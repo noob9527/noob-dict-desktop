@@ -1,0 +1,9 @@
+appId: com.my-website.my-app
+productName: MyApp
+copyright: Copyright © 2019 ${author}
+mac:
+  category: public.app-category.utilities
+files:
+  - 'build/**/*'
+  - 'public/electron.js'
+  - 'node_modules/**/*'
