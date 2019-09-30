@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { TrayChannel } from "./shared/tray/tray-channel";
 
-// const electron = window.require('electron');
-// const ipc = electron.ipcRenderer as Electron.IpcRenderer;
+const electron = window.require('electron');
+const ipc = electron.ipcRenderer as Electron.IpcRenderer;
 
 const App: React.FC = () => {
   const [counter, setCounter] = useState(0);
@@ -18,9 +19,9 @@ const App: React.FC = () => {
 
   function onClick() {
     if (trayOn) {
-      console.log(trayOn);
+      ipc.send(TrayChannel.REMOVE_TRAY);
     } else {
-      console.log(trayOn);
+      ipc.send(TrayChannel.PUT_IN_TRAY);
     }
     setTrayOn(!trayOn);
   }

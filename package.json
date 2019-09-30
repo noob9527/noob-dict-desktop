@@ -21,12 +21,14 @@
     "wonky-scripts": "^0.0.5"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "electron:start": "concurrently \"BROWSER=none npm start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:build": "npm run build && electron-builder build --linux"
+    "react:start": "react-scripts start",
+    "react:build": "react-scripts build",
+    "react:test": "react-scripts test",
+    "react:eject": "react-scripts eject",
+    "electron:start": "parcel watch ./electron/main.ts --no-source-maps --target electron --out-dir public --out-file electron.js",
+    "electron:build": "parcel build ./electron/main.ts --no-minify --no-source-maps --out-dir public --out-file electron.js",
+    "start": "concurrently \"npm run electron:start\" \"BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build": "npm run electron:build && npm run react:build && electron-builder build --linux"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -48,6 +50,7 @@
     "electron": "^6.0.10",
     "electron-builder": "^21.2.0",
     "electron-reload": "^1.5.0",
+    "parcel-bundler": "^1.12.3",
     "wait-on": "^3.3.0"
   }
 }
