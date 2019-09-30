@@ -18,7 +18,7 @@
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "typescript": "3.6.3",
-    "wonky-scripts": "0.0.5"
+    "wonky-scripts": "^0.0.5"
   },
   "scripts": {
     "start": "react-scripts start",
