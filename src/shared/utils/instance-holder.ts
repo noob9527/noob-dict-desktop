@@ -25,6 +25,6 @@ class InstanceHolder {
   }
 }
 
-const defaultHolder = new InstanceHolder();
+const holder = new InstanceHolder();
 
-export default defaultHolder;
+export default holder;

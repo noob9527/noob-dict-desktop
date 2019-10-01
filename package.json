@@ -2,7 +2,7 @@
   "name": "silvery-dict",
   "version": "0.1.0",
   "private": true,
-  "main": "public/electron.js",
+  "main": "build/electron.js",
   "homepage": "./",
   "author": {
     "name": "Your Name",
@@ -26,10 +26,10 @@
     "react:build": "react-scripts build",
     "react:test": "react-scripts test",
     "react:eject": "react-scripts eject",
-    "electron:start": "parcel watch ./electron/main.ts --no-source-maps --target electron --out-dir public --out-file electron.js",
-    "electron:build": "parcel build ./electron/main.ts --no-minify --no-source-maps --target electron --out-dir public --out-file electron.js",
+    "electron:start": "parcel watch ./electron/main.ts --no-source-maps --target electron --out-dir build --out-file electron.js",
+    "electron:build": "parcel build ./electron/main.ts --no-source-maps --target electron --out-dir build --out-file electron.js --no-minify",
     "start": "concurrently \"npm run electron:start\" \"BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
-    "build": "npm run electron:build && npm run react:build && electron-builder build --linux"
+    "build": "npm run react:build && npm run electron:build  && electron-builder build --linux"
   },
   "eslintConfig": {
     "extends": "react-app"

@@ -5,5 +5,4 @@ mac:
   category: public.app-category.utilities
 files:
   - 'build/**/*'
-  - 'electron/main.js'
   - 'node_modules/**/*'
