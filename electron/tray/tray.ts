@@ -1,9 +1,10 @@
-import { app, BrowserWindow, Menu, Tray } from 'electron';
+import { app, Menu, Tray } from 'electron';
 import logger from '../../src/shared/utils/logger';
 import holder from '../../src/shared/utils/instance-holder';
 import getAssetsPath from "../../src/shared/utils/path-util";
+import { showWindow } from "../window";
 
-export default function ensureTray() {
+export function ensureTray() {
   holder.setIfAbsent(Tray, createTray);
   return holder.get(Tray);
 }
@@ -31,15 +32,7 @@ function createMenu() {
       label: 'Show',
       click: () => {
         logger.log('show');
-        const window = holder.get(BrowserWindow);
-        if (window) {
-          if (window.isMinimized()) {
-            window.restore()
-          }
-          window.show();
-        } else {
-          logger.error("somehow window doesn't exist")
-        }
+        showWindow();
       }
     },
     {
