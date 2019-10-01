@@ -1,4 +1,4 @@
-process.env.HMR_PORT=39509;process.env.HMR_HOSTNAME="localhost";// modules are defined as an array
+process.env.HMR_PORT=0;process.env.HMR_HOSTNAME="localhost";// modules are defined as an array
 // [ module function, map of requires ]
 //
 // map of requires is short require name -> numeric require
@@ -117,74 +117,151 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"../src/shared/tray/tray-channel.ts":[function(require,module,exports) {
+})({"dHvU":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.TrayChannel = void 0;
-var TrayChannel;
-exports.TrayChannel = TrayChannel;
+exports.default = void 0;
 
-(function (TrayChannel) {
-  TrayChannel["PUT_IN_TRAY"] = "PUT_IN_TRAY";
-  TrayChannel["REMOVE_TRAY"] = "REMOVE_TRAY";
-})(TrayChannel || (exports.TrayChannel = TrayChannel = {}));
-},{}],"tray.ts":[function(require,module,exports) {
+var _electronTimber = _interopRequireDefault(require("electron-timber"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+var _default = _electronTimber.default;
+exports.default = _default;
+},{}],"aaZu":[function(require,module,exports) {
 "use strict";
 
-var path = _interopRequireWildcard(require("path"));
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var InstanceHolder =
+/** @class */
+function () {
+  function InstanceHolder() {
+    this.map = new Map();
+  }
+
+  InstanceHolder.prototype.setIfAbsent = function (key, producer) {
+    if (!this.map.has(key)) {
+      this.map.set(key, producer());
+    }
+  };
+
+  InstanceHolder.prototype.get = function (key) {
+    return this.map.get(key);
+  };
+
+  InstanceHolder.prototype.has = function (key) {
+    return this.map.has(key);
+  };
+
+  InstanceHolder.prototype.remove = function (key) {
+    return this.map.delete(key);
+  };
+
+  Object.defineProperty(InstanceHolder.prototype, "size", {
+    get: function get() {
+      return this.map.size;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  return InstanceHolder;
+}();
+
+var defaultHolder = new InstanceHolder();
+var _default = defaultHolder;
+exports.default = _default;
+},{}],"8dS/":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = ensureTray;
 
 var _electron = require("electron");
 
-var _trayChannel = require("../src/shared/tray/tray-channel");
+var path = _interopRequireWildcard(require("path"));
+
+var _logger = _interopRequireDefault(require("../../src/shared/utils/logger"));
+
+var _instanceHolder = _interopRequireDefault(require("../../src/shared/utils/instance-holder"));
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } var cache = _getRequireWildcardCache(); if (cache && cache.has(obj)) { return cache.get(obj); } var newObj = {}; if (obj != null) { var hasPropertyDescriptor = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) { var desc = hasPropertyDescriptor ? Object.getOwnPropertyDescriptor(obj, key) : null; if (desc && (desc.get || desc.set)) { Object.defineProperty(newObj, key, desc); } else { newObj[key] = obj[key]; } } } } newObj.default = obj; if (cache) { cache.set(obj, newObj); } return newObj; }
 
-var appIcon;
+function ensureTray() {
+  _instanceHolder.default.setIfAbsent(_electron.Tray, createTray);
 
-_electron.ipcMain.on(_trayChannel.TrayChannel.PUT_IN_TRAY, function (event) {
+  return _instanceHolder.default.get(_electron.Tray);
+}
+
+function createTray() {
   // todo show icon bug
   // (electron:31101): libappindicator-WARNING **: 18:59:31.347: Using '/tmp' paths in SNAP environment will lead to unreadable resources
   var iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
   var iconPath = path.join(__dirname, iconName);
-  appIcon = new _electron.Tray(iconPath);
+  var tray = new _electron.Tray(iconPath);
+  var menu = createMenu();
+  tray.setToolTip('Electron Demo in the tray.');
+  tray.setContextMenu(menu);
+  tray.on('click', function () {
+    // this event doesn't work on my machine(ubuntu)
+    _logger.default.log('click');
+  });
+  return tray;
+}
 
-  var contextMenu = _electron.Menu.buildFromTemplate([{
-    label: 'Remove',
-    click: function () {
-      event.sender.send('tray-removed');
+function createMenu() {
+  return _electron.Menu.buildFromTemplate([{
+    label: 'Show',
+    click: function click() {
+      _logger.default.log('show');
+
+      var window = _instanceHolder.default.get(_electron.BrowserWindow);
+
+      if (window) {
+        if (window.isMinimized()) {
+          window.restore();
+        }
+
+        window.show();
+      } else {
+        _logger.default.error("somehow window doesn't exist");
+      }
+    }
+  }, {
+    label: 'Quit',
+    click: function click() {
+      _electron.app.quit();
+
+      _logger.default.log('app.quit()');
     }
   }]);
-
-  appIcon.setToolTip('Electron Demo in the tray.');
-  appIcon.setContextMenu(contextMenu);
-});
-
-_electron.ipcMain.on(_trayChannel.TrayChannel.REMOVE_TRAY, function () {
-  console.log('remove'); // todo tray won't be destroyed on ubuntu
-  // https://github.com/electron/electron/issues/17622
-  // alt + f2,  r
-
-  appIcon.destroy();
-});
-
-_electron.app.on('window-all-closed', function () {
-  if (appIcon) appIcon.destroy();
-});
-},{"../src/shared/tray/tray-channel":"../src/shared/tray/tray-channel.ts"}],"main.ts":[function(require,module,exports) {
+}
+},{"../../src/shared/utils/logger":"dHvU","../../src/shared/utils/instance-holder":"aaZu"}],"ZCfc":[function(require,module,exports) {
 "use strict";
-
-var _electronIsDev = _interopRequireDefault(require("electron-is-dev"));
 
 var _electron = require("electron");
 
-var path = _interopRequireWildcard(require("path"));
+var _logger = _interopRequireDefault(require("../src/shared/utils/logger"));
 
-require("./tray.ts");
+var _instanceHolder = _interopRequireDefault(require("../src/shared/utils/instance-holder"));
+
+var _electronIsDev = _interopRequireDefault(require("electron-is-dev"));
+
+var _tray = _interopRequireDefault(require("./tray/tray"));
+
+var path = _interopRequireWildcard(require("path"));
 
 function _getRequireWildcardCache() { if (typeof WeakMap !== "function") return null; var cache = new WeakMap(); _getRequireWildcardCache = function () { return cache; }; return cache; }
 
@@ -193,18 +270,44 @@ function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj;
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // Modules to control application life and create native browser window
-// refer to:
+var is_quiting = false; // refer to:
 // https://www.freecodecamp.org/news/building-an-electron-application-with-create-react-app-97945861647c/
 // https://medium.com/@johndyer24/building-a-production-electron-create-react-app-application-with-shared-code-using-electron-builder-c1f70f0e2649
 // https://www.codementor.io/randyfindley/how-to-build-an-electron-app-using-create-react-app-and-electron-builder-ss1k0sfer
-// Keep a global reference of the window object, if you don't, the window will
-// be closed automatically when the JavaScript object is garbage collected.
-var mainWindow;
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+
+_electron.app.on("ready", ensureWindow); // Quit when all windows are closed.
+
+
+_electron.app.on("window-all-closed", function () {
+  // On OS X it is common for applications and their menu bar
+  // to stay active until the user quits explicitly with Cmd + Q
+  // if (process.platform !== "darwin") {
+  //   app.quit();
+  // }
+  // we do not quit the app here
+  _logger.default.log('window-all-closed');
+}); // On OS X it"s common to re-create a window in the app when the
+// dock icon is clicked and there are no other windows open.
+
+
+_electron.app.on("activate", ensureWindow);
+
+_electron.app.on("before-quit", function () {
+  is_quiting = true;
+});
+
+function ensureWindow() {
+  _instanceHolder.default.setIfAbsent(_electron.BrowserWindow, createWindow);
+
+  return _instanceHolder.default.get(_electron.BrowserWindow);
+}
 
 function createWindow() {
-  // Create the browser window.
-  mainWindow = new _electron.BrowserWindow({
-    width: 800,
+  var window = new _electron.BrowserWindow({
+    width: 1600,
     height: 600,
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
@@ -212,251 +315,46 @@ function createWindow() {
       nodeIntegration: true
     }
   });
-  mainWindow.loadURL(_electronIsDev.default ? 'http://localhost:3000' : "file://" + path.join(__dirname, '../build/index.html')); // if (isDev) {
-  //   // Open the DevTools.
-  //   //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-  //   mainWindow.webContents.openDevTools();
-  // }
-  // mainWindow.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
+  window.loadURL(_electronIsDev.default ? 'http://localhost:3000' : "file://" + path.join(__dirname, '../build/index.html')); // window.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
   // and load the index.html of the app.
-  // mainWindow.loadFile('index.html')
-  // Emitted when the window is closed.
+  // window.loadFile('index.html')
 
-  mainWindow.on("closed", function () {
+  window.on("close", function (e) {
+    // close to tray
+    // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
+    if (!is_quiting) {
+      e.preventDefault();
+      window.hide();
+    }
+  }); // Emitted when the window is closed.
+
+  window.on("closed", function () {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    mainWindow = null;
+    _instanceHolder.default.remove(_electron.BrowserWindow);
+
+    _logger.default.log('closed');
   });
-} // This method will be called when Electron has finished
-// initialization and is ready to create browser windows.
-// Some APIs can only be used after this event occurs.
+  window.webContents.on("did-finish-load", function () {
+    (0, _tray.default)();
 
+    _logger.default.log('did-finish-load');
+  });
 
-_electron.app.on("ready", createWindow); // Quit when all windows are closed.
-
-
-_electron.app.on("window-all-closed", function () {
-  // On OS X it is common for applications and their menu bar
-  // to stay active until the user quits explicitly with Cmd + Q
-  if (process.platform !== "darwin") {
-    _electron.app.quit();
+  if (_electronIsDev.default) {
+    // Open the DevTools.
+    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
+    window.webContents.openDevTools();
   }
-});
 
-_electron.app.on("activate", function () {
-  // On OS X it"s common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (mainWindow === null) {
-    createWindow();
-  }
-}); // In this file you can include the rest of your app's specific main process
+  return window;
+} // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 // hot reload
-// try {
-//   require('electron-reloader')(module);
-// } catch (_) {
-// }
-},{"./tray.ts":"tray.ts"}],"../node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
-var OVERLAY_ID = '__parcel__error__overlay__';
-var OldModule = module.bundle.Module;
 
-function Module(moduleName) {
-  OldModule.call(this, moduleName);
-  this.hot = {
-    data: module.bundle.hotData,
-    _acceptCallbacks: [],
-    _disposeCallbacks: [],
-    accept: function (fn) {
-      this._acceptCallbacks.push(fn || function () {});
-    },
-    dispose: function (fn) {
-      this._disposeCallbacks.push(fn);
-    }
-  };
-  module.bundle.hotData = null;
-}
 
-module.bundle.Module = Module;
-var checkedAssets, assetsToAccept;
-var parent = module.bundle.parent;
-
-if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
-  var hostname = process.env.HMR_HOSTNAME || location.hostname;
-  var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + process.env.HMR_PORT + '/');
-
-  ws.onmessage = function (event) {
-    checkedAssets = {};
-    assetsToAccept = [];
-    var data = JSON.parse(event.data);
-
-    if (data.type === 'update') {
-      var handled = false;
-      data.assets.forEach(function (asset) {
-        if (!asset.isNew) {
-          var didAccept = hmrAcceptCheck(global.parcelRequire, asset.id);
-
-          if (didAccept) {
-            handled = true;
-          }
-        }
-      }); // Enable HMR for CSS by default.
-
-      handled = handled || data.assets.every(function (asset) {
-        return asset.type === 'css' && asset.generated.js;
-      });
-
-      if (handled) {
-        console.clear();
-        data.assets.forEach(function (asset) {
-          hmrApply(global.parcelRequire, asset);
-        });
-        assetsToAccept.forEach(function (v) {
-          hmrAcceptRun(v[0], v[1]);
-        });
-      } else {
-        window.location.reload();
-      }
-    }
-
-    if (data.type === 'reload') {
-      ws.close();
-
-      ws.onclose = function () {
-        location.reload();
-      };
-    }
-
-    if (data.type === 'error-resolved') {
-      console.log('[parcel] ✨ Error resolved');
-      removeErrorOverlay();
-    }
-
-    if (data.type === 'error') {
-      console.error('[parcel] 🚨  ' + data.error.message + '\n' + data.error.stack);
-      removeErrorOverlay();
-      var overlay = createErrorOverlay(data);
-      document.body.appendChild(overlay);
-    }
-  };
-}
-
-function removeErrorOverlay() {
-  var overlay = document.getElementById(OVERLAY_ID);
-
-  if (overlay) {
-    overlay.remove();
-  }
-}
-
-function createErrorOverlay(data) {
-  var overlay = document.createElement('div');
-  overlay.id = OVERLAY_ID; // html encode message and stack trace
-
-  var message = document.createElement('div');
-  var stackTrace = document.createElement('pre');
-  message.innerText = data.error.message;
-  stackTrace.innerText = data.error.stack;
-  overlay.innerHTML = '<div style="background: black; font-size: 16px; color: white; position: fixed; height: 100%; width: 100%; top: 0px; left: 0px; padding: 30px; opacity: 0.85; font-family: Menlo, Consolas, monospace; z-index: 9999;">' + '<span style="background: red; padding: 2px 4px; border-radius: 2px;">ERROR</span>' + '<span style="top: 2px; margin-left: 5px; position: relative;">🚨</span>' + '<div style="font-size: 18px; font-weight: bold; margin-top: 20px;">' + message.innerHTML + '</div>' + '<pre>' + stackTrace.innerHTML + '</pre>' + '</div>';
-  return overlay;
-}
-
-function getParents(bundle, id) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return [];
-  }
-
-  var parents = [];
-  var k, d, dep;
-
-  for (k in modules) {
-    for (d in modules[k][1]) {
-      dep = modules[k][1][d];
-
-      if (dep === id || Array.isArray(dep) && dep[dep.length - 1] === id) {
-        parents.push(k);
-      }
-    }
-  }
-
-  if (bundle.parent) {
-    parents = parents.concat(getParents(bundle.parent, id));
-  }
-
-  return parents;
-}
-
-function hmrApply(bundle, asset) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return;
-  }
-
-  if (modules[asset.id] || !bundle.parent) {
-    var fn = new Function('require', 'module', 'exports', asset.generated.js);
-    asset.isNew = !modules[asset.id];
-    modules[asset.id] = [fn, asset.deps];
-  } else if (bundle.parent) {
-    hmrApply(bundle.parent, asset);
-  }
-}
-
-function hmrAcceptCheck(bundle, id) {
-  var modules = bundle.modules;
-
-  if (!modules) {
-    return;
-  }
-
-  if (!modules[id] && bundle.parent) {
-    return hmrAcceptCheck(bundle.parent, id);
-  }
-
-  if (checkedAssets[id]) {
-    return;
-  }
-
-  checkedAssets[id] = true;
-  var cached = bundle.cache[id];
-  assetsToAccept.push([bundle, id]);
-
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    return true;
-  }
-
-  return getParents(global.parcelRequire, id).some(function (id) {
-    return hmrAcceptCheck(global.parcelRequire, id);
-  });
-}
-
-function hmrAcceptRun(bundle, id) {
-  var cached = bundle.cache[id];
-  bundle.hotData = {};
-
-  if (cached) {
-    cached.hot.data = bundle.hotData;
-  }
-
-  if (cached && cached.hot && cached.hot._disposeCallbacks.length) {
-    cached.hot._disposeCallbacks.forEach(function (cb) {
-      cb(bundle.hotData);
-    });
-  }
-
-  delete bundle.cache[id];
-  bundle(id);
-  cached = bundle.cache[id];
-
-  if (cached && cached.hot && cached.hot._acceptCallbacks.length) {
-    cached.hot._acceptCallbacks.forEach(function (cb) {
-      cb();
-    });
-
-    return true;
-  }
-}
-},{}]},{},["../node_modules/parcel-bundler/src/builtins/hmr-runtime.js","main.ts"], null)
+try {
+  require('electron-reloader')(module);
+} catch (_) {}
+},{"../src/shared/utils/logger":"dHvU","../src/shared/utils/instance-holder":"aaZu","./tray/tray":"8dS/"}]},{},["ZCfc"], null)
