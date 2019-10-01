@@ -1,7 +1,7 @@
-import { Tray, Menu, app, BrowserWindow } from 'electron';
-import * as path from 'path';
+import { app, BrowserWindow, Menu, Tray } from 'electron';
 import logger from '../../src/shared/utils/logger';
 import holder from '../../src/shared/utils/instance-holder';
+import getAssetsPath from "../../src/shared/utils/path-util";
 
 export default function ensureTray() {
   holder.setIfAbsent(Tray, createTray);
@@ -9,10 +9,8 @@ export default function ensureTray() {
 }
 
 function createTray() {
-  // todo show icon bug
-  // (electron:31101): libappindicator-WARNING **: 18:59:31.347: Using '/tmp' paths in SNAP environment will lead to unreadable resources
   const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
-  const iconPath = path.join(__dirname, iconName);
+  const iconPath = getAssetsPath(iconName);
 
   const tray = new Tray(iconPath);
   const menu = createMenu();

@@ -5,13 +5,26 @@ import holder from '../src/shared/utils/instance-holder';
 import isDev from 'electron-is-dev';
 import ensureTray from './tray/tray';
 import * as path from 'path';
+import getAssetsPath from "../src/shared/utils/path-util";
 
 let is_quiting = false;
 
-// refer to:
-// https://www.freecodecamp.org/news/building-an-electron-application-with-create-react-app-97945861647c/
-// https://medium.com/@johndyer24/building-a-production-electron-create-react-app-application-with-shared-code-using-electron-builder-c1f70f0e2649
-// https://www.codementor.io/randyfindley/how-to-build-an-electron-app-using-create-react-app-and-electron-builder-ss1k0sfer
+// Make this app a single instance app.
+if (!app.requestSingleInstanceLock()) {
+  app.quit();
+}
+app.on("second-instance", () => {
+  logger.log("second-instance");
+  const window = holder.get(BrowserWindow);
+  if (window) {
+    if (window.isMinimized()) {
+      window.restore()
+    }
+    window.show();
+  } else {
+    logger.error("somehow window doesn't exist")
+  }
+});
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
@@ -47,6 +60,7 @@ function createWindow() {
   const window = new BrowserWindow({
     width: 1600,
     height: 600,
+    icon: getAssetsPath('iconTemplate.png'),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
@@ -65,7 +79,7 @@ function createWindow() {
   window.on("close", e => {
     // close to tray
     // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
-    if(!is_quiting) {
+    if (!is_quiting) {
       e.preventDefault();
       window.hide();
     }
