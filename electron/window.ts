@@ -30,7 +30,9 @@ function createWindow() {
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
-      nodeIntegration: true
+      nodeIntegration: true,
+      // to disable the cors policy, so that we can fetch resources from different origin
+      webSecurity: false,
     },
   });
 

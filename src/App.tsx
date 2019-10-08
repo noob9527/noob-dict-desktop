@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
 import './App.css';
-import { TrayChannel } from "./shared/tray/tray-channel";
 
-const electron = window.require('electron');
-const ipc = electron.ipcRenderer as Electron.IpcRenderer;
+// const electron = window.require('electron');
+// const ipc = electron.ipcRenderer as Electron.IpcRenderer;
+
+const { EngineIdentifier, search } = window.require('noob-dict-core');
 
 const App: React.FC = () => {
   const [counter, setCounter] = useState(0);
-  const [trayOn, setTrayOn] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setCounter(counter + 1), 1000);
@@ -17,13 +17,10 @@ const App: React.FC = () => {
     };
   });
 
-  function onClick() {
-    if (trayOn) {
-      ipc.send(TrayChannel.REMOVE_TRAY);
-    } else {
-      ipc.send(TrayChannel.PUT_IN_TRAY);
-    }
-    setTrayOn(!trayOn);
+  async function onClick() {
+    const res = await search('go', EngineIdentifier.BING);
+    console.log(res);
+    console.log('click');
   }
 
   return (
