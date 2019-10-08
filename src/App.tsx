@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import logo from './logo.svg';
+import { Button } from 'antd';
 import './App.css';
 
-// const electron = window.require('electron');
-// const ipc = electron.ipcRenderer as Electron.IpcRenderer;
+import * as electron from 'electron';
+import { EngineIdentifier, search } from 'noob-dict-core';
 
-const { EngineIdentifier, search } = window.require('noob-dict-core');
+console.log(electron);
+console.log(EngineIdentifier, search);
 
 const App: React.FC = () => {
   const [counter, setCounter] = useState(0);
@@ -18,7 +20,7 @@ const App: React.FC = () => {
   });
 
   async function onClick() {
-    const res = await search('go', EngineIdentifier.BING);
+    const res = await search('go');
     console.log(res);
     console.log('click');
   }
@@ -30,7 +32,7 @@ const App: React.FC = () => {
         <p>
           Edit <code>src/App.tsx</code> and save to reload.
         </p>
-        <button onClick={onClick}>button</button>
+        <Button type="primary" onClick={onClick}>Button</Button>
         <div>counter: {counter}</div>
       </header>
     </div>

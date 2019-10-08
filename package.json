@@ -14,6 +14,7 @@
     "@types/node": "12.7.8",
     "@types/react": "16.9.3",
     "@types/react-dom": "16.9.1",
+    "antd": "^3.23.6",
     "electron-is-dev": "^1.1.0",
     "electron-timber": "^0.5.1",
     "react": "^16.10.1",
@@ -22,10 +23,10 @@
     "typescript": "3.6.3"
   },
   "scripts": {
-    "react:start": "react-scripts start",
-    "react:build": "react-scripts build",
-    "react:test": "react-scripts test",
-    "react:eject": "react-scripts eject",
+    "react:start": "rescripts start",
+    "react:build": "rescripts build",
+    "react:test": "rescripts test",
+    "react:eject": "rescripts eject",
     "electron:start": "parcel watch ./electron/main.ts --no-source-maps --target electron --out-dir build --out-file electron.js",
     "electron:build": "parcel build ./electron/main.ts --no-source-maps --target electron --out-dir build --out-file electron.js --no-minify",
     "start": "concurrently \"npm run electron:start\" \"BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
@@ -47,10 +48,17 @@
     ]
   },
   "devDependencies": {
+    "@ant-design/dark-theme": "^1.0.3",
+    "@rescripts/cli": "^0.0.12",
+    "@rescripts/rescript-env": "^0.0.10",
+    "babel-plugin-import": "^1.12.2",
     "concurrently": "^4.1.2",
+    "customize-cra": "^0.8.0",
     "electron": "^6.0.10",
     "electron-builder": "^21.2.0",
     "electron-reload": "^1.5.0",
+    "less": "^3.10.3",
+    "less-loader": "^5.0.0",
     "parcel-bundler": "^1.12.3",
     "wait-on": "^3.3.0"
   }
