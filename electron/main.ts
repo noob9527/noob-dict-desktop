@@ -52,10 +52,14 @@ app.on("before-quit", () => {
   globalState.isQuiting = true;
 });
 
-
 // In this file you can include the rest of your app's specific main process
 // code. You can also put them in separate files and require them here.
 
+// suppress the annoying error message
+// => [.DisplayCompositor]GL ERROR :GL_INVALID_OPERATION : glBufferData: <- error from previous GL command
+// https://github.com/electron/electron/issues/7834
+// https://github.com/electron/electron/issues/12820
+app.disableHardwareAcceleration();
 
 // hot reload
 try {
