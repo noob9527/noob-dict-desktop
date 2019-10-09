@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import logo from './logo.svg';
-import { Button, Tabs, Icon } from 'antd';
+import { useDispatch, useSelector } from 'dva';
+import { Button, Icon, Tabs } from 'antd';
 import './App.css';
 
 // import * as electron from 'electron';
@@ -9,23 +10,22 @@ import './App.css';
 // console.log(EngineIdentifier, search);
 
 const App: React.FC = () => {
-  const [counter, setCounter] = useState(0);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setCounter(counter + 1), 1000);
-    return () => {
-      clearTimeout(timer);
-    };
+  // const [counter, setCounter] = useState(0);
+  const counter = useSelector((state: any) => {
+    return state.app.counter;
   });
+  const dispatch = useDispatch();
+
 
   async function onClick() {
     // const res = await search('go');
     // console.log(res);
     console.log('click');
+    dispatch({ type: 'app/inc' });
   }
 
   return (
-    <Tabs tabPosition="left" type="card" size="large">
+    <Tabs tabPosition="left" type="card">
       <Tabs.TabPane
         tab={<Icon type="apple"/>}
         key="1"
@@ -45,10 +45,10 @@ const App: React.FC = () => {
         tab={<Icon type="android"/>}
         key="2"
       >
-        Tab 2
       </Tabs.TabPane>
     </Tabs>
   );
 };
 
+// export default connect((state: { app: any }) => ({ counter: state.app.counter }))(App);
 export default App;

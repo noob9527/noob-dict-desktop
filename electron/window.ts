@@ -69,8 +69,9 @@ function createWindow() {
 
   if (isDev) {
     // Open the DevTools.
-    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
     window.webContents.openDevTools();
+    // add devtools
+    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
   }
 
   return window;
