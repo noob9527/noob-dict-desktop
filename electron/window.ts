@@ -6,6 +6,8 @@ import { ensureTray } from './tray/tray';
 import * as path from 'path';
 import getAssetsPath from "../src/shared/utils/path-util";
 import globalState from './global-state';
+import * as os from "os";
+import * as fs from "fs";
 
 export function ensureWindow() {
   holder.setIfAbsent(BrowserWindow, createWindow);
@@ -72,6 +74,25 @@ function createWindow() {
     window.webContents.openDevTools();
     // add devtools
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
+    const extensionDir = path.join(os.homedir(), '.config/google-chrome/Default/Extensions');
+    const reactDir = path.join(extensionDir, 'fmkadmapgofadopljbjfkapdkoienihi');
+    const reduxDir = path.join(extensionDir, 'lmhkpmbekcpmknklioeibfkpmmfibljd');
+    if (fs.existsSync(reactDir)) {
+      const react = fs.readdirSync(reactDir);
+      if (react.length) {
+        const reactExt = path.join(reactDir, react[react.length - 1]);
+        console.log(`load react dev tools from: ${reactExt}`);
+        BrowserWindow.addDevToolsExtension(reactExt);
+      }
+    }
+    if (fs.existsSync(reduxDir)) {
+      const redux = fs.readdirSync(reduxDir);
+      if (redux.length) {
+        const reduxExt = path.join(reduxDir, redux[redux.length - 1]);
+        console.log(`load redux dev tools from: ${reduxExt}`);
+        BrowserWindow.addDevToolsExtension(reduxExt);
+      }
+    }
   }
 
   return window;
