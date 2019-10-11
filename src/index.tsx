@@ -2,7 +2,7 @@ import './index.css';
 import * as serviceWorker from './serviceWorker';
 import dva from 'dva';
 import * as models from './pages/models';
-import routes from './pages/routes';
+import router from './pages/Router';
 
 const app = dva();
 
@@ -10,7 +10,7 @@ Object.values(models).forEach(model => {
   app.model(model);
 });
 
-app.router(routes);
+app.router(router);
 
 app.start('#root');
 
