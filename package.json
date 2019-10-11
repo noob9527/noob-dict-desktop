@@ -1,5 +1,5 @@
 {
-  "name": "noob-dict",
+  "name": "noob-dict-desktop",
   "version": "0.1.0",
   "private": true,
   "main": "build/electron.js",
@@ -8,21 +8,6 @@
     "name": "Your Name",
     "email": "your.email@domain.com",
     "url": "https://your-website.com"
-  },
-  "dependencies": {
-    "@types/jest": "24.0.18",
-    "@types/lodash": "^4.14.144",
-    "@types/node": "12.7.8",
-    "@types/react": "16.9.3",
-    "@types/react-dom": "16.9.1",
-    "antd": "^3.23.6",
-    "dva": "^2.6.0-beta.14",
-    "electron-is-dev": "^1.1.0",
-    "electron-timber": "^0.5.1",
-    "react": "^16.10.1",
-    "react-dom": "^16.10.1",
-    "react-scripts": "^3.1.2",
-    "typescript": "3.6.3"
   },
   "scripts": {
     "react:start": "rescripts start",
@@ -33,6 +18,22 @@
     "electron:build": "parcel build ./electron/main.ts --no-source-maps --target electron --out-dir build --out-file electron.js --no-minify",
     "start": "concurrently \"npm run electron:start\" \"BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
     "build": "npm run react:build && npm run electron:build  && electron-builder build --linux"
+  },
+  "dependencies": {
+    "@types/jest": "24.0.18",
+    "@types/lodash": "^4.14.144",
+    "@types/node": "12.7.8",
+    "@types/react": "16.9.3",
+    "@types/react-dom": "16.9.1",
+    "antd": "^3.23.6",
+    "dva": "^2.6.0-beta.14",
+    "electron-context-menu": "^0.15.0",
+    "electron-is-dev": "^1.1.0",
+    "electron-timber": "^0.5.1",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1",
+    "react-scripts": "^3.1.2",
+    "typescript": "3.6.3"
   },
   "eslintConfig": {
     "extends": "react-app"

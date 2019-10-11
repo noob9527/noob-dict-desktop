@@ -45,9 +45,10 @@ export default () => {
 
   function search(text: string) {
     dispatch({
-      type: 'search/fetchHtml',
+      type: 'search/fetchResults',
       text
     });
+    if (open) setOpen(false);
   }
 
   return (

@@ -1,24 +1,35 @@
-import * as Core from "noob-dict-core";
+import { getSuggests, search, SearchResult, Suggest } from "noob-dict-core";
+
+// console.log(electron);
+//
+// const appPath = electron.remote.app.getAppPath();
+// console.log(appPath);
+//
 
 export {
   fetchSuggests,
   fetchResult,
-  fetchHtml,
 };
 
-async function fetchSuggests(text: string): Promise<Core.Suggest[]> {
-  return Core.getSuggests(text);
+async function fetchSuggests(text: string): Promise<Suggest[]> {
+  return getSuggests(text);
 }
 
-async function fetchResult(text: string, engine: Core.EngineIdentifier): Promise<Core.SearchResult> {
-  const instance = Core.getEngineInstance(engine);
-  return instance.search(text);
+async function fetchResult(text: string, option: SearchResult): Promise<SearchResult> {
+  return search(text, option);
 }
 
-async function fetchHtml(text: string, engine: Core.EngineIdentifier): Promise<string> {
-  const instance = Core.getEngineInstance(engine);
-  const parser = instance.parser;
-  const document = await instance.getDocument(text);
-  const dE =  parser.getDefinitionElements(document);
-  return dE.map(e => e.outerHTML).join('');
-}
+// async function fetchResult(text: string, engine: EngineIdentifier): Promise<string> {
+//   const path = appPath + '/src/components/dictionaries/bing/fixture/__test_go.html';
+//   return new Promise(resolve => {
+//     fs.readFile(
+//       path,
+//       'utf8',
+//       (err: any, data: any) => {
+//         resolve(data);
+//       });
+//   });
+// }
+
+
+

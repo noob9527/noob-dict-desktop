@@ -1,17 +1,21 @@
 // @ts-ignore
-import { Model, saga } from 'dva';
-import { fetchHtml, fetchSuggests } from './service';
-import { EngineIdentifier, SearchResult, Suggest } from "noob-dict-core";
+import { saga } from 'dva';
+import { EngineIdentifier, SearchResult } from "noob-dict-core";
+import { fetchResult, fetchSuggests } from './service';
+import { SearchModel } from "./search-demain";
 
 const { delay } = saga;
 
-const model: Model = {
+const model: SearchModel = {
   namespace: 'search',
   state: {
     text: '',
-    suggests: [] as Suggest[],
-    searchResults: [] as [EngineIdentifier, SearchResult][],
-    htmls: [] as [EngineIdentifier, string][],
+    suggests: [],
+    engines: [EngineIdentifier.BING, EngineIdentifier.CAMBRIDGE],
+    searchResults: {
+      [EngineIdentifier.BING]: null,
+      [EngineIdentifier.CAMBRIDGE]: null
+    },
   },
   effects: {
     * textChange(action, { put }) {
@@ -46,15 +50,29 @@ const model: Model = {
         }
       });
     },
-    * fetchHtml(action, { call, put }) {
-      const html = yield call(fetchHtml, action.text, EngineIdentifier.CAMBRIDGE);
+    * fetchResults(action, { call, put, select, all }) {
+      const engines: EngineIdentifier[] = yield select((state: any) => state.search.engines);
+      yield all(engines.map(engine => {
+        console.log(engine);
+        return put({
+          type: 'fetchSingleResult',
+          payload: {
+            text: action.text,
+            engine,
+          },
+        });
+      }));
+    },
+    * fetchSingleResult(action, { call, put }) {
+      const { text, engine } = action.payload;
+      const result = yield call(fetchResult, text, { engine });
       yield put({
-        type: 'mergeState',
+        type: 'mergeSearchResult',
         payload: {
-          htmls: [[EngineIdentifier.CAMBRIDGE, html]],
+          result,
         },
       });
-    },
+    }
   },
   reducers: {
     mergeState(state, action: any) {
@@ -62,6 +80,16 @@ const model: Model = {
         ...state,
         ...action.payload
       };
+    },
+    mergeSearchResult(state, action: any) {
+      const result: SearchResult = action.payload.result;
+      return {
+        ...state,
+        searchResults: {
+          ...state.searchResults,
+          [result.engine]: result,
+        },
+      }
     },
   }
 };

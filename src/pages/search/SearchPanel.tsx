@@ -1,29 +1,43 @@
 import React from 'react';
 import { useSelector } from 'dva';
+import { SearchResults } from "./search-demain";
+import { Icon, Tabs } from "antd";
+import { SearchResult, EngineIdentifier } from 'noob-dict-core';
 
 export default () => {
-  const htmls = useSelector((state: any) => state.search.htmls);
 
-  const html = htmls && htmls[0] && htmls[0][1];
-
-  console.log(htmls);
+  const results: SearchResults = useSelector((state: any) => state.search.searchResults);
 
   return (
     <>
-      {/*<iframe*/}
-      {/*  src="https://www.bing.com/dict/search?q=go"*/}
-      {/*  title="bing"*/}
-      {/*  height="100%"*/}
-      {/*  width="100%"*/}
-      {/*/>*/}
-      {/*<iframe*/}
-      {/*  src="https://dictionary.cambridge.org/search/english/direct/?q=go"*/}
-      {/*  title="cambridge"*/}
-      {/*  height="100%"*/}
-      {/*  width="100%"*/}
-      {/*/>*/}
-      <div>test</div>
-      <div dangerouslySetInnerHTML={{ __html: html }}/>
+      <Tabs type="card">
+        {
+          Object.entries(results)
+            .map(entry => fn(entry[0] as EngineIdentifier, entry[1]))
+        }
+        {
+          Object.values(results)
+            .filter(e => !!e)
+            .map((result: Maybe<SearchResult>) => {
+              if (!result) return (<div>no result</div>);
+            })
+        }
+      </Tabs>
     </>
   );
+}
+
+function fn(key: EngineIdentifier, value: Maybe<SearchResult>) {
+  return (
+    <Tabs.TabPane
+      tab={<Icon type="apple"/>}
+      key={key}
+    >
+      {
+        value
+          ? (<div dangerouslySetInnerHTML={{ __html: value.processedHtml }}/>)
+          : (<div>hello {key}</div>)
+      }
+    </Tabs.TabPane>
+  )
 }

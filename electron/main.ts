@@ -1,8 +1,16 @@
 // Modules to control application life and create native browser window
-import { app, globalShortcut } from 'electron';
+import { app, globalShortcut, MenuItem } from 'electron';
 import logger from '../src/shared/utils/logger';
 import { ensureWindow, showWindow } from './window';
 import globalState from './global-state';
+import contextMenu from 'electron-context-menu';
+
+contextMenu({
+  showInspectElement: true,
+  labels: {
+    inspect: 'inspect',
+  },
+});
 
 // Make this app a single instance app.
 if (!app.requestSingleInstanceLock()) {
