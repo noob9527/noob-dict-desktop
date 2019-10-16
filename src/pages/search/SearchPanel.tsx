@@ -55,10 +55,6 @@ function fn(key: EngineIdentifier, value: Maybe<SearchResult>) {
     html = value.html;
   } else {
     html = Array.from({ length: 100 }).map((e, i) => `<div>hello ${i}</div>`).join('\n');
-    html += `<script>window.onerror = (e) => {console.debug(e);return true;}</script>`;
-    html += `<script>
-throw new Error('gocha')
-</script>`
   }
 
   return (

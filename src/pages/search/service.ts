@@ -1,4 +1,4 @@
-import { getSuggests, search, SearchResult, Suggest, SearchOption } from "noob-dict-core";
+import { getSuggests, search, SearchResult, Suggest, SearchOption, mockSearch, mockGetSuggests } from "noob-dict-core";
 // import * as fs from 'fs';
 // import * as electron from 'electron';
 
@@ -9,12 +9,20 @@ export {
   fetchResult,
 };
 
+// async function fetchSuggests(text: string): Promise<Suggest[]> {
+//   return getSuggests(text);
+// }
+
 async function fetchSuggests(text: string): Promise<Suggest[]> {
-  return getSuggests(text);
+  return mockGetSuggests(text);
 }
 
-async function fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
-  return search(text, option);
+// async function fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
+//   return search(text, option);
+// }
+
+async function fetchResult(text: string, option: SearchOption) {
+  return mockSearch(text, option);
 }
 
 // async function fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
