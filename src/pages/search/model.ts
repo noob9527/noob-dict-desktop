@@ -2,7 +2,8 @@
 import { saga } from 'dva';
 import { EngineIdentifier, SearchResult } from "noob-dict-core";
 import { fetchResult, fetchSuggests } from './service';
-import { SearchModel } from "./search-demain";
+import { SearchModel } from "./search-domain";
+import { injectSuppressErrorScript } from "../../shared/utils/dom-utils";
 
 const { delay } = saga;
 
@@ -65,11 +66,15 @@ const model: SearchModel = {
     },
     * fetchSingleResult(action, { call, put }) {
       const { text, engine } = action.payload;
-      const result = yield call(fetchResult, text, { engine });
+      const result: SearchResult = yield call(fetchResult, text, { engine });
+      const processedResult = {
+        ...result,
+        html: injectSuppressErrorScript(result.html),
+      };
       yield put({
         type: 'mergeSearchResult',
         payload: {
-          result,
+          result: processedResult,
         },
       });
     }
@@ -89,7 +94,7 @@ const model: SearchModel = {
           ...state.searchResults,
           [result.engine]: result,
         },
-      }
+      };
     },
   }
 };

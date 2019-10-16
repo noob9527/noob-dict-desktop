@@ -8,7 +8,7 @@ const Page: React.FC<any> = props => {
   const { children } = props;
   return (
     <Layout>
-      <Layout.Sider width={60}>
+      <Layout.Sider width={0}>
         <Menu mode="vertical" style={{
           minHeight: '100vh',
         }}>
