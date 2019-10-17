@@ -6,6 +6,7 @@ export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchResult> 
 export interface SearchState {
   text: string,
   suggests: Suggest[],
+  loadingSuggests: boolean,
   engines: EngineIdentifier[],
   searchResults: SearchResults,
 }

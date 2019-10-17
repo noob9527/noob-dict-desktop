@@ -1,78 +1,88 @@
-import React, { KeyboardEventHandler, useState } from 'react';
-import { AutoComplete, Input } from "antd";
-import { Suggest } from 'noob-dict-core';
+import React, { useState } from 'react';
+import styles from './search.module.scss';
+import { Input, Select, Spin } from "antd";
 import { useDispatch, useSelector } from 'dva';
 import { SelectValue } from "antd/es/select";
-
-const { Search } = Input;
+import { SearchState } from "./search-domain";
 
 export default () => {
   const dispatch = useDispatch();
-  const dataSource = useSelector((state: any) => state.search.suggests)
-    .map((e: Suggest) => e.entry);
+  const text = useSelector((state: { search: SearchState }) => state.search.text);
+  const suggests = useSelector((state: { search: SearchState }) => state.search.suggests);
+  const loadingSuggests = useSelector((state: { search: SearchState }) => state.search.loadingSuggests);
 
   const [open, setOpen] = useState(false);
 
-  // 请使用 onChange 进行受控管理。onSearch 触发于搜索输入，与 onChange 时机不同。
-  // 此外，点选选项时也不会触发 onSearch 事件。
-  const onChange = (text: SelectValue) => {
+  return (
+    <div className={styles.searchHeader}>
+      <Select
+        mode={Select.SECRET_COMBOBOX_MODE_DO_NOT_USE}
+        onChange={onChange}
+        onSearch={fetchSuggests}
+        onSelect={search}
+        onInputKeyDown={onInputKeydown}
+        onFocus={() => setOpen(true)}
+        onBlur={() => setOpen(false)}
+        value={text}
+        open={open}
+        getInputElement={getInputElement}
+        notFoundContent={loadingSuggests ? <Spin/> : null}
+        size="large"
+        className={styles.searchHeaderSelect}
+        dropdownClassName={styles.searchHeaderSelectDropdown}
+      >
+        {suggests.map(e => (
+          <Select.Option key={e.entry}>
+            <span>{e.entry}</span>
+            <span>{e.explain}</span>
+          </Select.Option>
+        ))}
+      </Select>
+      {/*<div>isLoading: <span style={{ backgroundColor: loadingSuggests ? 'green' : 'red' }}>{String(loadingSuggests)}</span></div>*/}
+      {/*<div>open: <span style={{ backgroundColor: open ? 'green' : 'red' }}>{String(open)}</span></div>*/}
+    </div>
+  );
+
+  function getInputElement() {
+    return <Input.Search
+      placeholder="input search text"
+      onSearch={search}
+    />;
+  }
+
+  function onChange(text: SelectValue) {
+    if (text && !open) {
+      setOpen(true);
+    }
     dispatch({
       type: 'search/textChange',
       text
     });
-  };
-  const onSearchSuggests = (text: string) => {
-    if (text.trim().length) setOpen(true);
+  }
+
+  function fetchSuggests(text: SelectValue) {
     dispatch({
       type: 'search/searchTextChange',
       text
     });
-  };
-  // 在选中 suggest 时触发 search
-  const onSelect = (text: SelectValue) => {
+  }
+
+  function onInputKeydown(e: React.KeyboardEvent<HTMLInputElement>) {
+    if (e.key === 'Enter') {
+      if (!open) {
+        if (e.target instanceof HTMLInputElement) {
+          search(e.target.value);
+        }
+      }
+    }
+  }
+
+  function search(text: SelectValue) {
     setOpen(false);
-    search(text as string);
-  };
-  // 在选项未打开时按 enter 触发 search
-  const onSearch = (text: string) => {
-    // if (text && !open) search(text);
-    if (text) search(text);
-  };
-
-  const onPressEnter: KeyboardEventHandler = (e) => {
-    if (open) e.preventDefault();
-  };
-
-  function search(text: string) {
     dispatch({
       type: 'search/fetchResults',
       text
     });
-    if (open) setOpen(false);
   }
-
-  return (
-    <>
-      <AutoComplete
-        onChange={onChange}
-        onSearch={onSearchSuggests}
-        onSelect={onSelect}
-        open={open}
-        dataSource={dataSource}
-      >
-        <Search
-          placeholder={"input search text"}
-          onSearch={onSearch}
-          onPressEnter={onPressEnter}
-        />
-        {/*{dataSource.map((suggest: Suggest) => {*/}
-        {/*  return (*/}
-        {/*    <AutoComplete.Option key={suggest.entry}>*/}
-        {/*      {suggest.entry}*/}
-        {/*    </AutoComplete.Option>*/}
-        {/*  );*/}
-        {/*})}*/}
-      </AutoComplete>
-    </>
-  );
 }
+

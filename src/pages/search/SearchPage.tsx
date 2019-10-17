@@ -6,8 +6,8 @@ import styles from './search.module.scss';
 
 export default () => {
   return (
-    <Layout style={{ height: '100vh' }}>
-      <Layout.Header className={styles.searchHeader}>
+    <Layout className={styles.searchPage}>
+      <Layout.Header>
         <SearchHeader/>
       </Layout.Header>
       <Layout.Content>

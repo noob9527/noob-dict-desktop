@@ -2,7 +2,7 @@
 import { saga } from 'dva';
 import { EngineIdentifier, SearchResult } from "noob-dict-core";
 import { fetchResult, fetchSuggests } from './service';
-import { SearchModel } from "./search-domain";
+import { SearchModel, SearchState } from "./search-domain";
 import { injectSuppressErrorScript } from "../../shared/utils/dom-utils";
 
 const { delay } = saga;
@@ -12,6 +12,7 @@ const model: SearchModel = {
   state: {
     text: '',
     suggests: [],
+    loadingSuggests: false,
     engines: [EngineIdentifier.BING, EngineIdentifier.CAMBRIDGE],
     searchResults: {
       [EngineIdentifier.BING]: null,
@@ -19,18 +20,29 @@ const model: SearchModel = {
     },
   },
   effects: {
+    // update text in time
     * textChange(action, { put }) {
       yield put({
         type: 'mergeState',
         payload: {
-          text: action.text
+          text: action.text,
+          suggests: [],
         }
       });
     },
+    // control suggests, loading suggests
     * searchTextChange(action, { put }) {
+      if (action.text) {
+        yield put({
+          type: 'debouncedFetchSuggests',
+          text: action.text
+        });
+      }
       yield put({
-        type: 'debouncedFetchSuggests',
-        text: action.text
+        type: 'mergeState',
+        payload: {
+          loadingSuggests: Boolean(action.text),
+        }
       });
     },
     debouncedFetchSuggests: [
@@ -44,17 +56,19 @@ const model: SearchModel = {
     ],
     * fetchSuggests(action, { call, put }) {
       const suggests = yield call(fetchSuggests, action.text);
+      console.log(suggests);
       yield put({
         type: 'mergeState',
         payload: {
-          suggests
+          suggests,
+          loadingSuggests: false
         }
       });
     },
     * fetchResults(action, { call, put, select, all }) {
       const engines: EngineIdentifier[] = yield select((state: any) => state.search.engines);
+      console.log(`search: ${action.text}`);
       yield all(engines.map(engine => {
-        console.log(engine);
         return put({
           type: 'fetchSingleResult',
           payload: {

@@ -1,8 +1,52 @@
-.searchHeader {
-  background-color: rebeccapurple;
-}
-.searchPanel {
-    :global .ant-tabs-content {
-        flex: 1;
+// we have to put this in root level
+// because searchHeaderSelectDropdown is not a child of searchPage after rendering
+.searchHeaderSelectDropdown {
+  :global .ant-select-dropdown-menu-item {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+  }
+
+  :global .ant-spin-spinning {
+    width: 100%;
+
+    .ant-spin-dot {
+      vertical-align: middle;
     }
+  }
 }
+
+.searchPage {
+
+  height: 100vh;
+
+  .searchHeader {
+    height: 100%;
+    display: flex;
+    align-items: center;
+
+    .searchHeaderSelect {
+      width: 300px;
+
+      :global .ant-select-selection {
+        border: 0;
+        height: auto;
+
+        .ant-select-selection__rendered {
+          height: 100%;
+          margin: 0;
+          .ant-input {
+            border-radius: 0;
+          }
+        }
+      }
+    }
+  }
+
+  .searchPanel {
+    :global .ant-tabs-content {
+      flex: 1;
+    }
+  }
+}
+
