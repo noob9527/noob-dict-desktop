@@ -12,44 +12,25 @@ export default () => {
   const results: SearchResults = useSelector((state: any) => state.search.searchResults);
 
   // const result = results && results[EngineIdentifier.BING];
-  //
-  // let script: any;
-  // if (result) {
-  //   let matched = /<script id="audio-player">([\s\S]*?)<\/script>/.exec(result!.processedHtml);
-  //   console.log(result!.processedHtml, matched);
-  //   script = matched && matched[1];
-  //   console.log(script);
-  // }
-  //
-  // useEffect(() => {
-  //   console.log(script);
-  //   if (script && !executed) {
-  //     executed = true;
-  //     window.eval(script);
-  //   }
-  // });
 
 
   return (
-    <>
-      <Tabs className={styles.searchPanel}
-        style={{
-          height: '100%',
-          display: 'flex',
-          flexDirection: 'column'
-        }}
-        tabBarStyle={{ margin: 0 }}
-      >
+    <div className={styles.searchPanel}>
+      <Tabs
+        tabBarGutter={0}
+        tabBarStyle={{
+          margin: 0
+        }}>
         {
           Object.entries(results)
-            .map(entry => fn(entry[0] as EngineIdentifier, entry[1]))
+            .map(entry => getPane(entry[0] as EngineIdentifier, entry[1]))
         }
       </Tabs>
-    </>
+    </div>
   );
 }
 
-function fn(key: EngineIdentifier, value: Maybe<SearchResult>) {
+function getPane(key: EngineIdentifier, value: Maybe<SearchResult>) {
   let html: string;
   if (value) {
     html = value.html;
