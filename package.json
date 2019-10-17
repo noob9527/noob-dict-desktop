@@ -10,6 +10,10 @@
     "url": "https://your-website.com"
   },
   "scripts": {
+    "wonky:start": "react-scripts start",
+    "wonky:build": "react-scripts build",
+    "wonky:test": "react-scripts test",
+    "wonky:eject": "react-scripts eject",
     "react:start": "rescripts start",
     "react:build": "rescripts build",
     "react:test": "rescripts test",
@@ -32,8 +36,8 @@
     "electron-timber": "^0.5.1",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
-    "react-scripts": "^3.1.2",
-    "typescript": "3.6.3"
+    "typescript": "3.6.3",
+    "wonky-scripts": "^0.0.5"
   },
   "eslintConfig": {
     "extends": "react-app"
