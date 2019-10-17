@@ -11,9 +11,7 @@
   },
   "scripts": {
     "wonky:start": "react-scripts start",
-    "wonky:build": "react-scripts build",
     "wonky:test": "react-scripts test",
-    "wonky:eject": "react-scripts eject",
     "react:start": "rescripts start",
     "react:build": "rescripts build",
     "react:test": "rescripts test",
@@ -30,6 +28,7 @@
     "@types/react": "16.9.3",
     "@types/react-dom": "16.9.1",
     "antd": "^3.23.6",
+    "dexie": "^2.0.4",
     "dva": "^2.6.0-beta.14",
     "electron-context-menu": "^0.15.0",
     "electron-is-dev": "^1.1.0",

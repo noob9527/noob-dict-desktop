@@ -2,8 +2,11 @@
 import { saga } from 'dva';
 import { EngineIdentifier, SearchResult } from "noob-dict-core";
 import { fetchResult, fetchSuggests } from './service';
-import { SearchModel, SearchState } from "./search-domain";
+import { SearchModel } from "./search-domain";
 import { injectSuppressErrorScript } from "../../shared/utils/dom-utils";
+import * as HistoryService from '../../shared/db/history-service';
+import { History } from "../../shared/db/history";
+
 
 const { delay } = saga;
 
@@ -91,6 +94,13 @@ const model: SearchModel = {
           result: processedResult,
         },
       });
+
+      // save history
+      // todo throw exception due to html document
+      yield call(HistoryService.save, new History({
+        text: action.text,
+        searchResult: result,
+      }));
     }
   },
   reducers: {
