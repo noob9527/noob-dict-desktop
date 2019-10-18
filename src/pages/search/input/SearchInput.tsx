@@ -1,18 +1,19 @@
-import React, { useState, KeyboardEvent } from 'react';
-import styles from './search.module.scss';
+import React, { KeyboardEvent } from 'react';
+import styles from './search-input.module.scss';
 import { Input, Select, Spin } from "antd";
 import { useDispatch, useSelector } from 'dva';
 import { SelectValue } from "antd/es/select";
-import { SearchState } from "./search-domain";
+import { SearchInputState } from "./search-input-model";
 
 
 export default () => {
   const dispatch = useDispatch();
-  const text = useSelector((state: { search: SearchState }) => state.search.text);
-  const suggests = useSelector((state: { search: SearchState }) => state.search.suggests);
-  const loadingSuggests = useSelector((state: { search: SearchState }) => state.search.loadingSuggests);
-
-  const [open, setOpen] = useState(false);
+  const {
+    text,
+    suggests,
+    loadingSuggests,
+    open,
+  } = useSelector((state: { searchInput: SearchInputState }) => state.searchInput);
 
   return (
     <div className={styles.searchHeaderInput}>
@@ -31,7 +32,6 @@ export default () => {
         open={open}
         getInputElement={getInputElement}
         notFoundContent={loadingSuggests ? <Spin/> : null}
-        size="large"
         dropdownClassName={styles.searchHeaderSelectDropdown}
       >
         {suggests.map(e => (
@@ -50,16 +50,18 @@ export default () => {
   function getInputElement() {
     return <Input.Search
       placeholder="input search text"
-      onPressEnter={(e: KeyboardEvent<HTMLInputElement>) => {
-        if (open) {
-          e.preventDefault();
-          e.stopPropagation();
-        } else {
-          search((e.target as any).value);
-        }
-      }}
+      onPressEnter={onPressEnter}
       onSearch={search}
     />;
+  }
+
+  function onPressEnter(e: KeyboardEvent<HTMLInputElement>) {
+    if (open && !loadingSuggests) {
+      e.preventDefault();
+      e.stopPropagation();
+    } else {
+      search((e.target as any).value);
+    }
   }
 
   function onChange(text: SelectValue) {
@@ -67,22 +69,34 @@ export default () => {
       setOpen(true);
     }
     dispatch({
-      type: 'search/textChange',
-      text
+      type: 'searchInput/mergeState',
+      payload: {
+        text,
+        suggests: [],
+      }
     });
   }
 
   function fetchSuggests(text: SelectValue) {
     dispatch({
-      type: 'search/searchTextChange',
+      type: 'searchInput/searchTextChange',
       text
+    });
+  }
+
+  function setOpen(open: boolean) {
+    dispatch({
+      type: 'searchInput/mergeState',
+      payload: {
+        open
+      }
     });
   }
 
   function search(text: SelectValue) {
     setOpen(false);
     dispatch({
-      type: 'search/fetchResults',
+      type: 'searchPanel/fetchResults',
       text
     });
   }

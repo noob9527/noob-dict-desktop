@@ -1,11 +1,19 @@
 import database from "./database";
 import { IHistory } from "./history";
 
-export {
-  save
+const HistoryService = {
+  save,
+  findAll,
+};
+
+export default HistoryService;
+
+async function save(history: IHistory) {
+  const res = await database.histories.add(history);
+  history.id = res;
+  return res;
 }
 
-function save(history: IHistory) {
-  console.log('save:', history);
-  return database.histories.add(history);
+async function findAll(text: string): Promise<IHistory[]> {
+  return database.histories.where('text').equals(text).toArray()
 }
