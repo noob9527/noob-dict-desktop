@@ -51,7 +51,6 @@ const model: SearchInputModel = {
     ],
     * fetchSuggests(action, { call, put }) {
       const suggests = yield call(fetchSuggests, action.text);
-      console.log(suggests);
       yield put({
         type: 'mergeState',
         payload: {

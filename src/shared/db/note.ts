@@ -5,11 +5,19 @@ export enum CollectionAction {
   QUICK_COLLECT = "QUICK_COLLECT",
 }
 
+interface Context {
+  paragraph: string
+  source: string
+  remark: string
+}
+
 export interface INote {
-  id: Maybe<number>;
-  text: string;
+  id: Maybe<number>
+  text: string
+  context: Context[]
+  remark: string
   searchResult: SearchJsonResult
-  collectAction: CollectionAction,
+  collectAction: CollectionAction
   create_at: Date
   update_at: Maybe<Date>
 }
@@ -18,6 +26,8 @@ export class Note implements INote {
 
   id: Maybe<number>;
   text: string = '';
+  context = [];
+  remark = '';
   searchResult!: SearchJsonResult;
   collectAction!: CollectionAction;
   create_at!: Date;

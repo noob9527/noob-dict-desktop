@@ -14,5 +14,10 @@
 
   .ant-tabs-content {
     flex: 1;
+    height: 100%;
+
+    .ant-tabs-tabpane {
+      height: 100%;
+    }
   }
 }

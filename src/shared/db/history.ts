@@ -19,5 +19,6 @@ export class History implements IHistory {
     Object.assign(this, history);
     this.create_at = new Date();
     delete this.id; // this line is necessary, otherwise indexed db throw an error
+    console.log(this);
   }
 }

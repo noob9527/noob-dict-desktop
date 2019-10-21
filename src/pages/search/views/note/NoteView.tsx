@@ -1,5 +1,6 @@
 import React from 'react';
 import { INote } from "../../../../shared/db/note";
+import ReactJson from 'react-json-view';
 
 interface NoteViewProps {
   note: INote
@@ -7,8 +8,11 @@ interface NoteViewProps {
 
 const NoteView: React.FC<NoteViewProps> = (props: NoteViewProps) => {
   const { note } = props;
+  const { searchResult } = note;
   return (
-    <div> {JSON.stringify(note, null, 2)} </div>
+    <div style={{ marginBottom: '50px' }}>
+      <ReactJson src={searchResult}/>
+    </div>
   );
 };
 

@@ -70,7 +70,7 @@ function getEnginePane(key: EngineIdentifier, value: Maybe<SearchResult>) {
       tab={key}
       key={key}
     >
-      <EngineView html={html}/>
+      <EngineView html={html} searchResult={value}/>
     </Tabs.TabPane>
   );
 }

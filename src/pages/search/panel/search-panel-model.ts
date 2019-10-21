@@ -38,7 +38,7 @@ const searchPanelModel: SearchPanelModel = {
     },
   },
   effects: {
-    * fetchResults(action, { call, put, select, all}) {
+    * fetchResults(action, { call, put, select, all }) {
       const engines: EngineIdentifier[] = yield select((state: any) => state.searchPanel.engines);
 
       yield put({

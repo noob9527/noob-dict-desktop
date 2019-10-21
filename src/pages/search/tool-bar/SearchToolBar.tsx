@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './search-tool-bar.module.scss';
 import { useDispatch, useSelector } from 'dva';
 import { Button, Dropdown, Icon, Menu } from "antd";
-import { SearchToolBarState } from "./search-tool-bar-model";
 import { SearchPanelState } from "../panel/search-panel-model";
 import { CollectionAction } from "../../../shared/db/note";
 import { ThemeType } from "antd/es/icon";
@@ -12,7 +11,6 @@ const heartColor = '#eb2f96';
 
 export default () => {
   const dispatch = useDispatch();
-  const state: SearchToolBarState = useSelector((state: any) => state.searchToolBar);
   const panelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
   const { note, primaryResult } = panelState;
 
@@ -32,8 +30,8 @@ export default () => {
       <Dropdown
         disabled={!note && primaryResult == null}
         overlay={
-          note ? <></> : getMenu
-          // <></>
+          // note ? <></> : getMenu
+          <></>
         }>
         <Button
           type="link"

@@ -28,6 +28,7 @@
     "@types/react": "16.9.3",
     "@types/react-dom": "16.9.1",
     "antd": "^3.23.6",
+    "bizcharts": "^3.5.5",
     "dexie": "^2.0.4",
     "dva": "^2.6.0-beta.14",
     "electron-context-menu": "^0.15.0",
@@ -35,6 +36,7 @@
     "electron-timber": "^0.5.1",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
+    "react-json-view": "^1.19.1",
     "typescript": "3.6.3",
     "wonky-scripts": "^0.0.5"
   },
