@@ -5,10 +5,10 @@ module.exports = override(
   // change target to electron
   // https://www.codementor.io/randyfindley/how-to-build-an-electron-app-using-create-react-app-and-electron-builder-ss1k0sfer
   // https://webpack.js.org/configuration/target/
-  // config => {
-  //   config.target = 'electron-renderer';
-  //   return config;
-  // },
+  config => {
+    config.target = 'electron-renderer';
+    return config;
+  },
   // only import needed components
   // see https://ant.design/docs/react/use-in-typescript-cn
   fixBabelImports('import', {

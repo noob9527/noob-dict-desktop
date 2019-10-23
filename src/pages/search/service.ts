@@ -1,42 +1,26 @@
-import { getSuggests, search, SearchResult, Suggest, SearchOption, mockSearch, mockGetSuggests } from "noob-dict-core";
-// import * as fs from 'fs';
-// import * as electron from 'electron';
-
-// const appPath = electron.remote.app.getAppPath();
+import { getSuggests, mockGetSuggests, mockSearch, search, SearchOption, Suggest } from "noob-dict-core";
+import isDev from 'electron-is-dev';
 
 export {
   fetchSuggests,
   fetchResult,
 };
 
-// async function fetchSuggests(text: string): Promise<Suggest[]> {
-//   return getSuggests(text);
-// }
-
 async function fetchSuggests(text: string): Promise<Suggest[]> {
-  return mockGetSuggests(text);
+  return getSuggests(text);
+  // if (isDev) {
+  //   return mockGetSuggests(text);
+  // } else {
+  //   return getSuggests(text);
+  // }
 }
-
-// async function fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
-//   return search(text, option);
-// }
 
 async function fetchResult(text: string, option: SearchOption) {
-  return mockSearch(text, option);
+  return search(text, option);
+  // if (isDev) {
+  //   return mockSearch(text, option);
+  // } else {
+  //   return search(text, option);
+  // }
 }
-
-// async function fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
-//   const path = appPath + '/src/components/dictionaries/bing/fixture/__test_go2.html';
-//   return new Promise(resolve => {
-//     fs.readFile(
-//       path,
-//       'utf8',
-//       (err: any, data: any) => {
-//         resolve({
-//           engine: option.engine,
-//           processedHtml: data,
-//         } as SearchResult);
-//       });
-//   });
-// }
 

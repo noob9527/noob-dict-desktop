@@ -26,7 +26,7 @@ export function showWindow() {
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: 1600,
+    width: isDev ? 1600 : 800,
     height: 600,
     icon: getAssetsPath('iconTemplate.png'),
     webPreferences: {

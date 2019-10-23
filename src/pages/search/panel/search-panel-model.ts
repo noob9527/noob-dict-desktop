@@ -1,6 +1,5 @@
 import { EngineIdentifier, SearchResult } from "noob-dict-core";
 import { fetchResult } from '../service';
-import { injectSuppressErrorScript } from "../../../shared/utils/dom-utils";
 import { Model } from "dva";
 import HistoryService from '../../../shared/db/history-service';
 import NoteService from '../../../shared/db/note-service';
@@ -13,7 +12,7 @@ export interface SearchPanelState {
   translatedText: string,
   note: Maybe<INote>,
   histories: IHistory[],
-  currentTab: EngineIdentifier,
+  currentTab: string,
   engines: EngineIdentifier[],
   primaryResult: Maybe<SearchResult>,
   searchResults: SearchResults,
@@ -28,7 +27,7 @@ const searchPanelModel: SearchPanelModel = {
   state: {
     note: null,
     histories: [],
-    currentTab: EngineIdentifier.BING,
+    currentTab: 'OVERVIEW',
     engines: [EngineIdentifier.BING, EngineIdentifier.CAMBRIDGE],
     translatedText: '',
     primaryResult: null,
@@ -84,8 +83,15 @@ const searchPanelModel: SearchPanelModel = {
           primaryResult: primaryResult,
         }
       });
-      // persist history
       if (primaryResult) {
+        // switch tab
+        yield put({
+          type: 'mergeState',
+          payload: {
+            currentTab: primaryResult.engine,
+          }
+        });
+        // persist history
         yield call(HistoryService.save, new History({
           text: action.text,
           searchResult: primaryResult.toJSON(),
@@ -95,14 +101,10 @@ const searchPanelModel: SearchPanelModel = {
     * fetchSingleResult(action, { call, put, select }) {
       const { text, engine } = action.payload;
       const result: SearchResult = yield call(fetchResult, text, { engine });
-      const processedResult = {
-        ...result,
-        html: injectSuppressErrorScript(result.html),
-      };
       yield put({
         type: 'mergeSearchResult',
         payload: {
-          result: processedResult,
+          result: result,
         },
       });
     },

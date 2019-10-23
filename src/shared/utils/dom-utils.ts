@@ -9,11 +9,12 @@ function textToDom(text: string): Document {
 
 function injectScript(script: string, html: string): string {
   const doc = textToDom(html);
-  const $head = doc.querySelector('head')!;
+  // const $head = doc.querySelector('head')!;
+  const $body = doc.querySelector('body')!;
   const $script = doc.createElement('script');
   const $inlineScript = doc.createTextNode(script);
   $script.appendChild($inlineScript);
-  $head.prepend($script);
+  $body.prepend($script);
   return doc.documentElement.outerHTML;
 }
 

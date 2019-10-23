@@ -7,12 +7,13 @@ import { SearchPanelState } from "./search-panel-model";
 import EngineView from "../views/engine/EngineView";
 import NoteView from '../views/note/NoteView';
 import HistoryView from "../views/history/HistoryView";
+import OverviewView from "../views/overview/OverviewView";
 
 
 export default () => {
   const dispatch = useDispatch();
   const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
-  const { searchResults, currentTab, note, histories } = state;
+  const { primaryResult, searchResults, currentTab, note, histories } = state;
 
   return (
     <div className={styles.searchPanel}>
@@ -31,8 +32,25 @@ export default () => {
           margin: 0
         }}>
         {
-          Object.entries(searchResults)
-            .map(entry => getEnginePane(entry[0] as EngineIdentifier, entry[1]))
+          primaryResult ? null :
+            <Tabs.TabPane
+              tab="OVERVIEW"
+              key="OVERVIEW"
+            >
+              <OverviewView/>
+            </Tabs.TabPane>
+        }
+        {
+          Object.values(searchResults)
+            .filter(e => !!e)
+            .map((result: Maybe<SearchResult>) =>
+              <Tabs.TabPane
+                tab={result!.engine}
+                key={result!.engine}
+              >
+                <EngineView html={result!.html} searchResult={result}/>
+              </Tabs.TabPane>
+            )
         }
         {note ?
           <Tabs.TabPane
@@ -58,19 +76,14 @@ export default () => {
 }
 
 function getEnginePane(key: EngineIdentifier, value: Maybe<SearchResult>) {
-  let html: string;
-  if (value) {
-    html = value.html;
-  } else {
-    html = Array.from({ length: 100 }).map((e, i) => `<div>hello ${i}</div>`).join('\n');
-  }
+  if (!value) return null;
 
   return (
     <Tabs.TabPane
       tab={key}
       key={key}
     >
-      <EngineView html={html} searchResult={value}/>
+      <EngineView html={value.html} searchResult={value}/>
     </Tabs.TabPane>
   );
 }
