@@ -20,3 +20,6 @@ Icon doesn't show?
   ```
     (electron:31101): libappindicator-WARNING **: 18:59:31.347: Using '/tmp' paths in SNAP environment will lead to unreadable resources
   ```
+
+### TODO
+- webpack target, node integration ???
