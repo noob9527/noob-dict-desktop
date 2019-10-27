@@ -1,4 +1,4 @@
-import { SearchJsonResult } from "noob-dict-core";
+type SearchJsonResult = any;
 
 export enum CollectionAction {
   COLLECT = "COLLECT",

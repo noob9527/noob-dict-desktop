@@ -1,44 +1,95 @@
 {
   "name": "noob-dict-desktop",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
-  "main": "build/electron.js",
+  "main": "build/main.js",
   "homepage": "./",
-  "author": {
-    "name": "Your Name",
-    "email": "your.email@domain.com",
-    "url": "https://your-website.com"
-  },
+  "repository": "git@github.com:noob9527/noob-dict-desktop.git",
+  "author": "xuyan <2061864@qq.com>",
+  "license": "MIT",
   "scripts": {
-    "wonky:start": "react-scripts start",
-    "wonky:test": "react-scripts test",
-    "react:start": "rescripts start",
-    "react:build": "rescripts build",
-    "react:test": "rescripts test",
-    "react:eject": "rescripts eject",
-    "electron:start": "parcel watch ./electron/main.ts --no-source-maps --target electron --out-dir build --out-file electron.js",
-    "electron:build": "parcel build ./electron/main.ts --no-source-maps --target electron --out-dir build --out-file electron.js --no-minify",
-    "start": "concurrently \"npm run electron:start\" \"BROWSER=none npm run react:start\" \"wait-on http://localhost:3000 && electron .\"",
-    "build": "npm run react:build && npm run electron:build  && electron-builder build --linux"
+    "renderer:start": "node scripts/start.js",
+    "renderer:build": "node scripts/build.js",
+    "renderer:test": "node scripts/test.js",
+    "main:start": "parcel watch ./src/main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js",
+    "main:build": "parcel build ./src/main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js --no-minify",
+    "start": "concurrently \"npm run main:start\" \"BROWSER=none npm run renderer:start\" \"wait-on http://localhost:3000 && electron .\"",
+    "build": "npm run renderer:build && npm run main:build  && electron-builder build --linux"
   },
   "dependencies": {
+    "dexie": "^2.0.4",
+    "electron-context-menu": "^0.15.0",
+    "electron-is-dev": "^1.1.0",
+    "electron-timber": "^0.5.1",
+    "react": "^16.10.1",
+    "react-dom": "^16.10.1"
+  },
+  "devDependencies": {
+    "@babel/core": "7.4.3",
+    "@svgr/webpack": "4.1.0",
     "@types/jest": "24.0.18",
     "@types/lodash": "^4.14.144",
     "@types/node": "12.7.8",
     "@types/react": "16.9.3",
     "@types/react-dom": "16.9.1",
-    "antd": "^3.23.6",
-    "bizcharts": "^3.5.5",
-    "dexie": "^2.0.4",
-    "dva": "^2.6.0-beta.14",
-    "electron-context-menu": "^0.15.0",
-    "electron-is-dev": "^1.1.0",
-    "electron-timber": "^0.5.1",
-    "react": "^16.10.1",
-    "react-dom": "^16.10.1",
-    "react-json-view": "^1.19.1",
-    "react-scripts": "^3.2.0",
-    "typescript": "3.6.3"
+    "@typescript-eslint/eslint-plugin": "1.6.0",
+    "@typescript-eslint/parser": "1.6.0",
+    "babel-eslint": "10.0.1",
+    "babel-jest": "^24.8.0",
+    "babel-loader": "8.0.5",
+    "babel-plugin-named-asset-import": "^0.3.2",
+    "babel-preset-react-app": "^9.0.0",
+    "camelcase": "^5.2.0",
+    "case-sensitive-paths-webpack-plugin": "2.2.0",
+    "concurrently": "^5.0.0",
+    "css-loader": "2.1.1",
+    "dotenv": "6.2.0",
+    "dotenv-expand": "4.2.0",
+    "electron": "^6.0.10",
+    "electron-builder": "^21.2.0",
+    "electron-reload": "^1.5.0",
+    "eslint": "^5.16.0",
+    "eslint-config-react-app": "^4.0.1",
+    "eslint-loader": "2.1.2",
+    "eslint-plugin-flowtype": "2.50.1",
+    "eslint-plugin-import": "2.16.0",
+    "eslint-plugin-jsx-a11y": "6.2.1",
+    "eslint-plugin-react": "7.12.4",
+    "eslint-plugin-react-hooks": "^1.5.0",
+    "file-loader": "3.0.1",
+    "fs-extra": "7.0.1",
+    "html-webpack-plugin": "4.0.0-beta.5",
+    "identity-obj-proxy": "3.0.0",
+    "is-wsl": "^1.1.0",
+    "jest": "24.7.1",
+    "jest-environment-jsdom-fourteen": "0.1.0",
+    "jest-resolve": "24.7.1",
+    "jest-watch-typeahead": "0.3.0",
+    "mini-css-extract-plugin": "0.5.0",
+    "node-sass": "^4.13.0",
+    "optimize-css-assets-webpack-plugin": "5.0.1",
+    "parcel-bundler": "^1.12.4",
+    "pnp-webpack-plugin": "1.2.1",
+    "postcss-flexbugs-fixes": "4.1.0",
+    "postcss-loader": "3.0.0",
+    "postcss-normalize": "7.0.1",
+    "postcss-preset-env": "6.6.0",
+    "postcss-safe-parser": "4.0.1",
+    "react-app-polyfill": "^1.0.1",
+    "react-dev-utils": "^9.0.1",
+    "resolve": "1.10.0",
+    "sass-loader": "7.1.0",
+    "semver": "6.0.0",
+    "style-loader": "0.23.1",
+    "terser-webpack-plugin": "1.2.3",
+    "ts-pnp": "1.1.2",
+    "typescript": "^3.6.4",
+    "url-loader": "1.1.2",
+    "wait-on": "^3.3.0",
+    "webpack": "4.29.6",
+    "webpack-dev-server": "3.2.1",
+    "webpack-manifest-plugin": "2.0.4",
+    "workbox-webpack-plugin": "4.2.0"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -55,20 +106,57 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {
-    "@ant-design/dark-theme": "^1.0.3",
-    "@rescripts/cli": "^0.0.12",
-    "@rescripts/rescript-env": "^0.0.10",
-    "babel-plugin-import": "^1.12.2",
-    "concurrently": "^4.1.2",
-    "customize-cra": "^0.8.0",
-    "electron": "^6.0.10",
-    "electron-builder": "^21.2.0",
-    "electron-reload": "^1.5.0",
-    "less": "^3.10.3",
-    "less-loader": "^5.0.0",
-    "node-sass": "^4.12.0",
-    "parcel-bundler": "^1.12.3",
-    "wait-on": "^3.3.0"
+  "jest": {
+    "roots": [
+      "<rootDir>/src"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{js,jsx,ts,tsx}",
+      "!src/**/*.d.ts"
+    ],
+    "setupFiles": [
+      "react-app-polyfill/jsdom"
+    ],
+    "setupFilesAfterEnv": [],
+    "testMatch": [
+      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
+      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
+    ],
+    "testEnvironment": "jest-environment-jsdom-fourteen",
+    "transform": {
+      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
+      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
+      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
+    },
+    "transformIgnorePatterns": [
+      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+      "^.+\\.module\\.(css|sass|scss)$"
+    ],
+    "modulePaths": [],
+    "moduleNameMapper": {
+      "^react-native$": "react-native-web",
+      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
+    },
+    "moduleFileExtensions": [
+      "web.js",
+      "js",
+      "web.ts",
+      "ts",
+      "web.tsx",
+      "tsx",
+      "json",
+      "web.jsx",
+      "jsx",
+      "node"
+    ],
+    "watchPlugins": [
+      "jest-watch-typeahead/filename",
+      "jest-watch-typeahead/testname"
+    ]
+  },
+  "babel": {
+    "presets": [
+      "react-app"
+    ]
   }
 }

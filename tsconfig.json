@@ -21,7 +21,6 @@
     "jsx": "preserve"
   },
   "include": [
-    "src",
-    "electron"
+    "src"
   ]
 }

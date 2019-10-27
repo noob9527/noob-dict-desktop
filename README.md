@@ -1,22 +1,17 @@
-# noob dict
+# noob dict desktop
 
 ### project setup
 #### start
 to start properly, we have to run
 ```bash
-yarn react:build
+yarn renderer:build
 ```
-or copy assets from public/assets to build/assets manually.
+at least once, or we can copy assets from public/assets to build/assets manually.
 
 #### build explanation
-- `react:build` build code under src directory(via react-scripts)
-- `electron:build` build code under electron directory(via parcel)
+- `renderer:build` build code under renderer directory(via webpack)
+- `main:build` build code under main directory(via parcel)
 - `build` generate executable files
-
-reference:
-- [building-an-electron-application-with-create-react-app](https://www.freecodecamp.org/news/building-an-electron-application-with-create-react-app-97945861647c/)
-- [building-a-production-electron-create-react-app-application-with-shared-code-using-electron-builder](https://medium.com/@johndyer24/building-a-production-electron-create-react-app-application-with-shared-code-using-electron-builder-c1f70f0e2649)
-- [how-to-build-an-electron-app-using-create-react-app-and-electron-builder-ss1k0sfer](https://www.codementor.io/randyfindley/how-to-build-an-electron-app-using-create-react-app-and-electron-builder-ss1k0sfer)
 
 ### FAQ
 Icon doesn't show?
