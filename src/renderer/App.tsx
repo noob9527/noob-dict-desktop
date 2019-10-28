@@ -2,10 +2,12 @@ import React from 'react';
 import logo from './logo.svg';
 import './App.css';
 
-// import * as electron from 'electron';
-// console.log(electron.remote.app.getAppPath());
+import * as Electron from 'electron';
+
 
 const App: React.FC = () => {
+  console.log(Electron.remote.app.getAppPath());
+
   return (
     <div className="App">
       <header className="App-header">

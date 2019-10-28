@@ -125,7 +125,8 @@ module.exports = function(webpackEnv) {
   };
 
   return {
-    // target: 'electron-renderer',
+    // we don't use window.require() because it is not friendly to typescript
+    target: 'electron-renderer',
     mode: isEnvProduction ? 'production' : isEnvDevelopment && 'development',
     // Stop compilation early in production
     bail: isEnvProduction,
@@ -346,6 +347,8 @@ module.exports = function(webpackEnv) {
                   'babel-preset-react-app/webpack-overrides'
                 ),
                 plugins: [
+                  // fix wonky-script doesn't work after building bug
+                  // related to https://github.com/facebook/create-react-app/issues/7227
                   isEnvDevelopment && require.resolve('./react-fresh/babel'),
                   isEnvDevelopment && require.resolve('./thing'),
                   [

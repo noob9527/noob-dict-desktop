@@ -1,6 +1,10 @@
 # noob dict desktop
 
-### project setup
+### Finished feature
+- HMR
+- Run main and renderer process tests in parallel(via [Jest electron runner](https://github.com/facebook-atom/jest-electron-runner))
+
+### TODO
 
 #### scripts explanation
 - `renderer:build` build code under renderer directory(via webpack)
@@ -23,5 +27,3 @@ Icon doesn't show?
     (electron:31101): libappindicator-WARNING **: 18:59:31.347: Using '/tmp' paths in SNAP environment will lead to unreadable resources
   ```
 
-### TODO
-- webpack target, node integration ???

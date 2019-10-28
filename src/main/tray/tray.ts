@@ -1,7 +1,7 @@
 import { app, Menu, Tray } from 'electron';
 import logger from '../../shared/utils/logger';
 import holder from '../../shared/utils/instance-holder';
-import getAssetsPath from "../../shared/utils/path-util";
+import { getAssetsPath } from "../../shared/utils/path-util";
 import { showWindow } from "../window";
 
 export function ensureTray() {
@@ -42,5 +42,5 @@ function createMenu() {
         logger.log('app.quit()');
       }
     },
-  ])
+  ]);
 }

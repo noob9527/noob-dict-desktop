@@ -10,10 +10,10 @@
   "scripts": {
     "renderer:start": "node scripts/start.js",
     "renderer:build": "node scripts/build.js",
-    "renderer:test": "node scripts/test.js",
     "main:start": "parcel watch ./src/main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js",
     "main:build": "parcel build ./src/main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js --no-minify",
     "start": "concurrently \"npm run main:start\" \"BROWSER=none npm run renderer:start\" \"wait-on http://localhost:3000 && electron .\"",
+    "test": "node scripts/test.js --config=config/jest/jest.config.js",
     "build": "npm run renderer:build && npm run main:build  && electron-builder build --linux"
   },
   "dependencies": {
@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.4.3",
+    "@jest-runner/electron": "^2.0.2",
     "@svgr/webpack": "4.1.0",
     "@types/jest": "24.0.18",
     "@types/lodash": "^4.14.144",
@@ -104,54 +105,6 @@
       "last 1 chrome version",
       "last 1 firefox version",
       "last 1 safari version"
-    ]
-  },
-  "jest": {
-    "roots": [
-      "<rootDir>/src"
-    ],
-    "collectCoverageFrom": [
-      "src/**/*.{js,jsx,ts,tsx}",
-      "!src/**/*.d.ts"
-    ],
-    "setupFiles": [
-      "react-app-polyfill/jsdom"
-    ],
-    "setupFilesAfterEnv": [],
-    "testMatch": [
-      "<rootDir>/src/**/__tests__/**/*.{js,jsx,ts,tsx}",
-      "<rootDir>/src/**/*.{spec,test}.{js,jsx,ts,tsx}"
-    ],
-    "testEnvironment": "jest-environment-jsdom-fourteen",
-    "transform": {
-      "^.+\\.(js|jsx|ts|tsx)$": "<rootDir>/node_modules/babel-jest",
-      "^.+\\.css$": "<rootDir>/config/jest/cssTransform.js",
-      "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
-    },
-    "transformIgnorePatterns": [
-      "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
-      "^.+\\.module\\.(css|sass|scss)$"
-    ],
-    "modulePaths": [],
-    "moduleNameMapper": {
-      "^react-native$": "react-native-web",
-      "^.+\\.module\\.(css|sass|scss)$": "identity-obj-proxy"
-    },
-    "moduleFileExtensions": [
-      "web.js",
-      "js",
-      "web.ts",
-      "ts",
-      "web.tsx",
-      "tsx",
-      "json",
-      "web.jsx",
-      "jsx",
-      "node"
-    ],
-    "watchPlugins": [
-      "jest-watch-typeahead/filename",
-      "jest-watch-typeahead/testname"
     ]
   },
   "babel": {
