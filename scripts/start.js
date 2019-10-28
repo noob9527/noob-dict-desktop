@@ -16,6 +16,7 @@ require('../config/env');
 
 
 const fs = require('fs');
+const path = require('path');
 const chalk = require('react-dev-utils/chalk');
 const webpack = require('webpack');
 const WebpackDevServer = require('webpack-dev-server');
@@ -79,13 +80,13 @@ checkBrowsers(paths.appPath, isInteractive)
     const protocol = process.env.HTTPS === 'true' ? 'https' : 'http';
     const appName = require(paths.appPackageJson).name;
     const useTypeScript = fs.existsSync(paths.appTsConfig);
-    const tscCompileOnError = process.env.TSC_COMPILE_ON_ERROR === 'true';
     const urls = prepareUrls(protocol, HOST, port);
     const devSocket = {
       warnings: warnings =>
         devServer.sockWrite(devServer.sockets, 'warnings', warnings),
       errors: errors =>
         devServer.sockWrite(devServer.sockets, 'errors', errors),
+      edit: file => devServer.sockWrite(devServer.sockets, 'edit', file),
     };
     // Create a webpack compiler that is configured with custom messages.
     const compiler = createCompiler({
@@ -94,10 +95,13 @@ checkBrowsers(paths.appPath, isInteractive)
       devSocket,
       urls,
       useYarn,
-      useTypeScript,
-      tscCompileOnError,
+      useTypeScript: false,
       webpack,
     });
+    compiler.hooks.invalid.tap('invalid', file => {
+      devSocket.edit('./' + path.relative(process.cwd(), file));
+    });
+
     // Load proxy config
     const proxySetting = require(paths.appPackageJson).proxy;
     const proxyConfig = prepareProxy(proxySetting, paths.appPublic);
