@@ -1,44 +1,63 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+[![Build Status](https://travis-ci.org/noob9527/noob-dict-desktop.svg?branch=master)](https://travis-ci.org/noob9527/noob-dict-desktop)
+# noob dict desktop
 
-## Available Scripts
+### Finished feature
+- HMR
+- Run main and renderer process tests in parallel(via [Jest electron runner](https://github.com/facebook-atom/jest-electron-runner))
 
-In the project directory, you can run:
+### Scripts explanation
+- `renderer:start` start webpack dev server
+- `main:start` build code under electron-main directory with watch option(via parcel)
+- `electron:start` concurrently build electron-main directory and run electron
+- `start` concurrently run renderer:start and electron:start
+- `analyze` [analyzing webpack bundle size](https://create-react-app.dev/docs/analyzing-the-bundle-size/)
+- `renderer:build` build code under electron-main && browser directory(via webpack)
+- `main:build` build code under electron-main directory(via parcel)
+- `build` generate executable files
+- `release` build and draft a new release(if doesn’t already exist)(this is an automatic rule of electron-builder, because the script is named "release")
 
-### `npm start`
+In short:
+- to run code in dev mode, run `start`, or run `renderer:start` and `electron:start` separately.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Reference:
+- https://github.com/electron-userland/electron-builder/issues/2030
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### Source code organization(copy from [vscode](https://github.com/microsoft/vscode/wiki/Source-Code-Organization))
+- `common`: Source code that only requires basic JavaScript APIs and run in all the other target environments
+- `browser`: Source code that requires the browser APIs like access to the DOM
+    - may use code from: `common`
+- `node`: Source code that requires nodejs APIs
+    - may use code from: `common`
+- `electron-renderer`: Source code that requires the Electron renderer-process APIs
+    - may use code from: `common`, `browser`, `node`
+- `electron-main`:
+    - may use code from: `common`, `node`
 
-### `npm test`
+### publish
+> Recommended GitHub Releases Workflow
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Draft a new release. Set the “Tag version” to the value of version in your application package.json, and prefix it with v. “Release title” can be anything you want.  
+  For example, if your application package.json version is 1.0, your draft’s “Tag version” would be v1.0.
+2. Push some commits. Every CI build will update the artifacts attached to this draft.
+3. Once you are done, publish the release. GitHub will tag the latest commit for you.
 
-### `npm run build`
+The benefit of this workflow is that it allows you to always have the latest artifacts, and the release can be published once it is ready.  
+reference:  
+- [publish](https://www.electron.build/configuration/publish)
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+### Known issue
+Unable to find icon?
+to start properly, we have to run
+```bash
+yarn renderer:build
+```
+at least once, or we can copy assets from public/assets to build/assets manually.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+### FAQ
+Icon doesn't show?
+1. do not build or run the app under snap
+  For example, if your webstorm is installed via snap, do not run `yarn start` or `yarn build` via the terminal inside webstorm. it leads to the following error
+  ```
+    (electron:31101): libappindicator-WARNING **: 18:59:31.347: Using '/tmp' paths in SNAP environment will lead to unreadable resources
+  ```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

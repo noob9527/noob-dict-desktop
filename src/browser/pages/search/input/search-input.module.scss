@@ -1,0 +1,73 @@
+// we have to put this in root level
+// because searchHeaderSelectDropdown is not a child of searchPage after rendering
+.searchHeaderSelectDropdown {
+  :global .ant-select-dropdown-menu {
+    padding: 0;
+  }
+  :global .ant-select-dropdown-menu-item {
+    width: 100%;
+    display: inline-flex;
+    justify-content: space-between;
+
+    border-radius: 0;
+    background-color: #3C3C3C;
+    color: #F0F0F0;
+
+    &-selected {
+      background-color: rebeccapurple;
+    }
+    &:hover:not(&-disabled) {
+      background-color: rebeccapurple;
+    }
+    &-active {
+      background-color: rebeccapurple;
+    }
+  }
+
+  :global .ant-spin-spinning {
+    width: 100%;
+
+    .ant-spin-dot {
+      vertical-align: middle;
+    }
+  }
+}
+
+.searchHeaderInput :global {
+  display: flex;
+  align-items: center;
+
+  .ant-select {
+    width: 300px;
+
+    &-focusd {
+      border: none;
+    }
+  }
+
+  .ant-select-selection {
+    border: 0;
+    border-radius: 0;
+    height: auto;
+    box-shadow: none;
+
+    .ant-select-selection__rendered {
+      height: 100%;
+      margin: 0;
+
+      .ant-input {
+        color: #D4D4D4;
+        background-color: #3C3C3C;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+      }
+
+      .ant-input-suffix {
+        i {
+          color: #D4D4D4;
+        }
+      }
+    }
+  }
+}
