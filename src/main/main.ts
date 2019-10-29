@@ -27,12 +27,12 @@ app.on("second-instance", () => {
 app.on("ready", () => {
   ensureWindow();
 
-  const res = globalShortcut.register("CommandOrControl+O", () => {
-    logger.log("CommandOrControl+O");
+  const res = globalShortcut.register("CommandOrControl+1", () => {
+    logger.log("CommandOrControl+1");
     showWindow();
   });
   if (!res) {
-    logger.error("CommandOrControl+O register failed");
+    logger.error("CommandOrControl+1 register failed");
   }
 });
 

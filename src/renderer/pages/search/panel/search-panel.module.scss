@@ -1,0 +1,23 @@
+.searchPanel :global {
+  height: 100%;
+
+  .ant-tabs {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .ant-tabs-tab {
+    text-align: center;
+    min-width: 130px;
+  }
+
+  .ant-tabs-content {
+    flex: 1;
+    height: 100%;
+
+    .ant-tabs-tabpane {
+      height: 100%;
+    }
+  }
+}

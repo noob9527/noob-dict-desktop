@@ -17,12 +17,21 @@
     "build": "npm run renderer:build && npm run main:build  && electron-builder build --linux"
   },
   "dependencies": {
+    "antd": "^3.24.3",
+    "bizcharts": "^3.5.5",
+    "connected-react-router": "^6.5.2",
     "dexie": "^2.0.4",
+    "dva": "^2.6.0-beta.14",
     "electron-context-menu": "^0.15.0",
     "electron-is-dev": "^1.1.0",
     "electron-timber": "^0.5.1",
+    "history": "^4.10.1",
     "react": "^16.10.1",
-    "react-dom": "^16.10.1"
+    "react-dom": "^16.10.1",
+    "react-redux": "^7.1.1",
+    "react-router-dom": "^5.1.2",
+    "redux": "^4.0.4",
+    "redux-saga": "^1.1.1"
   },
   "devDependencies": {
     "@babel/core": "7.4.3",
@@ -33,11 +42,14 @@
     "@types/node": "12.7.8",
     "@types/react": "16.9.3",
     "@types/react-dom": "16.9.1",
+    "@types/react-redux": "^7.1.5",
+    "@types/react-router-dom": "^5.1.0",
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
     "babel-eslint": "10.0.1",
     "babel-jest": "^24.8.0",
     "babel-loader": "8.0.5",
+    "babel-plugin-import": "^1.12.2",
     "babel-plugin-named-asset-import": "^0.3.2",
     "babel-preset-react-app": "^9.0.0",
     "camelcase": "^5.2.0",

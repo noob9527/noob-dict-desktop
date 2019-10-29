@@ -351,6 +351,17 @@ module.exports = function(webpackEnv) {
                   // related to https://github.com/facebook/create-react-app/issues/7227
                   isEnvDevelopment && require.resolve('./react-fresh/babel'),
                   isEnvDevelopment && require.resolve('./thing'),
+                  // babel import plugin
+                  // https://github.com/ant-design/babel-plugin-import
+                  // https://ant.design/docs/react/use-with-create-react-app-cn
+                  [
+                    require.resolve('babel-plugin-import'),
+                    {
+                      libraryName: 'antd',
+                      libraryDirectory: 'es',
+                      style: 'css',
+                    }
+                  ],
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
