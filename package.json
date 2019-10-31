@@ -10,8 +10,8 @@
   "scripts": {
     "renderer:start": "node scripts/start.js",
     "renderer:build": "node scripts/build.js",
-    "main:start": "parcel watch ./src/main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js",
-    "main:build": "parcel build ./src/main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js --no-minify",
+    "main:start": "parcel watch ./src/electron-main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js",
+    "main:build": "parcel build ./src/electron-main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js --no-minify",
     "start": "concurrently \"npm run main:start\" \"BROWSER=none npm run renderer:start\" \"wait-on http://localhost:3000 && electron .\"",
     "test": "node scripts/test.js --config=config/jest/jest.config.js",
     "build": "npm run renderer:build && npm run main:build  && electron-builder build --linux"

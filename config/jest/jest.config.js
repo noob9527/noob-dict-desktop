@@ -61,11 +61,14 @@ module.exports = {
       testEnvironment: 'node',
       testMatch: [
         // main
-        '<rootDir>/src/main/**/__tests__/**/*.{js,jsx,ts,tsx}',
-        '<rootDir>/src/main/**/*.{spec,test}.{js,jsx,ts,tsx}',
-        // shared
-        '<rootDir>/src/shared/**/__tests__/**/*.{js,jsx,ts,tsx}',
-        '<rootDir>/src/shared/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        '<rootDir>/src/electron-main/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/electron-main/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        // common
+        '<rootDir>/src/common/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/common/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        // node
+        '<rootDir>/src/node/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/node/**/*.{spec,test}.{js,jsx,ts,tsx}',
       ],
     },
     {
@@ -73,9 +76,12 @@ module.exports = {
       runner: '@jest-runner/electron',
       testEnvironment: '@jest-runner/electron/environment',
       testMatch: [
-        // renderer
-        '<rootDir>/src/renderer/**/__tests__/**/*.{js,jsx,ts,tsx}',
-        '<rootDir>/src/renderer/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        // electron-browser
+        '<rootDir>/src/electron-browser/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/electron-browser/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        // browser
+        '<rootDir>/src/browser/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/browser/**/*.{spec,test}.{js,jsx,ts,tsx}',
       ],
     }
   ]

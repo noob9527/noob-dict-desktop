@@ -7,7 +7,8 @@ export {
 };
 
 async function fetchSuggests(text: string): Promise<Suggest[]> {
-  return getSuggests(text);
+  return mockGetSuggests(text);
+  // return getSuggests(text);
   // if (isDev) {
   //   return mockGetSuggests(text);
   // } else {

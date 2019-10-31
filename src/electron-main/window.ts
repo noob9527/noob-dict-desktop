@@ -1,10 +1,10 @@
 import { BrowserWindow } from 'electron';
-import logger from '../shared/utils/logger';
-import holder from '../shared/utils/instance-holder';
+import logger from '../common/utils/logger';
+import holder from '../common/utils/instance-holder';
 import isDev from 'electron-is-dev';
 import { ensureTray } from './tray/tray';
 import * as path from 'path';
-import { getAssetsPath } from "../shared/utils/path-util";
+import { getAssetsPath } from "../common/utils/path-util";
 import globalState from './global-state';
 import * as os from "os";
 import * as fs from "fs";

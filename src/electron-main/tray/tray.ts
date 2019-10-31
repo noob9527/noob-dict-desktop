@@ -1,7 +1,7 @@
 import { app, Menu, Tray } from 'electron';
-import logger from '../../shared/utils/logger';
-import holder from '../../shared/utils/instance-holder';
-import { getAssetsPath } from "../../shared/utils/path-util";
+import logger from '../../common/utils/logger';
+import holder from '../../common/utils/instance-holder';
+import { getAssetsPath } from "../../common/utils/path-util";
 import { showWindow } from "../window";
 
 export function ensureTray() {
