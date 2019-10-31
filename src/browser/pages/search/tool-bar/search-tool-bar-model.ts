@@ -1,8 +1,8 @@
 import NoteService from "../../../db/note-service";
 import { CollectionAction, INote, Note } from "../../../db/note"
-import { Model } from "dva";
 import { call, put, select } from '@redux-saga/core/effects';
 import { SearchPanelState } from "../panel/search-panel-model";
+import { Model } from "../../../redux/redux-model";
 
 
 export interface SearchToolBarState {

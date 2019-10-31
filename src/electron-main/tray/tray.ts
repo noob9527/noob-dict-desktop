@@ -1,8 +1,8 @@
 import { app, Menu, Tray } from 'electron';
 import logger from '../../common/utils/logger';
 import holder from '../../common/utils/instance-holder';
-import { getAssetsPath } from "../../common/utils/path-util";
 import { showWindow } from "../window";
+import { getAssetsPath } from "../utils/path-util";
 
 export function ensureTray() {
   holder.setIfAbsent(Tray, createTray);

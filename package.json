@@ -19,9 +19,11 @@
   "dependencies": {
     "antd": "^3.24.3",
     "bizcharts": "^3.5.5",
+    "color": "^3.1.2",
     "connected-react-router": "^6.5.2",
     "dexie": "^2.0.4",
     "dva": "^2.6.0-beta.14",
+    "effective-enum": "^0.0.3",
     "electron-context-menu": "^0.15.0",
     "electron-is-dev": "^1.1.0",
     "electron-timber": "^0.5.1",
@@ -30,13 +32,18 @@
     "react-dom": "^16.10.1",
     "react-redux": "^7.1.1",
     "react-router-dom": "^5.1.2",
+    "react-tabs": "^3.0.0",
     "redux": "^4.0.4",
-    "redux-saga": "^1.1.1"
+    "redux-saga": "^1.1.1",
+    "styled-components": "^4.4.1",
+    "typescript": "^3.7.3"
   },
   "devDependencies": {
     "@babel/core": "7.4.3",
+    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
     "@jest-runner/electron": "^2.0.2",
     "@svgr/webpack": "4.1.0",
+    "@types/color": "^3.0.0",
     "@types/jest": "24.0.18",
     "@types/lodash": "^4.14.144",
     "@types/node": "12.7.8",
@@ -96,7 +103,6 @@
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "1.2.3",
     "ts-pnp": "1.1.2",
-    "typescript": "^3.6.4",
     "url-loader": "1.1.2",
     "wait-on": "^3.3.0",
     "webpack": "4.29.6",
@@ -122,6 +128,9 @@
   "babel": {
     "presets": [
       "react-app"
+    ],
+    "plugins": [
+      "@babel/plugin-proposal-optional-chaining"
     ]
   }
 }

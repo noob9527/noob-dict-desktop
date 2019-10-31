@@ -2,7 +2,7 @@ import { EngineIdentifier, SearchResult } from "noob-dict-core";
 import { fetchResult } from '../service';
 import { INote } from "../../../db/note";
 import { History, IHistory } from "../../../db/history";
-import { all, call, put, select } from '@redux-saga/core/effects';
+import { all, call, put, select, putResolve } from '@redux-saga/core/effects';
 import HistoryService from "../../../db/history-service";
 import NoteService from "../../../db/note-service";
 import { Model } from "../../../redux/redux-model";
@@ -36,7 +36,7 @@ const effects = {
     yield all([
       // fetch engines result
       ...engines.map(engine => {
-        return (put as any).resolve({
+        return putResolve({
           type: 'searchPanel/fetchSingleResult',
           payload: {
             text: action.text,

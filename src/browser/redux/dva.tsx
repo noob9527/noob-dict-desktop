@@ -5,7 +5,8 @@ import { all, takeEvery } from '@redux-saga/core/effects';
 import { createBrowserHistory } from 'history';
 import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
-import createSagaMiddleware from 'redux-saga';
+import createSagaMiddleware, { Saga } from 'redux-saga';
+import { EffectsMapObject, Model } from "./redux-model";
 
 const ReduxApp: React.FC<any> = (props: any) => {
   return (
@@ -17,18 +18,20 @@ const ReduxApp: React.FC<any> = (props: any) => {
 
 class Dva {
   state: any = {};
-  effects: any = {};
-  sagas: any[] = [];
+  effects: EffectsMapObject = {};
+  sagas: Saga[] = [];
   reducers: ReducersMapObject = {};
-  __router!: ComponentType;
+  rootComponent!: ComponentType;
   history = createBrowserHistory();
 
-  model(model: any) {
+  model(model: Model) {
     // state
     this.state[model.namespace] = model.state;
 
     // reducer
     this.reducers[model.namespace] = (state = model.state, action: Action) => {
+      if(!model.reducers) return state;
+      // convert namespace/action to action
       const key = action.type.slice(model.namespace.length + 1);
       const reducer = model.reducers[key];
       if (reducer) {
@@ -39,33 +42,33 @@ class Dva {
     };
 
     // effects
-    const effects = Object.entries(model.effects)
-      .map(([key, effect]: [string, any]) => {
-        console.log(key, effect);
-        return function* () {
-          yield takeEvery(`${model.namespace}/${key}`, effect);
-        };
-      });
-    this.effects[model.namespace] = function* () {
-      yield all(effects.map(e => e()));
-    };
+    if(model.effects) {
+      const effects = Object.entries(model.effects)
+        .map(([key, effect]: [string, any]) => {
+          return function* () {
+            yield takeEvery(`${model.namespace}/${key}`, effect);
+          };
+        });
+      this.effects[model.namespace] = function* () {
+        yield all(effects.map(e => e()));
+      };
+    }
 
     // sagas
-    console.log(model.sagas);
     if(model.sagas) {
       this.sagas = this.sagas.concat(model.sagas);
     }
   }
 
   router(router: ComponentType) {
-    this.__router = router;
+    this.rootComponent = router;
   }
 
   start(element: HTMLElement) {
     const store = this.createStore();
     ReactDOM.render((<ReduxApp store={store}>
       <ConnectedRouter history={this.history}>
-        <this.__router/>
+        <this.rootComponent/>
       </ConnectedRouter>
     </ReduxApp>), element);
   }
@@ -92,7 +95,6 @@ class Dva {
     );
 
     const self = this;
-    console.log('-------------', self.sagas);
     const rootSaga = function* () {
       yield all([
         ...Object.values(self.effects).map((e: any) => e()),

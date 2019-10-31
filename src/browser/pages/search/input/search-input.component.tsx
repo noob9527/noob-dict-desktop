@@ -4,6 +4,7 @@ import { Input, Select, Spin } from "antd";
 import { useDispatch, useSelector } from 'dva';
 import { SelectValue } from "antd/es/select";
 import { SearchInputState } from "./search-input-model";
+import styled from 'styled-components';
 
 
 export default () => {

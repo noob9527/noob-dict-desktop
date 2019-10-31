@@ -1,5 +1,5 @@
-import { Model } from 'dva';
 import { put } from "@redux-saga/core/effects";
+import { Model } from "../../redux/redux-model";
 
 const effects = {
   * increase(action) {
@@ -27,7 +27,7 @@ const reducers = {
   },
 };
 
-const appModel = {
+const appModel: Model = {
   namespace: 'app',
   state: {
     counter: 5

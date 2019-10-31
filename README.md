@@ -5,11 +5,25 @@
 - Run main and renderer process tests in parallel(via [Jest electron runner](https://github.com/facebook-atom/jest-electron-runner))
 
 ### TODO
+- remove dva dependency?
+- remove antd dependency?
 
-#### scripts explanation
-- `renderer:build` build code under renderer directory(via webpack)
-- `main:build` build code under main directory(via parcel)
+### Scripts explanation
+- `renderer:build` build code under browser directory(via webpack)
+- `main:build` build code under electron-main directory(via parcel)
 - `build` generate executable files
+
+### Source code organization(copy from [vscode](https://github.com/microsoft/vscode/wiki/Source-Code-Organization))
+- `common`: Source code that only requires basic JavaScript APIs and run in all the other target environments
+- `browser`: Source code that requires the browser APIs like access to the DOM
+    - may use code from: `common`
+- `node`: Source code that requires nodejs APIs
+    - may use code from: `common`
+- `electron-browser`: Source code that requires the Electron renderer-process APIs
+    - may use code from: `common`, `browser`, `node`
+- `electron-main`:
+    - may use code from: `common`, `node`
+
 
 ### Known issue
 Unable to find icon?
