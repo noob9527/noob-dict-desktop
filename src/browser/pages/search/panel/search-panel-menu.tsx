@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useRouteMatch, NavLink } from "react-router-dom";
+import { Link, useRouteMatch } from "react-router-dom";
 import styled from 'styled-components';
 import ColorId from '../../../styles/ColorId';
 
@@ -24,11 +24,10 @@ const MenuItemElement: React.FC<any> = (props) => {
 
 const MenuItem = styled(MenuItemElement)`
     display: inline-block;
-    border-bottom: none;
-    position: relative;
-    list-style: none;
-    cursor: pointer;
-    padding: 6px 12px;
+    //border-bottom: none;
+    //position: relative;
+    //list-style: none;
+    //cursor: pointer;
 
     color:${props => props.theme[ColorId.tab_inactiveForeground]};
     background-color: ${props => props.theme[ColorId.tab_inactiveBackground]};
@@ -36,7 +35,16 @@ const MenuItem = styled(MenuItemElement)`
       color:${props => props.theme[ColorId.tab_activeForeground]};
       background-color: ${props => props.theme[ColorId.tab_activeBackground]};
     }
+
     a {
+      display: inline-block;
+      text-align: center;
+      padding: 6px 12px;
+      width: 8em;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      vertical-align: middle;
+      
       color: unset;
       transition: none;
     }
@@ -45,17 +53,8 @@ const MenuItem = styled(MenuItemElement)`
     }
 `;
 
-const SearchPanelHeader: React.FC = () => {
-  return (
-    <nav>
-      <Menu>
-        <MenuItem to={"/search/tab1"}>tab1</MenuItem>
-        <MenuItem to={"/search/tab2"}>tab2</MenuItem>
-        <MenuItem to={"/search/tab3"}>tab3</MenuItem>
-      </Menu>
-    </nav>
-  );
+export {
+  Menu,
+  MenuItem
 };
-
-export default SearchPanelHeader;
 
