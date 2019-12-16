@@ -34,8 +34,11 @@ class Dva {
     // reducer
     this.reducers[model.namespace] = (state = model.state, action: Action) => {
       if(!model.reducers) return state;
+
+      if(!action.type.startsWith(model.namespace)) return state;
       // convert namespace/action to action
       const key = action.type.slice(model.namespace.length + 1);
+
       const reducer = model.reducers[key];
       if (reducer) {
         return reducer(state, action);
