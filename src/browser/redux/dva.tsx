@@ -16,6 +16,9 @@ const ReduxApp: React.FC<any> = (props: any) => {
   )
 };
 
+/**
+ * A simplified dva
+ */
 class Dva {
   state: any = {};
   effects: EffectsMapObject = {};

@@ -2,6 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 // import './tabs.css';
 import styled from 'styled-components';
+import ColorId from "../../styles/ColorId";
 
 
 const CustomTab = (props) => (
@@ -24,8 +25,8 @@ const CustomTabList = (props: any) => {
 };
 
 const StyledTabList = styled(CustomTabList)`
-  background-color: ${props => props.theme['tab.inactiveBackground']};
-  color: ${props => props.theme['tab.inactiveForeground']};
+  background-color: ${props => props.theme[ColorId.tab_inactiveBackground]};
+  color: ${props => props.theme[ColorId.tab_inactiveForeground]};
   
   // tab-list
   //border-bottom: 1px solid #aaa;
@@ -44,8 +45,8 @@ const StyledTabList = styled(CustomTabList)`
   }
   
   .react-tabs__tab--selected {
-    background-color: ${props => props.theme['tab.activeBackground']};
-    color: ${props => props.theme['tab.activeForeground']};
+    background-color: ${props => props.theme[ColorId.tab_activeBackground]};
+    color: ${props => props.theme[ColorId.tab_activeForeground]};
     //border-color: #aaa;
   }
   

@@ -11,7 +11,7 @@ const PageRouter = () => {
           {/*<Route path="/test1" component={SearchPage}/>*/}
           <Route path="/test1" component={App}/>
           <Route path="/test2" component={Test2}/>
-          {/*<Route component={App}/>*/}
+          <Route path="/search" component={SearchPage}/>
           <Route component={SearchPage}/>
         </Switch>
       </>
