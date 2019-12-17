@@ -1,5 +1,5 @@
 import { EngineIdentifier, SearchResult } from "noob-dict-core";
-import { fetchResult } from '../service';
+import { fetchResult } from '../search-service';
 import { INote } from "../../../db/note";
 import { History, IHistory } from "../../../db/history";
 import { all, call, put, select, putResolve } from '@redux-saga/core/effects';

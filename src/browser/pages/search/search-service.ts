@@ -17,11 +17,11 @@ async function fetchSuggests(text: string): Promise<Suggest[]> {
 }
 
 async function fetchResult(text: string, option: SearchOption) {
-  // return search(text, option);
-  if (isDev) {
-    return mockSearch(text, option);
-  } else {
-    return search(text, option);
-  }
+  return search(text, option);
+  // if (isDev) {
+  //   return mockSearch(text, option);
+  // } else {
+  //   return search(text, option);
+  // }
 }
 

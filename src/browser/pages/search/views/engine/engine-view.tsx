@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { SearchPanelState } from "../../panel/search-panel-model";
 import { useSelector } from "react-redux";
 import CommonEngineView from "./common-engine-view";
+import IframeEngineView from "./iframe-engine-view";
 
 interface EngineViewProps {
   html: string
@@ -18,7 +19,10 @@ const EngineView: React.FC<EngineViewProps> = (props: EngineViewProps) => {
   if (!result) return <div>empty result</div>;
 
   return (
-    <><CommonEngineView searchResult={result}/></>
+    <>
+      {/*<CommonEngineView searchResult={result}/>*/}
+      <IframeEngineView searchResult={result}/>
+    </>
   );
 
 };

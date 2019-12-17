@@ -2,7 +2,7 @@ import React from 'react';
 import SearchPanel from "./panel/search-panel";
 import SearchPanelLegacy from "./panel/search-panel-legacy";
 import SearchHeaderInput from "./input/search-input";
-import SearchToolBar from "./tool-bar/SearchToolBar";
+import SearchToolBar from "./tool-bar/search-tool-bar";
 import styled from 'styled-components';
 import ColorId from '../../styles/ColorId';
 

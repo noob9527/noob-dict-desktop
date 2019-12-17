@@ -19,7 +19,7 @@ export default () => {
         <Menu>
           {/*<MenuItem to={"/search/tab1"}>tab1</MenuItem>*/}
           {/*<MenuItem to={"/search/tab2"}>tab2</MenuItem>*/}
-          <MenuItem to={"/search/overview"}>OVERVIEW</MenuItem>
+          {/*<MenuItem to={"/search/overview"}>OVERVIEW</MenuItem>*/}
           {engineMenuItems}
         </Menu>
       </nav>

@@ -31,5 +31,7 @@ dark[ColorId.dropdown_border] = Color('#D4D4D4');
 // dark[ColorId.list_hoverBackground] = Color('#F0F0F0');
 // dark[ColorId.list_hoverForeground] = Color('#3C3C3C');
 
+// non stable
+dark[ColorId.heart] = Color('#eb2f96');
 
 Object.keys(dark).forEach(e => dark[e] = dark[e]?.toString());

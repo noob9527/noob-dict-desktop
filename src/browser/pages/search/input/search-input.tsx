@@ -49,7 +49,7 @@ export default () => {
 
   function getInputElement() {
     return <Input.Search
-      placeholder="input search text"
+      // placeholder="input search text"
       onPressEnter={onPressEnter}
       onSearch={search}
     />;

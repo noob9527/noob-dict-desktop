@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, Menu } from 'electron';
 import logger from '../common/utils/logger';
 import holder from '../common/utils/instance-holder';
 import isDev from 'electron-is-dev';
@@ -36,7 +36,20 @@ function createWindow() {
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
     },
+
+    // doesn't work on linux
+    // https://electronjs.org/docs/api/browser-window
+    minimizable: false,
+    maximizable: false,
   });
+
+  // remove menu bar
+  // https://stackoverflow.com/questions/39091964/remove-menubar-from-electron-app
+  window.setMenuBarVisibility(false); // turns out this is the only work way to hide the menu bar
+  // window.setMenu(null);
+  // window.removeMenu();
+  // Menu.setApplicationMenu(null);
+  // window.setAutoHideMenuBar(true);
 
   window.loadURL(isDev
     ? 'http://localhost:3000'
@@ -67,6 +80,11 @@ function createWindow() {
   window.webContents.on("did-finish-load", () => {
     ensureTray();
     logger.log('did-finish-load');
+  });
+  // stop link from opening new window
+  // https://stackoverflow.com/questions/46462248/electron-link-opens-in-new-window
+  window.webContents.on("new-window", (event) => {
+    event.preventDefault();
   });
 
   if (isDev) {

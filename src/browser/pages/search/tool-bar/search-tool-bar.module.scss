@@ -1,23 +1,23 @@
 .toolbar :global {
 
-  .ant-btn-link {
-    i {
-      color: #eb2f96;
-    }
-  }
-
-  .ant-btn-link[disabled] {
-    border: 0;
-    cursor: auto;
-
-    i {
-      color: gray;
-    }
-
-    &:hover {
-      i {
-        color: gray;
-      }
-    }
-  }
+  //.ant-btn-link {
+  //  i {
+  //    color: #eb2f96;
+  //  }
+  //}
+  //
+  //.ant-btn-link[disabled] {
+  //  border: 0;
+  //  cursor: auto;
+  //
+  //  i {
+  //    color: gray;
+  //  }
+  //
+  //  &:hover {
+  //    i {
+  //      color: gray;
+  //    }
+  //  }
+  //}
 }

@@ -1,4 +1,6 @@
 enum ColorId {
+  heart = "heart", // none stable
+
   background = "background",
   foreground = "foreground",
 
