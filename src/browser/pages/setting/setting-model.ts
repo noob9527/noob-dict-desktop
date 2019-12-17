@@ -1,6 +1,6 @@
 import { put, call } from "@redux-saga/core/effects";
 import { Model } from "../../redux/redux-model";
-import { openSettingWindow } from "./setting-service";
+import { openSettingWindow } from "../../services/setting-service";
 
 export interface SettingState {
   open: boolean

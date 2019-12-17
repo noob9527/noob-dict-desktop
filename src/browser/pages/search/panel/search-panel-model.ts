@@ -1,8 +1,8 @@
 import { EngineIdentifier, SearchResult } from "noob-dict-core";
-import { fetchResult } from '../search-service';
+import { fetchResult } from '../../../services/search-service';
 import { INote } from "../../../db/note";
 import { History, IHistory } from "../../../db/history";
-import { all, call, put, select, putResolve } from '@redux-saga/core/effects';
+import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
 import HistoryService from "../../../db/history-service";
 import NoteService from "../../../db/note-service";
 import { Model } from "../../../redux/redux-model";

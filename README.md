@@ -7,6 +7,9 @@
 ### TODO
 - remove dva dependency?
 - remove antd dependency?
+- pin main window
+- setting window(modal)
+- popup window(frameless)
 
 ### Scripts explanation
 - `renderer:build` build code under browser directory(via webpack)
