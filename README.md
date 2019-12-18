@@ -22,7 +22,7 @@
     - may use code from: `common`
 - `node`: Source code that requires nodejs APIs
     - may use code from: `common`
-- `electron-browser`: Source code that requires the Electron renderer-process APIs
+- `electron-renderer`: Source code that requires the Electron renderer-process APIs
     - may use code from: `common`, `browser`, `node`
 - `electron-main`:
     - may use code from: `common`, `node`

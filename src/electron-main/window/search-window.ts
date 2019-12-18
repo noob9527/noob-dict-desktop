@@ -1,20 +1,25 @@
 import { BrowserWindow, Menu } from 'electron';
-import logger from '../common/utils/logger';
-import holder from '../common/utils/instance-holder';
+import logger from '../../common/utils/logger';
+import holder from '../../common/utils/instance-holder';
 import isDev from 'electron-is-dev';
-import { ensureTray } from './tray/tray';
+import { ensureTray } from '../tray/tray';
 import * as path from 'path';
-import globalState from './global-state';
-import * as os from "os";
-import * as fs from "fs";
-import { getAssetsPath } from './utils/path-util';
+import globalState from '../global-state';
+import * as os from 'os';
+import * as fs from 'fs';
+import { getAssetsPath } from '../utils/path-util';
 
-export function ensureWindow() {
+export {
+  ensureWindow,
+  showWindow,
+}
+
+function ensureWindow() {
   holder.setIfAbsent(BrowserWindow, createWindow);
   return holder.get(BrowserWindow);
 }
 
-export function showWindow() {
+function showWindow() {
   const window = holder.get(BrowserWindow);
   if (window) {
     if (window.isMinimized()) window.restore();
@@ -59,7 +64,7 @@ function createWindow() {
   // and load the index.html of the app.
   // window.loadFile('index.html')
 
-  window.on("close", e => {
+  window.on('close', e => {
     // close to tray
     // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
     if (!globalState.isQuiting) {
@@ -69,7 +74,7 @@ function createWindow() {
   });
 
   // Emitted when the window is closed.
-  window.on("closed", () => {
+  window.on('closed', () => {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
@@ -77,13 +82,13 @@ function createWindow() {
     logger.log('closed');
   });
 
-  window.webContents.on("did-finish-load", () => {
+  window.webContents.on('did-finish-load', () => {
     ensureTray();
     logger.log('did-finish-load');
   });
   // stop link from opening new window
   // https://stackoverflow.com/questions/46462248/electron-link-opens-in-new-window
-  window.webContents.on("new-window", (event) => {
+  window.webContents.on('new-window', (event) => {
     event.preventDefault();
   });
 

@@ -1,11 +1,12 @@
 import { EngineIdentifier, SearchResult } from "noob-dict-core";
-import { fetchResult } from '../../../services/search-service';
 import { INote } from "../../../db/note";
 import { History, IHistory } from "../../../db/history";
 import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
 import HistoryService from "../../../db/history-service";
 import NoteService from "../../../db/note-service";
 import { Model } from "../../../redux/redux-model";
+import { rendererContainer } from "../../../services/renderer-container";
+import { SearchService, searchServiceToken } from "../../../services/search-service";
 
 export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchResult> };
 
@@ -87,7 +88,8 @@ const effects = {
   },
   * fetchSingleResult(action) {
     const { text, engine } = action.payload;
-    const result: SearchResult = yield call(fetchResult, text, { engine });
+    const searchService = rendererContainer.get<SearchService>(searchServiceToken);
+    const result: SearchResult = yield call([searchService, searchService.fetchResult], text, { engine });
     yield put({
       type: 'searchPanel/mergeSearchResult',
       payload: {

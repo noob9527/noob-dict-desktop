@@ -1,7 +1,8 @@
 import { Suggest } from "noob-dict-core";
-import { fetchSuggests } from '../../../services/search-service';
 import { call, cancel, delay, fork, put, take } from '@redux-saga/core/effects';
 import { Model } from "../../../redux/redux-model";
+import { rendererContainer } from "../../../services/renderer-container";
+import { SearchService, searchServiceToken } from "../../../services/search-service";
 
 export interface SearchInputState {
   text: string,
@@ -32,7 +33,8 @@ const effects = {
     });
   },
   * fetchSuggests(action) {
-    const suggests = yield call(fetchSuggests, action.text);
+    const searchService = rendererContainer.get<SearchService>(searchServiceToken);
+    const suggests = yield call([searchService, searchService.fetchSuggests], action.text);
     yield put({
       type: 'searchInput/mergeState',
       payload: {

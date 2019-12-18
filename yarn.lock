@@ -6576,6 +6576,11 @@ invariant@^2.2.1, invariant@^2.2.2, invariant@^2.2.4:
   dependencies:
     loose-envify "^1.0.0"
 
+inversify@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/inversify/-/inversify-5.0.1.tgz#500d709b1434896ce5a0d58915c4a4210e34fb6e"
+  integrity sha512-Ieh06s48WnEYGcqHepdsJUIJUXpwH5o5vodAX+DK2JA/gjy4EbEcQZxw+uFfzysmKjiLXGYwNG3qDZsKVMcINQ==
+
 invert-kv@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npm.taobao.org/invert-kv/download/invert-kv-1.0.0.tgz#104a8e4aaca6d3d8cd157a8ef8bfab2d7a3ffdb6"
@@ -12915,7 +12920,7 @@ ts-pnp@^1.0.0:
   resolved "https://registry.npm.taobao.org/ts-pnp/download/ts-pnp-1.1.4.tgz#ae27126960ebaefb874c6d7fa4729729ab200d90"
   integrity sha1-ricSaWDrrvuHTG1/pHKXKasgDZA=
 
-tslib@^1.8.1, tslib@^1.9.0, tslib@^1.9.3:
+tslib@^1.8.1, tslib@^1.9.0:
   version "1.10.0"
   resolved "https://registry.npm.taobao.org/tslib/download/tslib-1.10.0.tgz#c3c19f95973fb0a62973fb09d90d961ee43e5c8a"
   integrity sha1-w8GflZc/sKYpc/sJ2Q2WHuQ+XIo=
@@ -12926,13 +12931,6 @@ tsutils@^3.7.0:
   integrity sha1-7XGZF/EcoN7lhicrKsSeAVot11k=
   dependencies:
     tslib "^1.8.1"
-
-tsyringe@^4.0.1:
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/tsyringe/-/tsyringe-4.0.1.tgz#f657d4f697c553dc69a31948a6c66e94447d8cfe"
-  integrity sha512-Xtn/r3y4fjplogdjiG2buqPBo3/FcXdlUrVWx7JaXpNiwsPG135yEajVfIXVVT1VpnfBYbZ8hjKZer+NJVLTww==
-  dependencies:
-    tslib "^1.9.3"
 
 tty-browserify@0.0.0:
   version "0.0.0"

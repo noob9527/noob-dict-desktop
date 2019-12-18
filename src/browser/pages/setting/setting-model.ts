@@ -1,6 +1,7 @@
-import { put, call } from "@redux-saga/core/effects";
-import { Model } from "../../redux/redux-model";
-import { openSettingWindow } from "../../services/setting-service";
+import { call, put } from '@redux-saga/core/effects';
+import { Model } from '../../redux/redux-model';
+import { SettingService, settingServiceToken } from '../../services/setting-service';
+import { rendererContainer } from '../../services/renderer-container';
 
 export interface SettingState {
   open: boolean
@@ -12,7 +13,8 @@ export interface SettingModel extends Model {
 
 const effects = {
   * open() {
-    const open = yield call(openSettingWindow);
+    const settingService = rendererContainer.get<SettingService>(settingServiceToken);
+    const open = yield call([settingService, settingService.openSettingWindow]);
     yield put({
       type: 'setting/mergeState',
       payload: { open },

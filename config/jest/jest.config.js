@@ -76,9 +76,9 @@ module.exports = {
       runner: '@jest-runner/electron',
       testEnvironment: '@jest-runner/electron/environment',
       testMatch: [
-        // electron-browser
-        '<rootDir>/src/electron-browser/**/__tests__/**/*.{js,jsx,ts,tsx}',
-        '<rootDir>/src/electron-browser/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        // electron-renderer
+        '<rootDir>/src/electron-renderer/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/electron-renderer/**/*.{spec,test}.{js,jsx,ts,tsx}',
         // browser
         '<rootDir>/src/browser/**/__tests__/**/*.{js,jsx,ts,tsx}',
         '<rootDir>/src/browser/**/*.{spec,test}.{js,jsx,ts,tsx}',

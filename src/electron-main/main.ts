@@ -1,7 +1,7 @@
 // Modules to control application life and create native browser window
 import { app, globalShortcut, MenuItem } from 'electron';
 import logger from '../common/utils/logger';
-import { ensureWindow, showWindow } from './window';
+import { ensureWindow, showWindow } from './window/search-window';
 import globalState from './global-state';
 import contextMenu from 'electron-context-menu';
 

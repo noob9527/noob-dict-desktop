@@ -1,13 +1,14 @@
 import { SettingService } from "../../browser/services/setting-service";
-import { container } from "tsyringe";
-import { remote } from 'electron';
+import { remote, ipcRenderer } from 'electron';
 import isDev from "electron-is-dev";
 import * as path from "path";
 import holder from "../../common/utils/instance-holder";
+import { injectable } from "inversify";
 
 const { BrowserWindow } = remote;
 
-class ElectronSettingService extends SettingService {
+@injectable()
+export class ElectronSettingService extends SettingService {
   openSettingWindow(): Promise<boolean> {
     // todo
     // gotta do this in main process?
@@ -40,8 +41,3 @@ class ElectronSettingService extends SettingService {
   }
 }
 
-export default function registerSettingService() {
-  container.register(SettingService, {
-    useClass: ElectronSettingService
-  });
-}

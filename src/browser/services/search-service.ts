@@ -1,29 +1,9 @@
-import { SearchOption, SearchResult, Suggest } from "noob-dict-core";
-import { container } from "tsyringe";
+import { SearchOption, SearchResult, Suggest } from 'noob-dict-core';
 
-// work as injection token
-export class SearchService {
-  fetchSuggests(text: string): Promise<Suggest[]> {
-    throw new Error();
-  }
+export const searchServiceToken = Symbol.for('search-service');
 
-  fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
-    throw new Error();
-  }
+export interface SearchService {
+  fetchSuggests(text: string): Promise<Suggest[]>
+
+  fetchResult(text: string, option: SearchOption): Promise<SearchResult>
 }
-
-export {
-  fetchSuggests,
-  fetchResult,
-};
-
-async function fetchSuggests(text: string): Promise<Suggest[]> {
-  const searchService = container.resolve(SearchService);
-  return searchService.fetchSuggests(text);
-}
-
-async function fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
-  const searchService = container.resolve(SearchService);
-  return searchService.fetchResult(text, option);
-}
-
