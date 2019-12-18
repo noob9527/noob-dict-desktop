@@ -1,8 +1,8 @@
-import NoteService from "../../../db/note-service";
-import { CollectionAction, INote, Note } from "../../../db/note"
+import NoteService from '../../../db/note-service';
+import { CollectionAction, INote, Note } from '../../../db/note';
 import { call, put, select } from '@redux-saga/core/effects';
-import { SearchPanelState } from "../panel/search-panel-model";
-import { Model } from "../../../redux/redux-model";
+import { SearchPanelState } from '../panel/search-panel-model';
+import { Model } from '../../../redux/redux-model';
 
 
 export interface SearchToolBarState {
@@ -49,14 +49,14 @@ const effects = {
       type: 'searchPanel/mergeState',
       payload: { note },
     });
-  }
+  },
 };
 
 const reducers = {
   mergeState(state, action: any) {
     return {
       ...state,
-      ...action.payload
+      ...action.payload,
     };
   },
 };
@@ -64,7 +64,7 @@ const reducers = {
 const searchToolBarModel: SearchToolBarModel = {
   namespace: 'searchToolBar',
   state: {
-    lastCollectAction: CollectionAction.COLLECT
+    lastCollectAction: CollectionAction.COLLECT,
   },
   effects,
   reducers,

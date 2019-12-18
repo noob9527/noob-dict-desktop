@@ -1,12 +1,20 @@
 import { app, Menu, Tray } from 'electron';
 import logger from '../../common/utils/logger';
-import holder from '../../common/utils/instance-holder';
-import { showWindow } from "../window/search-window";
-import { getAssetsPath } from "../utils/path-util";
+import { showSearchWindow } from '../window/search-window';
+import { getAssetsPath } from '../utils/path-util';
+import { mainContainer } from '../../common/container/main-container';
 
-export function ensureTray() {
-  holder.setIfAbsent(Tray, createTray);
-  return holder.get(Tray);
+export {
+  getOrCreateTray,
+};
+
+const TrayToken = Symbol.for('tray');
+mainContainer.bind<Tray>(TrayToken)
+  .toDynamicValue(createTray)
+  .inSingletonScope();
+
+function getOrCreateTray() {
+  return mainContainer.get<Tray>(TrayToken);
 }
 
 function createTray() {
@@ -32,15 +40,15 @@ function createMenu() {
       label: 'Show',
       click: () => {
         logger.log('show');
-        showWindow();
-      }
+        showSearchWindow();
+      },
     },
     {
       label: 'Quit',
       click: () => {
         app.quit();
         logger.log('app.quit()');
-      }
+      },
     },
   ]);
 }

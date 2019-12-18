@@ -24,6 +24,7 @@
     "dexie": "^2.0.4",
     "dva": "^2.6.0-beta.14",
     "effective-enum": "^0.0.3",
+    "electron-better-ipc": "^0.7.0",
     "electron-context-menu": "^0.15.0",
     "electron-is-dev": "^1.1.0",
     "electron-timber": "^0.5.1",

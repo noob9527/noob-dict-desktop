@@ -5,8 +5,8 @@ import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
 import HistoryService from "../../../db/history-service";
 import NoteService from "../../../db/note-service";
 import { Model } from "../../../redux/redux-model";
-import { rendererContainer } from "../../../services/renderer-container";
-import { SearchService, searchServiceToken } from "../../../services/search-service";
+import { rendererContainer } from "../../../../common/container/renderer-container";
+import { SearchService, SearchServiceToken } from "../../../services/search-service";
 
 export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchResult> };
 
@@ -88,7 +88,7 @@ const effects = {
   },
   * fetchSingleResult(action) {
     const { text, engine } = action.payload;
-    const searchService = rendererContainer.get<SearchService>(searchServiceToken);
+    const searchService = rendererContainer.get<SearchService>(SearchServiceToken);
     const result: SearchResult = yield call([searchService, searchService.fetchResult], text, { engine });
     yield put({
       type: 'searchPanel/mergeSearchResult',

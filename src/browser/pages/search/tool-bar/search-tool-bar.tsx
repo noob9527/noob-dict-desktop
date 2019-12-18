@@ -1,12 +1,9 @@
 import React from 'react';
-import styles from './search-tool-bar.module.scss';
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Dropdown, Icon, Menu } from "antd";
-import { SearchPanelState } from "../panel/search-panel-model";
-import { ThemeType } from "antd/es/icon";
-import { ClickParam } from "antd/es/menu";
-import { CollectionAction } from "../../../db/note";
+import { Button, Icon } from 'antd';
+import { SearchPanelState } from '../panel/search-panel-model';
 import styled from 'styled-components';
+import { SearchState } from '../search-model';
 
 const ToolBar = styled.div`
   display: flex;
@@ -22,9 +19,10 @@ const ToolBar = styled.div`
 
 export default () => {
   const dispatch = useDispatch();
+  const searchState: SearchState = useSelector((state: any) => state.search);
   const panelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
   const { note, primaryResult } = panelState;
-
+  const { pinned } = searchState;
 
   return (
     <ToolBar>
@@ -32,7 +30,6 @@ export default () => {
         type="link"
         shape="circle"
         onClick={() => {
-          console.log('hello');
           dispatch({
             type: 'setting/open',
           });
@@ -46,10 +43,16 @@ export default () => {
       <Button
         type="link"
         shape="circle"
+        onClick={() => {
+          dispatch({
+            type: 'search/togglePinned',
+          });
+        }}
         ghost
       >
         <Icon
           type="pushpin"
+          style={{ transform: `rotate(${pinned ? '-45deg' : '0deg'})` }}
         />
       </Button>
     </ToolBar>

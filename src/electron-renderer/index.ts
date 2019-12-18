@@ -1,6 +1,4 @@
 // for dependency injection
 import 'reflect-metadata';
-import registerAllService from './services/service-register';
+import './services';
 import '../browser/index';
-
-registerAllService();

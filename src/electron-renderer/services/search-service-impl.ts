@@ -1,6 +1,6 @@
-import { SearchService } from "../../browser/services/search-service";
-import { getSuggests, mockGetSuggests, mockSearch, search, SearchOption, SearchResult, Suggest } from "noob-dict-core";
-import { injectable } from "inversify";
+import { SearchService } from '../../browser/services/search-service';
+import { getSuggests, mockGetSuggests, mockSearch, search, SearchOption, SearchResult, Suggest } from 'noob-dict-core';
+import { injectable } from 'inversify';
 
 // this implementation only works if you can circumvent the CORS problem
 @injectable()

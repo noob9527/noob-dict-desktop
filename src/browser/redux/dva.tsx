@@ -6,7 +6,7 @@ import { createBrowserHistory } from 'history';
 import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import createSagaMiddleware, { Saga } from 'redux-saga';
-import { EffectsMapObject, Model } from "./redux-model";
+import { EffectsMapObject, Model } from './redux-model';
 
 const ReduxApp: React.FC<any> = (props: any) => {
   return (

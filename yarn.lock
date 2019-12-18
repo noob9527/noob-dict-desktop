@@ -4677,6 +4677,13 @@ ejs@^2.6.2:
   resolved "https://registry.npm.taobao.org/ejs/download/ejs-2.7.1.tgz?cache=0&sync_timestamp=1567453765286&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fejs%2Fdownload%2Fejs-2.7.1.tgz#5b5ab57f718b79d4aca9254457afecd36fa80228"
   integrity sha1-W1q1f3GLedSsqSVEV6/s02+oAig=
 
+electron-better-ipc@^0.7.0:
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/electron-better-ipc/-/electron-better-ipc-0.7.0.tgz#da6c439933639954a889fe6109767c6aeaafca94"
+  integrity sha512-9gQOHoedFRdM/dQjKARTdxnTmdk/srecn0Ez89NOl8EsGwrpfKDQ4aN8mG6gFlgKL7SGFHZpeDBY+aiNh4+ECw==
+  dependencies:
+    serialize-error "^5.0.0"
+
 electron-builder@^21.2.0:
   version "21.2.0"
   resolved "https://registry.npm.taobao.org/electron-builder/download/electron-builder-21.2.0.tgz?cache=0&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Felectron-builder%2Fdownload%2Felectron-builder-21.2.0.tgz#b68ec4def713fc0b8602654ce842f972432f50c5"
@@ -11789,6 +11796,13 @@ send@0.17.1:
     range-parser "~1.2.1"
     statuses "~1.5.0"
 
+serialize-error@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/serialize-error/-/serialize-error-5.0.0.tgz#a7ebbcdb03a5d71a6ed8461ffe0fc1a1afed62ac"
+  integrity sha512-/VtpuyzYf82mHYTtI4QKtwHa79vAdU5OQpNPAmE/0UDdlGT0ZxHwC+J6gXkw29wwoVI8fMPsfcVHOwXtUQYYQA==
+  dependencies:
+    type-fest "^0.8.0"
+
 serialize-javascript@^1.4.0, serialize-javascript@^1.7.0:
   version "1.9.1"
   resolved "https://registry.npm.taobao.org/serialize-javascript/download/serialize-javascript-1.9.1.tgz#cfc200aef77b600c47da9bb8149c943e798c2fdb"
@@ -12960,6 +12974,11 @@ type-fest@^0.3.0:
   version "0.3.1"
   resolved "https://registry.npm.taobao.org/type-fest/download/type-fest-0.3.1.tgz?cache=0&sync_timestamp=1569404138136&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Ftype-fest%2Fdownload%2Ftype-fest-0.3.1.tgz#63d00d204e059474fe5e1b7c011112bbd1dc29e1"
   integrity sha1-Y9ANIE4FlHT+Xht8ARESu9HcKeE=
+
+type-fest@^0.8.0:
+  version "0.8.1"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.8.1.tgz#09e249ebde851d3b1e48d27c105444667f17b83d"
+  integrity sha512-4dbzIzqvjtgiM5rw1k5rEHtBANKmdudhGyBEajN01fEyhaAIhsoKNy6y7+IN93IfpFtwY9iqi7kD+xwKhQsNJA==
 
 type-is@~1.6.17, type-is@~1.6.18:
   version "1.6.18"

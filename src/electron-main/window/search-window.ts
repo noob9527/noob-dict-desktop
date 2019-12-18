@@ -1,31 +1,40 @@
-import { BrowserWindow, Menu } from 'electron';
+import { BrowserWindow } from 'electron';
 import logger from '../../common/utils/logger';
-import holder from '../../common/utils/instance-holder';
 import isDev from 'electron-is-dev';
-import { ensureTray } from '../tray/tray';
+import { getOrCreateTray } from '../tray/tray';
 import * as path from 'path';
 import globalState from '../global-state';
 import * as os from 'os';
 import * as fs from 'fs';
 import { getAssetsPath } from '../utils/path-util';
+import { mainContainer } from '../../common/container/main-container';
 
 export {
-  ensureWindow,
-  showWindow,
+  getOrCreateSearchWindow,
+  showSearchWindow,
+  destroy,
+};
+
+const SearchWindowToken = Symbol.for('search-window');
+mainContainer.bind<BrowserWindow>(SearchWindowToken).toDynamicValue(createWindow);
+
+function getOrCreateSearchWindow() {
+  return mainContainer.get<BrowserWindow>(SearchWindowToken);
 }
 
-function ensureWindow() {
-  holder.setIfAbsent(BrowserWindow, createWindow);
-  return holder.get(BrowserWindow);
+function destroy() {
+  // try to clear the cache and free the memory
+  // https://github.com/inversify/InversifyJS/blob/master/wiki/scope.md
+  mainContainer.rebind<BrowserWindow>(SearchWindowToken).toDynamicValue(createWindow);
 }
 
-function showWindow() {
-  const window = holder.get(BrowserWindow);
+function showSearchWindow() {
+  const window = getOrCreateSearchWindow();
   if (window) {
     if (window.isMinimized()) window.restore();
     window.show();
   } else {
-    logger.error("somehow window doesn't exist");
+    logger.error('somehow window doesn\'t exist');
   }
 }
 
@@ -58,7 +67,7 @@ function createWindow() {
 
   window.loadURL(isDev
     ? 'http://localhost:3000'
-    : `file://${path.join(__dirname, '../build/index.html')}`
+    : `file://${path.join(__dirname, '../build/index.html')}`,
   );
   // window.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
   // and load the index.html of the app.
@@ -78,12 +87,12 @@ function createWindow() {
     // Dereference the window object, usually you would store windows
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
-    holder.remove(BrowserWindow);
+    destroy();
     logger.log('closed');
   });
 
   window.webContents.on('did-finish-load', () => {
-    ensureTray();
+    getOrCreateTray();
     logger.log('did-finish-load');
   });
   // stop link from opening new window
