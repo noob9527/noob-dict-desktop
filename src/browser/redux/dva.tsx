@@ -2,18 +2,18 @@ import React, { ComponentType } from 'react';
 import ReactDOM from 'react-dom';
 import { Action, applyMiddleware, combineReducers, compose, createStore, ReducersMapObject } from 'redux';
 import { all, takeEvery } from '@redux-saga/core/effects';
-import { createHashHistory } from 'history';
+import { createBrowserHistory, History } from 'history';
 import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import createSagaMiddleware, { Saga } from 'redux-saga';
 import { EffectsMapObject, Model } from './redux-model';
 
-const ReduxApp: React.FC<any> = (props: any) => {
-  return (
-    <Provider store={props.store}>
-      {props.children}
-    </Provider>
-  )
+interface DvaOption {
+  history: History<any>
+}
+
+const defaultOption: DvaOption = {
+  history: createBrowserHistory(),
 };
 
 /**
@@ -25,10 +25,14 @@ class Dva {
   sagas: Saga[] = [];
   reducers: ReducersMapObject = {};
   rootComponent!: ComponentType;
-  // electron production mode(load file) cannot use browser history
-  // https://stackoverflow.com/a/47926513
-  // history = createBrowserHistory();
-  history = createHashHistory();
+  history: History<any>;
+
+  constructor(
+    option: Partial<DvaOption>,
+  ) {
+    const opt = { ...defaultOption, ...option };
+    this.history = opt.history;
+  }
 
   model(model: Model) {
     // state
@@ -36,9 +40,9 @@ class Dva {
 
     // reducer
     this.reducers[model.namespace] = (state = model.state, action: Action) => {
-      if(!model.reducers) return state;
+      if (!model.reducers) return state;
 
-      if(!action.type.startsWith(model.namespace)) return state;
+      if (!action.type.startsWith(model.namespace)) return state;
       // convert namespace/action to action
       const key = action.type.slice(model.namespace.length + 1);
 
@@ -51,7 +55,7 @@ class Dva {
     };
 
     // effects
-    if(model.effects) {
+    if (model.effects) {
       const effects = Object.entries(model.effects)
         .map(([key, effect]: [string, any]) => {
           return function* () {
@@ -64,7 +68,7 @@ class Dva {
     }
 
     // sagas
-    if(model.sagas) {
+    if (model.sagas) {
       this.sagas = this.sagas.concat(model.sagas);
     }
   }
@@ -75,18 +79,20 @@ class Dva {
 
   start(element: HTMLElement) {
     const store = this.createStore();
-    ReactDOM.render((<ReduxApp store={store}>
-      <ConnectedRouter history={this.history}>
-        <this.rootComponent/>
-      </ConnectedRouter>
-    </ReduxApp>), element);
+    ReactDOM.render((
+      <Provider store={store}>
+        <ConnectedRouter history={this.history}>
+          <this.rootComponent/>
+        </ConnectedRouter>
+      </Provider>
+    ), element);
   }
 
   private createStore(initialState: any = {}) {
     const sagaMiddleware = createSagaMiddleware();
     const rootReducer = combineReducers({
       router: connectRouter(this.history),
-      ...this.reducers
+      ...this.reducers,
     });
 
     const store = createStore(
@@ -107,7 +113,7 @@ class Dva {
     const rootSaga = function* () {
       yield all([
         ...Object.values(self.effects).map((e: any) => e()),
-        ...self.sagas.map((e: any) => e())
+        ...self.sagas.map((e: any) => e()),
       ]);
     };
     sagaMiddleware.run(rootSaga);
@@ -116,7 +122,9 @@ class Dva {
   }
 }
 
-export default function dva() {
-  return new Dva();
+export default function dva(
+  option: Partial<DvaOption> = {},
+) {
+  return new Dva(option);
 }
 
