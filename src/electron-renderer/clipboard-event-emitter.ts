@@ -13,6 +13,8 @@ function diff(str1, str2) {
 class ClipboardEventEmitter extends EventEmitter {
   eventEmitter: EventEmitter = new EventEmitter();
   timer: any = null;
+  // previousClipboardText = '';
+  // previousSelectionText = '';
   previousClipboardText = clipboard.readText('clipboard');
   previousSelectionText = clipboard.readText('selection');
 

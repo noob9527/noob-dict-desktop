@@ -40,12 +40,13 @@ function createWindow() {
       webSecurity: false,
     },
   });
-  window.setMenuBarVisibility(false);
+  // window.setMenuBarVisibility(false);
 
   // Load a remote URL
+  // https://stackoverflow.com/a/47926513
   window.loadURL(isDev
-    ? 'http://localhost:3000/setting'
-    : `file://${path.join(__dirname, '../build/index.html')}`,
+    ? 'http://localhost:3000/#/setting'
+    : `file://${path.join(__dirname, '../build/index.html#/setting')}`,
   );
 
   window.on('closed', () => {

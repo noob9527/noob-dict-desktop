@@ -12,6 +12,7 @@
 - popup window(frameless)
 
 ### Scripts explanation
+- `analyze` [analyzing webpack bundle size](https://create-react-app.dev/docs/analyzing-the-bundle-size/)
 - `renderer:build` build code under browser directory(via webpack)
 - `main:build` build code under electron-main directory(via parcel)
 - `build` generate executable files

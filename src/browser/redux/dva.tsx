@@ -2,7 +2,7 @@ import React, { ComponentType } from 'react';
 import ReactDOM from 'react-dom';
 import { Action, applyMiddleware, combineReducers, compose, createStore, ReducersMapObject } from 'redux';
 import { all, takeEvery } from '@redux-saga/core/effects';
-import { createBrowserHistory } from 'history';
+import { createHashHistory } from 'history';
 import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
 import { Provider } from 'react-redux';
 import createSagaMiddleware, { Saga } from 'redux-saga';
@@ -25,7 +25,10 @@ class Dva {
   sagas: Saga[] = [];
   reducers: ReducersMapObject = {};
   rootComponent!: ComponentType;
-  history = createBrowserHistory();
+  // electron production mode(load file) cannot use browser history
+  // https://stackoverflow.com/a/47926513
+  // history = createBrowserHistory();
+  history = createHashHistory();
 
   model(model: Model) {
     // state
