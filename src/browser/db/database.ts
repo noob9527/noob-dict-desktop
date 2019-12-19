@@ -1,6 +1,6 @@
 import Dexie from 'dexie';
-import { INote } from "./note";
-import { IHistory } from "./history";
+import { INote } from './note';
+import { IHistory } from './history';
 
 class Database extends Dexie {
   notes: Dexie.Table<INote, number>;

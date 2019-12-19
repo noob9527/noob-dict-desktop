@@ -1,5 +1,5 @@
 import Color from 'color';
-import ColorId from "../styles/ColorId";
+import ColorId from '../styles/ColorId';
 
 // names are copy from [Color customization color id changes](https://github.com/microsoft/vscode/wiki/Color-customization-color-id-changes)
 export const dark = {};

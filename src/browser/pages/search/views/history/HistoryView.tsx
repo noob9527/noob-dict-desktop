@@ -5,8 +5,8 @@ import {
   Geom,
   Axis,
   Tooltip,
-} from "bizcharts";
-import { IHistory } from "../../../../db/history";
+} from 'bizcharts';
+import { IHistory } from '../../../../db/history';
 
 interface HistoryViewProps {
   histories: IHistory[]
@@ -25,12 +25,12 @@ const HistoryView: React.FC<HistoryViewProps> = (props: HistoryViewProps) => {
   const data = group(histories, chronoUnit);
   return (
     <div style={{ marginBottom: '50px', width: '100%' }}>
-      <Chart height={400} data={data} forceFit padding={"auto"}>
+      <Chart height={400} data={data} forceFit padding={'auto'}>
         <Axis name="date"/>
         <Axis name="times"/>
         <Tooltip
           crosshairs={{
-            type: "y"
+            type: 'y'
           }}
         />
         <Geom type="line" position="date*times" size={2}/>
@@ -38,9 +38,9 @@ const HistoryView: React.FC<HistoryViewProps> = (props: HistoryViewProps) => {
           type="point"
           position="date*times"
           size={4}
-          shape={"circle"}
+          shape={'circle'}
           style={{
-            stroke: "#fff",
+            stroke: '#fff',
             lineWidth: 1
           }}
         />

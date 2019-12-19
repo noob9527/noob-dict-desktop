@@ -1,4 +1,4 @@
-import database from "./database";
+import database from './database';
 
 describe('database', () => {
   it('isOpen', async () => {

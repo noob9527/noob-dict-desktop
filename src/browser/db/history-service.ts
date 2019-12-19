@@ -1,5 +1,5 @@
-import database from "./database";
-import { IHistory } from "./history";
+import database from './database';
+import { IHistory } from './history';
 
 const HistoryService = {
   save,

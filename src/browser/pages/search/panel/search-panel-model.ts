@@ -1,12 +1,12 @@
-import { EngineIdentifier, SearchResult } from "noob-dict-core";
-import { INote } from "../../../db/note";
-import { History, IHistory } from "../../../db/history";
+import { EngineIdentifier, SearchResult } from 'noob-dict-core';
+import { INote } from '../../../db/note';
+import { History, IHistory } from '../../../db/history';
 import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
-import HistoryService from "../../../db/history-service";
-import NoteService from "../../../db/note-service";
-import { Model } from "../../../redux/redux-model";
-import { rendererContainer } from "../../../../common/container/renderer-container";
-import { SearchService, SearchServiceToken } from "../../../services/search-service";
+import HistoryService from '../../../db/history-service';
+import NoteService from '../../../db/note-service';
+import { Model } from '../../../redux/redux-model';
+import { rendererContainer } from '../../../../common/container/renderer-container';
+import { SearchService, SearchServiceToken } from '../../../services/search-service';
 
 export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchResult> };
 

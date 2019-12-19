@@ -1,10 +1,10 @@
 import React from 'react';
 import { SearchResult, EngineIdentifier } from 'noob-dict-core';
-import { useParams } from "react-router-dom";
-import { SearchPanelState } from "../../panel/search-panel-model";
-import { useSelector } from "react-redux";
-import CommonEngineView from "./common-engine-view";
-import IframeEngineView from "./iframe-engine-view";
+import { useParams } from 'react-router-dom';
+import { SearchPanelState } from '../../panel/search-panel-model';
+import { useSelector } from 'react-redux';
+import CommonEngineView from './common-engine-view';
+import IframeEngineView from './iframe-engine-view';
 
 interface EngineViewProps {
   html: string

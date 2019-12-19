@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'dva';
 // import { Tabs } from "antd";
 import { EngineIdentifier, SearchResult } from 'noob-dict-core';
 import styles from './search-panel.module.scss';
-import { SearchPanelState } from "./search-panel-model";
-import EngineView from "../views/engine/engine-view";
+import { SearchPanelState } from './search-panel-model';
+import EngineView from '../views/engine/engine-view';
 import NoteView from '../views/note/NoteView';
-import HistoryView from "../views/history/HistoryView";
-import OverviewView from "../views/overview/OverviewView";
-import { Tab, Tabs, TabList, TabPanel } from "../../../components/tabs/tabs";
+import HistoryView from '../views/history/HistoryView';
+import OverviewView from '../views/overview/OverviewView';
+import { Tab, Tabs, TabList, TabPanel } from '../../../components/tabs/tabs';
 
 // export default () => {
 //   return (

@@ -1,8 +1,8 @@
-import { Suggest } from "noob-dict-core";
+import { Suggest } from 'noob-dict-core';
 import { call, cancel, delay, fork, put, take } from '@redux-saga/core/effects';
-import { Model } from "../../../redux/redux-model";
-import { rendererContainer } from "../../../../common/container/renderer-container";
-import { SearchService, SearchServiceToken } from "../../../services/search-service";
+import { Model } from '../../../redux/redux-model';
+import { rendererContainer } from '../../../../common/container/renderer-container';
+import { SearchService, SearchServiceToken } from '../../../services/search-service';
 
 export interface SearchInputState {
   text: string,

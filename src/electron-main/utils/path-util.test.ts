@@ -1,4 +1,4 @@
-import { getAssetsPath } from "./path-util";
+import { getAssetsPath } from './path-util';
 
 describe('path-util', () => {
   it('getAssetsPath', () => {

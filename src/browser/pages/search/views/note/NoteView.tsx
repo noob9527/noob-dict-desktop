@@ -1,6 +1,6 @@
 import React from 'react';
 // import ReactJson from 'react-json-view';
-import { INote } from "../../../../db/note";
+import { INote } from '../../../../db/note';
 
 interface NoteViewProps {
   note: INote

@@ -1,8 +1,8 @@
 type SearchJsonResult = any;
 
 export enum CollectionAction {
-  COLLECT = "COLLECT",
-  QUICK_COLLECT = "QUICK_COLLECT",
+  COLLECT = 'COLLECT',
+  QUICK_COLLECT = 'QUICK_COLLECT',
 }
 
 interface Context {

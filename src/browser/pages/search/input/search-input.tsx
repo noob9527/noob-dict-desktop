@@ -1,9 +1,9 @@
 import React, { KeyboardEvent } from 'react';
 import styles from './search-input.module.scss';
-import { Input, Select, Spin } from "antd";
+import { Input, Select, Spin } from 'antd';
 import { useDispatch, useSelector } from 'dva';
-import { SelectValue } from "antd/es/select";
-import { SearchInputState } from "./search-input-model";
+import { SelectValue } from 'antd/es/select';
+import { SearchInputState } from './search-input-model';
 
 
 export default () => {

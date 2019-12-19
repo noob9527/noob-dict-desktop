@@ -1,5 +1,5 @@
-import database from "./database";
-import { INote } from "./note";
+import database from './database';
+import { INote } from './note';
 
 const NoteService = {
   save,

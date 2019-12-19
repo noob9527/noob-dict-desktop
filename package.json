@@ -8,6 +8,7 @@
   "author": "xuyan <2061864@qq.com>",
   "license": "MIT",
   "scripts": {
+    "lint:fix": "eslint --fix src --ext .ts,.tsx",
     "renderer:start": "node scripts/start.js",
     "renderer:build": "node scripts/build.js",
     "main:start": "parcel watch ./src/electron-main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js",

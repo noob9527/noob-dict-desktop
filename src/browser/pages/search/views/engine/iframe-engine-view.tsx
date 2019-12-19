@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResult } from "noob-dict-core";
+import { SearchResult } from 'noob-dict-core';
 
 interface CommonEngineViewProps {
   searchResult: SearchResult
