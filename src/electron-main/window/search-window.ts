@@ -59,7 +59,7 @@ function createWindow() {
 
   // remove menu bar
   // https://stackoverflow.com/questions/39091964/remove-menubar-from-electron-app
-  window.setMenuBarVisibility(false); // turns out this is the only work way to hide the menu bar
+  // window.setMenuBarVisibility(false); // turns out this is the only work way to hide the menu bar
   // window.setMenu(null);
   // window.removeMenu();
   // Menu.setApplicationMenu(null);

@@ -2,7 +2,6 @@ import { BrowserWindow } from 'electron';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import { mainContainer } from '../../common/container/main-container';
-import { getOrCreateSearchWindow } from './search-window';
 import logger from '../../common/utils/logger';
 
 export {
@@ -30,7 +29,6 @@ function createWindow() {
     width: isDev ? 1500 : 700,
     height: 500,
     modal: true,
-    parent: getOrCreateSearchWindow(),
     show: false,
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
@@ -40,12 +38,13 @@ function createWindow() {
       webSecurity: false,
     },
   });
-  window.setMenuBarVisibility(false);
+  // window.setMenuBarVisibility(false);
 
   // Load a remote URL
+  // https://stackoverflow.com/a/47926513
   window.loadURL(isDev
-    ? 'http://localhost:3000/setting'
-    : `file://${path.join(__dirname, '../build/index.html')}`,
+    ? 'http://localhost:3000/#/setting'
+    : `file://${path.join(__dirname, '../build/index.html#/setting')}`,
   );
 
   window.on('closed', () => {

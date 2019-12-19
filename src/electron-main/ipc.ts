@@ -1,7 +1,7 @@
 import { ipcMain } from 'electron-better-ipc';
 import { getOrCreateSettingWindow } from './window/setting-window';
 import { SearchChannel, SettingChannel } from '../common/ipc-channel';
-import { getOrCreateSearchWindow } from './window/search-window';
+import { getOrCreateSearchWindow, showSearchWindow } from './window/search-window';
 
 ipcMain.answerRenderer(SettingChannel.OPEN_SETTING_WINDOW, () => {
   getOrCreateSettingWindow();
@@ -14,4 +14,8 @@ ipcMain.answerRenderer(SearchChannel.TOGGLE_PIN_SEARCH_WINDOW, () => {
   const target = !top;
   window.setAlwaysOnTop(target);
   return target;
+});
+
+ipcMain.answerRenderer(SearchChannel.SHOW_SEARCH_WINDOW, () => {
+  showSearchWindow();
 });
