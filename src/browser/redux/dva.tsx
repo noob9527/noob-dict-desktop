@@ -1,6 +1,14 @@
 import React, { ComponentType } from 'react';
 import ReactDOM from 'react-dom';
-import { Action, applyMiddleware, combineReducers, compose, createStore, ReducersMapObject } from 'redux';
+import {
+  Action,
+  applyMiddleware,
+  combineReducers,
+  compose,
+  createStore,
+  ReducersMapObject,
+  StoreEnhancer,
+} from 'redux';
 import { all, takeEvery } from '@redux-saga/core/effects';
 import { createBrowserHistory, History } from 'history';
 import { ConnectedRouter, connectRouter, routerMiddleware } from 'connected-react-router';
@@ -9,11 +17,20 @@ import createSagaMiddleware, { Saga } from 'redux-saga';
 import { EffectsMapObject, Model } from './redux-model';
 
 interface DvaOption {
-  history: History<any>
+  history: History<any>,
+  extraEnhancers: StoreEnhancer[],
+  createRootComponent: (store, history) => ComponentType
 }
 
 const defaultOption: DvaOption = {
   history: createBrowserHistory(),
+  extraEnhancers: [],
+  createRootComponent: (store, history) => (props) =>
+    <Provider store={store}>
+      <ConnectedRouter history={history}>
+        {props.children}
+      </ConnectedRouter>
+    </Provider>,
 };
 
 /**
@@ -24,14 +41,18 @@ class Dva {
   effects: EffectsMapObject = {};
   sagas: Saga[] = [];
   reducers: ReducersMapObject = {};
-  rootComponent!: ComponentType;
+  routerComponent!: ComponentType;
   history: History<any>;
+  extraEnhancers: StoreEnhancer[];
+  createRootComponent: (store, history) => ComponentType;
 
   constructor(
     option: Partial<DvaOption>,
   ) {
     const opt = { ...defaultOption, ...option };
     this.history = opt.history;
+    this.extraEnhancers = opt.extraEnhancers;
+    this.createRootComponent = opt.createRootComponent;
   }
 
   model(model: Model) {
@@ -74,18 +95,17 @@ class Dva {
   }
 
   router(router: ComponentType) {
-    this.rootComponent = router;
+    this.routerComponent = router;
   }
 
   start(element: HTMLElement) {
     const store = this.createStore();
-    ReactDOM.render((
-      <Provider store={store}>
-        <ConnectedRouter history={this.history}>
-          <this.rootComponent/>
-        </ConnectedRouter>
-      </Provider>
-    ), element);
+    // got to start with a capital letter
+    // https://stackoverflow.com/questions/37414304/typescript-complains-property-does-not-exist-on-type-jsx-intrinsicelements-whe
+    const Root = this.createRootComponent(store, this.history);
+    ReactDOM.render(<Root>
+      <this.routerComponent/>
+    </Root>, element);
   }
 
   private createStore(initialState: any = {}) {
@@ -104,6 +124,7 @@ class Dva {
           sagaMiddleware,
           // ... other middlewares ...
         ),
+        ...this.extraEnhancers,
         // @ts-ignore
         window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
       ),

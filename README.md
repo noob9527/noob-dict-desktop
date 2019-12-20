@@ -12,10 +12,17 @@
 - popup window(frameless)
 
 ### Scripts explanation
+- `renderer:start` start webpack dev server
+- `main:start` build code under electron-main directory with watch option(via parcel)
+- `electron:start` concurrently build electron-main directory and run electron
+- `start` concurrently run renderer:start and electron:start
 - `analyze` [analyzing webpack bundle size](https://create-react-app.dev/docs/analyzing-the-bundle-size/)
-- `renderer:build` build code under browser directory(via webpack)
+- `renderer:build` build code under electron-main && browser directory(via webpack)
 - `main:build` build code under electron-main directory(via parcel)
 - `build` generate executable files
+
+In short:
+- to run code in dev mode, run `start`, or run `renderer:start` and `electron:start` separately.
 
 ### Source code organization(copy from [vscode](https://github.com/microsoft/vscode/wiki/Source-Code-Organization))
 - `common`: Source code that only requires basic JavaScript APIs and run in all the other target environments

@@ -79,11 +79,11 @@ const effects = {
           currentTab: primaryResult.engine,
         }
       });
-      // persist history
-      yield call(HistoryService.save, new History({
-        text: action.text,
-        searchResult: primaryResult.toJSON(),
-      }));
+      // // persist history
+      // yield call(HistoryService.save, new History({
+      //   text: action.text,
+      //   searchResult: primaryResult.toJSON(),
+      // }));
     }
   },
   * fetchSingleResult(action) {

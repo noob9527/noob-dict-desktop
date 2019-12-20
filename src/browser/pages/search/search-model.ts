@@ -14,9 +14,7 @@ export interface SearchModel extends Model {
 const effects = {
   * togglePinned() {
     const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
-    console.log(searchUiService);
     const pinned = yield call([searchUiService, searchUiService.togglePin]);
-    console.log(pinned);
     yield put({
       type: 'search/mergeState',
       payload: { pinned },

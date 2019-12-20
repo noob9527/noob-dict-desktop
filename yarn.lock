@@ -11348,6 +11348,11 @@ redent@^1.0.0:
     indent-string "^2.1.0"
     strip-indent "^1.0.1"
 
+redux-persist@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/redux-persist/-/redux-persist-6.0.0.tgz#b4d2972f9859597c130d40d4b146fecdab51b3a8"
+  integrity sha512-71LLMbUq2r02ng2We9S215LtPu3fY0KgaGE0k8WRgl6RkqxtGfl7HUozz1Dftwsb0D/5mZ8dwAaPbtnzfvbEwQ==
+
 redux-saga@^0.16.0:
   version "0.16.2"
   resolved "https://registry.npm.taobao.org/redux-saga/download/redux-saga-0.16.2.tgz?cache=0&sync_timestamp=1568706734416&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2Fredux-saga%2Fdownload%2Fredux-saga-0.16.2.tgz#993662e86bc945d8509ac2b8daba3a8c615cc971"
