@@ -30,12 +30,13 @@ function destroy() {
 
 function showSearchWindow() {
   const window = getOrCreateSearchWindow();
-  if (window) {
-    if (window.isMinimized()) window.restore();
-    window.show();
-  } else {
-    logger.error('somehow window doesn\'t exist');
-  }
+  window.show();
+  // if (window) {
+  //   if (window.isMinimized()) window.restore();
+  //   window.show();
+  // } else {
+  //   logger.error('somehow window doesn\'t exist');
+  // }
 }
 
 function createWindow() {

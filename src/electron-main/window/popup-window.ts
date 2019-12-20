@@ -5,30 +5,43 @@ import { mainContainer } from '../../common/container/main-container';
 import logger from '../../common/utils/logger';
 
 export {
-  getOrCreateSettingWindow,
+  getOrCreatePopupWindow,
+  showPopupWindow,
   destroy,
 };
 
-const SettingWindowToken = Symbol.for('setting-window');
-mainContainer.bind<BrowserWindow>(SettingWindowToken).toDynamicValue(createWindow);
+const PopupWindowToken = Symbol.for('popup-window');
+mainContainer.bind<BrowserWindow>(PopupWindowToken).toDynamicValue(createWindow);
 
-function getOrCreateSettingWindow() {
-  return mainContainer.get<BrowserWindow>(SettingWindowToken);
+function getOrCreatePopupWindow() {
+  return mainContainer.get<BrowserWindow>(PopupWindowToken);
+}
+
+function showPopupWindow() {
+  const window = getOrCreatePopupWindow();
+  window.show();
+  // if (window) {
+  //   if (window.isMinimized()) window.restore();
+  //   window.show();
+  // } else {
+  //   logger.error('somehow window doesn\'t exist');
+  // }
 }
 
 function destroy() {
   // try to clear the cache and free the memory
   // https://github.com/inversify/InversifyJS/blob/master/wiki/scope.md
-  mainContainer.rebind<BrowserWindow>(SettingWindowToken).toDynamicValue(createWindow);
+  mainContainer.rebind<BrowserWindow>(PopupWindowToken).toDynamicValue(createWindow);
 }
 
 function createWindow() {
-  // create a modal window
-  // https://electronjs.org/docs/api/browser-window#modal-windows
+  // create a popup window
+  // https://electronjs.org/docs/api/frameless-window
   const window = new BrowserWindow({
-    width: isDev ? 1500 : 700,
-    height: 500,
-    modal: true,
+    width: isDev ? 800 : 800,
+    height: 600,
+    transparent: true,
+    frame: false,
     show: false,
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
@@ -43,16 +56,16 @@ function createWindow() {
   // Load a remote URL
   // https://stackoverflow.com/a/47926513
   window.loadURL(isDev
-    ? 'http://localhost:3000/#/setting'
-    : `file://${path.join(__dirname, '../build/index.html#/setting')}`,
+    ? 'http://localhost:3000/#/popup'
+    : `file://${path.join(__dirname, '../build/index.html#/popup')}`,
   );
 
   window.on('closed', () => {
     destroy();
-    logger.log(`${SettingWindowToken.description} closed`);
+    logger.log(`${PopupWindowToken.description} closed`);
   });
   window.once('ready-to-show', () => {
-    window.show();
+    // window.show();
   });
   return window;
 }

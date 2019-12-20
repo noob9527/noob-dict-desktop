@@ -5,11 +5,14 @@ import { SettingUiService, SettingUiServiceToken } from '../../browser/services/
 import { ElectronSettingUiService } from './setting-ui-service-impl';
 import { SearchUiService, SearchUiServiceToken } from '../../browser/services/search-ui-service';
 import { ElectronSearchUiService } from './search-ui-service-impl';
+import { PopupUiService, PopupUiServiceToken } from '../../browser/services/popup-ui-service';
+import { ElectronPopupUiService } from './popup-ui-service-impl';
 
 function registerAllService() {
   rendererContainer.bind<SearchService>(SearchServiceToken).to(MockSearchService);
   rendererContainer.bind<SearchUiService>(SearchUiServiceToken).to(ElectronSearchUiService);
   rendererContainer.bind<SettingUiService>(SettingUiServiceToken).to(ElectronSettingUiService);
+  rendererContainer.bind<PopupUiService>(PopupUiServiceToken).to(ElectronPopupUiService);
 }
 
 registerAllService();

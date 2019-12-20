@@ -7,13 +7,18 @@ enum SearchChannel {
   SHOW_SEARCH_WINDOW = 'SHOW_SEARCH_WINDOW'
 }
 
-export enum TrayChannel {
-  PUT_IN_TRAY = 'PUT_IN_TRAY',
-  REMOVE_TRAY = 'REMOVE_TRAY'
+enum PopupChannel {
+  SHOW_POPUP_WINDOW = 'SHOW_POPUP_WINDOW'
 }
+
+// enum TrayChannel {
+//   PUT_IN_TRAY = 'PUT_IN_TRAY',
+//   REMOVE_TRAY = 'REMOVE_TRAY'
+// }
 
 export {
   SettingChannel,
   SearchChannel,
+  PopupChannel,
 };
 

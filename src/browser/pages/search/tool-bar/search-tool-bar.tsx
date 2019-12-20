@@ -4,6 +4,8 @@ import { Button, Icon } from 'antd';
 import { SearchPanelState } from '../panel/search-panel-model';
 import styled from 'styled-components';
 import { SearchState } from '../search-model';
+import { rendererContainer } from '../../../../common/container/renderer-container';
+import { PopupUiService, PopupUiServiceToken } from '../../../services/popup-ui-service';
 
 const ToolBar = styled.div`
   display: flex;
@@ -24,8 +26,25 @@ export default () => {
   const { note, primaryResult } = panelState;
   const { pinned } = searchState;
 
+  const popupUiService = rendererContainer.get<PopupUiService>(PopupUiServiceToken);
+
   return (
     <ToolBar>
+      <Button
+        type="link"
+        shape="circle"
+        onClick={() => {
+          popupUiService.show();
+          // dispatch({
+          //   type: 'popup/show',
+          // });
+        }}
+        ghost
+      >
+        <Icon
+          type="smile"
+        />
+      </Button>
       <Button
         type="link"
         shape="circle"

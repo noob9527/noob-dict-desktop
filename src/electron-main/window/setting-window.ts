@@ -31,7 +31,6 @@ function createWindow() {
     height: 500,
     modal: true,
     parent: getOrCreateSearchWindow(),
-    show: false,
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
