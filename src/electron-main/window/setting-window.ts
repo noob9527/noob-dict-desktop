@@ -27,10 +27,10 @@ function createWindow() {
   // create a modal window
   // https://electronjs.org/docs/api/browser-window#modal-windows
   const window = new BrowserWindow({
-    width: isDev ? 1500 : 700,
-    height: 500,
+    width: isDev ? 1000 : 400,
+    height: 300,
     modal: true,
-    parent: getOrCreateSearchWindow(),
+    // parent: getOrCreateSearchWindow(),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
@@ -39,7 +39,7 @@ function createWindow() {
       webSecurity: false,
     },
   });
-  // window.setMenuBarVisibility(false);
+  window.setMenuBarVisibility(false);
 
   // Load a remote URL
   // https://stackoverflow.com/a/47926513
@@ -55,5 +55,10 @@ function createWindow() {
   window.once('ready-to-show', () => {
     window.show();
   });
+
+  if(isDev) {
+    // window.webContents.openDevTools();
+  }
+
   return window;
 }

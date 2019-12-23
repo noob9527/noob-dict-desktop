@@ -1,3 +1,4 @@
+// names are copy from [Color customization color id changes](https://github.com/microsoft/vscode/wiki/Color-customization-color-id-changes)
 enum ColorId {
   heart = 'heart', // none stable
 
@@ -8,6 +9,9 @@ enum ColorId {
   input_foreground = 'input.foreground',
   input_background = 'input.background',
   input_border = 'input.border',
+
+  // button
+  button_background = 'button.background',
 
   // tabs
   tab_border = 'tab.border',

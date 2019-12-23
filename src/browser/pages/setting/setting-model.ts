@@ -5,6 +5,7 @@ import { rendererContainer } from '../../../common/container/renderer-container'
 
 export interface SettingState {
   open: boolean
+  appHotKey: string
 }
 
 export interface SettingModel extends Model {
@@ -26,7 +27,7 @@ const reducers = {
   mergeState(state, action: any) {
     return {
       ...state,
-      ...action.payload
+      ...action.payload,
     };
   },
 };
@@ -35,6 +36,7 @@ const appModel: SettingModel = {
   namespace: 'setting',
   state: {
     open: false,
+    appHotKey: '',
   },
   effects,
   reducers,
