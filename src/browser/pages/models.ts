@@ -5,14 +5,16 @@ import search from './search/search-model';
 import searchInput from './search/input/search-input-model';
 import searchPanel from './search/panel/search-panel-model';
 import searchToolBar from './search/tool-bar/search-tool-bar-model';
+import transientModel from './transient-model';
 
 export {
   root,
-  app,
   setting,
+  transientModel,
+  app,
   search,
   searchInput,
   searchPanel,
-  searchToolBar
+  searchToolBar,
 };
 

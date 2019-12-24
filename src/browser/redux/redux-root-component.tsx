@@ -3,8 +3,10 @@ import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
 import { PersistGate } from 'redux-persist/integration/react';
 import { Spin } from 'antd';
+import { registerStorageEventListener } from './register-storage-event-listener';
 
 export const createReduxRootComponent = (store, history) => {
+  registerStorageEventListener(store, store.persistConfig);
   return (props) => (
     <Provider store={store}>
       {/*<ConnectedRouter history={history}>*/}

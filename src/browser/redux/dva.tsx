@@ -7,6 +7,7 @@ import {
   compose,
   createStore,
   ReducersMapObject,
+  Store,
   StoreEnhancer,
 } from 'redux';
 import { all, takeEvery } from '@redux-saga/core/effects';
@@ -17,14 +18,16 @@ import createSagaMiddleware, { Saga } from 'redux-saga';
 import { EffectsMapObject, Model } from './redux-model';
 
 interface DvaOption {
-  history: History<any>,
-  extraEnhancers: StoreEnhancer[],
+  history: History<any>
+  extraEnhancers: StoreEnhancer[]
   createRootComponent: (store, history) => ComponentType
+  initialState: any
 }
 
 const defaultOption: DvaOption = {
   history: createBrowserHistory(),
   extraEnhancers: [],
+  initialState: {},
   createRootComponent: (store, history) => (props) =>
     <Provider store={store}>
       <ConnectedRouter history={history}>
@@ -37,7 +40,9 @@ const defaultOption: DvaOption = {
  * A simplified dva
  */
 class Dva {
-  state: any = {};
+  state: any = {};  // globalState
+  _store: Store | null = null;
+  initialState: any = {};
   effects: EffectsMapObject = {};
   sagas: Saga[] = [];
   reducers: ReducersMapObject = {};
@@ -53,6 +58,7 @@ class Dva {
     this.history = opt.history;
     this.extraEnhancers = opt.extraEnhancers;
     this.createRootComponent = opt.createRootComponent;
+    this.initialState = opt.initialState;
   }
 
   model(model: Model) {
@@ -99,25 +105,28 @@ class Dva {
   }
 
   start(element: HTMLElement) {
-    const store = this.createStore();
+    this.getOrCreateStore();
     // got to start with a capital letter
     // https://stackoverflow.com/questions/37414304/typescript-complains-property-does-not-exist-on-type-jsx-intrinsicelements-whe
-    const Root = this.createRootComponent(store, this.history);
+    const Root = this.createRootComponent(this._store, this.history);
     ReactDOM.render(<Root>
       <this.routerComponent/>
     </Root>, element);
   }
 
-  private createStore(initialState: any = {}) {
+  private getOrCreateStore() {
+    if (this._store) return;
+
     const sagaMiddleware = createSagaMiddleware();
     const rootReducer = combineReducers({
       router: connectRouter(this.history),
       ...this.reducers,
     });
 
+    Object.assign(this.state, this.initialState);
     const store = createStore(
       rootReducer,
-      initialState,
+      this.state,
       compose(
         applyMiddleware(
           routerMiddleware(this.history), // for dispatching history actions
@@ -138,8 +147,8 @@ class Dva {
       ]);
     };
     sagaMiddleware.run(rootSaga);
-
-    return store;
+    // registerStorageEventListener(store, { key: 'root', storage });
+    this._store = store;
   }
 }
 
