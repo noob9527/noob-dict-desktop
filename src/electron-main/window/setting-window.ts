@@ -30,6 +30,7 @@ function createWindow() {
     width: isDev ? 1000 : 400,
     height: 300,
     modal: true,
+    show: false, // not show until window is ready
     // parent: getOrCreateSearchWindow(),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
@@ -47,6 +48,9 @@ function createWindow() {
     ? 'http://localhost:3000/#/setting'
     : `file://${path.join(__dirname, '../build/index.html#/setting')}`,
   );
+  // window.loadURL(
+  //   `file://${path.join(__dirname, '../build/test.html')}`,
+  // );
 
   window.on('closed', () => {
     destroy();
@@ -56,7 +60,7 @@ function createWindow() {
     window.show();
   });
 
-  if(isDev) {
+  if (isDev) {
     // window.webContents.openDevTools();
   }
 

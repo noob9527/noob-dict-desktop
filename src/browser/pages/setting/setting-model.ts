@@ -6,6 +6,8 @@ import { rendererContainer } from '../../../common/container/renderer-container'
 export interface SettingState {
   open: boolean
   appHotKey: string
+  // watchClipboard: boolean
+  // watchSelection: boolean
 }
 
 export interface SettingModel extends Model {

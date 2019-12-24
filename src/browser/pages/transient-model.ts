@@ -1,6 +1,18 @@
 import { Model } from '../redux/redux-model';
-import { take, takeEvery, delay, fork } from '@redux-saga/core/effects';
+import { takeEvery } from '@redux-saga/core/effects';
 import { REHYDRATE } from 'redux-persist/es/constants';
+
+interface TransientState {
+
+}
+
+interface TransientModel extends Model {
+
+}
+
+const state = {};
+
+const effects = {};
 
 const reducers = {
   mergeState(state, action: any) {
@@ -13,7 +25,7 @@ const reducers = {
 
 const transientModel: Model = {
   namespace: '_transient',
-  state: {},
+  state,
   reducers,
   sagas: [watchRehydrateEvent],
 };
@@ -21,19 +33,10 @@ const transientModel: Model = {
 export default transientModel;
 
 function* watchRehydrateEvent() {
-  console.log('watch rehydrate', REHYDRATE);
-  yield takeEvery('persist/REHYDRATE', handleRehydrate);
-  console.log('watch rehydrate end');
-  // console.log('watch rehydrate', REHYDRATE);
-  // while (true) {
-  //   const action = yield take(REHYDRATE);
-  //   console.log(action);
-  //   yield delay(1000);
-  //   yield fork(handleRehydrate)
-  //   console.log(new Date());
-  // }
+  console.debug('watch rehydrate action', REHYDRATE);
+  yield takeEvery(REHYDRATE, handleRehydrate);
 }
 
-function handleRehydrate() {
+function* handleRehydrate() {
   console.log('rehydrate');
 }
