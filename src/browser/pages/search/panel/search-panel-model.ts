@@ -4,7 +4,7 @@ import { History, IHistory } from '../../../db/history';
 import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
 import HistoryService from '../../../db/history-service';
 import NoteService from '../../../db/note-service';
-import { Model } from '../../../redux/redux-model';
+import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../../services/search-service';
 

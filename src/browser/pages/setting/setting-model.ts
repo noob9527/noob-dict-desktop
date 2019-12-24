@@ -1,29 +1,29 @@
-import { call, put } from '@redux-saga/core/effects';
-import { Model } from '../../redux/redux-model';
-import { SettingUiService, SettingUiServiceToken } from '../../services/setting-ui-service';
-import { rendererContainer } from '../../../common/container/renderer-container';
+import { Model } from '../../redux/common/redux-model';
+import { Reducer } from 'redux';
+import { persistReducer } from 'redux-persist';
+import { REHYDRATE } from 'redux-persist/es/constants';
+import { takeEvery } from '@redux-saga/core/effects';
+import { settingPersistConfig } from '../../redux/redux-persist-store-enhancer';
+// import storageSession from 'redux-persist/lib/storage/session';
+// import storage from 'redux-persist/lib/storage';
 
 export interface SettingState {
-  open: boolean
   appHotKey: string
-  // watchClipboard: boolean
-  // watchSelection: boolean
+  watchClipboard: boolean
+  watchSelection: boolean
 }
 
 export interface SettingModel extends Model {
   state: SettingState
 }
 
-const effects = {
-  * open() {
-    const settingUiService = rendererContainer.get<SettingUiService>(SettingUiServiceToken);
-    const open = yield call([settingUiService, settingUiService.open]);
-    yield put({
-      type: 'setting/mergeState',
-      payload: { open },
-    });
-  },
+const state = {
+  appHotKey: '',
+  watchClipboard: false,
+  watchSelection: false,
 };
+
+const effects = {};
 
 const reducers = {
   mergeState(state, action: any) {
@@ -34,14 +34,27 @@ const reducers = {
   },
 };
 
-const appModel: SettingModel = {
+function __unstableReducerEnhancer(reducer: Reducer) {
+  // see https://github.com/rt2zz/redux-persist#nested-persists
+  return persistReducer(settingPersistConfig, reducer);
+}
+
+const settingModel: SettingModel = {
   namespace: 'setting',
-  state: {
-    open: false,
-    appHotKey: '',
-  },
+  state,
   effects,
   reducers,
+  sagas: [watchRehydrateEvent],
+  __unstableReducerEnhancer,
 };
 
-export default appModel;
+export default settingModel;
+
+function* watchRehydrateEvent() {
+  console.debug('watch rehydrate action', REHYDRATE);
+  yield takeEvery(REHYDRATE, handleRehydrate);
+}
+
+function* handleRehydrate() {
+  console.debug('rehydrate');
+}

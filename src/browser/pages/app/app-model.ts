@@ -1,5 +1,5 @@
 import { put } from '@redux-saga/core/effects';
-import { Model } from '../../redux/redux-model';
+import { Model } from '../../redux/common/redux-model';
 
 const effects = {
   * increase(action) {

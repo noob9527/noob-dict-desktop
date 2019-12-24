@@ -66,7 +66,7 @@ class Dva {
     this.state[model.namespace] = model.state;
 
     // reducer
-    this.reducers[model.namespace] = (state = model.state, action: Action) => {
+    let reducer = (state = model.state, action: Action) => {
       if (!model.reducers) return state;
 
       if (!action.type.startsWith(model.namespace)) return state;
@@ -80,6 +80,8 @@ class Dva {
         return state;
       }
     };
+    if (model.__unstableReducerEnhancer) reducer = model.__unstableReducerEnhancer(reducer);
+    this.reducers[model.namespace] = reducer;
 
     // effects
     if (model.effects) {

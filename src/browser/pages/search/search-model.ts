@@ -1,5 +1,5 @@
 import { call, put } from '@redux-saga/core/effects';
-import { Model } from '../../redux/redux-model';
+import { Model } from '../../redux/common/redux-model';
 import { SearchUiService, SearchUiServiceToken } from '../../services/search-ui-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
 

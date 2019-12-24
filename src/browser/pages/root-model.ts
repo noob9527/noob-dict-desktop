@@ -1,4 +1,4 @@
-import { Model } from '../redux/redux-model';
+import { Model } from '../redux/common/redux-model';
 import { dark } from '../theme/dark';
 
 const reducers = {

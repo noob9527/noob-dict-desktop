@@ -1,7 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { SearchState } from '../search/search-model';
 import { ThemedCheckbox } from '../../components/checkbox/checkbox';
 import { SettingState } from './setting-model';
 import { ThemedContent } from '../../components/content/content';
@@ -25,30 +24,34 @@ const InlineContainer = styled.span`
 
 const SettingPage = () => {
   const dispatch = useDispatch();
-  const searchState: SearchState = useSelector((state: any) => state.search);
   const settingState: SettingState = useSelector((state: any) => state.setting);
-  const { pinned } = searchState;
-  const { appHotKey } = settingState;
+  const { appHotKey, watchClipboard, watchSelection } = settingState;
 
   return (
     <ThemedContent>
       <Container>
-        {/*<Button*/}
-        {/*  type="link"*/}
-        {/*  shape="circle"*/}
-        {/*  onClick={() => {*/}
-        {/*    dispatch({*/}
-        {/*      type: 'search/togglePinned',*/}
-        {/*    });*/}
-        {/*  }}*/}
-        {/*>*/}
-        {/*  <Icon*/}
-        {/*    type="pushpin"*/}
-        {/*    style={{ transform: `rotate(${pinned ? '-45deg' : '0deg'})` }}*/}
-        {/*  />*/}
-        {/*</Button>*/}
-        <ThemedCheckbox>watch selection (only on linux)</ThemedCheckbox>
-        <ThemedCheckbox>watch clipboard</ThemedCheckbox>
+        <ThemedCheckbox
+          checked={watchSelection}
+          onChange={event => {
+            dispatch({
+              type: 'setting/mergeState',
+              payload: {
+                watchSelection: event?.target?.checked!!,
+              },
+            });
+          }}>
+          watch selection (only on linux)</ThemedCheckbox>
+        <ThemedCheckbox
+          checked={watchClipboard}
+          onChange={event => {
+            dispatch({
+              type: 'setting/mergeState',
+              payload: {
+                watchClipboard: event?.target?.checked!!,
+              },
+            });
+          }}>
+          watch clipboard</ThemedCheckbox>
         <InlineContainer>
           <span>hot key:</span>
           <ThemedInputShortcut

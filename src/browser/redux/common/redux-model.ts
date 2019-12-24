@@ -1,5 +1,6 @@
-import { AnyAction, ReducersMapObject } from 'redux';
+import { AnyAction, Reducer, ReducersMapObject } from 'redux';
 import { Saga } from 'redux-saga';
+import { SettingState } from '../../pages/setting/setting-model';
 
 
 export interface Model {
@@ -9,6 +10,7 @@ export interface Model {
   // effects are watched via takeEvery
   effects?: EffectsMapObject
   sagas?: Saga[]
+  __unstableReducerEnhancer?: (reducer: Reducer<SettingState>) => Reducer<SettingState>
 }
 
 export type Effect = (action: AnyAction) => void;

@@ -50,7 +50,7 @@ export default () => {
         shape="circle"
         onClick={() => {
           dispatch({
-            type: 'setting/open',
+            type: '_transient/openSettingWindow',
           });
         }}
         ghost

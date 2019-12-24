@@ -10,6 +10,10 @@ ipcMain.answerRenderer(SettingChannel.OPEN_SETTING_WINDOW, () => {
   return true;
 });
 
+ipcMain.answerRenderer(SettingChannel.SETTING_CHANGE_R2M, data => {
+  ipcMain.callRenderer(getOrCreateSearchWindow(), SettingChannel.SETTING_CHANGE, data);
+});
+
 ipcMain.answerRenderer(SearchChannel.TOGGLE_PIN_SEARCH_WINDOW, () => {
   const window = getOrCreateSearchWindow();
   const top = window.isAlwaysOnTop();
