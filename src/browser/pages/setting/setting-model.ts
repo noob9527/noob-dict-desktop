@@ -1,11 +1,7 @@
 import { Model } from '../../redux/common/redux-model';
-import { Reducer } from 'redux';
-import { persistReducer } from 'redux-persist';
-import { REHYDRATE } from 'redux-persist/es/constants';
-import { takeEvery } from '@redux-saga/core/effects';
-import { settingPersistConfig } from '../../redux/redux-persist-store-enhancer';
-// import storageSession from 'redux-persist/lib/storage/session';
-// import storage from 'redux-persist/lib/storage';
+import { call, put, select } from '@redux-saga/core/effects';
+import { rendererContainer } from '../../../common/container/renderer-container';
+import { SettingService, SettingServiceToken } from '../../../common/services/setting-service';
 
 export interface SettingState {
   appHotKey: string
@@ -23,7 +19,27 @@ const state = {
   watchSelection: false,
 };
 
-const effects = {};
+const effects = {
+  * init() {
+    const settingService = rendererContainer.get<SettingService>(SettingServiceToken);
+    const setting = yield call([settingService, settingService.initSetting]);
+    yield put({
+      type: 'setting/mergeState',
+      payload: setting,
+    });
+  },
+  // is designed to be called by setting window
+  * settingChange(action) {
+    const settingService = rendererContainer.get<SettingService>(SettingServiceToken);
+    const oldValue = yield select((state: any) => state.setting);
+    const newValue = { ...oldValue, ...action.payload };
+    const actualNewValue = yield call([settingService, settingService.sendSettingChange], newValue, oldValue);
+    yield put({
+      type: 'setting/mergeState',
+      payload: actualNewValue,
+    });
+  },
+};
 
 const reducers = {
   mergeState(state, action: any) {
@@ -34,27 +50,11 @@ const reducers = {
   },
 };
 
-function __unstableReducerEnhancer(reducer: Reducer) {
-  // see https://github.com/rt2zz/redux-persist#nested-persists
-  return persistReducer(settingPersistConfig, reducer);
-}
-
 const settingModel: SettingModel = {
   namespace: 'setting',
   state,
   effects,
   reducers,
-  sagas: [watchRehydrateEvent],
-  __unstableReducerEnhancer,
 };
 
 export default settingModel;
-
-function* watchRehydrateEvent() {
-  console.debug('watch rehydrate action', REHYDRATE);
-  yield takeEvery(REHYDRATE, handleRehydrate);
-}
-
-function* handleRehydrate() {
-  console.debug('rehydrate');
-}

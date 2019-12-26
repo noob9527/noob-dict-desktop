@@ -34,7 +34,7 @@ const SettingPage = () => {
           checked={watchSelection}
           onChange={event => {
             dispatch({
-              type: 'setting/mergeState',
+              type: 'setting/settingChange',
               payload: {
                 watchSelection: event?.target?.checked!!,
               },
@@ -45,7 +45,7 @@ const SettingPage = () => {
           checked={watchClipboard}
           onChange={event => {
             dispatch({
-              type: 'setting/mergeState',
+              type: 'setting/settingChange',
               payload: {
                 watchClipboard: event?.target?.checked!!,
               },
@@ -58,7 +58,7 @@ const SettingPage = () => {
             value={appHotKey}
             onChange={value => {
               dispatch({
-                type: 'setting/mergeState',
+                type: 'setting/settingChange',
                 payload: {
                   appHotKey: value,
                 },

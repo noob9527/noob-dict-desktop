@@ -4,6 +4,8 @@ import * as path from 'path';
 import { mainContainer } from '../../common/container/main-container';
 import { getOrCreateSearchWindow } from './search-window';
 import logger from '../../common/utils/logger';
+import { ipcMain } from 'electron-better-ipc';
+import { SettingChannel } from '../../common/ipc-channel';
 
 export {
   getOrCreateSettingWindow,
@@ -27,11 +29,11 @@ function createWindow() {
   // create a modal window
   // https://electronjs.org/docs/api/browser-window#modal-windows
   const window = new BrowserWindow({
-    width: isDev ? 1000 : 400,
-    height: 300,
+    width: isDev ? 400 : 400,
+    height: 200,
     modal: true,
     show: false, // not show until window is ready
-    // parent: getOrCreateSearchWindow(),
+    parent: getOrCreateSearchWindow(),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
@@ -52,7 +54,8 @@ function createWindow() {
   //   `file://${path.join(__dirname, '../build/test.html')}`,
   // );
 
-  window.on('closed', () => {
+  window.on('closed', async () => {
+    await ipcMain.callRenderer(getOrCreateSearchWindow(), SettingChannel.SETTING_WINDOW_CLOSED);
     destroy();
     logger.log(`${SettingWindowToken.description} closed`);
   });

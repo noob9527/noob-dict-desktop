@@ -5,6 +5,7 @@ import logger from '../common/utils/logger';
 import { getOrCreateSearchWindow, showSearchWindow } from './window/search-window';
 import globalState from './global-state';
 import contextMenu from 'electron-context-menu';
+import { initialSetting } from './setting';
 
 contextMenu({
   showInspectElement: true,
@@ -27,14 +28,7 @@ app.on('second-instance', () => {
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
   getOrCreateSearchWindow();
-
-  const res = globalShortcut.register('CommandOrControl+1', () => {
-    logger.log('CommandOrControl+1');
-    showSearchWindow();
-  });
-  if (!res) {
-    logger.error('CommandOrControl+1 register failed');
-  }
+  initialSetting();
 });
 
 // Quit when all windows are closed.

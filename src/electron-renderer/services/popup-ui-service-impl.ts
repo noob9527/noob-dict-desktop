@@ -1,4 +1,4 @@
-import { PopupUiService } from '../../browser/services/popup-ui-service';
+import { PopupUiService } from '../../common/services/popup-ui-service';
 import { ipcRenderer } from 'electron-better-ipc';
 import { injectable } from 'inversify';
 import { PopupChannel } from '../../common/ipc-channel';

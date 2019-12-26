@@ -1,4 +1,4 @@
-import { WindowService } from '../../browser/services/window-service';
+import { WindowService } from '../../common/services/window-service';
 import { injectable } from 'inversify';
 
 @injectable()

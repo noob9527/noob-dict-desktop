@@ -59,10 +59,8 @@ class ClipboardEventEmitter extends EventEmitter {
 
 }
 
-const clipboardEventEmitter = new ClipboardEventEmitter();
-
 export {
-  clipboardEventEmitter,
+  ClipboardEventEmitter,
 };
 
 

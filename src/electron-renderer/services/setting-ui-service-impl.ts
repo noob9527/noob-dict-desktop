@@ -1,4 +1,4 @@
-import { SettingUiService } from '../../browser/services/setting-ui-service';
+import { SettingUiService } from '../../common/services/setting-ui-service';
 import { ipcRenderer } from 'electron-better-ipc';
 import { injectable } from 'inversify';
 import { SettingChannel } from '../../common/ipc-channel';

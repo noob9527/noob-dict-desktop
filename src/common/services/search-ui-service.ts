@@ -1,7 +1,10 @@
 export const SearchUiServiceToken = Symbol.for('search-ui-service');
 
 export interface SearchUiService {
-  showSearchWindow(): Promise<void>
+  toggleSearchWindow(option: { isSettingWindowOpen }): Promise<void>
+
+  showSearchWindow()
+
   // return if current state is pinned
   togglePin(): Promise<boolean>
 }

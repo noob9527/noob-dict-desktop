@@ -6,7 +6,7 @@ import HistoryService from '../../../db/history-service';
 import NoteService from '../../../db/note-service';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
-import { SearchService, SearchServiceToken } from '../../../services/search-service';
+import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
 
 export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchResult> };
 

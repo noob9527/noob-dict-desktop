@@ -6,6 +6,9 @@ import { Spin } from 'antd';
 import { registerStorageEventListener } from './redux-persist-store-enhancer';
 
 export const createReduxRootComponent = (store, history) => {
+  store.dispatch({
+    type: 'setting/init',
+  });
   registerStorageEventListener(store);
   return (props) => (
     <Provider store={store}>

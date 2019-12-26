@@ -5,7 +5,7 @@ import { SearchPanelState } from '../panel/search-panel-model';
 import styled from 'styled-components';
 import { SearchState } from '../search-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
-import { PopupUiService, PopupUiServiceToken } from '../../../services/popup-ui-service';
+import { PopupUiService, PopupUiServiceToken } from '../../../../common/services/popup-ui-service';
 
 const ToolBar = styled.div`
   display: flex;

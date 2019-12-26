@@ -8,10 +8,12 @@ import * as os from 'os';
 import * as fs from 'fs';
 import { getAssetsPath } from '../utils/path-util';
 import { mainContainer } from '../../common/container/main-container';
+import { getOrCreateSettingWindow } from './setting-window';
 
 export {
   getOrCreateSearchWindow,
   showSearchWindow,
+  toggleSearchWindow,
   destroy,
 };
 
@@ -37,6 +39,19 @@ function showSearchWindow() {
   // } else {
   //   logger.error('somehow window doesn\'t exist');
   // }
+}
+
+function toggleSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+  const searchWindow = getOrCreateSearchWindow();
+  if (searchWindow.isMinimized() || !searchWindow.isVisible()) {
+    searchWindow.show();
+    if (option.isSettingWindowOpen) getOrCreateSettingWindow().show();
+    return true;
+  } else {
+    if (option.isSettingWindowOpen) getOrCreateSettingWindow().hide();
+    searchWindow.hide();
+    return false;
+  }
 }
 
 function createWindow() {

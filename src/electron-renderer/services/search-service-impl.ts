@@ -1,4 +1,4 @@
-import { SearchService } from '../../browser/services/search-service';
+import { SearchService } from '../../common/services/search-service';
 import { getSuggests, mockGetSuggests, mockSearch, search, SearchOption, SearchResult, Suggest } from 'noob-dict-core';
 import { injectable } from 'inversify';
 
