@@ -9,8 +9,13 @@ const ThemedCheckbox = styled(Checkbox)`
   &.ant-checkbox-wrapper + .ant-checkbox-wrapper {
     margin-left: unset;
   }
+
+  .ant-checkbox-checked .ant-checkbox-inner {
+    border-color: rebeccapurple;
+    background-color: rebeccapurple;
+  }
 `;
 
 export {
   ThemedCheckbox,
-}
+};

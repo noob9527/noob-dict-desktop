@@ -8,6 +8,12 @@ import ColorId from '../../styles/ColorId';
 
 const SearchPage = styled.div`
   height: 100vh;
+  display: flex;
+  flex-direction: column;
+  
+  > * + * {
+    flex: 1;
+  }
 `;
 
 const Header = styled.header`
