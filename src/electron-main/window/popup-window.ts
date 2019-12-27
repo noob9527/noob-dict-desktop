@@ -38,8 +38,8 @@ function createWindow() {
   // create a popup window
   // https://electronjs.org/docs/api/frameless-window
   const window = new BrowserWindow({
-    width: isDev ? 800 : 800,
-    height: 600,
+    width: isDev ? 50 : 50,
+    height: 50,
     transparent: true,
     frame: false,
     show: false,

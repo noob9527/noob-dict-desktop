@@ -14,6 +14,11 @@ const Popup = styled.div`
   height: 50px;
   background-color: black;
   color: white;
+  
+  display: flex;
+  span {
+    margin: auto;
+  }
 `;
 
 const PopupPage = () => {
@@ -22,21 +27,7 @@ const PopupPage = () => {
   const { pinned } = searchState;
   return (
     <Popup>
-      <Button
-        type="link"
-        shape="circle"
-        onClick={() => {
-          console.log(111);
-          // dispatch({
-          //   type: 'search/togglePinned',
-          // });
-        }}
-      >
-        <Icon
-          type="pushpin"
-          style={{ transform: `rotate(${pinned ? '-45deg' : '0deg'})` }}
-        />
-      </Button>
+      <span>T</span>
     </Popup>
   );
 };

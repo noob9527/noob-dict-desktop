@@ -6,19 +6,23 @@ import { SearchUiService, SearchUiServiceToken } from '../../common/services/sea
 import { SearchChannel } from '../../common/ipc-channel';
 import { SettingState } from './setting/setting-model';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
+import { WindowIdentifier } from '../../common/window-constants';
+import { getWindowIdentifier } from '../utils/window-utils';
 
 export interface TransientState {
   isSettingWindowOpen: boolean
   isSearchWindowOpen: boolean
+  windowIdentifier: WindowIdentifier
 }
 
 interface TransientModel extends Model {
   state: TransientState
 }
 
-const state = {
+const state: TransientState = {
   isSearchWindowOpen: true,
   isSettingWindowOpen: false,
+  windowIdentifier: getWindowIdentifier(),
 };
 
 const effects = {

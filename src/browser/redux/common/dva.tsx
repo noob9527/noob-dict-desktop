@@ -21,13 +21,11 @@ interface DvaOption {
   history: History<any>
   extraEnhancers: StoreEnhancer[]
   createRootComponent: (store, history) => ComponentType
-  initialState: any
 }
 
 const defaultOption: DvaOption = {
   history: createBrowserHistory(),
   extraEnhancers: [],
-  initialState: {},
   createRootComponent: (store, history) => (props) =>
     <Provider store={store}>
       <ConnectedRouter history={history}>
@@ -42,7 +40,6 @@ const defaultOption: DvaOption = {
 class Dva {
   state: any = {};  // globalState
   _store: Store | null = null;
-  initialState: any = {};
   effects: EffectsMapObject = {};
   sagas: Saga[] = [];
   reducers: ReducersMapObject = {};
@@ -58,7 +55,6 @@ class Dva {
     this.history = opt.history;
     this.extraEnhancers = opt.extraEnhancers;
     this.createRootComponent = opt.createRootComponent;
-    this.initialState = opt.initialState;
   }
 
   model(model: Model) {
@@ -125,7 +121,6 @@ class Dva {
       ...this.reducers,
     });
 
-    Object.assign(this.state, this.initialState);
     const store = createStore(
       rootReducer,
       this.state,

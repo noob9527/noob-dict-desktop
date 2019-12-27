@@ -98,20 +98,20 @@ const effects = {
     });
   },
   * fetchNote(action) {
-    const { text } = action.payload;
-    const note = yield call(NoteService.findOne, text);
-    yield put({
-      type: 'searchPanel/mergeState',
-      payload: { note },
-    });
+    // const { text } = action.payload;
+    // const note = yield call(NoteService.findOne, text);
+    // yield put({
+    //   type: 'searchPanel/mergeState',
+    //   payload: { note },
+    // });
   },
   * fetchHistories(action) {
-    const { text } = action.payload;
-    const histories = yield call(HistoryService.findAll, text);
-    yield put({
-      type: 'searchPanel/mergeState',
-      payload: { histories },
-    });
+    // const { text } = action.payload;
+    // const histories = yield call(HistoryService.findAll, text);
+    // yield put({
+    //   type: 'searchPanel/mergeState',
+    //   payload: { histories },
+    // });
   },
 };
 

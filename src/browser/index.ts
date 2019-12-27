@@ -3,7 +3,6 @@ import dva from './redux/common/dva';
 import { RootComponent } from './pages/root.component';
 import { createHashHistory } from 'history';
 import { createReduxRootComponent } from './redux/redux-root-component';
-import { getWindowIdentifier } from './utils/window-utils';
 import { reduxPersistStoreEnhancer } from './redux/redux-persist-store-enhancer';
 
 const app = dva({
@@ -12,12 +11,6 @@ const app = dva({
   history: createHashHistory(),
   extraEnhancers: [reduxPersistStoreEnhancer],
   createRootComponent: createReduxRootComponent,
-  initialState: {
-    _transient: {
-      // tell us in which window we are running
-      windowIdentifier: getWindowIdentifier(),
-    },
-  },
 });
 
 Object.values(models).forEach((e) => {
