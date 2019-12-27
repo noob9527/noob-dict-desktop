@@ -1,13 +1,15 @@
-import React, { KeyboardEvent } from 'react';
+import React, { KeyboardEvent, useRef } from 'react';
 import styles from './search-input.module.scss';
 import { Input, Select, Spin } from 'antd';
 import { useDispatch, useSelector } from 'dva';
 import { SelectValue } from 'antd/es/select';
 import { SearchInputState } from './search-input-model';
+import { usePrevious } from '../../../components/hooks/use-previous';
 
 
 export default () => {
   const dispatch = useDispatch();
+  const { focusInput } = useSelector((state: any) => state._transient);
   const {
     text,
     suggests,
@@ -15,9 +17,17 @@ export default () => {
     open,
   } = useSelector((state: { searchInput: SearchInputState }) => state.searchInput);
 
+  // focus on input element
+  const previousFocusInput = usePrevious(focusInput);
+  const selectEle = useRef<Select | null>(null);
+  if (!previousFocusInput && focusInput) {
+    selectEle?.current?.focus();
+  }
+
   return (
     <div className={styles.searchHeaderInput}>
       <Select
+        ref={selectEle}
         mode={Select.SECRET_COMBOBOX_MODE_DO_NOT_USE}
         onChange={onChange}
         onSearch={handleInputSearchText}
@@ -26,8 +36,18 @@ export default () => {
           if (suggests.length) {
             setOpen(true);
           }
+          dispatch({
+            type: '_transient/mergeState',
+            payload: { focusInput: true },
+          });
         }}
-        onBlur={() => setOpen(false)}
+        onBlur={() => {
+          setOpen(false);
+          dispatch({
+            type: '_transient/mergeState',
+            payload: { focusInput: false },
+          });
+        }}
         value={text}
         open={open}
         getInputElement={getInputElement}

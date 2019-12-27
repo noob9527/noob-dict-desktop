@@ -15,7 +15,7 @@ export interface SearchInputModel extends Model {
   state: SearchInputState
 }
 
-const state = {
+const state: SearchInputState = {
   text: '',
   suggests: [],
   loadingSuggests: false,

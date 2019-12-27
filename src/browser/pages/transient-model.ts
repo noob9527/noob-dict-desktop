@@ -10,6 +10,7 @@ import { WindowIdentifier } from '../../common/window-constants';
 import { getWindowIdentifier } from '../utils/window-utils';
 
 export interface TransientState {
+  focusInput: boolean,
   isSettingWindowOpen: boolean
   isSearchWindowOpen: boolean
   windowIdentifier: WindowIdentifier
@@ -20,6 +21,7 @@ interface TransientModel extends Model {
 }
 
 const state: TransientState = {
+  focusInput: false,
   isSearchWindowOpen: true,
   isSettingWindowOpen: false,
   windowIdentifier: getWindowIdentifier(),
@@ -61,6 +63,7 @@ const effects = {
       type: '_transient/mergeState',
       payload: {
         isSearchWindowOpen: true,
+        focusInput: true,
       },
     });
   },
