@@ -7,7 +7,7 @@ import { REHYDRATE } from 'redux-persist/es/constants';
 import { getWindowIdentifier } from '../utils/window-utils';
 import { WindowIdentifier } from '../../common/window-constants';
 import { ipcRenderer } from 'electron-better-ipc';
-import { GlobalShotCutChannel, SettingChannel } from '../../common/ipc-channel';
+import { GlobalShotCutChannel, SearchChannel, SettingChannel } from '../../common/ipc-channel';
 import { SettingService, SettingServiceToken } from '../../common/services/setting-service';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 
@@ -74,6 +74,25 @@ function registerStorageEventListener(store: Store) {
           isSettingWindowOpen: false,
         },
       });
+    });
+    // listen search window event
+    ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_SHOWED, async () => {
+      store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_SHOWED });
+    });
+    ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_HIDED, async () => {
+      store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_HIDED });
+    });
+    ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_RESTORED, async () => {
+      store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_RESTORED });
+    });
+    ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_MINIMIZED, async () => {
+      store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_MINIMIZED });
+    });
+    ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_FOCUS, async () => {
+      store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_FOCUS });
+    });
+    ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_BLUR, async () => {
+      store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_BLUR });
     });
   }
 

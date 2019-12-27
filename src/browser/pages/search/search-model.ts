@@ -22,24 +22,32 @@ const effects = {
       payload: { pinned },
     });
   },
-  * clipboardTextChange(action) {
-    console.log(action);
-    const settingState: SettingState = yield select(state => state.setting);
-    const transientState: TransientState = yield select(state => state.transient);
-
-    if (transientState.isSettingWindowOpen) return;
-    if (!settingState.watchClipboard) return;
-    // todo change search input
-  },
   * selectionTextChange(action) {
     console.log(action);
     const settingState: SettingState = yield select(state => state.setting);
-    const transientState: TransientState = yield select(state => state.transient);
+    const transientState: TransientState = yield select(state => state._transient);
+    const searchState: SearchState = yield select(state => state.search);
 
+    if (!settingState.watchSelection) return;
     if (transientState.isSettingWindowOpen) return;
-    if (!settingState.watchClipboard) return;
+    if (transientState.isSearchWindowOpen) {
+      if (searchState.pinned) {
+        yield put({
+          type: 'searchInput/searchTextChange',
+          text: action.payload.newText,
+        });
+        yield put({
+          type: 'searchPanel/fetchResults',
+          text: action.newText,
+        });
+      }
+    }
+
     // todo show popup window
     // todo change search input
+  },
+  * clipboardTextChange(action) {
+    console.log(action);
   },
 };
 

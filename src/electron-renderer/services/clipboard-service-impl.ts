@@ -1,4 +1,5 @@
 import { ClipboardEventEmitter } from '../utils/clipboard-event-emitter';
+import { clipboard } from 'electron';
 import { injectable } from 'inversify';
 import { ClipboardService } from '../../common/services/clipboard-service';
 
@@ -20,5 +21,13 @@ export class ClipboardServiceImpl implements ClipboardService {
 
   stopListening() {
     this.eventEmitter.stopListening();
+  }
+
+  readClipboardText(): string {
+    return clipboard.readText();
+  }
+
+  readSelectionText(): string {
+    return clipboard.readText('selection');
   }
 }

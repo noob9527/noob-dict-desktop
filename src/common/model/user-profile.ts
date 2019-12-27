@@ -1,5 +1,5 @@
 export interface UserProfile {
   appHotKey: string | null
-  watchClipboard: boolean
+  readClipboard: boolean
   watchSelection: boolean
 }

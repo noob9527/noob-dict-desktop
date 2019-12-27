@@ -20,7 +20,7 @@ export default () => {
       <Select
         mode={Select.SECRET_COMBOBOX_MODE_DO_NOT_USE}
         onChange={onChange}
-        onSearch={fetchSuggests}
+        onSearch={handleInputSearchText}
         onSelect={search}
         onFocus={() => {
           if (suggests.length) {
@@ -64,23 +64,22 @@ export default () => {
     }
   }
 
+  // 选中 option，或 input 的 value 变化（combobox 模式下）时，调用此函数
   function onChange(text: SelectValue) {
     if (text && !open) {
       setOpen(true);
     }
     dispatch({
-      type: 'searchInput/mergeState',
-      payload: {
-        text,
-        suggests: [],
-      }
+      type: 'searchInput/searchTextChange',
+      text,
     });
   }
 
-  function fetchSuggests(text: SelectValue) {
+  // 文本框值变化时回调
+  function handleInputSearchText(text: SelectValue) {
     dispatch({
-      type: 'searchInput/searchTextChange',
-      text
+      type: 'searchInput/inputSearchText',
+      text,
     });
   }
 
@@ -88,8 +87,8 @@ export default () => {
     dispatch({
       type: 'searchInput/mergeState',
       payload: {
-        open
-      }
+        open,
+      },
     });
   }
 
@@ -97,7 +96,7 @@ export default () => {
     setOpen(false);
     dispatch({
       type: 'searchPanel/fetchResults',
-      text
+      text,
     });
   }
 }

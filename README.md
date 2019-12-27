@@ -4,13 +4,6 @@
 - HMR
 - Run main and renderer process tests in parallel(via [Jest electron runner](https://github.com/facebook-atom/jest-electron-runner))
 
-### TODO
-- remove dva dependency?
-- remove antd dependency?
-- pin main window
-- setting window(modal)
-- popup window(frameless)
-
 ### Scripts explanation
 - `renderer:start` start webpack dev server
 - `main:start` build code under electron-main directory with watch option(via parcel)

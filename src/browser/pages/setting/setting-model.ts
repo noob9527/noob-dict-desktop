@@ -5,7 +5,7 @@ import { SettingService, SettingServiceToken } from '../../../common/services/se
 
 export interface SettingState {
   appHotKey: string
-  watchClipboard: boolean
+  readClipboard: boolean
   watchSelection: boolean
 }
 
@@ -15,7 +15,7 @@ export interface SettingModel extends Model {
 
 const state = {
   appHotKey: '',
-  watchClipboard: false,
+  readClipboard: false,
   watchSelection: false,
 };
 

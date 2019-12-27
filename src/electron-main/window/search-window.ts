@@ -7,8 +7,9 @@ import globalState from '../global-state';
 import * as os from 'os';
 import * as fs from 'fs';
 import { getAssetsPath } from '../utils/path-util';
-import { mainContainer } from '../../common/container/main-container';
 import { getOrCreateSettingWindow } from './setting-window';
+import { ipcMain } from 'electron-better-ipc';
+import { SearchChannel } from '../../common/ipc-channel';
 
 export {
   getOrCreateSearchWindow,
@@ -17,17 +18,16 @@ export {
   destroy,
 };
 
-const SearchWindowToken = Symbol.for('search-window');
-mainContainer.bind<BrowserWindow>(SearchWindowToken).toDynamicValue(createWindow);
+let searchWindow: BrowserWindow | null = null;
 
 function getOrCreateSearchWindow() {
-  return mainContainer.get<BrowserWindow>(SearchWindowToken);
+  if (searchWindow != null) return searchWindow;
+  searchWindow = createWindow();
+  return searchWindow;
 }
 
 function destroy() {
-  // try to clear the cache and free the memory
-  // https://github.com/inversify/InversifyJS/blob/master/wiki/scope.md
-  mainContainer.rebind<BrowserWindow>(SearchWindowToken).toDynamicValue(createWindow);
+  searchWindow = null;
 }
 
 function showSearchWindow() {
@@ -43,11 +43,14 @@ function showSearchWindow() {
 
 function toggleSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
   const searchWindow = getOrCreateSearchWindow();
+  logger.log('toggleSearchWindow', new Date());
   if (searchWindow.isMinimized() || !searchWindow.isVisible()) {
+    logger.log('show search window');
     searchWindow.show();
     if (option.isSettingWindowOpen) getOrCreateSettingWindow().show();
     return true;
   } else {
+    logger.log('hide search window');
     if (option.isSettingWindowOpen) getOrCreateSettingWindow().hide();
     searchWindow.hide();
     return false;
@@ -105,6 +108,25 @@ function createWindow() {
     // when you should delete the corresponding element.
     destroy();
     logger.log('closed');
+  });
+
+  window.on('show', e => {
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_SHOWED, e);
+  });
+  window.on('hide', e => {
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_HIDED, e);
+  });
+  window.on('restore', e => {
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_RESTORED, e);
+  });
+  window.on('minimize', e => {
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_MINIMIZED, e);
+  });
+  window.on('focus', e => {
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_FOCUS, e);
+  });
+  window.on('blur', e => {
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_BLUR, e);
   });
 
   window.webContents.on('did-finish-load', () => {

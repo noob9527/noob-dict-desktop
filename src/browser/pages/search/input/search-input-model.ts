@@ -23,13 +23,23 @@ const state = {
 };
 
 const effects = {
-  // control suggests, loading suggests
-  * searchTextChange(action) {
+  // manually input search text
+  * inputSearchText(action) {
     yield put({
       type: 'searchInput/mergeState',
       payload: {
         loadingSuggests: Boolean(action.text),
-      }
+      },
+    });
+  },
+  // manually input search text or select value from suggests
+  * searchTextChange(action) {
+    yield put({
+      type: 'searchInput/mergeState',
+      payload: {
+        text: action?.text,
+        suggests: [],
+      },
     });
   },
   * fetchSuggests(action) {
@@ -39,8 +49,8 @@ const effects = {
       type: 'searchInput/mergeState',
       payload: {
         suggests,
-        loadingSuggests: false
-      }
+        loadingSuggests: false,
+      },
     });
   },
 };
@@ -49,7 +59,7 @@ const reducers = {
   mergeState(state, action: any) {
     return {
       ...state,
-      ...action.payload
+      ...action.payload,
     };
   },
 };
@@ -68,7 +78,7 @@ function* watchSearchTextChange() {
   yield fork(function* () {
     let task;
     while (true) {
-      const action = yield take('searchInput/searchTextChange');
+      const action = yield take('searchInput/inputSearchText');
       if (task) {
         yield cancel(task);
       }

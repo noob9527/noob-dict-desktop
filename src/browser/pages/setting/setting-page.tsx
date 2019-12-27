@@ -25,7 +25,7 @@ const InlineContainer = styled.span`
 const SettingPage = () => {
   const dispatch = useDispatch();
   const settingState: SettingState = useSelector((state: any) => state.setting);
-  const { appHotKey, watchClipboard, watchSelection } = settingState;
+  const { appHotKey, readClipboard, watchSelection } = settingState;
 
   return (
     <ThemedContent>
@@ -42,16 +42,16 @@ const SettingPage = () => {
           }}>
           watch selection (only on linux)</ThemedCheckbox>
         <ThemedCheckbox
-          checked={watchClipboard}
+          checked={readClipboard}
           onChange={event => {
             dispatch({
               type: 'setting/settingChange',
               payload: {
-                watchClipboard: event?.target?.checked!!,
+                readClipboard: event?.target?.checked!!,
               },
             });
           }}>
-          watch clipboard</ThemedCheckbox>
+          read clipboard</ThemedCheckbox>
         <InlineContainer>
           <span>hot key:</span>
           <ThemedInputShortcut
