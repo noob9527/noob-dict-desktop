@@ -2,7 +2,7 @@ import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 // import './tabs.css';
 import styled from 'styled-components';
-import ColorId from '../../styles/ColorId';
+import ColorId from '../../../styles/ColorId';
 
 
 const CustomTab = (props) => (

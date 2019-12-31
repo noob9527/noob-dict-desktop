@@ -10,9 +10,11 @@ const SearchPage = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
   
   > * + * {
     flex: 1;
+    overflow: hidden;
   }
 `;
 

@@ -1,10 +1,10 @@
 import React from 'react';
-import { SearchResult, EngineIdentifier } from 'noob-dict-core';
+import { EngineIdentifier, SearchResult } from 'noob-dict-core';
 import { useParams } from 'react-router-dom';
 import { SearchPanelState } from '../../panel/search-panel-model';
 import { useSelector } from 'react-redux';
-import CommonEngineView from './common-engine-view';
-import IframeEngineView from './iframe-engine-view';
+import CommonEngineView from '../../../../components/dict/common/common-dict';
+import BingDict from '../../../../components/dict/bing/bing-dict';
 
 interface EngineViewProps {
   html: string
@@ -18,13 +18,13 @@ const EngineView: React.FC<EngineViewProps> = (props: EngineViewProps) => {
 
   if (!result) return <div>empty result</div>;
 
-  return (
-    <>
-      {/*<CommonEngineView searchResult={result}/>*/}
-      <IframeEngineView searchResult={result}/>
-    </>
-  );
-
+  // noinspection JSRedundantSwitchStatement
+  switch (result.engine) {
+    case EngineIdentifier.BING:
+      return <BingDict searchResult={result}/>;
+    default:
+      return <CommonEngineView searchResult={result}/>;
+  }
 };
 
 export default EngineView;

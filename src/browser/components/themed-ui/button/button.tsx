@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import ColorId from '../../styles/ColorId';
+import ColorId from '../../../styles/ColorId';
 import { Button } from 'antd';
 
 const ThemedButton = styled(Button)`

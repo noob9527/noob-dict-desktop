@@ -5,4 +5,5 @@
 - popup window(frameless)
 - notes
 - engine view
+- highlight search words
 

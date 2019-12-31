@@ -1,10 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { ThemedCheckbox } from '../../components/checkbox/checkbox';
+import { ThemedCheckbox } from '../../components/themed-ui/checkbox/checkbox';
 import { SettingState } from './setting-model';
-import { ThemedContent } from '../../components/content/content';
-import { ThemedInputShortcut } from '../../components/input-shortcut/themed-input-shortcut';
+import { ThemedContent } from '../../components/themed-ui/content/content';
+import { ThemedInputShortcut } from '../../components/themed-ui/input-shortcut/themed-input-shortcut';
 
 const Container = styled.div`
   height: 200px;

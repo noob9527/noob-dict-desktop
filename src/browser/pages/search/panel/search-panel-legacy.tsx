@@ -8,7 +8,7 @@ import EngineView from '../views/engine/engine-view';
 import NoteView from '../views/note/NoteView';
 import HistoryView from '../views/history/HistoryView';
 import OverviewView from '../views/overview/OverviewView';
-import { Tab, Tabs, TabList, TabPanel } from '../../../components/tabs/tabs';
+import { Tab, Tabs, TabList, TabPanel } from '../../../components/themed-ui/tabs/tabs';
 
 // export default () => {
 //   return (

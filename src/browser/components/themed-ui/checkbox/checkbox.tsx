@@ -1,6 +1,6 @@
 import { Checkbox } from 'antd';
 import styled from 'styled-components';
-import ColorId from '../../styles/ColorId';
+import ColorId from '../../../styles/ColorId';
 
 const ThemedCheckbox = styled(Checkbox)`
   &.ant-checkbox-wrapper {
