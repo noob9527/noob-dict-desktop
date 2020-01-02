@@ -2,20 +2,30 @@ import React from 'react';
 import { Route, Switch } from 'react-router-dom';
 import { SearchPanelState } from './search-panel-model';
 import { useSelector } from 'react-redux';
+import ScrollArea from 'react-scrollbar';
 import OverviewView from '../views/overview/OverviewView';
 import EngineView from '../views/engine/engine-view';
 import { Menu, MenuItem } from './search-panel-menu';
 import { ThemedContent } from '../../../components/themed-ui/content/content';
 import styled from 'styled-components';
 import HistoryView from '../views/history/HistoryView';
+import ColorId from '../../../styles/ColorId';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
 
   > * + * {
-    overflow: auto;
+    //overflow: auto;  // default scroll bar
+    overflow: hidden;
+    // react-scrollbar
     flex: 1;
+    .scrollarea {
+      height: 100%;
+      .scrollbar {
+        background-color: white !important;
+      }
+    }
   }
 `;
 
@@ -44,15 +54,17 @@ export default () => {
         </Menu>
       </nav>
       <ThemedContent>
-        <Content>
-          <Switch>
-            {/*<Route path="/search/tab1" component={() => <div>tab1</div>}/>*/}
-            {/*<Route path="/search/tab2" component={() => <div>tab2</div>}/>*/}
-            <Route path="/search/overview" component={OverviewView}/>
-            <Route path="/search/engine_view/:engine" component={EngineView}/>
-            <Route component={OverviewView}/>
-          </Switch>
-        </Content>
+        <ScrollArea>
+          <Content>
+            <Switch>
+              {/*<Route path="/search/tab1" component={() => <div>tab1</div>}/>*/}
+              {/*<Route path="/search/tab2" component={() => <div>tab2</div>}/>*/}
+              <Route path="/search/overview" component={OverviewView}/>
+              <Route path="/search/engine_view/:engine" component={EngineView}/>
+              <Route component={OverviewView}/>
+            </Switch>
+          </Content>
+        </ScrollArea>
       </ThemedContent>
     </Container>
   );

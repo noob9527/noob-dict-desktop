@@ -16,8 +16,21 @@ const EngineView: React.FC<EngineViewProps> = (props: EngineViewProps) => {
   const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
   const result = state.searchResults[engine];
 
-  if (!result) return <div>empty result</div>;
+  return (
+    <>{getDictComponent(result)}</>
+  );
 
+  // noinspection JSRedundantSwitchStatement
+  // switch (result.engine) {
+  //   case EngineIdentifier.BING:
+  //     return <BingDict searchResult={result}/>;
+  //   default:
+  //     return <CommonEngineView searchResult={result}/>;
+  // }
+};
+
+function getDictComponent(result: SearchResult | null | undefined) {
+  if (!result) return <>empty result</>;
   // noinspection JSRedundantSwitchStatement
   switch (result.engine) {
     case EngineIdentifier.BING:
@@ -25,6 +38,6 @@ const EngineView: React.FC<EngineViewProps> = (props: EngineViewProps) => {
     default:
       return <CommonEngineView searchResult={result}/>;
   }
-};
+}
 
 export default EngineView;
