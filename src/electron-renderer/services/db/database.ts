@@ -1,19 +1,19 @@
 import Dexie from 'dexie';
-import { INote } from './note';
-import { IHistory } from './history';
+import { INote } from '../../../browser/db/note';
+import { IHistory } from '../../../browser/db/history';
 
 class Database extends Dexie {
-  notes: Dexie.Table<INote, number>;
+  notes: Dexie.Table<INote, number>; // todo: remove it!
   histories: Dexie.Table<IHistory, number>;
 
   constructor(databaseName: string) {
     super(databaseName);
     this.version(1).stores({
-      notes: '++id,text,create_at',
       histories: '++id,text,create_at',
+      notes: '++id,text,create_at',
     });
-    this.notes = this.table('notes'); // Just informing Typescript what Dexie has already done...
-    this.histories = this.table('histories');
+    this.histories = this.table('histories'); // Just informing Typescript what Dexie has already done...
+    this.notes = this.table('notes');
   }
 }
 

@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import useEventListener from '../../../hooks/use-event-listener';
+import useEventListener from '../../../../hooks/use-event-listener';
 import styled from 'styled-components';
 import speaker from './speaker.svg';
 

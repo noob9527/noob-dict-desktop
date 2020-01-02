@@ -1,4 +1,4 @@
-import database from './database';
+import database from '../../electron-renderer/services/db/database';
 import { IHistory } from './history';
 
 const HistoryService = {

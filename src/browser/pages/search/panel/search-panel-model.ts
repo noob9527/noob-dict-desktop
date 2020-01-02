@@ -2,11 +2,13 @@ import { EngineIdentifier, SearchResult } from 'noob-dict-core';
 import { INote } from '../../../db/note';
 import { History, IHistory } from '../../../db/history';
 import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
-import HistoryService from '../../../db/history-service';
 import NoteService from '../../../db/note-service';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
+import { HistoryService, HistoryServiceToken } from '../../../../common/services/db/history-service';
+
+const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
 
 export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchResult> };
 
@@ -32,7 +34,7 @@ const effects = {
       type: 'searchPanel/mergeState',
       payload: {
         translatedText: '',
-      }
+      },
     });
     yield all([
       // fetch engines result
@@ -69,7 +71,7 @@ const effects = {
       payload: {
         translatedText: action.text,
         primaryResult: primaryResult,
-      }
+      },
     });
     if (primaryResult) {
       // switch tab
@@ -77,13 +79,13 @@ const effects = {
         type: 'searchPanel/mergeState',
         payload: {
           currentTab: primaryResult.engine,
-        }
+        },
       });
-      // // persist history
-      // yield call(HistoryService.save, new History({
-      //   text: action.text,
-      //   searchResult: primaryResult.toJSON(),
-      // }));
+      // persist history
+      yield call([historyService, historyService.save], new History({
+        text: action.text,
+        searchResult: primaryResult.toJSON(),
+      }));
     }
   },
   * fetchSingleResult(action) {
@@ -106,12 +108,12 @@ const effects = {
     // });
   },
   * fetchHistories(action) {
-    // const { text } = action.payload;
-    // const histories = yield call(HistoryService.findAll, text);
-    // yield put({
-    //   type: 'searchPanel/mergeState',
-    //   payload: { histories },
-    // });
+    const { text } = action.payload;
+    const histories = yield call([historyService, historyService.findAll], text);
+    yield put({
+      type: 'searchPanel/mergeState',
+      payload: { histories },
+    });
   },
 };
 
@@ -119,7 +121,7 @@ const reducers = {
   mergeState(state, action: any) {
     return {
       ...state,
-      ...action.payload
+      ...action.payload,
     };
   },
   mergeSearchResult(state, action: any) {
@@ -145,7 +147,7 @@ const searchPanelModel: SearchPanelModel = {
     primaryResult: null,
     searchResults: {
       [EngineIdentifier.BING]: null,
-      [EngineIdentifier.CAMBRIDGE]: null
+      [EngineIdentifier.CAMBRIDGE]: null,
     },
   },
   effects,

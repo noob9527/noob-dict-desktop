@@ -7,6 +7,7 @@ import EngineView from '../views/engine/engine-view';
 import { Menu, MenuItem } from './search-panel-menu';
 import { ThemedContent } from '../../../components/themed-ui/content/content';
 import styled from 'styled-components';
+import HistoryView from '../views/history/HistoryView';
 
 const Container = styled.div`
   display: flex;
@@ -25,6 +26,7 @@ const Content = styled.div`
 export default () => {
   const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
 
+  const histories = state.histories;
   const engineMenuItems = Object.keys(state.searchResults)
     .filter(e => !!e)
     .map(e => <MenuItem key={e} to={`/search/engine_view/${e}`}>{e}</MenuItem>);
@@ -35,6 +37,8 @@ export default () => {
         <Menu>
           <MenuItem to={'/search/overview'}>OVERVIEW</MenuItem>
           {engineMenuItems}
+          {/*{histories.length ? <MenuItem to={'/search/history'}></MenuItem> : null}*/}
+
           {/*<MenuItem to={'/search/tab1'}>tab1</MenuItem>*/}
           {/*<MenuItem to={'/search/tab2'}>tab2</MenuItem>*/}
         </Menu>

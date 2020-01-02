@@ -1,7 +1,7 @@
 import React from 'react';
 import { Pronunciation, LanguageTag } from 'noob-dict-core';
 import styled from 'styled-components';
-import Speaker from './speaker';
+import Speaker from '../shared/speaker/speaker';
 
 const ItemContainer = styled.span`
   > span + span {

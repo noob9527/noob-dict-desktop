@@ -9,7 +9,7 @@ const PageRouter = () => {
   return (
     <>
       <Switch>
-        <Route path="/test1" component={App}/>
+        <Route path="/app" component={App}/>
         <Route path="/search" component={SearchPage}/>
         <Route path="/setting" component={SettingPage}/>
         <Route path="/popup" component={PopupPage}/>

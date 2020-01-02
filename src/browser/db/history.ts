@@ -1,9 +1,15 @@
 import { SearchJsonResult } from 'noob-dict-core';
 
+interface IContext {
+  sentence: string
+  remark?: string
+}
+
 export interface IHistory {
   id?: Maybe<number>
   text: string
   searchResult: SearchJsonResult
+  contexts: IContext[]
   create_at: Date
   update_at: Maybe<Date>
 }
@@ -12,6 +18,7 @@ export class History implements IHistory {
   id?: Maybe<number>;
   text: string = '';
   searchResult!: SearchJsonResult;
+  contexts: IContext[] = [];
   create_at!: Date;
   update_at: Maybe<Date>;
 
