@@ -1,6 +1,7 @@
 import React from 'react';
 import { Pronunciation, LanguageTag } from 'noob-dict-core';
 import styled from 'styled-components';
+import Speaker from './speaker';
 
 const ItemContainer = styled.span`
   > span + span {
@@ -16,6 +17,7 @@ const ListContainer = styled.div`
 interface PronunciationItemProps {
   pronunciation: Pronunciation
 }
+
 interface PronunciationListProps {
   pronunciations: Pronunciation[]
 }
@@ -27,7 +29,7 @@ const PronunciationItem: React.FC<PronunciationItemProps> = (props: Pronunciatio
       <span>{LanguageTag.getLabel(pronunciation.tag)}</span>
       <span>{pronunciation.phoneticSymbol}</span>
       {/*todo: audio player*/}
-      <audio src={pronunciation.audio ?? undefined}/>
+      <Speaker src={pronunciation.audio ?? undefined}/>
     </ItemContainer>
   );
 };

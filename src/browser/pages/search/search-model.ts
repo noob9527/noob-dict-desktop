@@ -23,7 +23,7 @@ const effects = {
     });
   },
   * selectionTextChange(action) {
-    console.log(action);
+    // console.log(action);
     const settingState: SettingState = yield select(state => state.setting);
     const transientState: TransientState = yield select(state => state._transient);
     const searchState: SearchState = yield select(state => state.search);
@@ -47,7 +47,7 @@ const effects = {
     // todo change search input
   },
   * clipboardTextChange(action) {
-    console.log(action);
+    // console.log(action);
   },
 };
 
