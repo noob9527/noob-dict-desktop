@@ -1,12 +1,11 @@
 import NoteService from '../../../db/note-service';
-import { CollectionAction, INote, Note } from '../../../db/note';
+import { INote, Note } from '../../../../common/model/note';
 import { call, put, select } from '@redux-saga/core/effects';
 import { SearchPanelState } from '../panel/search-panel-model';
 import { Model } from '../../../redux/common/redux-model';
 
 
 export interface SearchToolBarState {
-  lastCollectAction: CollectionAction
 }
 
 export interface SearchToolBarModel extends Model {
@@ -34,15 +33,13 @@ const effects = {
   },
   * collect(action) {
     const searchPanelState: SearchPanelState = yield select((state: any) => state.searchPanel);
-    const lastCollectAction = yield select((state: any) => state.searchToolBar.lastCollectAction);
     const { primaryResult } = searchPanelState;
     if (!primaryResult) {
       throw new Error('missing available result');
     }
     const note = new Note({
       text: primaryResult.target,
-      collectAction: lastCollectAction,
-      searchResult: primaryResult.toJSON(),
+      searchResult: primaryResult,
     });
     yield call(NoteService.save, note);
     yield put({
@@ -64,7 +61,6 @@ const reducers = {
 const searchToolBarModel: SearchToolBarModel = {
   namespace: 'searchToolBar',
   state: {
-    lastCollectAction: CollectionAction.COLLECT,
   },
   effects,
   reducers,

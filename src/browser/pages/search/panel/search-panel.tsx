@@ -10,12 +10,15 @@ import { ThemedContent } from '../../../components/themed-ui/content/content';
 import styled from 'styled-components';
 import HistoryView from '../views/history/HistoryView';
 import ColorId from '../../../styles/ColorId';
+import { ThemedTextArea } from '../../../components/themed-ui/input/textarea';
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
 
   > * + * {
+    display: flex;
+    flex-direction: column;
     //overflow: auto;  // default scroll bar
     overflow: hidden;
     // react-scrollbar
@@ -65,6 +68,11 @@ export default () => {
             </Switch>
           </Content>
         </ScrollArea>
+        <ThemedTextArea
+          className={'context-textarea'}
+          placeholder="give me more context about this search to help you remember"
+          autoSize={{ minRow: 1 }}
+        />
       </ThemedContent>
     </Container>
   );

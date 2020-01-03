@@ -1,5 +1,5 @@
 import { HistoryService } from '../../../common/services/db/history-service';
-import { IHistory } from '../../../browser/db/history';
+import { IHistory } from '../../../common/model/history';
 import database from './database';
 import { injectable } from 'inversify';
 

@@ -32,7 +32,6 @@ const DefinitionItem: React.FC<DefinitionItemProp> = (props: DefinitionItemProp)
       <WordFormList wordForms={definition.wordForms}/>
       <MeaningList meanings={definition.meanings}/>
       <ExampleList examples={definition.examples}/>
-      <hr/>
     </ItemContainer>
   );
 };
@@ -41,7 +40,14 @@ const DefinitionList: React.FC<DefinitionListProp> = (props: DefinitionListProp)
   const { definitions } = props;
   return (
     <ListContainer>
-      {definitions.map((def, i) => (<DefinitionItem definition={def} key={i}/>))}
+      {definitions.map((def, i) =>
+        (
+          <div key={i}>
+            <DefinitionItem definition={def} key={i}/>
+            {i < definitions.length - 1 ? <hr/> : null}
+          </div>
+        ),
+      )}
     </ListContainer>
   );
 };

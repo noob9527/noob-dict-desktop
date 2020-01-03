@@ -1,4 +1,4 @@
-import { IHistory } from '../../../browser/db/history';
+import { IHistory } from '../../model/history';
 
 export const HistoryServiceToken = Symbol.for('history-service');
 

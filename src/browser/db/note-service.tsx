@@ -1,5 +1,5 @@
 import database from '../../electron-renderer/services/db/database';
-import { INote } from './note';
+import { INote } from '../../common/model/note';
 
 const NoteService = {
   save,

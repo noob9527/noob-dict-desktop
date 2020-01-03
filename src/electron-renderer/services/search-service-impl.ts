@@ -1,5 +1,13 @@
 import { SearchService } from '../../common/services/search-service';
-import { getSuggests, mockGetSuggests, mockSearch, search, SearchOption, SearchResult, Suggest } from 'noob-dict-core';
+import {
+  getSuggests,
+  mockGetSuggests,
+  mockSearch,
+  search,
+  SearchJsonResult,
+  SearchOption,
+  Suggest,
+} from 'noob-dict-core';
 import { injectable } from 'inversify';
 
 // this implementation only works if you can circumvent the CORS problem
@@ -9,8 +17,9 @@ export class CorsSearchService implements SearchService {
     return getSuggests(text);
   }
 
-  fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
-    return search(text, option);
+  async fetchResult(text: string, option: SearchOption): Promise<SearchJsonResult> {
+    const result = await search(text, option);
+    return result.toJSON();
   }
 }
 
@@ -20,8 +29,9 @@ export class MockSearchService implements SearchService {
     return mockGetSuggests(text);
   }
 
-  fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
-    return mockSearch(text, option);
+  async fetchResult(text: string, option: SearchOption): Promise<SearchJsonResult> {
+    const result = await mockSearch(text, option);
+    return result.toJSON();
   }
 }
 

@@ -1,5 +1,5 @@
 import database from '../../electron-renderer/services/db/database';
-import { IHistory } from './history';
+import { IHistory } from '../../common/model/history';
 
 const HistoryService = {
   save,

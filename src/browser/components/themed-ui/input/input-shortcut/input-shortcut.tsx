@@ -1,5 +1,5 @@
 import React, { KeyboardEvent, useRef, useState } from 'react';
-import useEventListener from '../../../hooks/use-event-listener';
+import useEventListener from '../../../../hooks/use-event-listener';
 
 const DIGIT_ZERO = 48;
 const DIGIT_NINE = 57;

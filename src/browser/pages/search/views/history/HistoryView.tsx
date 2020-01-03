@@ -6,7 +6,7 @@ import {
   Axis,
   Tooltip,
 } from 'bizcharts';
-import { IHistory } from '../../../../db/history';
+import { IHistory } from '../../../../../common/model/history';
 
 interface HistoryViewProps {
   histories: IHistory[]

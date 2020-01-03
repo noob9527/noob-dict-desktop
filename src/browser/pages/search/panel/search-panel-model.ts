@@ -1,6 +1,6 @@
-import { EngineIdentifier, SearchResult } from 'noob-dict-core';
-import { INote } from '../../../db/note';
-import { History, IHistory } from '../../../db/history';
+import { EngineIdentifier, SearchResult, SearchJsonResult } from 'noob-dict-core';
+import { INote } from '../../../../common/model/note';
+import { History, IHistory } from '../../../../common/model/history';
 import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
 import NoteService from '../../../db/note-service';
 import { Model } from '../../../redux/common/redux-model';
@@ -10,7 +10,7 @@ import { HistoryService, HistoryServiceToken } from '../../../../common/services
 
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
 
-export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchResult> };
+export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchJsonResult> };
 
 export interface SearchPanelState {
   translatedText: string,
@@ -18,7 +18,7 @@ export interface SearchPanelState {
   histories: IHistory[],
   currentTab: string,
   engines: EngineIdentifier[],
-  primaryResult: Maybe<SearchResult>,
+  primaryResult: Maybe<SearchJsonResult>,
   searchResults: SearchResults,
 }
 
@@ -84,14 +84,13 @@ const effects = {
       // persist history
       yield call([historyService, historyService.save], new History({
         text: action.text,
-        searchResult: primaryResult.toJSON(),
       }));
     }
   },
   * fetchSingleResult(action) {
     const { text, engine } = action.payload;
     const searchService = rendererContainer.get<SearchService>(SearchServiceToken);
-    const result: SearchResult = yield call([searchService, searchService.fetchResult], text, { engine });
+    const result: SearchJsonResult = yield call([searchService, searchService.fetchResult], text, { engine });
     yield put({
       type: 'searchPanel/mergeSearchResult',
       payload: {
