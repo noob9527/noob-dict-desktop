@@ -1,10 +1,14 @@
 import React from 'react';
 import SearchPanel from './panel/search-panel';
-import SearchPanelLegacy from './panel/search-panel-legacy';
 import SearchHeaderInput from './input/search-input';
 import SearchToolBar from './tool-bar/search-tool-bar';
 import styled from 'styled-components';
 import ColorId from '../../styles/ColorId';
+import { SearchPanelState } from './panel/search-panel-model';
+import { useSelector } from 'react-redux';
+import { Menu, MenuItem } from './panel/search-panel-menu';
+import { ThemedContent } from '../../components/themed-ui/content/content';
+import { ThemedTextArea } from '../../components/themed-ui/input/textarea';
 
 const SearchPage = styled.div`
   height: 100vh;
@@ -27,14 +31,50 @@ const Header = styled.header`
   justify-content: space-between;
 `;
 
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  > * + * {
+    display: flex;
+    flex-direction: column;
+    //overflow: auto;  // default scroll bar, we use react-scrollbar instead
+    overflow: hidden;
+    flex: 1;
+  }
+`;
+
 export default () => {
+  const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
+
+  const engineMenuItems = Object.keys(state.searchResults)
+    .filter(e => !!e)
+    .map(e => <MenuItem key={e} to={`/search/engine_view/${e}`}>{e}</MenuItem>);
   return (
     <SearchPage>
       <Header>
         <SearchHeaderInput/>
         <SearchToolBar/>
       </Header>
-      <SearchPanel/>
+      <Content>
+        <nav>
+          <Menu>
+            <MenuItem to={'/search/overview'}>OVERVIEW</MenuItem>
+            {engineMenuItems}
+            {/*{histories.length ? <MenuItem to={'/search/history'}></MenuItem> : null}*/}
+            {/*<MenuItem to={'/search/tab1'}>tab1</MenuItem>*/}
+            {/*<MenuItem to={'/search/tab2'}>tab2</MenuItem>*/}
+          </Menu>
+        </nav>
+        <ThemedContent>
+          <SearchPanel/>
+          <ThemedTextArea
+            className={'context-textarea'}
+            placeholder="give me more context about this search to help you remember"
+            autoSize={{ minRow: 1 }}
+          />
+        </ThemedContent>
+      </Content>
       {/*<SearchPanelLegacy/>*/}
     </SearchPage>
   );
