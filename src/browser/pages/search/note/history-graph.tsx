@@ -1,15 +1,10 @@
 import React from 'react';
 import * as _ from 'lodash';
-import {
-  Chart,
-  Geom,
-  Axis,
-  Tooltip,
-} from 'bizcharts';
-import { IHistory } from '../../../../../common/model/history';
+import { Axis, Chart, Geom, Tooltip } from 'bizcharts';
+import { ISearchHistory } from '../../../../common/model/history';
 
 interface HistoryViewProps {
-  histories: IHistory[]
+  histories: ISearchHistory[]
 }
 
 enum ChronoUnit {
@@ -17,11 +12,11 @@ enum ChronoUnit {
   DAY
 }
 
-const HistoryView: React.FC<HistoryViewProps> = (props: HistoryViewProps) => {
+const HistoryGraph: React.FC<HistoryViewProps> = (props: HistoryViewProps) => {
   const { histories } = props;
 
-  const first = _.minBy(histories, e => e.create_at);
-  const chronoUnit = first ? getChronoUnit(first.create_at) : ChronoUnit.DAY;
+  const first = _.minBy(histories, e => e.createAt);
+  const chronoUnit = first ? getChronoUnit(new Date(first.createAt)) : ChronoUnit.DAY;
   const data = group(histories, chronoUnit);
   return (
     <div style={{ marginBottom: '50px', width: '100%' }}>
@@ -30,7 +25,7 @@ const HistoryView: React.FC<HistoryViewProps> = (props: HistoryViewProps) => {
         <Axis name="times"/>
         <Tooltip
           crosshairs={{
-            type: 'y'
+            type: 'y',
           }}
         />
         <Geom type="line" position="date*times" size={2}/>
@@ -41,7 +36,7 @@ const HistoryView: React.FC<HistoryViewProps> = (props: HistoryViewProps) => {
           shape={'circle'}
           style={{
             stroke: '#fff',
-            lineWidth: 1
+            lineWidth: 1,
           }}
         />
       </Chart>
@@ -49,15 +44,16 @@ const HistoryView: React.FC<HistoryViewProps> = (props: HistoryViewProps) => {
   );
 };
 
-export default HistoryView;
+export default HistoryGraph;
 
-function group(histories: IHistory[], chronoUnit: ChronoUnit) {
+function group(histories: ISearchHistory[], chronoUnit: ChronoUnit) {
   return _.chain(histories)
     .groupBy(e => {
+      const date = new Date(e.createAt);
       if (chronoUnit === ChronoUnit.DAY) {
-        return e.create_at.toISOString().slice(0, 10);
+        return date.toISOString().slice(0, 10);
       } else if (chronoUnit === ChronoUnit.MONTH) {
-        return e.create_at.toISOString().slice(0, 7);
+        return date.toISOString().slice(0, 7);
       }
     }).mapValues(e => e.length).entries().map(e => ({ date: e[0], times: e[1] })).value();
 }

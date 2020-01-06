@@ -1,8 +1,7 @@
-import { EngineIdentifier, SearchResult, SearchJsonResult } from 'noob-dict-core';
+import { EngineIdentifier, SearchJsonResult, SearchResult } from 'noob-dict-core';
 import { INote } from '../../../../common/model/note';
-import { History, IHistory } from '../../../../common/model/history';
+import { ISearchHistory } from '../../../../common/model/history';
 import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
-import NoteService from '../../../db/note-service';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
@@ -14,9 +13,9 @@ export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchJsonResu
 
 export interface SearchPanelState {
   translatedText: string,
-  note: Maybe<INote>,
-  histories: IHistory[],
-  currentTab: string,
+  note: Maybe<INote>, // tobe removed
+  histories: ISearchHistory[],
+  currentTab: string, // tobe removed
   engines: EngineIdentifier[],
   primaryResult: Maybe<SearchJsonResult>,
   searchResults: SearchResults,
@@ -47,25 +46,23 @@ const effects = {
           },
         });
       }),
-      // fetch from notes
-      yield put({
-        type: 'searchPanel/fetchNote',
-        payload: {
-          text: action.text,
-        },
-      }),
-      // fetch from histories
-      yield put({
-        type: 'searchPanel/fetchHistories',
-        payload: {
-          text: action.text,
-        },
-      }),
     ]);
 
     const searchPanelState: SearchPanelState = yield select((state: any) => state.searchPanel);
     const primaryResult = Object.values(searchPanelState.searchResults)
       .find(e => !!e);
+
+    // fetch from notes
+    yield put({
+      type: 'searchNote/fetchOrCreateNote',
+      payload: {
+        text: action.text,
+        part: {
+          searchResult: primaryResult,
+        },
+      },
+    });
+
     yield put({
       type: 'searchPanel/mergeState',
       payload: {
@@ -74,17 +71,13 @@ const effects = {
       },
     });
     if (primaryResult) {
-      // switch tab
+      // switch tab, todo: router
       yield put({
         type: 'searchPanel/mergeState',
         payload: {
           currentTab: primaryResult.engine,
         },
       });
-      // persist history
-      yield call([historyService, historyService.save], new History({
-        text: action.text,
-      }));
     }
   },
   * fetchSingleResult(action) {
@@ -96,22 +89,6 @@ const effects = {
       payload: {
         result: result,
       },
-    });
-  },
-  * fetchNote(action) {
-    // const { text } = action.payload;
-    // const note = yield call(NoteService.findOne, text);
-    // yield put({
-    //   type: 'searchPanel/mergeState',
-    //   payload: { note },
-    // });
-  },
-  * fetchHistories(action) {
-    const { text } = action.payload;
-    const histories = yield call([historyService, historyService.findAll], text);
-    yield put({
-      type: 'searchPanel/mergeState',
-      payload: { histories },
     });
   },
 };

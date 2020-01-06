@@ -1,10 +1,10 @@
-import { IHistory } from '../../model/history';
+import { ISearchHistory } from '../../model/history';
 
 export const HistoryServiceToken = Symbol.for('history-service');
 
 export interface HistoryService {
-  save(history: IHistory): Promise<IHistory>
+  save(history: ISearchHistory): Promise<ISearchHistory>
 
-  findAll(text: string): Promise<IHistory[]>
+  findAll(text: string): Promise<ISearchHistory[]>
   // remove all
 }

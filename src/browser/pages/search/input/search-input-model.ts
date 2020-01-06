@@ -64,7 +64,7 @@ const reducers = {
   },
 };
 
-const model: SearchInputModel = {
+const searchInputModel: SearchInputModel = {
   namespace: 'searchInput',
   state,
   effects,
@@ -72,7 +72,7 @@ const model: SearchInputModel = {
   sagas: [watchSearchTextChange],
 };
 
-export default model;
+export default searchInputModel;
 
 function* watchSearchTextChange() {
   yield fork(function* () {

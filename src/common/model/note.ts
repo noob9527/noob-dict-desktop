@@ -1,16 +1,16 @@
-import { IHistory } from './history';
+import { ISearchHistory } from './history';
 
-type SearchJsonResult = any;
 
 export interface INote {
   id: Maybe<number>
   text: string
   remark: string
-  searchResult: SearchJsonResult
-  createAt: Date
-  updateAt: Maybe<Date>
-  histories: IHistory[]
+  createAt: number
+  updateAt: Maybe<number>
   updateTimes: number // In general, the more update times, the more significant a word is
+  searchResult?: any
+  // extra
+  histories: ISearchHistory[]
 }
 
 export class Note implements INote {
@@ -18,15 +18,16 @@ export class Note implements INote {
   id: Maybe<number>;
   text: string = '';
   remark = '';
-  searchResult!: SearchJsonResult;
-  createAt!: Date;
-  updateAt: Maybe<Date>;
-  histories: IHistory[] = [];
+  createAt!: number;
+  updateAt: Maybe<number>;
   updateTimes = 0;
+  searchResult?: any;
+  // extra
+  histories: ISearchHistory[] = [];
 
   constructor(note: Partial<INote>) {
     Object.assign(this, note);
-    this.createAt = new Date();
+    this.createAt = (new Date()).getTime();
     delete this.id; // this line is necessary, otherwise indexed db throw an error
   }
 }

@@ -15,6 +15,8 @@ import { ClipboardServiceImpl } from './clipboard-service-impl';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { HistoryService, HistoryServiceToken } from '../../common/services/db/history-service';
 import { DexieHistoryService } from './db/history-service-impl';
+import { NoteService, NoteServiceToken } from '../../common/services/db/note-service';
+import { DexieNoteService } from './db/note-service-impl';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -27,6 +29,7 @@ function registerAllService() {
 
   // db
   rendererContainer.bind<HistoryService>(HistoryServiceToken).to(DexieHistoryService);
+  rendererContainer.bind<NoteService>(NoteServiceToken).to(DexieNoteService);
 }
 
 registerAllService();

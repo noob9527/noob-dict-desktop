@@ -1,10 +1,10 @@
 import Dexie from 'dexie';
 import { INote } from '../../../common/model/note';
-import { IHistory } from '../../../common/model/history';
+import { ISearchHistory } from '../../../common/model/history';
 
 class Database extends Dexie {
   notes: Dexie.Table<INote, number>;
-  histories: Dexie.Table<IHistory, number>;
+  histories: Dexie.Table<ISearchHistory, number>;
 
   constructor(databaseName: string) {
     super(databaseName);

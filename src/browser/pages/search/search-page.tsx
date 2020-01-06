@@ -2,13 +2,15 @@ import React from 'react';
 import SearchPanel from './panel/search-panel';
 import SearchHeaderInput from './input/search-input';
 import SearchToolBar from './tool-bar/search-tool-bar';
-import styled from 'styled-components';
 import ColorId from '../../styles/ColorId';
 import { SearchPanelState } from './panel/search-panel-model';
 import { useSelector } from 'react-redux';
 import { Menu, MenuItem } from './panel/search-panel-menu';
 import { ThemedContent } from '../../components/themed-ui/content/content';
 import { ThemedTextArea } from '../../components/themed-ui/input/textarea';
+import styled from 'styled-components';
+import SearchNote from './note/search-note';
+import ThemedSplitPane from '../../components/themed-ui/split-pane/split-pane';
 
 const SearchPage = styled.div`
   height: 100vh;
@@ -44,6 +46,7 @@ const Content = styled.div`
   }
 `;
 
+
 export default () => {
   const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
 
@@ -67,14 +70,19 @@ export default () => {
           </Menu>
         </nav>
         <ThemedContent>
-          <SearchPanel/>
-          <ThemedTextArea
-            className={'context-textarea'}
-            placeholder="give me more context about this search to help you remember"
-            autoSize={{ minRow: 1 }}
-          />
+          <ThemedSplitPane
+            primary="second"
+            split="horizontal"
+            minSize={60}
+            defaultSize={60}
+            maxSize={400}
+          >
+            <SearchPanel/>
+            <SearchNote/>
+          </ThemedSplitPane>
         </ThemedContent>
       </Content>
+
       {/*<SearchPanelLegacy/>*/}
     </SearchPage>
   );

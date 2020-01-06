@@ -4,26 +4,24 @@ interface Context {
   remark: string
 }
 
-export interface IHistory {
+export interface ISearchHistory {
   id?: Maybe<number>
-  noteId: number
   text: string
   context: Context[]
-  createAt: Date
-  updateAt: Maybe<Date>
+  createAt: number
+  updateAt: Maybe<number>
 }
 
-export class History implements IHistory {
+export class SearchHistory implements ISearchHistory {
   id?: Maybe<number>;
-  noteId = 0;
   text: string = '';
   context: Context[] = [];
-  createAt!: Date;
-  updateAt: Maybe<Date>;
+  createAt!: number;
+  updateAt: Maybe<number>;
 
-  constructor(history: Partial<IHistory>) {
+  constructor(history: Partial<ISearchHistory>) {
     Object.assign(this, history);
-    this.createAt = new Date();
+    this.createAt = (new Date()).getTime();
     delete this.id; // this line is necessary, otherwise indexed db throw an error
   }
 }

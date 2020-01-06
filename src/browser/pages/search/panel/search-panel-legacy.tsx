@@ -5,8 +5,8 @@ import { EngineIdentifier, SearchResult } from 'noob-dict-core';
 import styles from './search-panel.module.scss';
 import { SearchPanelState } from './search-panel-model';
 import EngineView from '../views/engine/engine-view';
-import NoteView from '../views/note/NoteView';
-import HistoryView from '../views/history/HistoryView';
+import NoteView from '../note/NoteView';
+import HistoryGraph from '../note/history-graph';
 import OverviewView from '../views/overview/OverviewView';
 import { Tab, Tabs, TabList, TabPanel } from '../../../components/themed-ui/tabs/tabs';
 
@@ -88,7 +88,7 @@ export default () => {
             tab="HISTORY"
             key="HISTORY"
           >
-            <HistoryView histories={histories}/>
+            <HistoryGraph histories={histories}/>
           </Tabs.TabPane>
           : null
         }
