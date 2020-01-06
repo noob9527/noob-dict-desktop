@@ -7,7 +7,7 @@ interface Context {
 export interface ISearchHistory {
   id?: Maybe<number>
   text: string
-  context: Context[]
+  context: Context | null | undefined
   createAt: number
   updateAt: Maybe<number>
 }
@@ -15,7 +15,7 @@ export interface ISearchHistory {
 export class SearchHistory implements ISearchHistory {
   id?: Maybe<number>;
   text: string = '';
-  context: Context[] = [];
+  context = null;
   createAt!: number;
   updateAt: Maybe<number>;
 
