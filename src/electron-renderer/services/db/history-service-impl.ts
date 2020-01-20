@@ -1,5 +1,5 @@
 import { HistoryService } from '../../../common/services/db/history-service';
-import { SearchHistory, ISearchHistory } from '../../../common/model/history';
+import { ISearchHistory, SearchHistory } from '../../../common/model/history';
 import database from './database';
 import { injectable } from 'inversify';
 
@@ -8,11 +8,16 @@ export class DexieHistoryService implements HistoryService {
   async findAll(text: string): Promise<ISearchHistory[]> {
     const res = await database.histories
       .where('text').equals(text).toArray();
-    return res.map(e => new SearchHistory(e));
+    return res.map(e => SearchHistory.wrap(e));
   }
 
-  async save(history: ISearchHistory): Promise<ISearchHistory> {
+  async add(history: ISearchHistory): Promise<ISearchHistory> {
     history.id = await database.histories.add(history);
+    return history;
+  }
+
+  async update(history: ISearchHistory): Promise<ISearchHistory> {
+    await database.histories.update(history.id!!, history);
     return history;
   }
 }

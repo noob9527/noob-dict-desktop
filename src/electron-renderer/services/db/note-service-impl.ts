@@ -5,6 +5,7 @@ import { INote, Note } from '../../../common/model/note';
 import { HistoryService, HistoryServiceToken } from '../../../common/services/db/history-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { SearchHistory } from '../../../common/model/history';
+import logger from "../../../common/utils/logger";
 
 @injectable()
 export class DexieNoteService implements NoteService {
@@ -21,20 +22,22 @@ export class DexieNoteService implements NoteService {
     if (res) {
       res.histories = await this.historyService.findAll(text);
     }
-    return new Note(res);
+    return Note.wrap(res);
   }
 
   async search(text: string, part: Partial<INote>): Promise<INote> {
     let note = await this.fetch(text);
-    const history = new SearchHistory({ text });
+    const history = SearchHistory.create({ text });
     if (!note) {
-      note = new Note({
+      note = Note.create({
         ...part,
         text,
         histories: [history],
       });
     } else {
+      logger.log('add hist start', note.histories.length, note.histories);
       note.histories.push(history);
+      logger.log('add hist end', note.histories.length);
     }
     return this.saveOrUpdate(note);
   }
@@ -43,16 +46,20 @@ export class DexieNoteService implements NoteService {
     if (note.id) {
       // update
       note.updateTimes++;
+      note.updateAt = (new Date()).getTime();
+      await database.notes.update(note.id, {
+        updateAt: note.updateAt,
+        updateTimes: note.updateTimes
+      });
     } else {
       // create
-
+      note.id = await database.notes.add(note);
     }
-    note.id = await database.notes.add(note);
     // todo: we may need transaction here
     // todo: what if we change the content of a history
     // cascade persist history
     const promises = note.histories.filter(e => !e.id)
-      .map(e => database.histories.add(e));
+      .map(e => this.historyService.add(e));
     await Promise.all(promises);
     return note;
   }

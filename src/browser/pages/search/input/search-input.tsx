@@ -18,11 +18,11 @@ export default () => {
   } = useSelector((state: { searchInput: SearchInputState }) => state.searchInput);
 
   // focus on input element
-  const previousFocusInput = usePrevious(focusInput);
+  // const previousFocusInput = usePrevious(focusInput);
   const selectEle = useRef<Select | null>(null);
-  if (!previousFocusInput && focusInput) {
-    selectEle?.current?.focus();
-  }
+  // if (!previousFocusInput && focusInput) {
+  //   selectEle?.current?.focus();
+  // }
 
   return (
     <div className={styles.searchHeaderInput}>

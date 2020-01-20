@@ -19,9 +19,20 @@ export class SearchHistory implements ISearchHistory {
   createAt!: number;
   updateAt: Maybe<number>;
 
-  constructor(history: Partial<ISearchHistory>) {
-    Object.assign(this, history);
-    this.createAt = (new Date()).getTime();
-    delete this.id; // this line is necessary, otherwise indexed db throw an error
+  static wrap(history: Partial<ISearchHistory>) {
+    const res = new SearchHistory();
+    Object.assign(res, history);
+    return res;
+  }
+
+  static create(history: Partial<ISearchHistory>) {
+    const res = new SearchHistory();
+    Object.assign(res, history);
+    res.createAt = (new Date()).getTime();
+    delete res.id;
+    return res;
+  }
+
+  private constructor() {
   }
 }

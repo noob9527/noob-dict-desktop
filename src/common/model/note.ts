@@ -25,9 +25,20 @@ export class Note implements INote {
   // extra
   histories: ISearchHistory[] = [];
 
-  constructor(note: Partial<INote>) {
-    Object.assign(this, note);
-    this.createAt = (new Date()).getTime();
-    delete this.id; // this line is necessary, otherwise indexed db throw an error
+  static wrap(note: Partial<INote>): Note {
+    const res = new Note();
+    Object.assign(res, note);
+    return res;
+  }
+
+  static create(note: Partial<INote>): Note {
+    const res = new Note();
+    Object.assign(res, note);
+    res.createAt = (new Date()).getTime();
+    delete res.id;
+    return res;
+  }
+
+  private constructor() {
   }
 }

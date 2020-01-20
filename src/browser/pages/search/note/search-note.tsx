@@ -5,18 +5,31 @@ import { useSelector } from 'dva';
 import { SearchNoteState } from './search-note-model';
 import HistoryGraph from './history-graph';
 import { SearchPanelState } from '../panel/search-panel-model';
-import { ThemedTextArea } from '../../../components/themed-ui/input/textarea';
-import moment from 'moment';
 import HistoryTable from './history-table';
+import { Button, Icon } from "antd";
 
-const Title = styled.h4`
-  font-weight: bold;
-  text-align: center;
+const Title = styled.header`
   margin: 10px 0;
+  text-align: center;
+  line-height: 32.5px;
+  h4 {
+    margin: 0;
+    display: inline-block;
+    font-weight: bold;
+  }
+  span:nth-child(2) {
+    margin-left: 5px;
+    font-size: 0.8rem;
+  }
+  span:nth-child(3) {
+    position: fixed;
+    right: 10px;
+  }
 `;
 
 const Container = styled.div`
     height: 100%;
+    margin: 10px;
 `;
 
 const StyledScrollArea = styled(ScrollArea)`
@@ -36,24 +49,24 @@ const SearchNote = () => {
   if (!panelState.translatedText) {
     return <div/>;
   }
-  let { histories } = noteState;
+  let { histories, noteInDb } = noteState;
 
   return (
     <Container>
-      <Title>QUICK NOTES</Title>
+      <Title>
+        <h4>QUICK NOTES</h4>
+        <span>{`(You've searched '${noteInDb?.text}' ${noteInDb?.updateTimes} times)`}</span>
+        <span>
+          <Button type="link" shape="circle" ghost onClick={() => {
+            // todo, move splitter
+          }}>
+            <Icon type="smile"/>
+          </Button>
+        </span>
+      </Title>
       <StyledScrollArea>
         <HistoryTable histories={histories}/>
-        {/*{histories.map((e, i) => (*/}
-        {/*  <div key={i}>*/}
-        {/*    <span>{moment(e.createAt).format('YYYY-MM-DD HH:mm:ss')}</span>*/}
-        {/*    <span>{e.context}</span>*/}
-        {/*  </div>*/}
-        {/*))}*/}
-        <ThemedTextArea
-          placeholder={`give me more context about '${panelState.translatedText}' to improve your memory`}
-          autoSize={{ minRow: 1 }}
-        />
-        {histories.length ? <HistoryGraph histories={histories}/> : null}
+        {/*<HistoryGraph histories={histories}/>*/}
       </StyledScrollArea>
     </Container>
   );
