@@ -1,12 +1,13 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import styled from 'styled-components';
-import { useSelector } from 'dva';
+import { useDispatch, useSelector } from 'dva';
 import { SearchNoteState } from './search-note-model';
 import HistoryGraph from './history-graph';
 import { SearchPanelState } from '../panel/search-panel-model';
 import HistoryTable from './history-table';
 import { Button, Icon } from "antd";
+import { SearchState } from '../search-model';
 
 const Title = styled.header`
   margin: 10px 0;
@@ -43,6 +44,8 @@ const StyledScrollArea = styled(ScrollArea)`
 `;
 
 const SearchNote = () => {
+  const dispatch = useDispatch();
+  const searchState: SearchState = useSelector((state: any) => state.search);
   const panelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
   const noteState: SearchNoteState = useSelector((state: any) => state.searchNote);
 
@@ -58,9 +61,11 @@ const SearchNote = () => {
         <span>{`(You've searched '${noteInDb?.text}' ${noteInDb?.updateTimes} times)`}</span>
         <span>
           <Button type="link" shape="circle" ghost onClick={() => {
-            // todo, move splitter
+            dispatch({
+              type: 'search/togglePaneSize',
+            });
           }}>
-            <Icon type="smile"/>
+            <Icon type={searchState.splitPaneButtonUp ? 'up' : 'down'}/>
           </Button>
         </span>
       </Title>

@@ -5,8 +5,14 @@ import { rendererContainer } from '../../../common/container/renderer-container'
 import { SettingState } from '../setting/setting-model';
 import { TransientState } from '../transient-model';
 
+export const SPLIT_PANE_SIZE_MAX = 450;
+export const SPLIT_PANE_SIZE_MIN = 60;
+export const SPLIT_PANE_SIZE_MIDDLE = (400 + 60) / 2;
+
 export interface SearchState {
   pinned: boolean
+  splitPaneSize: number
+  splitPaneButtonUp: boolean
 }
 
 export interface SearchModel extends Model {
@@ -53,9 +59,27 @@ const effects = {
 
 const reducers = {
   mergeState(state, action: any) {
+    console.log(action);
     return {
       ...state,
       ...action.payload,
+    };
+  },
+  updatePanelSize(state, action: any) {
+    const { splitPaneSize } = action.payload;
+    return {
+      ...state,
+      splitPaneSize,
+      splitPaneButtonUp: splitPaneSize <= SPLIT_PANE_SIZE_MIDDLE,
+    };
+  },
+  togglePaneSize(state) {
+    const { splitPaneButtonUp } = state;
+    const splitPaneSize = splitPaneButtonUp ? SPLIT_PANE_SIZE_MAX : SPLIT_PANE_SIZE_MIN;
+    return {
+      ...state,
+      splitPaneSize,
+      splitPaneButtonUp: !splitPaneButtonUp,
     };
   },
 };
@@ -64,6 +88,8 @@ const appModel: SearchModel = {
   namespace: 'search',
   state: {
     pinned: false,
+    splitPaneSize: SPLIT_PANE_SIZE_MIN,
+    splitPaneButtonUp: true,
   },
   effects,
   reducers,

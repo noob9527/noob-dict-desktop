@@ -1,16 +1,18 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import SearchPanel from './panel/search-panel';
 import SearchHeaderInput from './input/search-input';
 import SearchToolBar from './tool-bar/search-tool-bar';
 import ColorId from '../../styles/ColorId';
 import { SearchPanelState } from './panel/search-panel-model';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Menu, MenuItem } from './panel/search-panel-menu';
 import { ThemedContent } from '../../components/themed-ui/content/content';
 import { ThemedTextArea } from '../../components/themed-ui/input/textarea';
 import styled from 'styled-components';
 import SearchNote from './note/search-note';
 import ThemedSplitPane from '../../components/themed-ui/split-pane/split-pane';
+import { SearchState, SPLIT_PANE_SIZE_MAX, SPLIT_PANE_SIZE_MIN } from './search-model';
+import _ from 'lodash';
 
 const SearchPage = styled.div`
   height: 100vh;
@@ -48,9 +50,21 @@ const Content = styled.div`
 
 
 export default () => {
-  const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
+  const dispatch = useDispatch();
+  const searchState: SearchState = useSelector((state: any) => state.search);
+  const searchPanelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
 
-  const engineMenuItems = Object.keys(state.searchResults)
+  const handleUpdateSize = size => {
+    dispatch({
+      type: 'search/updatePanelSize',
+      payload: {
+        splitPaneSize: size,
+      },
+    });
+  };
+  const debounced = useCallback(_.debounce(handleUpdateSize, 200), []);
+
+  const engineMenuItems = Object.keys(searchPanelState.searchResults)
     .filter(e => !!e)
     .map(e => <MenuItem key={e} to={`/search/engine_view/${e}`}>{e}</MenuItem>);
   return (
@@ -73,9 +87,11 @@ export default () => {
           <ThemedSplitPane
             primary="second"
             split="horizontal"
-            minSize={60}
+            minSize={SPLIT_PANE_SIZE_MIN}
+            maxSize={SPLIT_PANE_SIZE_MAX}
             defaultSize={60}
-            maxSize={400}
+            size={searchState.splitPaneSize}
+            onChange={debounced}
           >
             <SearchPanel/>
             <SearchNote/>
