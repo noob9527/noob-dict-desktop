@@ -11,6 +11,7 @@ const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken
 
 export interface DataWrapper<T> {
   id: number,
+  editing: boolean,
   typing: boolean,
   dirty: boolean,
   syncing: boolean,
@@ -20,8 +21,6 @@ export interface DataWrapper<T> {
 
 export interface SearchNoteState {
   noteInDb: Maybe<INote>,
-  currentNote: Maybe<INote>,
-  dirty: boolean, // indicates if there's any change
   histories: {
     [index: number]: DataWrapper<ISearchHistory>
   }
@@ -32,31 +31,24 @@ export interface SearchNoteModel extends Model {
 }
 
 const effects = {
-  // fired when user change the note
-  * noteChange(action) {
-    yield put({
-      type: 'searchNote/mergeState',
-      payload: {
-        currentNote: action.note,
-      },
-    });
-  },
   * fetchOrCreateNote(action) {
     const { text, part } = action.payload;
     let note = yield call([noteService, noteService.search], text, part);
-    const histories = note.histories.reduce((acc, curr) => {
+    const histories = note.histories.reduce((acc, curr, i, arr) => {
       return {
         ...acc,
         [curr.id]: {
           id: curr.id,
           typing: false,
+          editing: i === arr.length - 1,
           dirty: false,
           syncing: false,
           oldData: curr,
-          newData: curr
-        }
+          newData: curr,
+        },
       };
     }, {});
+    console.log(histories);
     yield put({
       type: 'searchNote/mergeState',
       payload: {
@@ -75,22 +67,22 @@ const effects = {
     yield put({
       type: 'searchNote/startSyncHistoryContext',
       payload: {
-        history
+        history,
       },
     });
     yield all([
       call([historyService, historyService.update], history),
       // to show the spinner...
-      delay(1000)
+      delay(1000),
     ]);
     // yield call([historyService, historyService.update], history);
     yield put({
       type: 'searchNote/finishSyncHistoryContext',
       payload: {
-        history
+        history,
       },
     });
-  }
+  },
 };
 
 const reducers = {
@@ -104,7 +96,7 @@ const reducers = {
         typing: false,
         syncing: true,
         newData: history,
-      }
+      },
     };
     return {
       ...state,
@@ -123,7 +115,7 @@ const reducers = {
         dirty: false,
         oldData: history,
         newData: history,
-      }
+      },
     };
     return {
       ...state,
@@ -142,7 +134,7 @@ const reducers = {
         syncing: false,
         oldData: state.histories[history.id].oldData,
         newData: history,
-      }
+      },
     };
     return {
       ...state,
@@ -162,9 +154,7 @@ const searchNoteModel: SearchNoteModel = {
   namespace: 'searchNote',
   state: {
     noteInDb: null,
-    currentNote: null,
-    dirty: false,
-    histories: {}
+    histories: {},
   },
   effects,
   reducers,

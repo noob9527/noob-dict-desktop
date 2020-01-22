@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import { ISearchHistory } from '../../../../common/model/history';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -20,6 +20,10 @@ const Container = styled.div`
     width: 100%
     tr {
       text-align: center;
+      td.paragraph {
+        height: 31px; // work as min-height
+        text-align: left;
+      }
     }
     thead > tr {
       th:nth-child(1) {
@@ -47,7 +51,7 @@ const EditorContainer = styled.div`
 const HistoryTable: React.FC<HistoryViewProps> = (props) => {
   const dispatch = useDispatch();
   const histories = _.sortBy(Object.values(props.histories), e => {
-    return -e.oldData.createAt
+    return -e.oldData.createAt;
   });
 
   return (
@@ -64,7 +68,7 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
           <tbody>
           {histories
             .filter((e, i) => {
-              return !i || e.oldData.context!!
+              return !i || e.oldData.context!!;
             })
             .map((e, i) => (
               <tr key={(e.id ?? 0).toString()}>
@@ -74,9 +78,9 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
                       : 'Current'
                   }
                 </td>
-                <td>
+                <td className={'paragraph'}>
                   {
-                    i ? <span>{e.oldData.context?.paragraph}</span>
+                    !e.editing ? <div style={{ whiteSpace: 'pre-line' }}>{e.oldData.context?.paragraph}</div>
                       :
                       <EditorContainer>
                         <ThemedTextArea
@@ -91,11 +95,11 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
                                   ...e.oldData,
                                   context: {
                                     ...e.oldData.context,
-                                    paragraph: event.currentTarget.value
-                                  }
-                                }
-                              }
-                            })
+                                    paragraph: event.currentTarget.value,
+                                  },
+                                },
+                              },
+                            });
                           }}
                         />
                         <Icon className={e.syncing ? 'loading' : ''} type="loading"/>
