@@ -35,9 +35,16 @@ const Container = styled.div`
 
 const EditorContainer = styled.div`
   position: relative;
-  i.anticon {
+  .ant-input-affix-wrapper {
+    width: calc(100% - 21px);
+  }
+  //i.ant-input-textarea-clear-icon {
+  //  z-index: 999; 
+  //}
+  i.anticon-loading {
     position: absolute;
-    right: 7px;
+    right: 0;
+    //right: 7px;
     top: calc(50% - 7px);
 
     transition: opacity 2s ease;
@@ -62,7 +69,7 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
           <tr>
             <th>Time</th>
             <th>Context</th>
-            <th>Action</th>
+            {/*<th>Action</th>*/}
           </tr>
           </thead>
           <tbody>
@@ -87,6 +94,7 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
                           value={e.newData.context?.paragraph ?? ''}
                           placeholder={`give me more context about '${e.oldData.text}' to improve your memory`}
                           autoSize={{ minRows: 1 }}
+                          allowClear={true}
                           onChange={event => {
                             dispatch({
                               type: 'searchNote/typeHistoryContext',
@@ -106,11 +114,11 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
                       </EditorContainer>
                   }
                 </td>
-                <td>
-                  {/*<div>typing: {e.typing + ''}</div>*/}
-                  {/*<div>syncing: {e.syncing + ''}</div>*/}
-                  {/*<div>dirty: {e.dirty + ''}</div>*/}
-                </td>
+                {/*<td>*/}
+                {/*  /!*<div>typing: {e.typing + ''}</div>*!/*/}
+                {/*  /!*<div>syncing: {e.syncing + ''}</div>*!/*/}
+                {/*  /!*<div>dirty: {e.dirty + ''}</div>*!/*/}
+                {/*</td>*/}
               </tr>
             ))}
           </tbody>
