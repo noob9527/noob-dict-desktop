@@ -111,21 +111,27 @@ function createWindow() {
   });
 
   window.on('show', e => {
+    logger.log('search window show', e);
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_SHOWED, e);
   });
   window.on('hide', e => {
+    logger.log('search window hide', e);
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_HIDED, e);
   });
   window.on('restore', e => {
+    logger.log('search window restore', e);
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_RESTORED, e);
   });
   window.on('minimize', e => {
+    logger.log('search window minimize', e);
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_MINIMIZED, e);
   });
   window.on('focus', e => {
+    logger.log('search window focus', e);
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_FOCUS, e);
   });
   window.on('blur', e => {
+    logger.log('search window blur', e);
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_BLUR, e);
   });
 
