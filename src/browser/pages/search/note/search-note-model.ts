@@ -141,6 +141,17 @@ const reducers = {
       histories,
     };
   },
+  changeEditing(state, action) {
+    const { payload } = action;
+    const histories = {
+      ...state.histories,
+      [payload.id]: payload,
+    };
+    return {
+      ...state,
+      histories,
+    };
+  },
   mergeState(state, action: any) {
     return {
       ...state,

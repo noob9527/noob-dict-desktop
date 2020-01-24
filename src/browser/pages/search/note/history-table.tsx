@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useCallback } from 'react';
 import { ISearchHistory } from '../../../../common/model/history';
 import styled from 'styled-components';
 import moment from 'moment';
@@ -7,6 +7,7 @@ import { ThemedTextArea } from '../../../components/themed-ui/input/textarea';
 import { Button, Icon } from 'antd';
 import { useDispatch } from 'react-redux';
 import { DataWrapper } from './search-note-model';
+import { InlineEditTextarea } from './inline-edit-textarea';
 
 interface HistoryViewProps {
   histories: {
@@ -33,34 +34,11 @@ const Container = styled.div`
   }
 `;
 
-const EditorContainer = styled.div`
-  position: relative;
-  .ant-input-affix-wrapper {
-    width: calc(100% - 21px);
-  }
-  //i.ant-input-textarea-clear-icon {
-  //  z-index: 999; 
-  //}
-  i.anticon-loading {
-    position: absolute;
-    right: 0;
-    //right: 7px;
-    top: calc(50% - 7px);
-
-    transition: opacity 2s ease;
-    opacity: 0;
-    &.loading {
-      opacity: 1;
-    }
-  }
-`;
-
 const HistoryTable: React.FC<HistoryViewProps> = (props) => {
   const dispatch = useDispatch();
   const histories = _.sortBy(Object.values(props.histories), e => {
     return -e.oldData.createAt;
   });
-
   return (
     <>
       <Container>
@@ -69,7 +47,7 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
           <tr>
             <th>Time</th>
             <th>Context</th>
-            {/*<th>Action</th>*/}
+            {/*<th>Easy Edit</th>*/}
           </tr>
           </thead>
           <tbody>
@@ -86,39 +64,41 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
                   }
                 </td>
                 <td className={'paragraph'}>
-                  {
-                    !e.editing ? <div style={{ whiteSpace: 'pre-line' }}>{e.oldData.context?.paragraph}</div>
-                      :
-                      <EditorContainer>
-                        <ThemedTextArea
-                          value={e.newData.context?.paragraph ?? ''}
-                          placeholder={`give me more context about '${e.oldData.text}' to improve your memory`}
-                          autoSize={{ minRows: 1 }}
-                          allowClear={true}
-                          onChange={event => {
-                            dispatch({
-                              type: 'searchNote/typeHistoryContext',
-                              payload: {
-                                history: {
-                                  ...e.oldData,
-                                  context: {
-                                    ...e.oldData.context,
-                                    paragraph: event.currentTarget.value,
-                                  },
-                                },
-                              },
-                            });
-                          }}
-                        />
-                        <Icon className={e.syncing ? 'loading' : ''} type="loading"/>
-                      </EditorContainer>
-                  }
+                  <InlineEditTextarea
+                    showLoading={e.syncing}
+                    editing={e.editing}
+                    onEditingChange={value => {
+                      // if it is the first element, we force the editing state
+                      const editing = i === 0 || value;
+                      dispatch({
+                        type: 'searchNote/changeEditing',
+                        payload: {
+                          ...e,
+                          editing,
+                        },
+                      });
+                    }}
+                    value={e.newData.context?.paragraph ?? ''}
+                    placeholder={`give me more context about '${e.oldData.text}' to improve your memory`}
+                    onChange={value => {
+                      dispatch({
+                        type: 'searchNote/typeHistoryContext',
+                        payload: {
+                          history: {
+                            ...e.oldData,
+                            context: {
+                              ...e.oldData.context,
+                              paragraph: value,
+                            },
+                          },
+                        },
+                      });
+                    }}
+                  />
+                  {/*<div>typing: {e.typing + ''}</div>*/}
+                  {/*<div>syncing: {e.syncing + ''}</div>*/}
+                  {/*<div>dirty: {e.dirty + ''}</div>*/}
                 </td>
-                {/*<td>*/}
-                {/*  /!*<div>typing: {e.typing + ''}</div>*!/*/}
-                {/*  /!*<div>syncing: {e.syncing + ''}</div>*!/*/}
-                {/*  /!*<div>dirty: {e.dirty + ''}</div>*!/*/}
-                {/*</td>*/}
               </tr>
             ))}
           </tbody>

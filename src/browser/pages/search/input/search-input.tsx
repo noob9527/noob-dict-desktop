@@ -17,6 +17,7 @@ export default () => {
     open,
   } = useSelector((state: { searchInput: SearchInputState }) => state.searchInput);
 
+  // todo: this leads to searchInput focus bug(Cannot flush updates when React is already rendering)
   // focus on input element
   // const previousFocusInput = usePrevious(focusInput);
   const selectEle = useRef<Select | null>(null);
