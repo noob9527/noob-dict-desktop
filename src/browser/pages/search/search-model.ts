@@ -1,4 +1,4 @@
-import { call, put, select } from '@redux-saga/core/effects';
+import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
 import { Model } from '../../redux/common/redux-model';
 import { SearchUiService, SearchUiServiceToken } from '../../../common/services/search-ui-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
@@ -28,8 +28,7 @@ const effects = {
       payload: { pinned },
     });
   },
-  * selectionTextChange(action) {
-    // console.log(action);
+  * debouncedSelectionTextChange(action) {
     const settingState: SettingState = yield select(state => state.setting);
     const transientState: TransientState = yield select(state => state._transient);
     const searchState: SearchState = yield select(state => state.search);
@@ -44,13 +43,10 @@ const effects = {
         });
         yield put({
           type: 'searchPanel/fetchResults',
-          text: action.newText,
+          text: action.payload.newText,
         });
       }
     }
-
-    // todo show popup window
-    // todo change search input
   },
   * clipboardTextChange(action) {
     // console.log(action);
@@ -93,6 +89,32 @@ const appModel: SearchModel = {
   },
   effects,
   reducers,
+  sagas: [watchSelectionTextChange],
 };
 
 export default appModel;
+
+
+function* watchSelectionTextChange() {
+  yield fork(function* () {
+    let task;
+    while (true) {
+      const action = yield take('search/selectionTextChange');
+      if (task) {
+        yield cancel(task);
+      }
+      // if text has multiline, we ignore it
+      if (!action?.payload?.newText?.includes('\n')) {
+        task = yield fork(debounced, action);
+      }
+    }
+  });
+
+  function* debounced(action) {
+    yield delay(800);
+    yield put({
+      ...action,
+      type: 'search/debouncedSelectionTextChange',
+    });
+  }
+}
