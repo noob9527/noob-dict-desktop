@@ -1,10 +1,11 @@
 import React from 'react';
-import { EngineIdentifier, SearchResult } from 'noob-dict-core';
+import { EngineIdentifier, SearchJsonResult, SearchResult } from 'noob-dict-core';
 import { useParams } from 'react-router-dom';
 import { SearchPanelState } from '../../panel/search-panel-model';
 import { useSelector } from 'react-redux';
 import CommonEngineView from '../../../../components/dict/common/common-dict';
 import BingDict from '../../../../components/dict/bing/bing-dict';
+import { ThemedEmpty } from '../../../../components/themed-ui/empty/empty';
 
 interface EngineViewProps {
   html: string
@@ -29,8 +30,8 @@ const EngineView: React.FC<EngineViewProps> = (props: EngineViewProps) => {
   // }
 };
 
-function getDictComponent(result: SearchResult | null | undefined) {
-  if (!result) return <>empty result</>;
+function getDictComponent(result: SearchJsonResult | null | undefined) {
+  if (!result) return (<ThemedEmpty/>);
   // noinspection JSRedundantSwitchStatement
   switch (result.engine) {
     case EngineIdentifier.BING:

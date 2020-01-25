@@ -55,7 +55,6 @@ const effects = {
 
 const reducers = {
   mergeState(state, action: any) {
-    console.log(action);
     return {
       ...state,
       ...action.payload,

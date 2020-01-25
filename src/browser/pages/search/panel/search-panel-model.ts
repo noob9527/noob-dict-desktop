@@ -1,11 +1,10 @@
 import { EngineIdentifier, SearchJsonResult, SearchResult } from 'noob-dict-core';
-import { INote } from '../../../../common/model/note';
-import { ISearchHistory } from '../../../../common/model/history';
 import { all, call, put, putResolve, select } from '@redux-saga/core/effects';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
 import { HistoryService, HistoryServiceToken } from '../../../../common/services/db/history-service';
+import { push } from 'connected-react-router';
 
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
 
@@ -13,9 +12,6 @@ export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchJsonResu
 
 export interface SearchPanelState {
   translatedText: string,
-  note: Maybe<INote>, // tobe removed
-  histories: ISearchHistory[],
-  currentTab: string, // tobe removed
   engines: EngineIdentifier[],
   primaryResult: Maybe<SearchJsonResult>,
   searchResults: SearchResults,
@@ -71,13 +67,14 @@ const effects = {
       },
     });
     if (primaryResult) {
-      // switch tab, todo: router
-      yield put({
-        type: 'searchPanel/mergeState',
-        payload: {
-          currentTab: primaryResult.engine,
-        },
-      });
+      yield put(push(`/search/engine_view/${primaryResult.engine}`));
+      // switch tab
+      // yield put({
+      //   type: 'searchPanel/mergeState',
+      //   payload: {
+      //     currentTab: primaryResult.engine,
+      //   },
+      // });
     }
   },
   * fetchSingleResult(action) {
@@ -115,9 +112,6 @@ const reducers = {
 const searchPanelModel: SearchPanelModel = {
   namespace: 'searchPanel',
   state: {
-    note: null,
-    histories: [],
-    currentTab: 'OVERVIEW',
     engines: [EngineIdentifier.BING, EngineIdentifier.CAMBRIDGE],
     translatedText: '',
     primaryResult: null,

@@ -7,6 +7,7 @@ import searchPanel from './search/panel/search-panel-model';
 import searchNote from './search/note/search-note-model';
 import searchToolBar from './search/tool-bar/search-tool-bar-model';
 import transientModel from './transient-model';
+import overview from './search/views/overview/overview-model';
 
 export {
   root,
@@ -18,5 +19,6 @@ export {
   searchPanel,
   searchNote,
   searchToolBar,
+  overview,
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResult } from 'noob-dict-core';
+import { SearchJsonResult } from 'noob-dict-core';
 import styled from 'styled-components';
 import Title from '../common/title';
 import ExampleList from '../common/example-list';
@@ -11,7 +11,7 @@ const Container = styled.div`
 `;
 
 interface CommonEngineViewProps {
-  searchResult: SearchResult
+  searchResult: SearchJsonResult
 }
 
 const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps) => {

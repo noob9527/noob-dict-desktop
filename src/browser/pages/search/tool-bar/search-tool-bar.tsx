@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Icon } from 'antd';
-import { SearchPanelState } from '../panel/search-panel-model';
 import styled from 'styled-components';
 import { SearchState } from '../search-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
@@ -23,8 +22,6 @@ const ToolBar = styled.div`
 export default () => {
   const dispatch = useDispatch();
   const searchState: SearchState = useSelector((state: any) => state.search);
-  const panelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
-  const { note, primaryResult } = panelState;
   const { pinned } = searchState;
 
   const popupUiService = rendererContainer.get<PopupUiService>(PopupUiServiceToken);

@@ -51,6 +51,8 @@ const Content = styled.div`
 
 export default () => {
   const dispatch = useDispatch();
+  const routerState = useSelector((state: any) => state.router);
+  const showSearchNote = routerState?.location?.pathname?.includes('engine_view');
   const searchState: SearchState = useSelector((state: any) => state.search);
   const searchPanelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
 
@@ -84,18 +86,26 @@ export default () => {
           </Menu>
         </nav>
         <ThemedContent>
-          <ThemedSplitPane
-            primary="second"
-            split="horizontal"
-            minSize={SPLIT_PANE_SIZE_MIN}
-            maxSize={SPLIT_PANE_SIZE_MAX}
-            defaultSize={60}
-            size={searchState.splitPaneSize}
-            onChange={debounced}
-          >
-            <SearchPanel/>
-            <SearchNote/>
-          </ThemedSplitPane>
+          {showSearchNote ?
+            (
+              <ThemedSplitPane
+                primary="second"
+                split="horizontal"
+                minSize={SPLIT_PANE_SIZE_MIN}
+                maxSize={SPLIT_PANE_SIZE_MAX}
+                defaultSize={60}
+                size={searchState.splitPaneSize}
+                onChange={debounced}
+              >
+                <SearchPanel/>
+                <SearchNote/>
+              </ThemedSplitPane>
+            )
+            :
+            (
+              <SearchPanel/>
+            )
+          }
         </ThemedContent>
       </Content>
 

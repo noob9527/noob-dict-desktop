@@ -24,7 +24,8 @@ const Title = styled.header`
     font-size: 0.8rem;
   }
   span:nth-child(3) {
-    position: fixed;
+    //position: fixed;
+    position: absolute;
     right: 10px;
   }
 `;

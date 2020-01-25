@@ -38,9 +38,10 @@ interface InlineEditTextareaProps {
   value?: string
   onChange?: (value) => void
   placeholder?: string
-  editing?: boolean
   showLoading?: boolean
+  editing?: boolean
   onEditingChange?: (value: boolean) => void
+  autoFocus?: boolean
 }
 
 const defaultProps: InlineEditTextareaProps = {
@@ -57,6 +58,7 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
     onChange,
     onEditingChange,
     showLoading,
+    autoFocus,
   } = props;
 
   const textAreaEle = useRef<any>(null);
@@ -74,13 +76,15 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
 
   // focus on textArea
   const previousEditing = usePrevious(isEditing);
-  if (!previousEditing && isEditing) {
-    // a simple hack
-    // https://stackoverflow.com/questions/35522220/react-ref-with-focus-doesnt-work-without-settimeout-my-example
-    setTimeout(() => {
-      textAreaEle?.current?.focus();
-    }, 1);
-  }
+  useEffect(() => {
+    if (autoFocus && !previousEditing && isEditing) {
+      // a simple hack
+      // https://stackoverflow.com/questions/35522220/react-ref-with-focus-doesnt-work-without-settimeout-my-example
+      setTimeout(() => {
+        textAreaEle?.current?.focus();
+      }, 1);
+    }
+  }, [autoFocus, previousEditing, isEditing]);
 
   return (
     <Container>

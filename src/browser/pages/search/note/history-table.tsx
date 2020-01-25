@@ -67,6 +67,7 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
                   <InlineEditTextarea
                     showLoading={e.syncing}
                     editing={e.editing}
+                    autoFocus={i !== 0} // disable autoFocus on the first element, cuz it leads a ui bug
                     onEditingChange={value => {
                       // if it is the first element, we force the editing state
                       const editing = i === 0 || value;
