@@ -6,8 +6,9 @@ import { SearchNoteState } from './search-note-model';
 import HistoryGraph from './history-graph';
 import { SearchPanelState } from '../panel/search-panel-model';
 import HistoryTable from './history-table';
-import { Button, Icon } from "antd";
+import { Button, Icon, Tooltip } from 'antd';
 import { SearchState } from '../search-model';
+import { ThemedTooltip } from '../../../components/themed-ui/tooltip/tooltip';
 
 const Title = styled.header`
   margin: 10px 0;
@@ -60,6 +61,7 @@ const SearchNote = () => {
         <h4>QUICK NOTES</h4>
         <span>{`(You've searched '${noteInDb?.text}' ${noteInDb?.updateTimes} times)`}</span>
         <span>
+          <ThemedTooltip title={searchState.splitPaneButtonUp ? 'maximize' : 'minimize'}>
           <Button type="link" shape="circle" ghost onClick={() => {
             dispatch({
               type: 'search/togglePaneSize',
@@ -67,6 +69,7 @@ const SearchNote = () => {
           }}>
             <Icon type={searchState.splitPaneButtonUp ? 'up' : 'down'}/>
           </Button>
+          </ThemedTooltip>
         </span>
       </Title>
       <StyledScrollArea>

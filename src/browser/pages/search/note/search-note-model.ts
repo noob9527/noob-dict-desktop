@@ -5,6 +5,7 @@ import { all, call, cancel, delay, fork, put, take, select } from '@redux-saga/c
 import { NoteService, NoteServiceToken } from '../../../../common/services/db/note-service';
 import { ISearchHistory } from '../../../../common/model/history';
 import { HistoryService, HistoryServiceToken } from '../../../../common/services/db/history-service';
+import _ from 'lodash';
 
 const noteService = rendererContainer.get<NoteService>(NoteServiceToken);
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
@@ -48,7 +49,6 @@ const effects = {
         },
       };
     }, {});
-    console.log(histories);
     yield put({
       type: 'searchNote/mergeState',
       payload: {
@@ -80,6 +80,28 @@ const effects = {
       type: 'searchNote/finishSyncHistoryContext',
       payload: {
         history,
+      },
+    });
+  },
+  * saveExampleToContext(action) {
+    const { paragraph } = action.payload;
+    const searchNoteState: SearchNoteState = yield select(e => e.searchNote);
+    const latest: DataWrapper<ISearchHistory> | undefined = _.maxBy(
+      Object.values(searchNoteState.histories),
+      e => e.id,
+    );
+    if (!latest) return;
+
+    yield put({
+      type: 'searchNote/typeHistoryContext',
+      payload: {
+        history: {
+          ...latest.oldData,
+          context: {
+            ...latest.oldData.context,
+            paragraph,
+          },
+        },
       },
     });
   },

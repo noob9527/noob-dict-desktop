@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { SearchState } from '../search-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { PopupUiService, PopupUiServiceToken } from '../../../../common/services/popup-ui-service';
+import { ThemedTooltip } from '../../../components/themed-ui/tooltip/tooltip';
 
 const ToolBar = styled.div`
   display: flex;
@@ -45,35 +46,39 @@ export default () => {
           type="smile"
         />
       </Button>
-      <Button
-        type="link"
-        shape="circle"
-        onClick={() => {
-          dispatch({
-            type: '_transient/openSettingWindow',
-          });
-        }}
-        ghost
-      >
-        <Icon
-          type="setting"
-        />
-      </Button>
-      <Button
-        type="link"
-        shape="circle"
-        onClick={() => {
-          dispatch({
-            type: 'search/togglePinned',
-          });
-        }}
-        ghost
-      >
-        <Icon
-          type="pushpin"
-          style={{ transform: `rotate(${pinned ? '-45deg' : '0deg'})` }}
-        />
-      </Button>
+      <ThemedTooltip title={'setting'}>
+        <Button
+          type="link"
+          shape="circle"
+          onClick={() => {
+            dispatch({
+              type: '_transient/openSettingWindow',
+            });
+          }}
+          ghost
+        >
+          <Icon
+            type="setting"
+          />
+        </Button>
+      </ThemedTooltip>
+      <ThemedTooltip placement="bottom" title={'pin window'}>
+        <Button
+          type="link"
+          shape="circle"
+          onClick={() => {
+            dispatch({
+              type: 'search/togglePinned',
+            });
+          }}
+          ghost
+        >
+          <Icon
+            type="pushpin"
+            style={{ transform: `rotate(${pinned ? '-45deg' : '0deg'})` }}
+          />
+        </Button>
+      </ThemedTooltip>
     </ToolBar>
   );
 
