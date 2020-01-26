@@ -52,9 +52,14 @@ const Content = styled.div`
 export default () => {
   const dispatch = useDispatch();
   const routerState = useSelector((state: any) => state.router);
-  const showSearchNote = routerState?.location?.pathname?.includes('engine_view');
   const searchState: SearchState = useSelector((state: any) => state.search);
   const searchPanelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
+
+  const showSearchNote =
+    // in engine view
+    routerState?.location?.pathname?.includes('engine_view')
+    // has primary result
+      && searchPanelState.primaryResult!!;
 
   const handleUpdateSize = size => {
     dispatch({
