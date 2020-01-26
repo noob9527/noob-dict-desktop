@@ -28,21 +28,21 @@ export default () => {
 
   return (
     <ToolBar>
-      <Button
-        type="link"
-        shape="circle"
-        onClick={() => {
-          popupUiService.show();
-          // dispatch({
-          //   type: 'popup/show',
-          // });
-        }}
-        ghost
-      >
-        <Icon
-          type="smile"
-        />
-      </Button>
+      {/*<Button*/}
+      {/*  type="link"*/}
+      {/*  shape="circle"*/}
+      {/*  onClick={() => {*/}
+      {/*    popupUiService.show();*/}
+      {/*    // dispatch({*/}
+      {/*    //   type: 'popup/show',*/}
+      {/*    // });*/}
+      {/*  }}*/}
+      {/*  ghost*/}
+      {/*>*/}
+      {/*  <Icon*/}
+      {/*    type="smile"*/}
+      {/*  />*/}
+      {/*</Button>*/}
       <ThemedTooltip title={'setting'}>
         <Button
           type="link"

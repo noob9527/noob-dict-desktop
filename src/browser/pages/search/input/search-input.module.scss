@@ -1,6 +1,9 @@
 // we have to put this in root level
 // because searchHeaderSelectDropdown is not a child of searchPage after rendering
 .searchHeaderSelectDropdown {
+  :global .ant-select-dropdown-menu {
+    padding: 0;
+  }
   :global .ant-select-dropdown-menu-item {
     width: 100%;
     display: inline-flex;

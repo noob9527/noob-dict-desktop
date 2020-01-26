@@ -83,7 +83,7 @@ export default () => {
       <Content>
         <nav>
           <Menu>
-            <MenuItem to={'/search/overview'}>OVERVIEW</MenuItem>
+            {/*<MenuItem to={'/search/overview'}>OVERVIEW</MenuItem>*/}
             {engineMenuItems}
             {/*{histories.length ? <MenuItem to={'/search/history'}></MenuItem> : null}*/}
             {/*<MenuItem to={'/search/tab1'}>tab1</MenuItem>*/}

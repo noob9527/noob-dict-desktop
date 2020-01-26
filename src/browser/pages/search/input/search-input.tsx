@@ -1,4 +1,4 @@
-import React, { KeyboardEvent, useRef } from 'react';
+import React, { KeyboardEvent, useEffect, useRef } from 'react';
 import styles from './search-input.module.scss';
 import { Input, Select, Spin } from 'antd';
 import { useDispatch, useSelector } from 'dva';
@@ -17,13 +17,14 @@ export default () => {
     open,
   } = useSelector((state: { searchInput: SearchInputState }) => state.searchInput);
 
-  // todo: this leads to searchInput focus bug(Cannot flush updates when React is already rendering)
   // focus on input element
-  // const previousFocusInput = usePrevious(focusInput);
   const selectEle = useRef<Select | null>(null);
-  // if (!previousFocusInput && focusInput) {
-  //   selectEle?.current?.focus();
-  // }
+  const previousFocusInput = usePrevious(focusInput);
+  useEffect(() => {
+    if (!previousFocusInput && focusInput) {
+      selectEle?.current?.focus();
+    }
+  }, [previousFocusInput, focusInput]);
 
   return (
     <div className={styles.searchHeaderInput}>

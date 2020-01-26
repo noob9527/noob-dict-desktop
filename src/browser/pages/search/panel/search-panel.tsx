@@ -27,9 +27,9 @@ export default () => {
       <Switch>
         {/*<Route path="/search/tab1" component={() => <div>tab1</div>}/>*/}
         {/*<Route path="/search/tab2" component={() => <div>tab2</div>}/>*/}
-        <Route path="/search/overview" component={OverviewView}/>
+        {/*<Route path="/search/overview" component={OverviewView}/>*/}
         <Route path="/search/engine_view/:engine" component={EngineView}/>
-        <Route component={OverviewView}/>
+        <Route component={EngineView}/>
       </Switch>
     </Container>
   );
