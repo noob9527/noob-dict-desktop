@@ -7,12 +7,13 @@ import { SearchPanelState } from './panel/search-panel-model';
 import { useDispatch, useSelector } from 'react-redux';
 import { Menu, MenuItem } from './panel/search-panel-menu';
 import { ThemedContent } from '../../components/themed-ui/content/content';
-import { ThemedTextArea } from '../../components/themed-ui/input/textarea';
 import styled from 'styled-components';
 import SearchNote from './note/search-note';
 import ThemedSplitPane from '../../components/themed-ui/split-pane/split-pane';
 import { SearchState, SPLIT_PANE_SIZE_MAX, SPLIT_PANE_SIZE_MIN } from './search-model';
 import _ from 'lodash';
+import { useParams } from 'react-router-dom';
+import { EngineIdentifier, SearchResultType } from 'noob-dict-core';
 
 const SearchPage = styled.div`
   height: 100vh;
@@ -52,14 +53,17 @@ const Content = styled.div`
 export default () => {
   const dispatch = useDispatch();
   const routerState = useSelector((state: any) => state.router);
+  const matched = /engine_view\/(\w+)/.exec(routerState.location.pathname);
+  const engine = (matched && matched[1]) as EngineIdentifier;
+
   const searchState: SearchState = useSelector((state: any) => state.search);
   const searchPanelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
 
   const showSearchNote =
     // in engine view
     routerState?.location?.pathname?.includes('engine_view')
-    // has primary result
-      && searchPanelState.primaryResult!!;
+    // has success result
+    && searchPanelState.searchResultMap[engine]?.type === SearchResultType.SUCCESS;
 
   const handleUpdateSize = size => {
     dispatch({
@@ -71,7 +75,7 @@ export default () => {
   };
   const debounced = useCallback(_.debounce(handleUpdateSize, 200), []);
 
-  const engineMenuItems = Object.keys(searchPanelState.searchResults)
+  const engineMenuItems = Object.keys(searchPanelState.searchResultMap)
     .filter(e => !!e)
     .map(e => <MenuItem key={e} to={`/search/engine_view/${e}`}>{e}</MenuItem>);
   return (

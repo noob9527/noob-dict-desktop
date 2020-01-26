@@ -3,10 +3,14 @@
 - remove dva dependency?
 - ~~remove antd dependency?~~
 
-- overview page
 - highlight search words (highlight target(varies word forms) in examples)
 - popup window(frameless)
+- update app mechanism
 - local storage backward compatibility
-- search window bug(toggleSearchWindow doesn't work as expected after a while)
+- search window bug(toggleSearchWindow doesn't work as expected after a while, cannot reproduce for the time being)
+- overview page
 - remove history?
+- search: link word?
+- search: previous, next button
+- search: getSuggests include histories
 

@@ -6,10 +6,11 @@ interface CommonEngineViewProps {
 }
 
 const IframeEngineView: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps) => {
-  const html = props.searchResult.html ?? '';
-  return (
-    <iframe width="100%" height="100%" frameBorder={0} srcDoc={html}/>
-  );
+  return <></>;
+  // const html = props.searchResult.html ?? '';
+  // return (
+  //   <iframe width="100%" height="100%" frameBorder={0} srcDoc={html}/>
+  // );
 };
 
 export default IframeEngineView;

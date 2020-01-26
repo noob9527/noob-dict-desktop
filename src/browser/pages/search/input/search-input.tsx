@@ -5,6 +5,26 @@ import { useDispatch, useSelector } from 'dva';
 import { SelectValue } from 'antd/es/select';
 import { SearchInputState } from './search-input-model';
 import { usePrevious } from '../../../hooks/use-previous';
+import styled from 'styled-components';
+
+const Suggestion = styled.div`
+  width: 100%;
+  span {
+    display: inline-block;
+    width: 50%;
+    
+    // ellipsis
+    vertical-align: middle;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  //span:nth-child(1) {
+  //}
+  span:nth-child(2) {
+    font-size: 0.7em;
+  }
+`;
 
 
 export default () => {
@@ -52,14 +72,17 @@ export default () => {
         }}
         value={text}
         open={open}
+        // open={true}
         getInputElement={getInputElement}
         notFoundContent={loadingSuggests ? <Spin/> : null}
         dropdownClassName={styles.searchHeaderSelectDropdown}
       >
         {suggests.map(e => (
           <Select.Option key={e.entry}>
-            <span>{e.entry}</span>
-            <span>{e.explain}</span>
+            <Suggestion>
+              <span>{e.entry}</span>
+              <span>{e.explain}</span>
+            </Suggestion>
           </Select.Option>
         ))}
       </Select>

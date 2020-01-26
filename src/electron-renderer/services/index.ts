@@ -1,4 +1,4 @@
-import { MockSearchService } from './search-service-impl';
+import { CorsSearchService, MockSearchService } from './search-service-impl';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../common/services/search-service';
 import { SettingUiService, SettingUiServiceToken } from '../../common/services/setting-ui-service';
@@ -20,7 +20,7 @@ import { DexieNoteService } from './db/note-service-impl';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
-  rendererContainer.bind<SearchService>(SearchServiceToken).to(MockSearchService);
+  rendererContainer.bind<SearchService>(SearchServiceToken).to(CorsSearchService);
   rendererContainer.bind<SearchUiService>(SearchUiServiceToken).to(ElectronSearchUiService);
   rendererContainer.bind<SettingUiService>(SettingUiServiceToken).to(ElectronSettingUiService);
   rendererContainer.bind<SettingService>(SettingServiceToken).to(ElectronSettingService);

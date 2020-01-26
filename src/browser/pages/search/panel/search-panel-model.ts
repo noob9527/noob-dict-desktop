@@ -1,5 +1,5 @@
-import { EngineIdentifier, SearchJsonResult, SearchResult } from 'noob-dict-core';
-import { all, call, put, putResolve, select, fork, join } from '@redux-saga/core/effects';
+import { EngineIdentifier, SearchResult } from 'noob-dict-core';
+import { all, call, put, select } from '@redux-saga/core/effects';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
@@ -8,13 +8,13 @@ import { push } from 'connected-react-router';
 
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
 
-export type SearchResults = { [index in EngineIdentifier]?: Maybe<SearchJsonResult> };
+export type SearchResultMap = { [index in EngineIdentifier]?: Maybe<SearchResult> };
 
 export interface SearchPanelState {
   translatedText: string,
   engines: EngineIdentifier[],
-  primaryResult: Maybe<SearchJsonResult>,
-  searchResults: SearchResults,
+  primaryResult: Maybe<SearchResult>,
+  searchResultMap: SearchResultMap,
 }
 
 export interface SearchPanelModel extends Model {
@@ -24,11 +24,20 @@ export interface SearchPanelModel extends Model {
 function* fetchSingleResult(action) {
   const { text, engine } = action.payload;
   const searchService = rendererContainer.get<SearchService>(SearchServiceToken);
-  const result: SearchJsonResult = yield call([searchService, searchService.fetchResult], text, { engine });
+
+  let result: SearchResult | null | undefined = null;
+
+  try {
+    result = yield call([searchService, searchService.fetchResult], text, { engine });
+  } catch (e) {
+    console.error(e);
+  }
+
   yield put({
     type: 'searchPanel/mergeSearchResult',
     payload: {
-      result: result,
+      engine,
+      result,
     },
   });
 }
@@ -57,7 +66,7 @@ function* fetchResults(action) {
   ]);
 
   const searchPanelState: SearchPanelState = yield select((state: any) => state.searchPanel);
-  const primaryResult = Object.values(searchPanelState.searchResults)
+  const primaryResult = Object.values(searchPanelState.searchResultMap)
     .find(e => !!e);
 
   // fetch from notes
@@ -96,12 +105,12 @@ const reducers = {
     };
   },
   mergeSearchResult(state, action: any) {
-    const result: SearchResult = action.payload.result;
+    const { engine, result } = action.payload;
     return {
       ...state,
-      searchResults: {
-        ...state.searchResults,
-        [result.engine]: result,
+      searchResultMap: {
+        ...state.searchResultMap,
+        [engine]: result,
       },
     };
   },
@@ -113,7 +122,7 @@ const searchPanelModel: SearchPanelModel = {
     engines: [EngineIdentifier.BING, EngineIdentifier.CAMBRIDGE],
     translatedText: '',
     primaryResult: null,
-    searchResults: {
+    searchResultMap: {
       [EngineIdentifier.BING]: null,
       [EngineIdentifier.CAMBRIDGE]: null,
     },
