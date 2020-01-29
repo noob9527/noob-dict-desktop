@@ -5,7 +5,9 @@ enum ColorId {
   background = 'background',
   foreground = 'foreground',
 
-  primary = 'primary',
+  // word
+  word_link = 'word_link',
+  word_highlight = 'word_highlight',
 
   // input
   input_foreground = 'input.foreground',

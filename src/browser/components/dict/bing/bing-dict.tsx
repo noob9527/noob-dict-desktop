@@ -20,6 +20,11 @@ const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps)
   const { result } = props;
 
   if (SearchResults.isSuccessResult(result)) {
+    const highlightWords = new Set([
+      result.target,
+      result.title!!,
+      ...result.wordForms.map(e => e[1])
+    ]);
     return (
       <Container>
         <Title>{result.title}</Title>
@@ -27,7 +32,7 @@ const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps)
         <BingDefinitionList definitions={result.definitions}/>
         <WordFormList wordForms={result.wordForms}/>
         <hr/>
-        <ExampleList examples={result.examples}/>
+        <ExampleList examples={result.examples} highlightWordSet={highlightWords}/>
       </Container>
     );
   } else if (SearchResults.isDoYouMeanResult(result)) {
@@ -37,4 +42,5 @@ const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps)
   }
 };
 
-export default BingDict;
+// https://reactjs.org/docs/react-api.html#reactmemo
+export default React.memo(BingDict);

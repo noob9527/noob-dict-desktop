@@ -4,7 +4,7 @@ import ColorId from '../../../../styles/ColorId';
 import { useDispatch } from 'react-redux';
 
 const StyledWordLink = styled.span`
-  color: ${props => props.theme[ColorId.primary]};
+  color: ${props => props.theme[ColorId.word_link]};
   cursor: pointer;
 `;
 

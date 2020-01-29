@@ -1,5 +1,5 @@
 import React from 'react';
-import { EngineIdentifier, SearchResult } from 'noob-dict-core';
+import { EngineIdentifier } from 'noob-dict-core';
 import { useParams } from 'react-router-dom';
 import { SearchPanelState } from '../../panel/search-panel-model';
 import { useSelector } from 'react-redux';
@@ -13,21 +13,8 @@ const EngineView: React.FC = () => {
   const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
   const result = state.searchResultMap[engine];
 
-  return (
-    <>{getDictComponent(result)}</>
-  );
-
-  // noinspection JSRedundantSwitchStatement
-  // switch (result.engine) {
-  //   case EngineIdentifier.BING:
-  //     return <BingDict searchResult={result}/>;
-  //   default:
-  //     return <CommonEngineView searchResult={result}/>;
-  // }
-};
-
-function getDictComponent(result: SearchResult | null | undefined) {
   if (!result) return (<ThemedEmpty/>);
+
   // noinspection JSRedundantSwitchStatement
   switch (result.engine) {
     case EngineIdentifier.BING:
@@ -35,6 +22,6 @@ function getDictComponent(result: SearchResult | null | undefined) {
     default:
       return <CommonEngineView result={result}/>;
   }
-}
+};
 
 export default EngineView;

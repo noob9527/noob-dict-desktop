@@ -31,4 +31,5 @@ const CommonDict: React.FC<CommonEngineListProps> = (props: CommonEngineListProp
   }
 };
 
-export default CommonDict;
+// https://reactjs.org/docs/react-api.html#reactmemo
+export default React.memo(CommonDict);

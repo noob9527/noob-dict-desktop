@@ -6,7 +6,9 @@ export const dark = {};
 dark[ColorId.background] = Color('#1E1E1E');
 dark[ColorId.foreground] = Color('#D4D4D4');
 
-dark[ColorId.primary] = Color('#f9690e');
+// word
+dark[ColorId.word_link] = Color('#f9690e');
+dark[ColorId.word_highlight] = Color('rebeccapurple').lighten(0.5);
 
 // input
 dark[ColorId.input_foreground] = Color('#D4D4D4');

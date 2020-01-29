@@ -25,13 +25,17 @@ interface DefinitionItemProp {
 
 const DefinitionItem: React.FC<DefinitionItemProp> = (props: DefinitionItemProp) => {
   const { definition } = props;
+  const highlightWords = new Set([
+    definition.title!!,
+    ...definition.wordForms.map(e => e[1]),
+  ]);
   return (
     <ItemContainer>
       <span>{definition.partOfSpeech}</span>
       <PronunciationList pronunciations={definition.pronunciations}/>
       <WordFormList wordForms={definition.wordForms}/>
       <MeaningList meanings={definition.meanings}/>
-      <ExampleList examples={definition.examples}/>
+      <ExampleList examples={definition.examples} highlightWordSet={highlightWords}/>
     </ItemContainer>
   );
 };

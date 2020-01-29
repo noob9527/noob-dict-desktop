@@ -1,46 +1,61 @@
 import React from 'react';
 import styled from 'styled-components';
+import ColorId from '../../../../styles/ColorId';
 
-// todo
-const Sentence = styled.p`
+const Sentence = styled.span`
+`;
 
+const NormalSpan = styled.span`
+
+`;
+
+const HighlightSpan = styled.span`
+  color: ${props => props.theme[ColorId.word_highlight]};
 `;
 
 interface HighlightProp {
   sentence: string
   // array of [startIndex, endIndex]
   posList?: [number, number][]
-  words?: Set<String>
+  highlightWords?: Set<string>
 }
 
 interface PosHighlightProp {
   sentence: string
-  pos: [number, number][]
+  posList: [number, number][]
 }
 
 interface WordHighlightProp {
   sentence: string
-  words: Set<string>
+  highlightWords: Set<string>
 }
 
-const PosHighlight = (props) => {
+const PosHighlight: React.FC<PosHighlightProp> = (props) => {
   const { sentence } = props;
   return <Sentence>{sentence}</Sentence>;
 };
 
-const WordHighlight = (props) => {
-  const { sentence } = props;
-  return <Sentence>{sentence}</Sentence>;
+const WordHighlight: React.FC<WordHighlightProp> = (props) => {
+  const { sentence, highlightWords } = props;
+  const words = sentence.split(/\s+/);
+  // return <Sentence>{sentence}</Sentence>;
+  return <Sentence>{words.map((e, i) =>
+    (highlightWords.has(e)
+        ? <HighlightSpan key={i}>{e} </HighlightSpan>
+        : <NormalSpan key={i}>{e} </NormalSpan>
+    ))
+  }
+  </Sentence>;
 };
 
 const Highlight: React.FC<HighlightProp> = (props) => {
-  const { posList, words, sentence } = props;
+  const { posList, highlightWords, sentence } = props;
 
   if (posList && posList.length)
-    return <PosHighlight {...props}/>;
+    return <PosHighlight sentence={sentence} posList={posList}/>;
 
-  if (words && words.size)
-    return <WordHighlight {...props}/>;
+  if (highlightWords && highlightWords.size)
+    return <WordHighlight sentence={sentence} highlightWords={highlightWords}/>;
 
   return <Sentence>{sentence}</Sentence>;
 };

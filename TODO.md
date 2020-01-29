@@ -3,7 +3,6 @@
 - remove dva dependency?
 - ~~remove antd dependency?~~
 
-- highlight search words (highlight target(varies word forms) in examples)
 - popup window(frameless)
 - update app mechanism
 - local storage backward compatibility
