@@ -19,6 +19,15 @@ export interface SearchModel extends Model {
   state: SearchState
 }
 
+interface SearchAction {
+  type: 'search/search',
+  payload: {
+    text: string
+    engine?: string
+  }
+}
+
+
 const effects = {
   * togglePinned() {
     const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
@@ -38,18 +47,26 @@ const effects = {
     if (transientState.isSearchWindowOpen) {
       if (searchState.pinned) {
         yield put({
-          type: 'searchInput/searchTextChange',
-          text: action.payload.newText,
-        });
-        yield put({
-          type: 'searchPanel/fetchResults',
-          text: action.payload.newText,
+          type: 'search/search',
+          payload: {
+            text: action.payload.newText,
+          },
         });
       }
     }
   },
   * clipboardTextChange(action) {
     // console.log(action);
+  },
+  * search(action: SearchAction) {
+    yield put({
+      type: 'searchInput/searchTextChange',
+      text: action.payload.text,
+    });
+    yield put({
+      type: 'searchPanel/fetchResults',
+      text: action.payload.text,
+    });
   },
 };
 

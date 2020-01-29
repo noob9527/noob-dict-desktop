@@ -5,6 +5,8 @@ enum ColorId {
   background = 'background',
   foreground = 'foreground',
 
+  primary = 'primary',
+
   // input
   input_foreground = 'input.foreground',
   input_background = 'input.background',

@@ -2,6 +2,7 @@ import React from 'react';
 import { DoYouMeanItem, DoYouMeanType } from 'noob-dict-core';
 import styled from 'styled-components';
 import _ from 'lodash';
+import WordLink from '../shared/word-link/word-link';
 
 const GroupContainer = styled.div`
 `;
@@ -40,7 +41,7 @@ const DoYouMeanItemComponent: React.FC<DoYouMeanItemProp> = (props) => {
   const { doYouMeanItem } = props;
   return (
     <ItemContainer>
-      <span>{doYouMeanItem.suggest.entry}</span>
+      <WordLink word={doYouMeanItem.suggest.entry}/>
       <span>{doYouMeanItem.suggest.explain}</span>
     </ItemContainer>
   );

@@ -1,14 +1,14 @@
 import React from 'react';
 import { Example, Language } from 'noob-dict-core';
 import styled from 'styled-components';
-import { Button, Icon, Tooltip } from 'antd';
+import { Button, Icon } from 'antd';
 import { ThemedTooltip } from '../../themed-ui/tooltip/tooltip';
-import { useDispatch, useSelector } from 'react-redux';
-import _ from 'lodash';
-import { SearchNoteState } from '../../../pages/search/note/search-note-model';
+import { useDispatch } from 'react-redux';
+import ColorId from '../../../styles/ColorId';
 
 const ItemContainer = styled.li`
   .anticon {
+    color: ${props => props.theme[ColorId.primary]};
     margin-left: 8px;
   }
 `;

@@ -13,8 +13,8 @@ export interface Model {
   __unstableReducerEnhancer?: (reducer: Reducer<SettingState>) => Reducer<SettingState>
 }
 
-export type Effect = (action: AnyAction) => void;
+export type Effect<T extends AnyAction> = (action: T) => void;
 
 export interface EffectsMapObject {
-  [key: string]: Effect,
+  [key: string]: Effect<any>,
 }
