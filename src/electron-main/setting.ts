@@ -15,7 +15,7 @@ function initialSetting() {
 
 async function handleSettingChange(newValue: UserProfile, oldValue: UserProfile): Promise<UserProfile> {
   newValue.appHotKey = handleAppHotKeyChange(newValue.appHotKey, oldValue.appHotKey);
-  store.store = newValue;
+  store.store = newValue; // sync to electron store
   const res = await ipcMain.callRenderer(getOrCreateSearchWindow(), SettingChannel.SETTING_CHANGE, {
     newValue,
     oldValue,

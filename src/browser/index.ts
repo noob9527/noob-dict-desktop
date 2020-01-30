@@ -9,7 +9,7 @@ const app = dva({
   // electron production mode(load file) cannot use browser history
   // https://stackoverflow.com/a/47926513
   history: createHashHistory(),
-  extraEnhancers: [reduxPersistStoreEnhancer],
+  // extraEnhancers: [reduxPersistStoreEnhancer],
   createRootComponent: createReduxRootComponent,
 });
 
