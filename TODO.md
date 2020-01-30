@@ -9,5 +9,4 @@
 - overview page
 - remove history?
 - search: previous, next button
-- search: getSuggests include histories
 

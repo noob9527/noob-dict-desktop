@@ -5,7 +5,7 @@ import { INote, Note } from '../../../common/model/note';
 import { HistoryService, HistoryServiceToken } from '../../../common/services/db/history-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { SearchHistory } from '../../../common/model/history';
-import logger from "../../../common/utils/logger";
+import logger from '../../../common/utils/logger';
 
 @injectable()
 export class DexieNoteService implements NoteService {
@@ -23,6 +23,14 @@ export class DexieNoteService implements NoteService {
       res.histories = await this.historyService.findAll(text);
     }
     return Note.wrap(res);
+  }
+
+  async fetchLatest(limit: number): Promise<INote[]> {
+    return database.notes
+      .orderBy('updateAt')
+      .limit(limit)
+      .reverse()
+      .toArray();
   }
 
   async search(text: string, part: Partial<INote>): Promise<INote> {
@@ -49,14 +57,12 @@ export class DexieNoteService implements NoteService {
       note.updateAt = (new Date()).getTime();
       await database.notes.update(note.id, {
         updateAt: note.updateAt,
-        updateTimes: note.updateTimes
+        updateTimes: note.updateTimes,
       });
     } else {
       // create
       note.id = await database.notes.add(note);
     }
-    // todo: we may need transaction here
-    // todo: what if we change the content of a history
     // cascade persist history
     const promises = note.histories.filter(e => !e.id)
       .map(e => this.historyService.add(e));

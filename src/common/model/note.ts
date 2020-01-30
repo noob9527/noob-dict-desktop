@@ -1,4 +1,5 @@
 import { ISearchHistory } from './history';
+import { SearchSuccessResult } from 'noob-dict-core';
 
 
 export interface INote {
@@ -8,7 +9,7 @@ export interface INote {
   createAt: number
   updateAt: Maybe<number>
   updateTimes: number // In general, the more update times, the more significant a word is
-  searchResult?: any
+  searchResult?: SearchSuccessResult
   // extra
   histories: ISearchHistory[]
 }

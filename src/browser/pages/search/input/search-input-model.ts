@@ -28,7 +28,7 @@ const effects = {
     yield put({
       type: 'searchInput/mergeState',
       payload: {
-        loadingSuggests: Boolean(action.text),
+        loadingSuggests: true,
       },
     });
   },
@@ -38,6 +38,7 @@ const effects = {
       type: 'searchInput/mergeState',
       payload: {
         text: action?.text,
+        // reset suggests after an option is selected
         suggests: [],
       },
     });
@@ -82,9 +83,7 @@ function* watchSearchTextChange() {
       if (task) {
         yield cancel(task);
       }
-      if (action.text) {
-        task = yield fork(debouncedFetchSuggests, action);
-      }
+      task = yield fork(debouncedFetchSuggests, action);
     }
   });
 

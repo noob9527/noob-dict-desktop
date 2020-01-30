@@ -42,7 +42,9 @@ export default () => {
   const previousFocusInput = usePrevious(focusInput);
   useEffect(() => {
     if (!previousFocusInput && focusInput) {
-      selectEle?.current?.focus();
+      setTimeout(() => {
+        selectEle?.current?.focus();
+      }, 1);
     }
   }, [previousFocusInput, focusInput]);
 
@@ -55,8 +57,14 @@ export default () => {
         onSearch={handleInputSearchText}
         onSelect={search}
         onFocus={() => {
-          if (suggests.length) {
-            setOpen(true);
+          // open auto suggestion
+          setOpen(true);
+          // fetch suggest
+          if (!suggests.length) {
+            dispatch({
+              type: 'searchInput/fetchSuggests',
+              text,
+            });
           }
           dispatch({
             type: '_transient/mergeState',
@@ -77,8 +85,8 @@ export default () => {
         notFoundContent={loadingSuggests ? <Spin/> : null}
         dropdownClassName={styles.searchHeaderSelectDropdown}
       >
-        {suggests.map(e => (
-          <Select.Option key={e.entry}>
+        {suggests.map((e, i) => (
+          <Select.Option key={e.entry ? e.entry : i}>
             <Suggestion>
               <span>{e.entry}</span>
               <span>{e.explain}</span>

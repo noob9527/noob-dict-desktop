@@ -9,6 +9,8 @@ export interface NoteService {
   // cascade fetch corresponding histories
   fetch(text: string): Promise<Maybe<INote>>
 
+  fetchLatest(limit: number): Promise<INote[]>
+
   // if the note is not present
   // create one based on the second argument
   // else the second argument is ignored

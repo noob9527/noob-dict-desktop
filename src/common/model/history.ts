@@ -28,7 +28,9 @@ export class SearchHistory implements ISearchHistory {
   static create(history: Partial<ISearchHistory>) {
     const res = new SearchHistory();
     Object.assign(res, history);
-    res.createAt = (new Date()).getTime();
+    const now = (new Date()).getTime();
+    res.createAt = now;
+    res.updateAt = now;
     delete res.id;
     return res;
   }

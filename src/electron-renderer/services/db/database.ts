@@ -10,7 +10,7 @@ class Database extends Dexie {
     super(databaseName);
     this.version(1).stores({
       histories: '++id,text,createAt',
-      notes: '++id,text,createAt',
+      notes: '++id,text,createAt,updateAt',
     });
     this.histories = this.table('histories'); // Just informing Typescript what Dexie has already done...
     this.notes = this.table('notes');
