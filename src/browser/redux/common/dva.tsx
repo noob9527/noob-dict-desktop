@@ -121,18 +121,18 @@ class Dva {
       ...this.reducers,
     });
 
+    // @ts-ignore
+    const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
     const store = createStore(
       rootReducer,
       this.state,
-      compose(
+      composeEnhancers(
         applyMiddleware(
           routerMiddleware(this.history), // for dispatching history actions
           sagaMiddleware,
           // ... other middlewares ...
         ),
         ...this.extraEnhancers,
-        // @ts-ignore
-        window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
       ),
     );
 
@@ -144,7 +144,6 @@ class Dva {
       ]);
     };
     sagaMiddleware.run(rootSaga);
-    // registerStorageEventListener(store, { key: 'root', storage });
     this._store = store;
   }
 }

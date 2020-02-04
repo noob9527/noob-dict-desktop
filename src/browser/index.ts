@@ -3,7 +3,6 @@ import dva from './redux/common/dva';
 import { RootComponent } from './pages/root.component';
 import { createHashHistory } from 'history';
 import { createReduxRootComponent } from './redux/redux-root-component';
-import { reduxPersistStoreEnhancer } from './redux/redux-persist-store-enhancer';
 
 const app = dva({
   // electron production mode(load file) cannot use browser history
