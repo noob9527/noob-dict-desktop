@@ -1,5 +1,5 @@
 import React from 'react';
-import { DoYouMeanItem, DoYouMeanType } from 'noob-dict-core';
+import { DoYouMeanItem, DoYouMeanType } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import _ from 'lodash';
 import WordLink from '../shared/word-link/word-link';

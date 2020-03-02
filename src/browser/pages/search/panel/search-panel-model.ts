@@ -1,4 +1,4 @@
-import { EngineIdentifier, SearchResult, SearchResults, SearchResultType } from 'noob-dict-core';
+import { EngineIdentifier, SearchResult, SearchResults, SearchResultType } from '@noob9527/noob-dict-core';
 import { all, call, put, select, take } from '@redux-saga/core/effects';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';

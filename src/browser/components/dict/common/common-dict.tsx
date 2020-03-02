@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResult, SearchResults } from 'noob-dict-core';
+import { SearchResult, SearchResults } from '@noob9527/noob-dict-core';
 import DefinitionList from './definition-list';
 import styled from 'styled-components';
 import Title from './title';

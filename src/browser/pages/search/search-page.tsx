@@ -13,7 +13,7 @@ import ThemedSplitPane from '../../components/themed-ui/split-pane/split-pane';
 import { SearchState, SPLIT_PANE_SIZE_MAX, SPLIT_PANE_SIZE_MIN } from './search-model';
 import _ from 'lodash';
 import { useParams } from 'react-router-dom';
-import { EngineIdentifier, SearchResultType } from 'noob-dict-core';
+import { EngineIdentifier, SearchResultType } from '@noob9527/noob-dict-core';
 
 const SearchPage = styled.div`
   height: 100vh;

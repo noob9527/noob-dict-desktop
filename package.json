@@ -5,7 +5,7 @@
   "main": "build/main.js",
   "homepage": "./",
   "repository": "git@github.com:noob9527/noob-dict-desktop.git",
-  "author": "xuyan <2061864@qq.com>",
+  "author": "noob9527 <2061864@qq.com>",
   "license": "MIT",
   "scripts": {
     "analyze": "source-map-explorer 'build/static/js/*.js'",
@@ -17,9 +17,12 @@
     "electron:start": "concurrently \"npm run main:start\" \"wait-on http://localhost:3000 && electron .\"",
     "start": "concurrently \"npm run main:start\" \"npm run renderer:start\" \"wait-on http://localhost:3000 && electron .\"",
     "test": "node scripts/test.js --config=config/jest/jest.config.js",
-    "build": "npm run renderer:build && npm run main:build  && electron-builder build --linux"
+    "build:linux": "npm run renderer:build && npm run main:build  && electron-builder build --linux",
+    "build": "npm run renderer:build && npm run main:build && electron-builder build",
+    "release": "cross-env NODE_OPTIONS=--max_old_space_size=8192 CI=false npm run renderer:build && npm run main:build && electron-builder build"
   },
   "dependencies": {
+    "@noob9527/noob-dict-core": "^0.0.1",
     "antd": "^3.26.7",
     "bizcharts": "^3.5.5",
     "color": "^3.1.2",
@@ -74,6 +77,7 @@
     "camelcase": "^5.2.0",
     "case-sensitive-paths-webpack-plugin": "2.2.0",
     "concurrently": "^5.0.0",
+    "cross-env": "^7.0.0",
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Pronunciation, LanguageTag } from 'noob-dict-core';
+import { Pronunciation, LanguageTag } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import Speaker from '../shared/speaker/speaker';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Example, Language } from 'noob-dict-core';
+import { Example, Language } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import { Button, Icon } from 'antd';
 import { ThemedTooltip } from '../../themed-ui/tooltip/tooltip';

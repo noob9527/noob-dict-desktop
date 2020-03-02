@@ -1,5 +1,5 @@
 import React from 'react';
-import { Definition } from 'noob-dict-core';
+import { Definition } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import BingMeaningList from './bing-meaning-list';
 

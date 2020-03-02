@@ -1,5 +1,5 @@
 import React from 'react';
-import { Meaning } from 'noob-dict-core';
+import { Meaning } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 
 const ItemContainer = styled.span`

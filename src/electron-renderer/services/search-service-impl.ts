@@ -1,5 +1,5 @@
 import { SearchService } from '../../common/services/search-service';
-import { getSuggests, search, SearchOption, SearchResult, Suggest } from 'noob-dict-core';
+import { getSuggests, search, SearchOption, SearchResult, Suggest } from '@noob9527/noob-dict-core';
 import { injectable } from 'inversify';
 import { NoteService, NoteServiceToken } from '../../common/services/db/note-service';
 import { rendererContainer } from '../../common/container/renderer-container';

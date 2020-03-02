@@ -1,5 +1,5 @@
 import React from 'react';
-import { EngineIdentifier } from 'noob-dict-core';
+import { EngineIdentifier } from '@noob9527/noob-dict-core';
 import { useParams } from 'react-router-dom';
 import { SearchPanelState } from '../../panel/search-panel-model';
 import { useSelector } from 'react-redux';

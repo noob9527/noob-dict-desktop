@@ -1,5 +1,5 @@
 import { ISearchHistory } from './history';
-import { SearchSuccessResult } from 'noob-dict-core';
+import { SearchSuccessResult } from '@noob9527/noob-dict-core';
 
 
 export interface INote {

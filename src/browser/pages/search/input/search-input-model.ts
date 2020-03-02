@@ -1,4 +1,4 @@
-import { Suggest } from 'noob-dict-core';
+import { Suggest } from '@noob9527/noob-dict-core';
 import { call, cancel, delay, fork, put, take } from '@redux-saga/core/effects';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
