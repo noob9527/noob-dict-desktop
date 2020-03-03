@@ -4,6 +4,7 @@ import { SearchUiService, SearchUiServiceToken } from '../../../common/services/
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { SettingState } from '../setting/setting-model';
 import { TransientState } from '../transient-model';
+import { PopupUiService, PopupUiServiceToken } from '../../../common/services/popup-ui-service';
 
 export const SPLIT_PANE_SIZE_MAX = 450;
 export const SPLIT_PANE_SIZE_MIN = 60;
@@ -44,6 +45,13 @@ const effects = {
 
     if (!settingState.watchSelection) return;
     if (transientState.isSettingWindowOpen) return;
+
+    // // selection search only when window is not pinned
+    // if (!searchState.pinned) {
+    //   const popupUiService = rendererContainer.get<PopupUiService>(PopupUiServiceToken);
+    //   popupUiService.show();
+    // }
+
     if (transientState.isSearchWindowOpen) {
       if (searchState.pinned) {
         yield put({

@@ -8,6 +8,9 @@ import { SettingState } from './setting/setting-model';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { WindowIdentifier } from '../../common/window-constants';
 import { getWindowIdentifier } from '../utils/window-utils';
+import logger from '../../common/utils/logger';
+
+const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
 
 export interface TransientState {
   focusInput: boolean,
@@ -27,18 +30,44 @@ const state: TransientState = {
   windowIdentifier: getWindowIdentifier(),
 };
 
+interface ShowSearchWindowAction {
+  type: '_transient/showSearchWindow',
+  payload?: {
+    focusInput: boolean
+  }
+}
+
 const effects = {
-  * showSearchWindow() {
-    const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
-    yield call([searchUiService, searchUiService.showSearchWindow]);
+  * showSearchWindow(action: ShowSearchWindowAction) {
+    const state: TransientState = yield select(state => state._transient);
+    logger.log(action);
+    yield call([searchUiService, searchUiService.showSearchWindow], {
+      isSettingWindowOpen: state.isSearchWindowOpen
+    });
+    yield put({
+      type: '_transient/mergeState',
+      payload: {
+        focusInput: action.payload?.focusInput ?? true,
+      }
+    });
+  },
+  * hideSearchWindow() {
+    const state: TransientState = yield select(state => state._transient);
+    yield call([searchUiService, searchUiService.hideSearchWindow], {
+      isSettingWindowOpen: state.isSearchWindowOpen
+    });
   },
   * toggleSearchWindow() {
     const state: TransientState = yield select(state => state._transient);
-    const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
-    yield call(
-      [searchUiService, searchUiService.toggleSearchWindow],
-      { isSettingWindowOpen: state.isSettingWindowOpen },
-    );
+    if (state.isSearchWindowOpen) {
+      yield put({
+        type: '_transient/hideSearchWindow'
+      });
+    } else {
+      yield put({
+        type: '_transient/showSearchWindow'
+      });
+    }
   },
   * openSettingWindow() {
     const settingUiService = rendererContainer.get<SettingUiService>(SettingUiServiceToken);
@@ -63,7 +92,6 @@ const effects = {
       type: '_transient/mergeState',
       payload: {
         isSearchWindowOpen: true,
-        focusInput: true,
       },
     });
   },

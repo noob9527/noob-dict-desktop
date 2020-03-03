@@ -1,12 +1,13 @@
 // sync state between windows
 import { Store } from 'redux';
 import { ipcRenderer } from 'electron-better-ipc';
-import { GlobalShotCutChannel, SearchChannel, SettingChannel } from '../../common/ipc-channel';
-import { getWindowIdentifier } from '../utils/window-utils';
-import { WindowIdentifier } from '../../common/window-constants';
-import { rendererContainer } from '../../common/container/renderer-container';
-import { SettingService, SettingServiceToken } from '../../common/services/setting-service';
-import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
+import { GlobalShotCutChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
+import { getWindowIdentifier } from './utils/window-utils';
+import { WindowIdentifier } from '../common/window-constants';
+import { rendererContainer } from '../common/container/renderer-container';
+import { SettingService, SettingServiceToken } from '../common/services/setting-service';
+import { ClipboardService, ClipboardServiceToken } from '../common/services/clipboard-service';
+import logger from "../common/utils/logger";
 
 function registerStorageEventListener(store: Store) {
   console.debug('register storage event listener');
@@ -41,6 +42,7 @@ function registerStorageEventListener(store: Store) {
     });
     // listen global shot cut event
     ipcRenderer.answerMain(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, async () => {
+      logger.log(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, new Date());
       store.dispatch({
         type: '_transient/toggleSearchWindow',
       });
@@ -54,6 +56,17 @@ function registerStorageEventListener(store: Store) {
         },
       });
     });
+
+    // search event
+    ipcRenderer.answerMain(SearchChannel.SEARCH, async (data: any) => {
+      store.dispatch({
+        type: 'search/search',
+        payload: {
+          text: data.text
+        },
+      });
+    });
+
     // listen search window event
     ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_SHOWED, async () => {
       store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_SHOWED });

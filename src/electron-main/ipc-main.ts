@@ -1,8 +1,13 @@
 import { ipcMain } from 'electron-better-ipc';
 import { getOrCreateSettingWindow } from './window/setting-window';
 import { PopupChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
-import { getOrCreateSearchWindow, showSearchWindow, toggleSearchWindow } from './window/search-window';
-import { showPopupWindow } from './window/popup-window';
+import {
+  getOrCreateSearchWindow,
+  hideSearchWindow,
+  showSearchWindow,
+  toggleSearchWindow
+} from './window/search-window';
+import { hidePopupWindow, showPopupWindow } from './window/popup-window';
 import logger from '../common/utils/logger';
 import { handleSettingChange } from './setting';
 import { UserProfile } from '../common/model/user-profile';
@@ -27,14 +32,30 @@ ipcMain.answerRenderer(SearchChannel.TOGGLE_PIN_SEARCH_WINDOW, () => {
 
 ipcMain.answerRenderer(SearchChannel.TOGGLE_SEARCH_WINDOW, async (data: any) => {
   return toggleSearchWindow(data);
-  // showSearchWindow();
 });
 
 ipcMain.answerRenderer(SearchChannel.SHOW_SEARCH_WINDOW, async (data: any) => {
-  return showSearchWindow();
+  return showSearchWindow(data);
+});
+
+ipcMain.answerRenderer(SearchChannel.HIDE_SEARCH_WINDOW, async (data: any) => {
+  return hideSearchWindow(data);
+});
+
+ipcMain.answerRenderer(SearchChannel.SEARCH, async (data: any) => {
+  const window = getOrCreateSearchWindow();
+  await showSearchWindow();
+  if (data.text) {
+    await ipcMain.callRenderer(window, SearchChannel.SEARCH, { text: data.text })
+  }
 });
 
 ipcMain.answerRenderer(PopupChannel.SHOW_POPUP_WINDOW, () => {
   logger.log(PopupChannel.SHOW_POPUP_WINDOW);
   showPopupWindow();
+});
+
+ipcMain.answerRenderer(PopupChannel.HIDE_POPUP_WINDOW, () => {
+  logger.log(PopupChannel.HIDE_POPUP_WINDOW);
+  hidePopupWindow();
 });

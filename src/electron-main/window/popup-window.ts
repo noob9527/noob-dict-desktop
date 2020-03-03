@@ -1,12 +1,15 @@
-import { BrowserWindow } from 'electron';
+import { BrowserWindow, screen } from 'electron';
 import isDev from 'electron-is-dev';
 import * as path from 'path';
 import { mainContainer } from '../../common/container/main-container';
 import logger from '../../common/utils/logger';
+import { ipcMain } from "electron-better-ipc";
+import { SearchChannel } from "../../common/ipc-channel";
 
 export {
   getOrCreatePopupWindow,
   showPopupWindow,
+  hidePopupWindow,
   destroy,
 };
 
@@ -19,13 +22,31 @@ function getOrCreatePopupWindow() {
 
 function showPopupWindow() {
   const window = getOrCreatePopupWindow();
-  window.show();
-  // if (window) {
-  //   if (window.isMinimized()) window.restore();
-  //   window.show();
-  // } else {
-  //   logger.error('somehow window doesn\'t exist');
+  // todo: not user friendly, window should hide when user click
+
+  // https://github.com/electron/electron/issues/7259
+  // Set "always on top" and then normal again
+  // That brings the window on top reliably
+  // const wasOnTop = window.isAlwaysOnTop();
+  // window.setAlwaysOnTop(true);
+  // if (!wasOnTop) {
+  //   window.setAlwaysOnTop(false)
   // }
+
+  // https://stackoverflow.com/questions/47160857/show-window-in-electron-without-taking-focus
+  // https://github.com/electron/electron/blob/master/docs/api/browser-window.md#winshowinactive
+  // window.showInactive();
+  window.show();
+  // window.blur();
+
+  const pos = screen.getCursorScreenPoint();
+  window.setPosition(pos.x, pos.y - 80);
+  window.moveTop();
+}
+
+function hidePopupWindow() {
+  const window = getOrCreatePopupWindow();
+  window.hide();
 }
 
 function destroy() {
@@ -40,6 +61,8 @@ function createWindow() {
   const window = new BrowserWindow({
     width: isDev ? 50 : 50,
     height: 50,
+    // width: isDev ? 800 : 800,
+    // height: 800,
     transparent: true,
     frame: false,
     show: false,
@@ -68,6 +91,16 @@ function createWindow() {
   });
   window.once('ready-to-show', () => {
     // window.show();
+  });
+  // a workaround to set maximizable to false on linux
+  // https://stackoverflow.com/questions/58709065/how-to-disable-fullscreen-on-electron-window-linux
+  window.on('maximize', () => {
+    window.unmaximize();
+  });
+
+  window.on('blur', e => {
+    logger.log('popup window blur', e);
+    window.hide();
   });
   return window;
 }

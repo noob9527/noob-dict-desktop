@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { ConnectedRouter } from 'connected-react-router';
-import { registerStorageEventListener } from './register-storage-event-listener';
+import { registerStorageEventListener } from '../ipc-renderer';
 
 export const createReduxRootComponent = (store, history) => {
   store.dispatch({

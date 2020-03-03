@@ -57,6 +57,8 @@ export default () => {
         onSearch={handleInputSearchText}
         onSelect={search}
         onFocus={() => {
+          // I comment it because it's kinda annoying
+          // when we show search window programmatically
           // open auto suggestion
           setOpen(true);
           // fetch suggest

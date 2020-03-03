@@ -13,8 +13,9 @@ import { SearchChannel } from '../../common/ipc-channel';
 
 export {
   getOrCreateSearchWindow,
-  showSearchWindow,
   toggleSearchWindow,
+  showSearchWindow,
+  hideSearchWindow,
   destroy,
 };
 
@@ -30,9 +31,11 @@ function destroy() {
   searchWindow = null;
 }
 
-function showSearchWindow() {
+function showSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+  logger.log('show search window');
   const window = getOrCreateSearchWindow();
   window.show();
+  if (option.isSettingWindowOpen) getOrCreateSettingWindow().show();
   // if (window) {
   //   if (window.isMinimized()) window.restore();
   //   window.show();
@@ -41,18 +44,21 @@ function showSearchWindow() {
   // }
 }
 
+function hideSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+  logger.log('hide search window');
+  if (option.isSettingWindowOpen) getOrCreateSettingWindow().hide();
+  const window = getOrCreateSearchWindow();
+  window.hide();
+}
+
 function toggleSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
-  const searchWindow = getOrCreateSearchWindow();
   logger.log('toggleSearchWindow', new Date());
+  const searchWindow = getOrCreateSearchWindow();
   if (searchWindow.isMinimized() || !searchWindow.isVisible()) {
-    logger.log('show search window');
-    searchWindow.show();
-    if (option.isSettingWindowOpen) getOrCreateSettingWindow().show();
+    showSearchWindow(option);
     return true;
   } else {
-    logger.log('hide search window');
-    if (option.isSettingWindowOpen) getOrCreateSettingWindow().hide();
-    searchWindow.hide();
+    hideSearchWindow(option);
     return false;
   }
 }
