@@ -1,12 +1,12 @@
 // Modules to control application life and create native browser window
 import './ipc-main';
-import { app, globalShortcut } from 'electron';
+import { app, globalShortcut, Menu } from 'electron';
 import logger from '../common/utils/logger';
 import { getOrCreateSearchWindow, showSearchWindow } from './window/search-window';
-import { showPopupWindow } from './window/popup-window';
 import globalState from './global-state';
 import contextMenu from 'electron-context-menu';
 import { initialSetting } from './setting';
+// import { getOrCreateAppMenu } from './menu';
 
 contextMenu({
   showInspectElement: true,
@@ -28,8 +28,13 @@ app.on('second-instance', () => {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+
   getOrCreateSearchWindow();
+
   initialSetting();
+
+  // Menu.setApplicationMenu(getOrCreateAppMenu());
+
 });
 
 // Quit when all windows are closed.

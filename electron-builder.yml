@@ -1,12 +1,14 @@
 appId: cn.staynoob.noob-dict-desktop
-productName: MyApp
+productName: Noob Dictionary
 copyright: Copyright © 2019 ${author}
 mac:
+  # https://www.electron.build/configuration/mac
   category: public.app-category.utilities
-  icon: 'app.icons'
+  icon: 'build/assets/icon.icns'
 linux:
+  # https://www.electron.build/configuration/linux
+  # do not specify icon here, use icon.icns generate linux icon instead
   target: 'AppImage'
-  icon: 'app.icons'
   publish:
     - github
 files:

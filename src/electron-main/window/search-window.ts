@@ -67,7 +67,7 @@ function createWindow() {
   const window = new BrowserWindow({
     width: isDev ? 1600 : 800,
     height: 600,
-    icon: getAssetsPath('iconTemplate.png'),
+    icon: getAssetsPath('icon.png'),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
@@ -84,7 +84,7 @@ function createWindow() {
 
   // remove menu bar
   // https://stackoverflow.com/questions/39091964/remove-menubar-from-electron-app
-  window.setMenuBarVisibility(false); // turns out this is the only work way to hide the menu bar
+  // window.setMenuBarVisibility(false); // turns out this is the only work way to hide the menu bar
   // window.setMenu(null);
   // window.removeMenu();
   // Menu.setApplicationMenu(null);

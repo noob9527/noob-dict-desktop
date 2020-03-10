@@ -82,7 +82,7 @@ function createWindow() {
   // https://stackoverflow.com/a/47926513
   window.loadURL(isDev
     ? 'http://localhost:3000/#/popup'
-    : `file://${path.join(__dirname, '../build/index.html#/popup')}`,
+    : `file://${path.join(__dirname, '../build/index.html')}#/popup`,
   );
 
   window.on('closed', () => {

@@ -18,7 +18,7 @@ function getOrCreateTray() {
 }
 
 function createTray() {
-  const iconName = process.platform === 'win32' ? 'windows-icon.png' : 'iconTemplate.png';
+  const iconName = 'icon.png';
   const iconPath = getAssetsPath(iconName);
 
   const tray = new Tray(iconPath);
