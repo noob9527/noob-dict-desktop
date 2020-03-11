@@ -7,7 +7,7 @@ import { ThemedContent } from '../../components/themed-ui/content/content';
 import { ThemedInputShortcut } from '../../components/themed-ui/input/input-shortcut/themed-input-shortcut';
 
 const Container = styled.div`
-  height: 200px;
+  height: 100vh;
   padding: 20px;
   display: flex;
   flex-direction: column;

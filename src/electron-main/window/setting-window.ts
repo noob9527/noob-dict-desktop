@@ -32,6 +32,7 @@ function createWindow() {
     width: isDev ? 400 : 400,
     height: 200,
     modal: true,
+    resizable: false,
     show: false, // not show until window is ready
     parent: getOrCreateSearchWindow(),
     webPreferences: {
