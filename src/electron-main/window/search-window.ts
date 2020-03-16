@@ -6,29 +6,27 @@ import * as path from 'path';
 import globalState from '../global-state';
 import * as os from 'os';
 import * as fs from 'fs';
-import { getAssetsPath } from '../utils/path-util';
+import { getAssetsPath, getWindowHashUrl } from '../utils/path-util';
 import { getOrCreateSettingWindow } from './setting-window';
 import { ipcMain } from 'electron-better-ipc';
 import { SearchChannel } from '../../common/ipc-channel';
+import { windowContainer } from './windows';
+import { WindowId } from '../../common/window-constants';
 
 export {
   getOrCreateSearchWindow,
   toggleSearchWindow,
   showSearchWindow,
   hideSearchWindow,
-  destroy,
 };
 
-let searchWindow: BrowserWindow | null = null;
-
-function getOrCreateSearchWindow() {
-  if (searchWindow != null) return searchWindow;
-  searchWindow = createWindow();
-  return searchWindow;
+function getOrCreateSearchWindow(): BrowserWindow {
+  return windowContainer.find(WindowId.SEARCH)
+    ?? windowContainer.add(WindowId.SEARCH, createWindow());
 }
 
 function destroy() {
-  searchWindow = null;
+  windowContainer.remove(WindowId.SEARCH);
 }
 
 function showSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
@@ -76,6 +74,8 @@ function createWindow() {
       webSecurity: false,
     },
 
+    show: !process.argv.includes('--background'),
+
     // doesn't work on linux
     // https://electronjs.org/docs/api/browser-window
     minimizable: false,
@@ -90,13 +90,7 @@ function createWindow() {
   // Menu.setApplicationMenu(null);
   // window.setAutoHideMenuBar(true);
 
-  window.loadURL(isDev
-    ? 'http://localhost:3000'
-    : `file://${path.join(__dirname, '../build/index.html')}`,
-  );
-  // window.loadURL(`file://${path.join(__dirname, '../build/index.html')}`)
-  // and load the index.html of the app.
-  // window.loadFile('index.html')
+  window.loadURL(getWindowHashUrl());
 
   window.on('close', e => {
     // close to tray
@@ -117,27 +111,27 @@ function createWindow() {
   });
 
   window.on('show', e => {
-    logger.log('search window show', e);
+    logger.log('search window show');
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_SHOWED, e);
   });
   window.on('hide', e => {
-    logger.log('search window hide', e);
+    logger.log('search window hide');
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_HIDED, e);
   });
   window.on('restore', e => {
-    logger.log('search window restore', e);
+    logger.log('search window restore');
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_RESTORED, e);
   });
   window.on('minimize', e => {
-    logger.log('search window minimize', e);
+    logger.log('search window minimize');
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_MINIMIZED, e);
   });
   window.on('focus', e => {
-    logger.log('search window focus', e);
+    logger.log('search window focus');
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_FOCUS, e);
   });
   window.on('blur', e => {
-    logger.log('search window blur', e);
+    logger.log('search window blur');
     ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_BLUR, e);
   });
 

@@ -1,28 +1,24 @@
 import { BrowserWindow } from 'electron';
 import isDev from 'electron-is-dev';
-import * as path from 'path';
-import { mainContainer } from '../../common/container/main-container';
 import { getOrCreateSearchWindow } from './search-window';
 import logger from '../../common/utils/logger';
 import { ipcMain } from 'electron-better-ipc';
 import { SettingChannel } from '../../common/ipc-channel';
+import { getWindowHashUrl } from '../utils/path-util';
+import { windowContainer } from './windows';
+import { WindowId } from '../../common/window-constants';
 
 export {
   getOrCreateSettingWindow,
-  destroy,
 };
 
-const SettingWindowToken = Symbol.for('setting-window');
-mainContainer.bind<BrowserWindow>(SettingWindowToken).toDynamicValue(createWindow);
-
 function getOrCreateSettingWindow() {
-  return mainContainer.get<BrowserWindow>(SettingWindowToken);
+  return windowContainer.find(WindowId.SETTING)
+    ?? windowContainer.add(WindowId.SETTING, createWindow());
 }
 
 function destroy() {
-  // try to clear the cache and free the memory
-  // https://github.com/inversify/InversifyJS/blob/master/wiki/scope.md
-  mainContainer.rebind<BrowserWindow>(SettingWindowToken).toDynamicValue(createWindow);
+  windowContainer.remove(WindowId.SETTING);
 }
 
 function createWindow() {
@@ -47,18 +43,12 @@ function createWindow() {
 
   // Load a remote URL
   // https://stackoverflow.com/a/47926513
-  window.loadURL(isDev
-    ? 'http://localhost:3000/#/setting'
-    : `file://${path.join(__dirname, '..', 'build', 'index.html')}#/setting`,
-  );
-  // window.loadURL(
-  //   `file://${path.join(__dirname, '../build/test.html')}`,
-  // );
+  window.loadURL(getWindowHashUrl('setting'));
 
   window.on('closed', async () => {
     await ipcMain.callRenderer(getOrCreateSearchWindow(), SettingChannel.SETTING_WINDOW_CLOSED);
     destroy();
-    logger.log(`${SettingWindowToken.description} closed`);
+    logger.log(`${WindowId.SETTING} closed`);
   });
   window.once('ready-to-show', () => {
     window.show();

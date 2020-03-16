@@ -1,5 +1,5 @@
 appId: cn.staynoob.noob-dict-desktop
-productName: Noob Dictionary
+productName: 'noob-dictionary'
 copyright: Copyright © 2019 ${author}
 mac:
   # https://www.electron.build/configuration/mac

@@ -13,6 +13,7 @@
 - `analyze` [analyzing webpack bundle size](https://create-react-app.dev/docs/analyzing-the-bundle-size/)
 - `renderer:build` build code under electron-main && browser directory(via webpack)
 - `main:build` build code under electron-main directory(via parcel)
+- `electron:build` build executable file(via electron-builder)
 - `build` generate executable files
 - `release` build and draft a new release(if doesn’t already exist)(this is an automatic rule of electron-builder, because the script is named "release")
 

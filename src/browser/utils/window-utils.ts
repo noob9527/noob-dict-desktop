@@ -1,19 +1,19 @@
-import { WindowIdentifier } from '../../common/window-constants';
+import { WindowId } from '../../common/window-constants';
 
-function getWindowIdentifier() {
+function getWindowId() {
   switch (window?.location?.hash) {
     case '#/search':
-      return WindowIdentifier.SEARCH;
+      return WindowId.SEARCH;
     case '#/setting':
-      return WindowIdentifier.SETTING;
+      return WindowId.SETTING;
     case '#/popup':
-      return WindowIdentifier.POPUP;
+      return WindowId.POPUP;
     default:
-      return WindowIdentifier.SEARCH;
+      return WindowId.SEARCH;
   }
 }
 
 export {
-  getWindowIdentifier,
+  getWindowId,
 };
 

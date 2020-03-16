@@ -3,21 +3,24 @@ import isDev from 'electron-is-dev';
 import * as path from 'path';
 import { mainContainer } from '../../common/container/main-container';
 import logger from '../../common/utils/logger';
-import { ipcMain } from "electron-better-ipc";
-import { SearchChannel } from "../../common/ipc-channel";
+import { ipcMain } from 'electron-better-ipc';
+import { SearchChannel } from '../../common/ipc-channel';
+import { windowContainer } from './windows';
+import { WindowId } from '../../common/window-constants';
 
 export {
   getOrCreatePopupWindow,
   showPopupWindow,
   hidePopupWindow,
-  destroy,
 };
 
-const PopupWindowToken = Symbol.for('popup-window');
-mainContainer.bind<BrowserWindow>(PopupWindowToken).toDynamicValue(createWindow);
-
 function getOrCreatePopupWindow() {
-  return mainContainer.get<BrowserWindow>(PopupWindowToken);
+  return windowContainer.find(WindowId.POPUP)
+    ?? windowContainer.add(WindowId.POPUP, createWindow());
+}
+
+function destroy() {
+  windowContainer.remove(WindowId.POPUP);
 }
 
 function showPopupWindow() {
@@ -47,12 +50,6 @@ function showPopupWindow() {
 function hidePopupWindow() {
   const window = getOrCreatePopupWindow();
   window.hide();
-}
-
-function destroy() {
-  // try to clear the cache and free the memory
-  // https://github.com/inversify/InversifyJS/blob/master/wiki/scope.md
-  mainContainer.rebind<BrowserWindow>(PopupWindowToken).toDynamicValue(createWindow);
 }
 
 function createWindow() {
@@ -87,7 +84,7 @@ function createWindow() {
 
   window.on('closed', () => {
     destroy();
-    logger.log(`${PopupWindowToken.description} closed`);
+    logger.log(`${WindowId.POPUP} closed`);
   });
   window.once('ready-to-show', () => {
     // window.show();

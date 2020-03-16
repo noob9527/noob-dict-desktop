@@ -34,6 +34,8 @@ const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
 const postcssNormalize = require('postcss-normalize');
+const GitRevisionPlugin = require('git-revision-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
 
 // Source maps are resource heavy and can cause out of memory issue for large source files.
 const shouldUseSourceMap = process.env.GENERATE_SOURCEMAP !== 'false';
@@ -626,6 +628,11 @@ module.exports = function(webpackEnv) {
       //     // The formatter is invoked directly in WebpackDevServerUtils during development
       //     formatter: isEnvProduction ? typescriptFormatter : undefined,
       //   }),
+      //  Git revision plugin
+      isEnvProduction && new GitRevisionPlugin(),
+      new CopyPlugin([
+        { from: paths.appPackageJson, to : paths.appBuild }
+      ]),
     ].filter(Boolean),
     // Some libraries import Node modules but don't use them in the browser.
     // Tell Webpack to provide empty mocks for them so importing them works.

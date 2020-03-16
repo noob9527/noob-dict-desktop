@@ -6,17 +6,19 @@ import { SearchUiService, SearchUiServiceToken } from '../../common/services/sea
 import { SearchChannel } from '../../common/ipc-channel';
 import { SettingState } from './setting/setting-model';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
-import { WindowIdentifier } from '../../common/window-constants';
-import { getWindowIdentifier } from '../utils/window-utils';
+import { WindowId } from '../../common/window-constants';
+import { getWindowId } from '../utils/window-utils';
 import logger from '../../common/utils/logger';
+import { AppService, AppServiceToken } from '../../common/services/app-service';
 
 const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
+const appService = rendererContainer.get<AppService>(AppServiceToken);
 
 export interface TransientState {
   focusInput: boolean,
   isSettingWindowOpen: boolean
   isSearchWindowOpen: boolean
-  windowIdentifier: WindowIdentifier
+  windowIdentifier: WindowId
 }
 
 interface TransientModel extends Model {
@@ -25,9 +27,9 @@ interface TransientModel extends Model {
 
 const state: TransientState = {
   focusInput: false,
-  isSearchWindowOpen: true,
+  isSearchWindowOpen: !appService.getProcess().argv.includes('--background'),
   isSettingWindowOpen: false,
-  windowIdentifier: getWindowIdentifier(),
+  windowIdentifier: getWindowId(),
 };
 
 interface ShowSearchWindowAction {

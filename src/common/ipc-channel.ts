@@ -31,6 +31,15 @@ enum GlobalShotCutChannel {
   APP_HOT_KEY_PRESSED = 'APP_HOT_KEY_PRESSED'
 }
 
+enum AutoUpdaterChannel {
+  'CHECKING_FOR_UPDATE' = 'CHECKING_FOR_UPDATE',
+  'UPDATE_AVAILABLE' = 'UPDATE_AVAILABLE',
+  'UPDATE_NOT_AVAILABLE' = 'UPDATE_NOT_AVAILABLE',
+  'ERROR' = 'ERROR',
+  'DOWNLOAD_PROGRESS' = 'DOWNLOAD_PROGRESS',
+  'UPDATE_DOWNLOADED' = 'UPDATE_DOWNLOADED',
+}
+
 // enum TrayChannel {
 //   PUT_IN_TRAY = 'PUT_IN_TRAY',
 //   REMOVE_TRAY = 'REMOVE_TRAY'
@@ -41,5 +50,6 @@ export {
   SearchChannel,
   PopupChannel,
   GlobalShotCutChannel,
+  AutoUpdaterChannel,
 };
 
