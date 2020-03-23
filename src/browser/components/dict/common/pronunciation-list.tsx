@@ -28,7 +28,6 @@ const PronunciationItem: React.FC<PronunciationItemProps> = (props: Pronunciatio
     <ItemContainer>
       <span>{LanguageTag.getLabel(pronunciation.tag)}</span>
       <span>{pronunciation.phoneticSymbol}</span>
-      {/*todo: audio player*/}
       <Speaker src={pronunciation.audio ?? undefined}/>
     </ItemContainer>
   );

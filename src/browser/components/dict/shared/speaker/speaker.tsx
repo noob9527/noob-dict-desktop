@@ -47,7 +47,7 @@ const Speaker: React.FC<SpeakerProp> = (props) => {
 
   useEventListener('ended', (event) => {
     setPlaying(false);
-  }, audioEle.current);
+  });
 
   return (
     <>
@@ -63,8 +63,15 @@ const Speaker: React.FC<SpeakerProp> = (props) => {
   );
 
   async function handleClick() {
-    await (audioEle?.current?.play() ?? Promise.resolve());
+    const ref = audioEle?.current;
+    if(!ref) {
+      return Promise.resolve(); // we may set a timeout here?
+    }
     setPlaying(true);
+    // https://stackoverflow.com/questions/43577182/react-js-audio-src-is-updating-on-setstate-but-the-audio-playing-doesnt-chang
+    await ref.pause();
+    await ref.load();
+    await ref.play();
   }
 };
 
