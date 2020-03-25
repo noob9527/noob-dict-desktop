@@ -74,7 +74,9 @@ function createWindow() {
       webSecurity: false,
     },
 
-    show: !process.argv.includes('--background'),
+    // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
+    show: false, // not show until window is ready
+    backgroundColor: '#2e2c29',
 
     // doesn't work on linux
     // https://electronjs.org/docs/api/browser-window
@@ -92,6 +94,11 @@ function createWindow() {
 
   window.loadURL(getWindowHashUrl());
 
+  window.once('ready-to-show', () => {
+    if(!process.argv.includes('--background')) {
+      window.show();
+    }
+  });
   window.on('close', e => {
     // close to tray
     // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back

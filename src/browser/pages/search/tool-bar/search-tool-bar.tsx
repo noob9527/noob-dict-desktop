@@ -43,22 +43,22 @@ export default () => {
       {/*    type="smile"*/}
       {/*  />*/}
       {/*</Button>*/}
-      <ThemedTooltip title={'setting'}>
-        <Button
-          type="link"
-          shape="circle"
-          onClick={() => {
-            dispatch({
-              type: '_transient/openSettingWindow',
-            });
-          }}
-          ghost
-        >
-          <Icon
-            type="setting"
-          />
-        </Button>
-      </ThemedTooltip>
+      {/*<ThemedTooltip title={'setting'}>*/}
+      {/*  <Button*/}
+      {/*    type="link"*/}
+      {/*    shape="circle"*/}
+      {/*    onClick={() => {*/}
+      {/*      dispatch({*/}
+      {/*        type: '_transient/openSettingWindow',*/}
+      {/*      });*/}
+      {/*    }}*/}
+      {/*    ghost*/}
+      {/*  >*/}
+      {/*    <Icon*/}
+      {/*      type="setting"*/}
+      {/*    />*/}
+      {/*  </Button>*/}
+      {/*</ThemedTooltip>*/}
       <ThemedTooltip placement="bottom" title={'pin window'}>
         <Button
           type="link"

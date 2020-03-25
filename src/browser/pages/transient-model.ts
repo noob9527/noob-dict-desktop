@@ -3,7 +3,7 @@ import { call, put, select } from '@redux-saga/core/effects';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { SettingUiService, SettingUiServiceToken } from '../../common/services/setting-ui-service';
 import { SearchUiService, SearchUiServiceToken } from '../../common/services/search-ui-service';
-import { SearchChannel } from '../../common/ipc-channel';
+import { SearchChannel, SettingChannel } from '../../common/ipc-channel';
 import { SettingState } from './setting/setting-model';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { WindowId } from '../../common/window-constants';
@@ -71,14 +71,6 @@ const effects = {
       });
     }
   },
-  * openSettingWindow() {
-    const settingUiService = rendererContainer.get<SettingUiService>(SettingUiServiceToken);
-    const isSettingWindowOpen = yield call([settingUiService, settingUiService.open]);
-    yield put({
-      type: '_transient/mergeState',
-      payload: { isSettingWindowOpen },
-    });
-  },
   * searchWindowOpened() {
     const settingState: SettingState = yield select(state => state.setting);
     if (settingState.readClipboard) {
@@ -95,6 +87,12 @@ const effects = {
       payload: {
         isSearchWindowOpen: true,
       },
+    });
+  },
+  * settingWindowOpened() {
+    yield put({
+      type: '_transient/mergeState',
+      payload: { isSettingWindowOpen: true },
     });
   },
   * [SearchChannel.SEARCH_WINDOW_SHOWED]() {
@@ -136,6 +134,18 @@ const reducers = {
       ...action.payload,
     };
   },
+  [SettingChannel.SETTING_WINDOW_OPENED](state, action: any) {
+    return {
+      ...state,
+      isSearchWindowOpen: true
+    };
+  },
+  [SettingChannel.SETTING_WINDOW_CLOSED](state, action: any) {
+    return {
+      ...state,
+      isSearchWindowOpen: false
+    };
+  }
 };
 
 const transientModel: TransientModel = {

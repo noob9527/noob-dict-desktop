@@ -12,6 +12,7 @@ import { APP_CONSTANTS } from '../common/app-constants';
 import gitInfo from './utils/git-info';
 import { getOrCreateSearchWindow } from './window/search-window';
 import { Platform } from './utils/platform-util';
+import { getOrCreateSettingWindow } from './window/setting-window';
 
 export {
   getOrCreateAppMenu,
@@ -55,7 +56,18 @@ function createMenu(): Menu {
   const macAppMenu: Electron.MenuItemConstructorOptions = { role: 'appMenu' };
   const template: Electron.MenuItemConstructorOptions[] = [
     ...(Platform.isMac ? [macAppMenu] : []),
-    { role: 'fileMenu' },
+    {
+      role: 'fileMenu',
+      submenu: [
+        {
+          label: 'Setting',
+          click: () => getOrCreateSettingWindow(),
+        },
+        {
+          role: 'quit',
+        },
+      ]
+    },
     { role: 'editMenu' },
     { role: 'viewMenu' },
     { role: 'windowMenu' },

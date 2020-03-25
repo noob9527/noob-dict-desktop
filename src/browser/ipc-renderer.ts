@@ -49,14 +49,12 @@ function registerStorageEventListener(store: Store) {
         type: '_transient/toggleSearchWindow',
       });
     });
-    // listen setting window close event
+    // listen setting window event
+    ipcRenderer.answerMain(SettingChannel.SETTING_WINDOW_OPENED, async () => {
+      store.dispatch({ type: `_transient/${SettingChannel.SETTING_WINDOW_OPENED}`, });
+    });
     ipcRenderer.answerMain(SettingChannel.SETTING_WINDOW_CLOSED, async () => {
-      store.dispatch({
-        type: '_transient/mergeState',
-        payload: {
-          isSettingWindowOpen: false,
-        },
-      });
+      store.dispatch({ type: `_transient/${SettingChannel.SETTING_WINDOW_CLOSED}`, });
     });
 
     // listen search event
