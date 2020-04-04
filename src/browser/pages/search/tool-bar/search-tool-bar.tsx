@@ -6,13 +6,14 @@ import { SearchState } from '../search-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { PopupUiService, PopupUiServiceToken } from '../../../../common/services/popup-ui-service';
 import { ThemedTooltip } from '../../../components/themed-ui/tooltip/tooltip';
+import { AvatarDropDown } from './avatar-drop-down';
 
 const ToolBar = styled.div`
   display: flex;
   align-items: center;
-  //i {
-  //  margin: 5px;
-  //}
+  > * {
+    margin-right: 10px;
+  }
   i.anticon-pushpin {
     font-size: 1.1em; 
   }
@@ -76,6 +77,7 @@ export default () => {
           />
         </Button>
       </ThemedTooltip>
+      <AvatarDropDown/>
     </ToolBar>
   );
 

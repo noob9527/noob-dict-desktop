@@ -58,7 +58,7 @@ function createWindow() {
     ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_OPENED, e);
   });
   window.on('closed', async () => {
-    await ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_CLOSED);
+    ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_CLOSED);
     destroy();
     logger.log(`${WindowId.SETTING} closed`);
   });

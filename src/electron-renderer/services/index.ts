@@ -19,6 +19,10 @@ import { NoteService, NoteServiceToken } from '../../common/services/db/note-ser
 import { DexieNoteService } from './db/note-service-impl';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { ElectronAppService } from './app-service-impl';
+import { UserService, UserServiceToken } from '../../common/services/user-service';
+import { CorsUserService } from './user-service-impl';
+import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
+import { ElectronLoginUiService } from './login-ui-service-impl';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -29,6 +33,8 @@ function registerAllService() {
   rendererContainer.bind<PopupUiService>(PopupUiServiceToken).to(ElectronPopupUiService);
   rendererContainer.bind<WindowService>(WindowServiceToken).to(ElectronWindowService);
   rendererContainer.bind<AppService>(AppServiceToken).to(ElectronAppService);
+  rendererContainer.bind<UserService>(UserServiceToken).to(CorsUserService);
+  rendererContainer.bind<LoginUiService>(LoginUiServiceToken).to(ElectronLoginUiService);
 
   // db
   rendererContainer.bind<HistoryService>(HistoryServiceToken).to(DexieHistoryService);

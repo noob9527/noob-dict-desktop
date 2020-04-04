@@ -13,6 +13,7 @@ import gitInfo from './utils/git-info';
 import { getOrCreateSearchWindow } from './window/search-window';
 import { Platform } from './utils/platform-util';
 import { getOrCreateSettingWindow } from './window/setting-window';
+import { getOrCreateLoginWindow } from './window/login-window';
 
 export {
   getOrCreateAppMenu,
@@ -59,6 +60,10 @@ function createMenu(): Menu {
     {
       role: 'fileMenu',
       submenu: [
+        // {
+        //   label: 'Login',
+        //   click: () => getOrCreateLoginWindow(),
+        // },
         {
           label: 'Setting',
           click: () => getOrCreateSettingWindow(),

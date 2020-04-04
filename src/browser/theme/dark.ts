@@ -15,7 +15,10 @@ dark[ColorId.input_foreground] = Color('#D4D4D4');
 dark[ColorId.input_background] = Color('#3C3C3C');
 dark[ColorId.input_border] = null;
 
+// button
 dark[ColorId.button_background] = Color('rebeccapurple');
+dark[ColorId.button_hoverBackground] = dark[ColorId.button_background]?.darken(0.2);
+dark[ColorId.button_foreground] = Color('white');
 
 // tabs
 dark[ColorId.tab_border] = null;

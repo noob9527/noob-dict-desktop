@@ -1,7 +1,13 @@
 // sync state between windows
 import { Store } from 'redux';
 import { ipcRenderer } from 'electron-better-ipc';
-import { AutoUpdaterChannel, GlobalShotCutChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
+import {
+  AutoUpdaterChannel,
+  GlobalShotCutChannel,
+  LoginChannel,
+  SearchChannel,
+  SettingChannel
+} from '../common/ipc-channel';
 import { getWindowId } from './utils/window-utils';
 import { WindowId } from '../common/window-constants';
 import { rendererContainer } from '../common/container/renderer-container';
@@ -67,6 +73,7 @@ function registerStorageEventListener(store: Store) {
       });
     });
     listenSearchWindowEvent(store);
+    listenLoginWindowEvent(store);
   }
 }
 
@@ -89,6 +96,22 @@ function listenSearchWindowEvent(store) {
   });
   ipcRenderer.answerMain(SearchChannel.SEARCH_WINDOW_BLUR, async () => {
     store.dispatch({ type: '_transient/' + SearchChannel.SEARCH_WINDOW_BLUR });
+  });
+}
+
+function listenLoginWindowEvent(store) {
+  // listen search window event
+  ipcRenderer.answerMain(LoginChannel.LOGIN_WINDOW_OPENED, async () => {
+    store.dispatch({ type: '_transient/' + LoginChannel.LOGIN_WINDOW_OPENED });
+  });
+  ipcRenderer.answerMain(LoginChannel.LOGIN_WINDOW_CLOSED, async () => {
+    store.dispatch({ type: '_transient/' + LoginChannel.LOGIN_WINDOW_CLOSED });
+  });
+  ipcRenderer.answerMain(LoginChannel.LOGIN_CODE_RECEIVED, async (data) => {
+    store.dispatch({
+      type: 'root/' + LoginChannel.LOGIN_CODE_RECEIVED,
+      payload: data,
+    });
   });
 }
 

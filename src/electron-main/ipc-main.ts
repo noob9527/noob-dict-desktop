@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron-better-ipc';
 import { getOrCreateSettingWindow } from './window/setting-window';
-import { PopupChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
+import { LoginChannel, PopupChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
 import {
   getOrCreateSearchWindow,
   hideSearchWindow,
@@ -11,7 +11,9 @@ import { hidePopupWindow, showPopupWindow } from './window/popup-window';
 import logger from '../common/utils/logger';
 import { handleSettingChange } from './setting';
 import { UserProfile } from '../common/model/user-profile';
+import { getOrCreateLoginWindow } from './window/login-window';
 
+// setting channel
 ipcMain.answerRenderer(SettingChannel.OPEN_SETTING_WINDOW, () => {
   getOrCreateSettingWindow();
   return true;
@@ -22,6 +24,7 @@ ipcMain.answerRenderer(SettingChannel.SETTING_CHANGE, async data => {
   return handleSettingChange(newValue, oldValue);
 });
 
+// search channel
 ipcMain.answerRenderer(SearchChannel.TOGGLE_PIN_SEARCH_WINDOW, () => {
   const window = getOrCreateSearchWindow();
   const top = window.isAlwaysOnTop();
@@ -50,6 +53,7 @@ ipcMain.answerRenderer(SearchChannel.SEARCH, async (data: any) => {
   }
 });
 
+// popup channel
 ipcMain.answerRenderer(PopupChannel.SHOW_POPUP_WINDOW, () => {
   logger.log(PopupChannel.SHOW_POPUP_WINDOW);
   showPopupWindow();
@@ -58,4 +62,10 @@ ipcMain.answerRenderer(PopupChannel.SHOW_POPUP_WINDOW, () => {
 ipcMain.answerRenderer(PopupChannel.HIDE_POPUP_WINDOW, () => {
   logger.log(PopupChannel.HIDE_POPUP_WINDOW);
   hidePopupWindow();
+});
+
+// login channel
+ipcMain.answerRenderer(LoginChannel.SHOW_LOGIN_WINDOW, () => {
+  getOrCreateLoginWindow();
+  return true;
 });

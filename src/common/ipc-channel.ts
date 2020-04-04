@@ -32,6 +32,14 @@ enum GlobalShotCutChannel {
   APP_HOT_KEY_PRESSED = 'APP_HOT_KEY_PRESSED'
 }
 
+enum LoginChannel {
+  SHOW_LOGIN_WINDOW = 'SHOW_LOGIN_WINDOW',
+  LOGIN_CODE_RECEIVED = 'LOGIN_CODE_RECEIVED',
+
+  LOGIN_WINDOW_OPENED = 'LOGIN_WINDOW_OPENED',
+  LOGIN_WINDOW_CLOSED = 'LOGIN_WINDOW_CLOSED',
+}
+
 enum AutoUpdaterChannel {
   'CHECKING_FOR_UPDATE' = 'CHECKING_FOR_UPDATE',
   'UPDATE_AVAILABLE' = 'UPDATE_AVAILABLE',
@@ -52,5 +60,6 @@ export {
   PopupChannel,
   GlobalShotCutChannel,
   AutoUpdaterChannel,
+  LoginChannel,
 };
 
