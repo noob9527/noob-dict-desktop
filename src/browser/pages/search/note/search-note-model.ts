@@ -33,8 +33,8 @@ export interface SearchNoteModel extends Model {
 
 const effects = {
   * fetchOrCreateNote(action) {
-    const { text, part } = action.payload;
-    let note = yield call([noteService, noteService.search], text, part);
+    const { history } = action.payload;
+    let note = yield call([noteService, noteService.addHistory], history);
     const histories = note.histories.reduce((acc, curr, i, arr) => {
       return {
         ...acc,

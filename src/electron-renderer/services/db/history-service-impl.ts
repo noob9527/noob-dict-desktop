@@ -5,9 +5,10 @@ import { injectable } from 'inversify';
 
 @injectable()
 export class DexieHistoryService implements HistoryService {
-  async findAll(text: string): Promise<ISearchHistory[]> {
+  async findAll(text: string, user_id: string = ''): Promise<ISearchHistory[]> {
     const res = await database.histories
-      .where('text').equals(text).toArray();
+      .where({ text, user_id })
+      .toArray();
     return res.map(e => SearchHistory.wrap(e));
   }
 
@@ -20,6 +21,7 @@ export class DexieHistoryService implements HistoryService {
         param.createAtBetween.includeLower ?? true,
         param.createAtBetween.includeUpper ?? true,
       )
+      .filter(e => e.user_id === param.user_id)
       .toArray();
     return res.map(e => SearchHistory.wrap(e));
   }

@@ -1,5 +1,5 @@
 import { Model } from '../../../../redux/common/redux-model';
-import { call, fork, put, take, select } from '@redux-saga/core/effects';
+import { call, fork, put, select, take } from '@redux-saga/core/effects';
 import { LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router';
 import { ISearchHistory } from '../../../../../common/model/history';
 import { rendererContainer } from '../../../../../common/container/renderer-container';
@@ -9,6 +9,7 @@ import {
   HistoryServiceToken,
 } from '../../../../../common/services/db/history-service';
 import moment from 'moment';
+import { RootState } from '../../../root-model';
 
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
 
@@ -23,6 +24,7 @@ export interface OverviewModel extends Model {
 
 const state = {
   searchParams: {
+    user_id: '',
     createAtBetween: {
       lowerBound: moment().subtract(1, 'years').valueOf(),
     },
@@ -31,8 +33,10 @@ const state = {
 };
 const effects = {
   * fetchLatestHistories(action) {
+    const rootState: RootState = yield select((state: any) => state.root);
     const overviewState: OverviewState = yield select((state: any) => state.overview);
     const { searchParams } = overviewState;
+    searchParams.user_id = rootState?.currentUser?.id ?? '';
     let histories = yield call([historyService, historyService.search], searchParams);
     yield put({
       type: 'overview/mergeState',

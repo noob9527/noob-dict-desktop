@@ -1,15 +1,17 @@
 import { ISearchHistory } from './history';
-import { SearchSuccessResult } from '@noob9527/noob-dict-core';
+import { ISimpleSearchResult } from './search-domain';
 
 
+// note is just histories group by text
 export interface INote {
   id: Maybe<number>
+  user_id: string
   text: string
   remark: string
   createAt: number
   updateAt: Maybe<number>
   updateTimes: number // In general, the more update times, the more significant a word is
-  searchResult?: SearchSuccessResult
+  searchResult?: ISimpleSearchResult
   // extra
   histories: ISearchHistory[]
 }
@@ -17,12 +19,13 @@ export interface INote {
 export class Note implements INote {
 
   id: Maybe<number>;
+  user_id: string = '';
   text: string = '';
   remark = '';
   createAt!: number;
   updateAt: Maybe<number>;
   updateTimes = 0;
-  searchResult?: any;
+  searchResult?: ISimpleSearchResult;
   // extra
   histories: ISearchHistory[] = [];
 
@@ -36,6 +39,7 @@ export class Note implements INote {
     const res = new Note();
     Object.assign(res, note);
     res.createAt = (new Date()).getTime();
+    res.updateAt = res.createAt;
     delete res.id;
     return res;
   }

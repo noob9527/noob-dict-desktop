@@ -4,8 +4,7 @@ import { NoteService } from '../../../common/services/db/note-service';
 import { INote, Note } from '../../../common/model/note';
 import { HistoryService, HistoryServiceToken } from '../../../common/services/db/history-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
-import { SearchHistory } from '../../../common/model/history';
-import logger from '../../../common/utils/logger';
+import { ISearchHistory } from '../../../common/model/history';
 
 @injectable()
 export class DexieNoteService implements NoteService {
@@ -15,41 +14,49 @@ export class DexieNoteService implements NoteService {
     this.historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
   }
 
-  async fetch(text: string): Promise<Maybe<INote>> {
-    const res = await database.notes.where('text').equals(text).first();
+  async fetch(text: string, user_id: string = ''): Promise<Maybe<INote>> {
+    const res = await database.notes
+      .where({ text, user_id })
+      .first();
     if (!res) return res;
 
     if (res) {
-      res.histories = await this.historyService.findAll(text);
+      res.histories = await this.historyService.findAll(text, user_id);
     }
     return Note.wrap(res);
   }
 
-  async fetchLatest(limit: number): Promise<INote[]> {
+  // If the filter is narrow and the result set is small, choose where() to utilize the index for filtering,
+  // combined with sortBy() on the collection (or just sort the resulting array using Array.sort()).
+  // If the result set is large or filter is broad, you would probably be better of using orderBy()
+  // to utilize the index for sorting and combine with Collection.filter() for filtering.
+  // If you use limit() on the Collection, this is also normally the best choice.
+  // https://github.com/dfahlander/Dexie.js/issues/297#issuecomment-236725797
+  async fetchLatest(limit: number, user_id: string = ''): Promise<INote[]> {
     return database.notes
       .orderBy('updateAt')
-      .limit(limit)
       .reverse()
+      .filter(e => e.user_id === user_id)
+      .limit(limit)
       .toArray();
   }
 
-  async search(text: string, part: Partial<INote>): Promise<INote> {
-    let note = await this.fetch(text);
-    const history = SearchHistory.create({ text });
+  async addHistory(history: ISearchHistory): Promise<INote> {
+    let note = await this.fetch(history.text, history.user_id);
     if (!note) {
       note = Note.create({
-        ...part,
-        text,
+        user_id: history.user_id,
+        searchResult: history.searchResult,
+        text: history.text,
         histories: [history],
       });
     } else {
-      logger.log('add hist start', note.histories.length, note.histories);
       note.histories.push(history);
-      logger.log('add hist end', note.histories.length);
     }
     return this.saveOrUpdate(note);
   }
 
+  // cascade handle add/remove/update history
   async saveOrUpdate(note: INote): Promise<INote> {
     if (note.id) {
       // update

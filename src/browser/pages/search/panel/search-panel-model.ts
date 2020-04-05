@@ -4,6 +4,8 @@ import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
 import { push } from 'connected-react-router';
+import { simplifyResult } from '../../../../common/model/search-domain';
+import { RootState } from '../../root-model';
 
 export type SearchResultMap = { [index in EngineIdentifier]?: Maybe<SearchResult> };
 
@@ -48,6 +50,7 @@ function* fetchResults(action: FetchResultsAction) {
   if (!text.trim()) return;
 
   const engines: EngineIdentifier[] = yield select((state: any) => state.searchPanel.engines);
+  const rootState: RootState = yield select((state: any) => state.root);
 
   // reset translatedText
   yield put({
@@ -85,15 +88,15 @@ function* fetchResults(action: FetchResultsAction) {
     }
 
     if (result && SearchResults.isSuccessResult(result)) {
+      const history = {
+        text,
+        user_id: rootState.currentUser?.id ?? '',
+        searchResult: simplifyResult(result)
+      };
       // fetch from notes
       yield put({
         type: 'searchNote/fetchOrCreateNote',
-        payload: {
-          text,
-          part: {
-            searchResult: result,
-          },
-        },
+        payload: { history },
       });
       yield put(push(`/search/engine_view/${result.engine}`));
       break;
