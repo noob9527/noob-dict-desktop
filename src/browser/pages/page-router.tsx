@@ -5,6 +5,7 @@ import SearchPage from './search/search-page';
 import SettingPage from './setting/setting-page';
 import PopupPage from './popup/popup-page';
 import LoginPage from './login/login-page';
+import DeveloperPage from './developer/developer-page';
 
 const PageRouter = () => {
   return (
@@ -15,6 +16,7 @@ const PageRouter = () => {
         <Route path="/setting" component={SettingPage}/>
         <Route path="/popup" component={PopupPage}/>
         <Route path="/login" component={LoginPage}/>
+        <Route path="/developer" component={DeveloperPage}/>
         <Route component={SearchPage}/>
       </Switch>
     </>

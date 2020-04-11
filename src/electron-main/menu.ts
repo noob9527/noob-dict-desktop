@@ -14,6 +14,7 @@ import { getOrCreateSearchWindow } from './window/search-window';
 import { Platform } from './utils/platform-util';
 import { getOrCreateSettingWindow } from './window/setting-window';
 import { getOrCreateLoginWindow } from './window/login-window';
+import { getOrCreateDeveloperWindow } from './window/debug-window';
 
 export {
   getOrCreateAppMenu,
@@ -30,6 +31,10 @@ function createMenu(): Menu {
   const helpMenu: Electron.MenuItemConstructorOptions = {
     role: 'help',
     submenu: [
+      {
+        label: 'Developer Utilities',
+        click: () => getOrCreateDeveloperWindow(),
+      },
       {
         label: 'About',
         click: () => {

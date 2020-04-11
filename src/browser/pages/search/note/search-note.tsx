@@ -60,7 +60,7 @@ const SearchNote = () => {
     <Container>
       <Title>
         <h4>QUICK NOTES</h4>
-        <span>{`(You've searched '${noteInDb?.text}' ${(noteInDb?.updateTimes ?? 0) + 1} times)`}</span>
+        <span>{`(You've searched '${noteInDb?.text}' ${(noteInDb?.update_times ?? 0) + 1} times)`}</span>
         <span>
           <ThemedTooltip title={searchState.splitPaneButtonUp ? 'maximize' : 'minimize'}>
           <Button type="link" shape="circle" ghost onClick={() => {

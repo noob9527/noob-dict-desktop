@@ -8,9 +8,11 @@ class Database extends Dexie {
 
   constructor(databaseName: string) {
     super(databaseName);
+    // see https://dexie.org/docs/Version/Version.stores()
+    // we use create_at as local primary key
     this.version(1).stores({
-      histories: '++id,user_id,text,createAt,updateAt',
-      notes: '++id,user_id,text,updateAt',
+      histories: 'id,create_at,update_at,user_id,text',
+      notes: 'id,create_at,update_at,user_id,text',
     });
     this.histories = this.table('histories'); // Just informing Typescript what Dexie has already done...
     this.notes = this.table('notes');

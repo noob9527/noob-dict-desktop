@@ -1,9 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import { ThemedContent } from '../../components/themed-ui/content/content';
-import { ThemedButton } from '../../components/themed-ui/button/button';
 import { githubOption, weiboOption } from '../../../common/social-login';
-import { Icon } from 'antd';
 import { GithubButton, WeiboButton } from '../../components/themed-ui/button/social-button';
 
 const Container = styled.div`

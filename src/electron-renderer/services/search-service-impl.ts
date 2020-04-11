@@ -20,7 +20,7 @@ export class CorsSearchService implements SearchService {
       // if text is empty string, we fetch from notes
       const notes = await this.noteService.fetchLatest(20, user_id);
       return notes.map(e => {
-        const firstMeaning = e.searchResult?.definitions[0]?.meanings[0];
+        const firstMeaning = e.search_result?.definitions[0]?.meanings[0];
         return {
           entry: e.text,
           explain: firstMeaning?.ZH ?? firstMeaning?.EN,

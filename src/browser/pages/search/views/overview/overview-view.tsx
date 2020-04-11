@@ -25,8 +25,8 @@ const OverviewView: React.FC = () => {
       <ThemedEmpty/>
     );
   }
-  const first = _.minBy(histories, e => e.createAt);
-  const chronoUnit = first ? getChronoUnit(new Date(first.createAt)) : ChronoUnit.DAY;
+  const first = _.minBy(histories, e => e.create_at);
+  const chronoUnit = first ? getChronoUnit(new Date(first.create_at)) : ChronoUnit.DAY;
   const data = group(histories, chronoUnit);
   return (
     <Container>
@@ -60,7 +60,7 @@ export default OverviewView;
 function group(histories: ISearchHistory[], chronoUnit: ChronoUnit) {
   return _.chain(histories)
     .groupBy(e => {
-      const date = new Date(e.createAt);
+      const date = new Date(e.create_at);
       if (chronoUnit === ChronoUnit.DAY) {
         return date.toISOString().slice(0, 10);
       } else if (chronoUnit === ChronoUnit.MONTH) {

@@ -38,7 +38,7 @@ const effects = {
   //   }
   //   const note = new Note({
   //     text: primaryResult.target,
-  //     searchResult: primaryResult,
+  //     search_result: primaryResult,
   //   });
   //   yield call(NoteService.save, note);
   //   yield put({

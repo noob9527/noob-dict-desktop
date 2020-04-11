@@ -59,7 +59,8 @@
     "redux-saga": "^1.1.1",
     "reflect-metadata": "^0.1.13",
     "styled-components": "^4.4.1",
-    "typescript": "^3.7.3"
+    "typescript": "^3.7.3",
+    "uuid": "^7.0.3"
   },
   "devDependencies": {
     "@babel/core": "7.4.3",

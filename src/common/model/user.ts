@@ -16,9 +16,9 @@ export interface User {
   locale: string | null | undefined
   phone_number: string | null | undefined
 
-  create_at: Date
-  update_at: Date
-  last_sync_time: Date
+  create_at: string
+  update_at: string
+  last_sync_time: string
 
   id_token: string | null | undefined
 }

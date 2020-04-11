@@ -37,7 +37,7 @@ const Container = styled.div`
 const HistoryTable: React.FC<HistoryViewProps> = (props) => {
   const dispatch = useDispatch();
   const histories = _.sortBy(Object.values(props.histories), e => {
-    return -e.oldData.createAt;
+    return -e.oldData.create_at;
   });
   return (
     <>
@@ -59,7 +59,7 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
               <tr key={(e.id ?? 0).toString()}>
                 <td>
                   {
-                    i ? moment(e.oldData.createAt).format('YYYY-MM-DD HH:mm:ss')
+                    i ? moment(e.oldData.create_at).format('YYYY-MM-DD HH:mm:ss')
                       : 'Current'
                   }
                 </td>

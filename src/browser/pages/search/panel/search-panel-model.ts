@@ -91,7 +91,7 @@ function* fetchResults(action: FetchResultsAction) {
       const history = {
         text,
         user_id: rootState.currentUser?.id ?? '',
-        searchResult: simplifyResult(result)
+        search_result: simplifyResult(result)
       };
       // fetch from notes
       yield put({

@@ -3,6 +3,7 @@ enum WindowId {
   SETTING = 'SETTING',
   POPUP = 'POPUP',
   LOGIN = 'LOGIN',
+  DEVELOPER = 'DEVELOPER',
   // VERSION = 'VERSION',
 }
 

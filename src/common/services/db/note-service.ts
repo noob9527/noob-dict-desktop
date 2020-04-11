@@ -16,5 +16,9 @@ export interface NoteService {
   // this method will cascade fetch corresponding histories
   addHistory(history: ISearchHistory): Promise<INote>
 
+  // if history is new, call addHistory
+  // else just update history
+  syncHistory(history: ISearchHistory): Promise<void>
+
   // addHistories(histories: ISearchHistory[]): Promise<ISearchHistory[]>
 }

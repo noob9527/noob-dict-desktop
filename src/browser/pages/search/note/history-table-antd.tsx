@@ -17,13 +17,13 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
   const { histories } = props;
 
   const dataSource = _.chain(histories)
-    .sortBy(e => e.createAt)
+    .sortBy(e => e.create_at)
     .map((e, i) => {
       const first = i === 0;
       return {
         ...e,
         first,
-        createAtStr: first ? 'Current' : moment(e.createAt).format('YYYY-MM-DD HH:mm:ss'),
+        createAtStr: first ? 'Current' : moment(e.create_at).format('YYYY-MM-DD HH:mm:ss'),
         key: i,
       };
     }).value();

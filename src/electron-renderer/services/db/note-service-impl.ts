@@ -5,10 +5,13 @@ import { INote, Note } from '../../../common/model/note';
 import { HistoryService, HistoryServiceToken } from '../../../common/services/db/history-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { ISearchHistory } from '../../../common/model/history';
+import { v4 as uuidv4 } from 'uuid';
+import logger from '../../../common/utils/logger';
 
 @injectable()
 export class DexieNoteService implements NoteService {
   private historyService: HistoryService;
+  private log = logger.getLogger(DexieNoteService.name);
 
   constructor() {
     this.historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
@@ -34,7 +37,7 @@ export class DexieNoteService implements NoteService {
   // https://github.com/dfahlander/Dexie.js/issues/297#issuecomment-236725797
   async fetchLatest(limit: number, user_id: string = ''): Promise<INote[]> {
     return database.notes
-      .orderBy('updateAt')
+      .orderBy('update_at')
       .reverse()
       .filter(e => e.user_id === user_id)
       .limit(limit)
@@ -42,38 +45,63 @@ export class DexieNoteService implements NoteService {
   }
 
   async addHistory(history: ISearchHistory): Promise<INote> {
+    this.log.debug(this.addHistory.name, history);
+
+    await this.historyService.add(history);
     let note = await this.fetch(history.text, history.user_id);
     if (!note) {
       note = Note.create({
         user_id: history.user_id,
-        searchResult: history.searchResult,
-        text: history.text,
-        histories: [history],
+        search_result: history.search_result,
+        text: history.text
       });
+      await this.add(note)
     } else {
-      note.histories.push(history);
+      await this.update(note);
     }
-    return this.saveOrUpdate(note);
+    note.histories.push(history);
+    return note;
   }
 
-  // cascade handle add/remove/update history
-  async saveOrUpdate(note: INote): Promise<INote> {
-    if (note.id) {
-      // update
-      note.updateTimes++;
-      note.updateAt = (new Date()).getTime();
-      await database.notes.update(note.id, {
-        updateAt: note.updateAt,
-        updateTimes: note.updateTimes,
-      });
+  /**
+   * sync history with server
+   * called after sync2server request success
+   *
+   * create or update a history(without changing its update_at property)
+   * @param history
+   */
+  async syncHistory(history: ISearchHistory): Promise<void> {
+    this.log.debug(this.syncHistory.name, history);
+
+    const existed = await database.histories
+      .where('id')
+      .equals(history.id!!)
+      .first();
+    if (existed) {
+      this.log.debug(this.syncHistory.name, 'update history');
+      // we do not call this.update as we don't want to change history.update_at
+      await database.histories.update(history.id!!, history);
     } else {
-      // create
-      note.id = await database.notes.add(note);
+      await this.addHistory(history)
     }
-    // cascade persist history
-    const promises = note.histories.filter(e => !e.id)
-      .map(e => this.historyService.add(e));
-    await Promise.all(promises);
+  }
+
+  async add(note: INote): Promise<INote> {
+    const now = new Date().valueOf();
+    note.id = uuidv4();
+    note.create_at = now;
+    note.update_at = now;
+    await database.notes.add(note);
+    return note;
+  }
+
+  async update(note: INote): Promise<INote> {
+    note.update_times++;
+    note.update_at = (new Date()).valueOf();
+    await database.notes.update(note.id!!, {
+      update_at: note.update_at,
+      updateTimes: note.update_times,
+    });
     return note;
   }
 

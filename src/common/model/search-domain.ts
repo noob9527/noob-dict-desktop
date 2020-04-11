@@ -13,8 +13,8 @@ export interface Context {
   remark: string
 }
 
-export function simplifyResult(searchResult: SearchSuccessResult) {
-  const definitions = searchResult.definitions.map(e => ({
+export function simplifyResult(search_result: SearchSuccessResult) {
+  const definitions = search_result.definitions.map(e => ({
     ...e,
     examples: undefined,
   }));

@@ -23,6 +23,10 @@ import { UserService, UserServiceToken } from '../../common/services/user-servic
 import { CorsUserService } from './user-service-impl';
 import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
 import { ElectronLoginUiService } from './login-ui-service-impl';
+import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
+import { GlobalHistoryServiceImpl } from './global-history-service-impl';
+import { LocalStorageService, LocalStorageServiceToken } from '../../common/services/LocalStorageService';
+import { LocalStorageServiceImpl } from './local-storage-service-impl';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -35,6 +39,8 @@ function registerAllService() {
   rendererContainer.bind<AppService>(AppServiceToken).to(ElectronAppService);
   rendererContainer.bind<UserService>(UserServiceToken).to(CorsUserService);
   rendererContainer.bind<LoginUiService>(LoginUiServiceToken).to(ElectronLoginUiService);
+  rendererContainer.bind<GlobalHistoryService>(GlobalHistoryServiceToken).to(GlobalHistoryServiceImpl);
+  rendererContainer.bind<LocalStorageService>(LocalStorageServiceToken).to(LocalStorageServiceImpl);
 
   // db
   rendererContainer.bind<HistoryService>(HistoryServiceToken).to(DexieHistoryService);

@@ -104,7 +104,7 @@ const reducers = {
   },
 };
 
-const appModel: SearchModel = {
+const searchModel: SearchModel = {
   namespace: 'search',
   state: {
     pinned: false,
@@ -116,7 +116,7 @@ const appModel: SearchModel = {
   sagas: [watchSelectionTextChange],
 };
 
-export default appModel;
+export default searchModel;
 
 
 function* watchSelectionTextChange() {

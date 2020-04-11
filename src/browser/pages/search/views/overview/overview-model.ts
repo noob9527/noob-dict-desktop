@@ -4,7 +4,7 @@ import { LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router';
 import { ISearchHistory } from '../../../../../common/model/history';
 import { rendererContainer } from '../../../../../common/container/renderer-container';
 import {
-  HistorySearchParam,
+  HistoryCreateAtSearchParam,
   HistoryService,
   HistoryServiceToken,
 } from '../../../../../common/services/db/history-service';
@@ -14,7 +14,7 @@ import { RootState } from '../../../root-model';
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
 
 export interface OverviewState {
-  searchParams: HistorySearchParam,
+  searchParams: HistoryCreateAtSearchParam,
   histories: ISearchHistory[],
 }
 
@@ -37,7 +37,7 @@ const effects = {
     const overviewState: OverviewState = yield select((state: any) => state.overview);
     const { searchParams } = overviewState;
     searchParams.user_id = rootState?.currentUser?.id ?? '';
-    let histories = yield call([historyService, historyService.search], searchParams);
+    let histories = yield call([historyService, historyService.searchByCreateAt], searchParams);
     yield put({
       type: 'overview/mergeState',
       payload: {
