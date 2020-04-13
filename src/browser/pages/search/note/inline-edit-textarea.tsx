@@ -3,7 +3,6 @@ import styled from 'styled-components';
 import { ThemedTextArea } from '../../../components/themed-ui/input/textarea';
 import ColorId from '../../../styles/ColorId';
 import { usePrevious } from '../../../hooks/use-previous';
-import { Icon } from 'antd';
 
 const Container = styled.div`
   .inline-edit-textarea-display {
@@ -38,7 +37,6 @@ interface InlineEditTextareaProps {
   value?: string
   onChange?: (value) => void
   placeholder?: string
-  showLoading?: boolean
   editing?: boolean
   onEditingChange?: (value: boolean) => void
   autoFocus?: boolean
@@ -57,7 +55,6 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
     placeholder,
     onChange,
     onEditingChange,
-    showLoading,
     autoFocus,
   } = props;
 
@@ -74,18 +71,6 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
     }
   }, [editing]);
 
-  // focus on textArea
-  const previousEditing = usePrevious(isEditing);
-  useEffect(() => {
-    if (autoFocus && !previousEditing && isEditing) {
-      // a simple hack
-      // https://stackoverflow.com/questions/35522220/react-ref-with-focus-doesnt-work-without-settimeout-my-example
-      setTimeout(() => {
-        textAreaEle?.current?.focus();
-      }, 1);
-    }
-  }, [autoFocus, previousEditing, isEditing]);
-
   return (
     <Container>
       <div hidden={isEditing} className={'inline-edit-textarea-display'}>
@@ -94,12 +79,13 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
               onEditingChange(true);
             } else {
               setEditing(true);
-              // // a simple hack
-              // // https://stackoverflow.com/questions/35522220/react-ref-with-focus-doesnt-work-without-settimeout-my-example
-              // setTimeout(() => {
-              //   textAreaEle?.current?.focus();
-              // }, 1);
             }
+            // focus on textArea
+            setTimeout(() => {
+              if (autoFocus) {
+                textAreaEle?.current?.focus();
+              }
+            }, 100);
           }}>
             {value?.trim() ? value : placeholder}
           </span>
@@ -107,20 +93,12 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
       <EditorContainer hidden={!isEditing} className={'inline-edit-textarea-edit'}>
         <ThemedTextArea
           ref={textAreaEle}
-          onBlur={event => {
-            if (onEditingChange) {
-              onEditingChange(false);
-            } else {
-              setEditing(false);
-            }
-          }}
           value={value}
           placeholder={placeholder}
           autoSize={{ minRows: 1 }}
           // allowClear={true} // doesn't work since we have a blur handler
           onChange={e => onChange?.call(null, e.currentTarget.value)}
         />
-        <Icon className={showLoading ? 'loading' : ''} type="loading"/>
       </EditorContainer>
     </Container>
   );

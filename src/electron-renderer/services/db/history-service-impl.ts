@@ -65,4 +65,20 @@ export class DexieHistoryService implements HistoryService {
     return history;
   }
 
+  // fetch latest source
+  async fetchSourceSuggest(text: string, user_id: string): Promise<string[]> {
+    let res = await database.histories
+      .orderBy('update_at')
+      .reverse()
+      .filter(e => e.user_id === user_id
+        && !!e.context?.source?.trim() // source cannot be empty
+        && e.context!!.source!!.includes(text))
+      .toArray();
+
+    let tmp = res.map(e => e.context?.source ?? '')
+      // we do not use Set to remove duplicates as we want to maintain the order
+      .filter((e, i, a) => a.indexOf(e) === i);
+    return tmp.slice(0, 10);
+  }
+
 }

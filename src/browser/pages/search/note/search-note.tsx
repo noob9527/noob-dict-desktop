@@ -74,7 +74,7 @@ const SearchNote = () => {
         </span>
       </Title>
       <StyledScrollArea>
-        <HistoryTable histories={histories}/>
+        <HistoryTable/>
         {/*<HistoryGraph histories={histories}/>*/}
       </StyledScrollArea>
     </Container>

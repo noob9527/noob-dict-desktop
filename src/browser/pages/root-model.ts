@@ -11,6 +11,7 @@ import { User } from '../../common/model/user';
 import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
 import { setInterval } from 'timers';
 import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
+import electronIsDev from 'electron-is-dev';
 
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 const userService = rendererContainer.get<UserService>(UserServiceToken);
@@ -103,8 +104,15 @@ export function* watchClockEvent() {
   try {
     while (true) {
       // take(END) will cause the saga to terminate by jumping to the finally block
-      yield call([globalHistoryService, globalHistoryService.syncHistories]);
-      yield take(chan);
+      if (electronIsDev) {
+        // in dev mode
+        // we do not sync history after app initilized 
+        yield take(chan);
+        yield call([globalHistoryService, globalHistoryService.syncHistories]);
+      } else {
+        yield call([globalHistoryService, globalHistoryService.syncHistories]);
+        yield take(chan);
+      }
       // let times = yield take(chan);
       // console.log(`times: ${times}`);
     }

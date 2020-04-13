@@ -49,5 +49,7 @@ export interface HistoryService {
 
   searchByUpdateAt(param: HistoryUpdateAtSearchParam): Promise<ISearchHistory[]>
 
+  fetchSourceSuggest(text: string, user_id: string): Promise<string[]>
+
   // remove all
 }

@@ -24,6 +24,9 @@ export class CorsUserService implements UserService {
       redirect_uri: option.params.redirect_uri
     });
     const user = res.data;
+    // we remove last_sync_time here, otherwise won't able to fetch latest update item
+    // this may take a long while to finish
+    user.last_sync_time = (new Date(0)).toISOString()
     this.localStorageService.putObject(USER_KEY, user);
     return user;
   }

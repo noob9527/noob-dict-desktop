@@ -87,6 +87,7 @@ export class DexieNoteService implements NoteService {
   }
 
   async add(note: INote): Promise<INote> {
+    this.log.debug(this.add.name, note);
     const now = new Date().valueOf();
     note.id = uuidv4();
     note.create_at = now;
@@ -96,12 +97,14 @@ export class DexieNoteService implements NoteService {
   }
 
   async update(note: INote): Promise<INote> {
+    this.log.debug(this.update.name, 'before', note);
     note.update_times++;
     note.update_at = (new Date()).valueOf();
     await database.notes.update(note.id!!, {
       update_at: note.update_at,
-      updateTimes: note.update_times,
+      update_times: note.update_times,
     });
+    this.log.debug(this.update.name, 'after', note);
     return note;
   }
 

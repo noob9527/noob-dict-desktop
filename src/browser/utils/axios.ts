@@ -10,7 +10,7 @@ export function registerUserChangeListener(store) {
     const previousValue = currentUser;
     currentUser = select(store.getState());
     if (previousValue !== currentUser) {
-      axios.defaults.headers.common.tokenHeader = currentUser.id_token;
+      axios.defaults.headers.common.tokenHeader = currentUser?.id_token ?? '';
     }
   });
 }

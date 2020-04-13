@@ -1,11 +1,12 @@
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { INote } from '../../../../common/model/note';
 import { Model } from '../../../redux/common/redux-model';
-import { all, call, cancel, delay, fork, put, take, select } from '@redux-saga/core/effects';
+import { all, call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
 import { NoteService, NoteServiceToken } from '../../../../common/services/db/note-service';
 import { ISearchHistory } from '../../../../common/model/history';
 import { HistoryService, HistoryServiceToken } from '../../../../common/services/db/history-service';
 import _ from 'lodash';
+import { RootState } from '../../root-model';
 
 const noteService = rendererContainer.get<NoteService>(NoteServiceToken);
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
@@ -16,12 +17,15 @@ export interface DataWrapper<T> {
   typing: boolean,
   dirty: boolean,
   syncing: boolean,
+  showSpinner: boolean,
   oldData: T,
   newData: T,
 }
 
 export interface SearchNoteState {
   noteInDb: Maybe<INote>,
+  suggests: string[],
+  loadingSuggests: boolean,
   histories: {
     [index: number]: DataWrapper<ISearchHistory>
   }
@@ -30,6 +34,13 @@ export interface SearchNoteState {
 export interface SearchNoteModel extends Model {
   state: SearchNoteState
 }
+
+const state: SearchNoteState = {
+  suggests: [],
+  loadingSuggests: false,
+  noteInDb: null,
+  histories: {},
+};
 
 const effects = {
   * fetchOrCreateNote(action) {
@@ -44,6 +55,7 @@ const effects = {
           editing: i === arr.length - 1,
           dirty: false,
           syncing: false,
+          showSpinner: false,
           oldData: curr,
           newData: curr,
         },
@@ -61,8 +73,9 @@ const effects = {
   * syncHistoryContext(action) {
     const { history } = action.payload;
 
-    const searchNoteState: SearchNoteState = yield select(e => e.searchNote);
-    if (!searchNoteState.histories[history.id].dirty) return;
+    // somehow this may cause lost update
+    // const searchNoteState: SearchNoteState = yield select(e => e.searchNote);
+    // if (!searchNoteState.histories[history.id].dirty) return;
 
     yield put({
       type: 'searchNote/startSyncHistoryContext',
@@ -70,14 +83,24 @@ const effects = {
         history,
       },
     });
-    yield all([
-      call([historyService, historyService.update], history),
-      // to show the spinner...
-      delay(1000),
-    ]);
-    // yield call([historyService, historyService.update], history);
+    // yield all([
+    //   call([historyService, historyService.update], history),
+    //   // to show the spinner...
+    //   delay(1000),
+    // ]);
+    yield call([historyService, historyService.update], history);
+
     yield put({
       type: 'searchNote/finishSyncHistoryContext',
+      payload: {
+        history,
+      },
+    });
+
+    // we do not hide spinner during finish event
+    yield delay(1000);
+    yield put({
+      type: 'searchNote/hideSpinner',
       payload: {
         history,
       },
@@ -105,6 +128,38 @@ const effects = {
       },
     });
   },
+  // manually input search text
+  * inputSearchText(action) {
+    yield put({
+      type: 'searchNote/mergeState',
+      payload: {
+        loadingSuggests: true,
+      },
+    });
+  },
+  // manually input search text or select value from suggests
+  * searchTextChange(action) {
+    yield put({
+      type: 'searchNote/mergeState',
+      payload: {
+        text: action?.text,
+        // reset suggests after an option is selected
+        suggests: [],
+      },
+    });
+  },
+  * fetchSuggests(action) {
+    const rootState: RootState = yield select(state => state.root);
+    const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
+    const suggests = yield call([historyService, historyService.fetchSourceSuggest], action.text, rootState.currentUser?.id ?? '');
+    yield put({
+      type: 'searchNote/mergeState',
+      payload: {
+        suggests,
+        loadingSuggests: false,
+      },
+    });
+  },
 };
 
 const reducers = {
@@ -117,6 +172,7 @@ const reducers = {
         ...oldHistoryWrapper,
         typing: false,
         syncing: true,
+        showSpinner: true,
         newData: history,
       },
     };
@@ -144,6 +200,21 @@ const reducers = {
       histories,
     };
   },
+  hideSpinner(state, action) {
+    const { history } = action.payload;
+    const oldHistoryWrapper = state.histories[history.id];
+    const histories = {
+      ...state.histories,
+      [history.id]: {
+        ...oldHistoryWrapper,
+        showSpinner: false,
+      },
+    };
+    return {
+      ...state,
+      histories,
+    };
+  },
   typeHistoryContext(state, action) {
     const { history } = action.payload;
     const oldHistoryWrapper = state.histories[history.id];
@@ -152,9 +223,10 @@ const reducers = {
       [history.id]: {
         ...oldHistoryWrapper,
         typing: true,
-        dirty: history?.context?.paragraph !== oldHistoryWrapper?.context?.paragraph,
+        dirty: history?.context?.paragraph !== oldHistoryWrapper?.context?.paragraph
+          || history?.context?.source !== oldHistoryWrapper?.context?.source,
         syncing: false,
-        oldData: state.histories[history.id].oldData,
+        // oldData: state.histories[history.id].oldData,
         newData: history,
       },
     };
@@ -163,12 +235,15 @@ const reducers = {
       histories,
     };
   },
-  changeEditing(state, action) {
+  changeEditing(state: SearchNoteState, action) {
     const { payload } = action;
-    const histories = {
-      ...state.histories,
-      [payload.id]: payload,
-    };
+    const histories = { ...state.histories };
+    const current = _.maxBy(Object.values(histories), e => e.oldData.create_at);
+    Object.values(histories).forEach(e => {
+      e.editing = e.id === payload.id
+        // if it is the first element, we force the editing state
+        || e.id === current?.id;
+    });
     return {
       ...state,
       histories,
@@ -185,13 +260,10 @@ const reducers = {
 
 const searchNoteModel: SearchNoteModel = {
   namespace: 'searchNote',
-  state: {
-    noteInDb: null,
-    histories: {},
-  },
+  state,
   effects,
   reducers,
-  sagas: [watchTypeContext],
+  sagas: [watchTypeContext, watchSearchTextChange],
 };
 
 export default searchNoteModel;
@@ -213,6 +285,27 @@ function* watchTypeContext() {
     yield put({
       ...action,
       type: 'searchNote/syncHistoryContext',
+    });
+  }
+}
+
+function* watchSearchTextChange() {
+  yield fork(function* () {
+    let task;
+    while (true) {
+      const action = yield take('searchNote/inputSearchText');
+      if (task) {
+        yield cancel(task);
+      }
+      task = yield fork(debouncedFetchSuggests, action);
+    }
+  });
+
+  function* debouncedFetchSuggests(action) {
+    yield delay(300);
+    yield put({
+      ...action,
+      type: 'searchNote/fetchSuggests',
     });
   }
 }
