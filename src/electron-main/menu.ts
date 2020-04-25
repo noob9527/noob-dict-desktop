@@ -28,13 +28,18 @@ function getOrCreateAppMenu() {
 }
 
 function createMenu(): Menu {
-  const helpMenu: Electron.MenuItemConstructorOptions = {
-    role: 'help',
+  const toolMenu: Electron.MenuItemConstructorOptions = {
+    label: 'Tool',
     submenu: [
       {
         label: 'Developer Utilities',
         click: () => getOrCreateDeveloperWindow(),
       },
+    ]
+  };
+  const helpMenu: Electron.MenuItemConstructorOptions = {
+    role: 'help',
+    submenu: [
       {
         label: 'About',
         click: () => {
@@ -81,6 +86,7 @@ function createMenu(): Menu {
     { role: 'editMenu' },
     { role: 'viewMenu' },
     { role: 'windowMenu' },
+    toolMenu,
     helpMenu
   ];
   return Menu.buildFromTemplate(template);
