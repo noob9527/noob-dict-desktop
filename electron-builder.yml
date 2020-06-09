@@ -4,7 +4,7 @@ copyright: Copyright © 2019 ${author}
 mac:
   # https://www.electron.build/configuration/mac
   category: public.app-category.utilities
-  icon: 'build/assets/icon.icns'
+  icon: 'build/assets/icon/icon.icns'
 linux:
   # https://www.electron.build/configuration/linux
   # do not specify icon here, use icon.icns generate linux icon instead
@@ -18,3 +18,6 @@ directories:
   buildResources: 'build/assets'
 publish:
   provider: github
+#asar: false
+asarUnpack:
+  - 'build/assets/opencv/**/*'

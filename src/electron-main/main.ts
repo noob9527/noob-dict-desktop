@@ -6,10 +6,8 @@ import { getOrCreateSearchWindow, showSearchWindow } from './window/search-windo
 import globalState from './global-state';
 import contextMenu from 'electron-context-menu';
 import { initialSetting } from './setting';
-import isDev from 'electron-is-dev';
 import { getOrCreateAppMenu } from './menu';
 import { initialAutoUpdater } from './auto-update';
-import gitInfo from './utils/git-info';
 
 contextMenu({
   showInspectElement: true,

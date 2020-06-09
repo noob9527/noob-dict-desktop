@@ -13,6 +13,7 @@
     "email": "2061864@qq.com"
   },
   "scripts": {
+    "electron-rebuild": "electron-rebuild install-app-deps",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint:fix": "eslint --fix src --ext .ts,.tsx",
     "renderer:start": "BROWSER=none node scripts/start.js",

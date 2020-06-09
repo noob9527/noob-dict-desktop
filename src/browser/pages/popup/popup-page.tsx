@@ -9,6 +9,7 @@ import { rendererContainer } from "../../../common/container/renderer-container"
 import { SearchUiService, SearchUiServiceToken } from "../../../common/services/search-ui-service";
 import { ClipboardService, ClipboardServiceToken } from "../../../common/services/clipboard-service";
 import { PopupUiService, PopupUiServiceToken } from "../../../common/services/popup-ui-service";
+import { removeNormalizeStyle } from '../../utils/style-utils';
 
 const Popup = styled.div`
   // https://electronjs.org/docs/api/frameless-window
@@ -49,24 +50,5 @@ const PopupPage = () => {
     </Popup>
   );
 };
-
-function removeNormalizeStyle() {
-  const res = Array.from(document.querySelectorAll('style'));
-  const normalizeStyle = res.find(e => isNormalizeStyle(e.innerText));
-  if (normalizeStyle) {
-    logger.log('normalize css removed');
-    normalizeStyle.parentNode?.removeChild(normalizeStyle);
-  }
-}
-
-function isNormalizeStyle(text: String): boolean {
-  const t = `
-html,
-body {
-  width: 100%;
-  height: 100%;
-}`;
-  return text.includes(t);
-}
 
 export default PopupPage;

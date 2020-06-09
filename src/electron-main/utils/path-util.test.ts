@@ -1,8 +1,8 @@
-import { getAssetsPath } from './path-util';
+import { getIconPath } from './path-util';
 
 describe('path-util', () => {
   it('getAssetsPath', () => {
-    const res = getAssetsPath('iconTemplate.png');
+    const res = getIconPath('iconTemplate.png');
     expect(res).toContain('assets/iconTemplate.png');
   });
 });

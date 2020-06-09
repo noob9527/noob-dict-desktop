@@ -1,7 +1,7 @@
 import { app, Menu, Tray } from 'electron';
 import logger from '../../common/utils/logger';
 import { showSearchWindow } from '../window/search-window';
-import { getAssetsPath } from '../utils/path-util';
+import { getIconPath } from '../utils/path-util';
 import { mainContainer } from '../../common/container/main-container';
 
 export {
@@ -19,7 +19,7 @@ function getOrCreateTray() {
 
 function createTray() {
   const iconName = 'icon.png';
-  const iconPath = getAssetsPath(iconName);
+  const iconPath = getIconPath(iconName);
 
   const tray = new Tray(iconPath);
   const menu = createMenu();

@@ -6,7 +6,7 @@ import * as path from 'path';
 import globalState from '../global-state';
 import * as os from 'os';
 import * as fs from 'fs';
-import { getAssetsPath, getWindowHashUrl } from '../utils/path-util';
+import { getIconPath, getWindowHashUrl } from '../utils/path-util';
 import { getOrCreateSettingWindow } from './setting-window';
 import { ipcMain } from 'electron-better-ipc';
 import { SearchChannel } from '../../common/ipc-channel';
@@ -65,7 +65,7 @@ function createWindow() {
   const window = new BrowserWindow({
     width: isDev ? 1600 : 800,
     height: 600,
-    icon: getAssetsPath('icon.png'),
+    icon: getIconPath('icon.png'),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron

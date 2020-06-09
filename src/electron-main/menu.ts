@@ -7,7 +7,7 @@
 import { Menu } from 'electron';
 import { mainContainer } from '../common/container/main-container';
 import openAboutWindow from 'about-window';
-import { getAssetsPath, getBuildPath } from './utils/path-util';
+import { getIconPath, getBuildPath } from './utils/path-util';
 import { APP_CONSTANTS } from '../common/app-constants';
 import gitInfo from './utils/git-info';
 import { getOrCreateSearchWindow } from './window/search-window';
@@ -44,7 +44,7 @@ function createMenu(): Menu {
         label: 'About',
         click: () => {
           openAboutWindow({
-            icon_path: getAssetsPath('icon@32x.png'),
+            icon_path: getIconPath('icon@32x.png'),
             product_name: APP_CONSTANTS.PRODUCT_NAME,
             copyright: APP_CONSTANTS.COPYRIGHT,
             homepage: APP_CONSTANTS.HOME_PAGE,
