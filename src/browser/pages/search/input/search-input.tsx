@@ -1,11 +1,11 @@
 import React, { KeyboardEvent, useEffect, useRef } from 'react';
 import styles from './search-input.module.scss';
 import { Input, Select, Spin } from 'antd';
-import { useDispatch, useSelector } from 'dva';
 import { SelectValue } from 'antd/es/select';
 import { SearchInputState } from './search-input-model';
 import { usePrevious } from '../../../hooks/use-previous';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Suggestion = styled.div`
   width: 100%;

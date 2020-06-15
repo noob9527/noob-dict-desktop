@@ -1,7 +1,6 @@
 import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'dva';
 import { SearchNoteState } from './search-note-model';
 import HistoryGraph from './history-graph';
 import { SearchPanelState } from '../panel/search-panel-model';
@@ -9,6 +8,7 @@ import HistoryTable from './history-table';
 import { Button, Icon, Tooltip } from 'antd';
 import { SearchState } from '../search-model';
 import { ThemedTooltip } from '../../../components/themed-ui/tooltip/tooltip';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Title = styled.header`
   margin: 10px 0;

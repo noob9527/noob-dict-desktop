@@ -3,11 +3,10 @@ import styled from 'styled-components';
 import moment from 'moment';
 import _ from 'lodash';
 import { Icon } from 'antd';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { SearchNoteState } from './search-note-model';
 import { InlineEditTextarea } from './inline-edit-textarea';
 import { InlineEditText } from './inline-edit-text';
-import { useSelector } from 'dva';
 
 interface HistoryViewProps {
 }

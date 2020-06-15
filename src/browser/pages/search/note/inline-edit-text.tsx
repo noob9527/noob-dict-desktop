@@ -7,8 +7,7 @@ import { ThemedInput } from '../../../components/themed-ui/input/input';
 import { DataWrapper, SearchNoteState } from './search-note-model';
 import { ISearchHistory } from '../../../../common/model/history';
 import { SelectValue } from 'antd/es/select';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'dva';
+import { useDispatch, useSelector } from 'react-redux';
 
 const Suggestion = styled.div`
   width: 100%;
