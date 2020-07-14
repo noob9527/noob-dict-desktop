@@ -2,14 +2,15 @@ import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
 import { AutoUpdaterChannel } from '../common/ipc-channel';
 import { windowContainer } from './window/windows';
+import logger from '../common/utils/logger';
 
 export {
   initialAutoUpdater,
-}
+};
 
 function initialAutoUpdater() {
   // log.transports.file.level = 'info';
-  // autoUpdater.logger = log;
+  autoUpdater.logger = logger;
 
   autoUpdater.on(AutoUpdaterChannel.CHECKING_FOR_UPDATE, (info) => {
     broadcast(AutoUpdaterChannel.CHECKING_FOR_UPDATE, info);

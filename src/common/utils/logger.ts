@@ -15,6 +15,8 @@ import { Runtime } from './runtime';
 interface Logger {
   log(...args: any[]): void;
 
+  info(...args: any[]): void;
+
   debug(...args: any[]): void;
 
   warn(...args: any[]): void;
@@ -43,6 +45,10 @@ class LoggerImpl implements Logger {
   }
 
   log(...args: any[]): void {
+    internalLogger.log(...this.addPrefix(...args));
+  }
+
+  info(...args: any[]): void {
     internalLogger.log(...this.addPrefix(...args));
   }
 
