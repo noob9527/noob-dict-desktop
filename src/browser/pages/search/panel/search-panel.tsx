@@ -5,7 +5,7 @@ import OverviewView from '../views/overview/overview-view';
 import EngineView from '../views/engine/engine-view';
 import styled from 'styled-components';
 
-const Container = styled(ScrollArea)`
+const StyledScrollArea = styled(ScrollArea)`
   &.scrollarea {
     padding: 15px;
     height: 100%;
@@ -23,7 +23,7 @@ const Container = styled(ScrollArea)`
 
 export default () => {
   return (
-    <Container>
+    <StyledScrollArea focusableTabIndex={-1}>
       <Switch>
         {/*<Route path="/search/tab1" component={() => <div>tab1</div>}/>*/}
         {/*<Route path="/search/tab2" component={() => <div>tab2</div>}/>*/}
@@ -31,7 +31,7 @@ export default () => {
         <Route path="/search/engine_view/:engine" component={EngineView}/>
         <Route component={EngineView}/>
       </Switch>
-    </Container>
+    </StyledScrollArea>
   );
 }
 

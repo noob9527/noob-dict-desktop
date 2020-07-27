@@ -62,6 +62,7 @@ export default () => {
       {/*</ThemedTooltip>*/}
       <ThemedTooltip placement="bottom" title={'pin window'}>
         <Button
+          tabIndex={-1}
           type="link"
           shape="circle"
           onClick={() => {

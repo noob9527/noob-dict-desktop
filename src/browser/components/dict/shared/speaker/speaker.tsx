@@ -52,6 +52,7 @@ const Speaker: React.FC<SpeakerProp> = (props) => {
   return (
     <>
       <AudioButton
+        tabIndex={-1}
         className={playing ? 'isActive' : ''}
         onClick={handleClick}>
         <audio

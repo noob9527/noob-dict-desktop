@@ -63,7 +63,7 @@ const SearchNote = () => {
         <span>{`(You've searched '${noteInDb?.text}' ${(noteInDb?.update_times ?? 0) + 1} times)`}</span>
         <span>
           <ThemedTooltip title={searchState.splitPaneButtonUp ? 'maximize' : 'minimize'}>
-          <Button type="link" shape="circle" ghost onClick={() => {
+          <Button tabIndex={-1} type="link" shape="circle" ghost onClick={() => {
             dispatch({
               type: 'search/togglePaneSize',
             });
@@ -73,7 +73,7 @@ const SearchNote = () => {
           </ThemedTooltip>
         </span>
       </Title>
-      <StyledScrollArea>
+      <StyledScrollArea focusableTabIndex={-1}>
         <HistoryTable/>
         {/*<HistoryGraph histories={histories}/>*/}
       </StyledScrollArea>

@@ -18,7 +18,7 @@ const MenuItemElement: React.FC<any> = (props) => {
   });
   className += match ? ' active' : '';
   return (
-    <li className={className}><Link to={to}>{children}</Link></li>
+    <li className={className}><Link tabIndex={-1} to={to}>{children}</Link></li>
   );
 };
 

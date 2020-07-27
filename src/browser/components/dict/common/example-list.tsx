@@ -39,7 +39,7 @@ const ExampleItem: React.FC<ExampleItemProp> = (props: ExampleItemProp) => {
         {/*<span>{en}</span>*/}
         <Highlight sentence={en} highlightWords={highlightWordSet}/>
         <ThemedTooltip title={'save as context'}>
-          <Button type="link" shape="circle" ghost onClick={() => {
+          <Button tabIndex={-1} type="link" shape="circle" ghost onClick={() => {
             dispatch({
               type: 'searchNote/saveExampleToContext',
               payload: {
