@@ -69,8 +69,8 @@ function toggleSearchWindow(option: { isSettingWindowOpen: boolean } = { isSetti
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: isDev ? 1600 : 800,
-    height: 600,
+    width: isDev ? 1600 : 1200,
+    height: 900,
     icon: getIconPath('icon.png'),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),

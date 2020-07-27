@@ -32,8 +32,12 @@ const internalLogger = Runtime.isRenderer() ? timber : log;
 class LoggerImpl implements Logger {
 
   constructor(
-    private prefix?: string
+    private prefix?: string,
   ) {
+    // otherwise this line
+    // `autoUpdater.logger = logger;`
+    // will throw error
+    this.addPrefix = this.addPrefix.bind(this);
   }
 
   debug(...args: any[]): void {
@@ -68,5 +72,5 @@ class LoggerImpl implements Logger {
 
 const logger = new LoggerImpl();
 
-export default logger as Logger
+export default logger as Logger;
 
