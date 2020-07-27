@@ -5,7 +5,7 @@ import {
   getOrCreateSearchWindow,
   hideSearchWindow,
   showSearchWindow,
-  toggleSearchWindow
+  toggleSearchWindow, topSearchWindow,
 } from './window/search-window';
 import { hidePopupWindow, showPopupWindow } from './window/popup-window';
 import logger from '../common/utils/logger';
@@ -43,6 +43,10 @@ ipcMain.answerRenderer(SearchChannel.SHOW_SEARCH_WINDOW, async (data: any) => {
 
 ipcMain.answerRenderer(SearchChannel.HIDE_SEARCH_WINDOW, async (data: any) => {
   return hideSearchWindow(data);
+});
+
+ipcMain.answerRenderer(SearchChannel.TOP_SEARCH_WINDOW, async (data: any) => {
+  return topSearchWindow(data);
 });
 
 ipcMain.answerRenderer(SearchChannel.SEARCH, async (data: any) => {

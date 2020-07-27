@@ -44,7 +44,7 @@ export default () => {
     if (!previousFocusInput && focusInput) {
       setTimeout(() => {
         selectEle?.current?.focus();
-      }, 1);
+      }, 100);
     }
   }, [previousFocusInput, focusInput]);
 

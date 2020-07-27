@@ -17,6 +17,10 @@ export class ElectronSearchUiService implements SearchUiService {
     return ipcRenderer.callMain(SearchChannel.HIDE_SEARCH_WINDOW);
   }
 
+  async topSearchWindow(option: { isSettingWindowOpen }) {
+    return ipcRenderer.callMain(SearchChannel.TOP_SEARCH_WINDOW, option);
+  }
+
   async search(option: { text: string }) {
     return ipcRenderer.callMain(SearchChannel.SEARCH, option);
   }

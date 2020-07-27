@@ -25,7 +25,7 @@ interface TransientModel extends Model {
   state: TransientState
 }
 
-const state: TransientState = {
+const transientState: TransientState = {
   focusInput: false,
   isSearchWindowOpen: !appService.getProcess().argv.includes('--background'),
   isSettingWindowOpen: false,
@@ -59,12 +59,38 @@ const effects = {
       isSettingWindowOpen: state.isSearchWindowOpen
     });
   },
-  * toggleSearchWindow() {
+  * topSearchWindow() {
+    const state: TransientState = yield select(state => state._transient);
+    yield call([searchUiService, searchUiService.showSearchWindow], {
+      isSettingWindowOpen: state.isSearchWindowOpen
+    });
+    // yield put({
+    //   type: '_transient/mergeState',
+    //   payload: {
+    //     focusInput: false,
+    //   }
+    // });
+    yield put({
+      type: '_transient/mergeState',
+      payload: {
+        focusInput: true,
+      }
+    });
+  },
+  * appHotKeyPressed() {
     const state: TransientState = yield select(state => state._transient);
     if (state.isSearchWindowOpen) {
-      yield put({
-        type: '_transient/hideSearchWindow'
-      });
+      if (state.focusInput) {
+        // if search input is focused, we hide the window
+        yield put({
+          type: '_transient/hideSearchWindow'
+        });
+      } else {
+        // else, we focus on input
+        yield put({
+          type: '_transient/topSearchWindow'
+        });
+      }
     } else {
       yield put({
         type: '_transient/showSearchWindow'
@@ -150,7 +176,7 @@ const reducers = {
 
 const transientModel: TransientModel = {
   namespace: '_transient',
-  state,
+  state: transientState,
   effects,
   reducers,
 };

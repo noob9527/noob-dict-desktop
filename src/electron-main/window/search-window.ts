@@ -18,6 +18,7 @@ export {
   toggleSearchWindow,
   showSearchWindow,
   hideSearchWindow,
+  topSearchWindow,
 };
 
 function getOrCreateSearchWindow(): BrowserWindow {
@@ -47,6 +48,11 @@ function hideSearchWindow(option: { isSettingWindowOpen: boolean } = { isSetting
   if (option.isSettingWindowOpen) getOrCreateSettingWindow().hide();
   const window = getOrCreateSearchWindow();
   window.hide();
+}
+
+function topSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+  const window = getOrCreateSearchWindow();
+  window.moveTop();
 }
 
 function toggleSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {

@@ -7,6 +7,8 @@ export interface SearchUiService {
 
   hideSearchWindow(option: { isSettingWindowOpen })
 
+  topSearchWindow(option: { isSettingWindowOpen })
+
   search(option: { text: string })
 
   // return if current state is pinned

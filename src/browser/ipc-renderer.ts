@@ -52,7 +52,7 @@ function registerStorageEventListener(store: Store) {
     ipcRenderer.answerMain(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, async () => {
       logger.log(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, new Date());
       store.dispatch({
-        type: '_transient/toggleSearchWindow',
+        type: '_transient/appHotKeyPressed',
       });
     });
     // listen setting window event
