@@ -143,9 +143,9 @@ const InlineEditText: React.FC<InlineEditTextProps> = (props) => {
       type: 'searchNote/typeHistoryContext',
       payload: {
         history: {
-          ...historyWrapper.oldData,
+          ...historyWrapper.newData,
           context: {
-            ...historyWrapper.oldData.context,
+            ...historyWrapper.newData.context,
             source: text,
           },
         },

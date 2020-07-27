@@ -71,7 +71,8 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
           <tbody>
           {histories
             .filter((e, i) => {
-              return !i || e.oldData.context!!;
+              return !i // always show first element
+                || (e.oldData.context?.paragraph || e.oldData.context?.source);
             })
             .map((e, i) => (
               <tr key={(e.id ?? 0).toString()}>
