@@ -51,10 +51,17 @@ export class GlobalHistoryServiceImpl implements GlobalHistoryService {
     });
     methodLogger.debug('receive item size', res.itemSinceLastSync.length);
 
-    const promises = res.itemSinceLastSync.map(history => {
-      return this.noteService.syncHistory(history);
-    });
-    await Promise.all(promises);
+    // const promises = res.itemSinceLastSync.map(history => {
+    //   return this.noteService.syncHistory(history);
+    // });
+    // await Promise.all(promises);
+
+    // for now, we have to process it one by one
+    // otherwise we may encounter concurrent related issue
+    // e.g. Error: "Key already exists in the object store."
+    for (const history of res.itemSinceLastSync) {
+      await this.noteService.syncHistory(history);
+    }
 
     // update last sync time
     this.updateLastSyncTime(new Date(res.serverLastSyncTime));
