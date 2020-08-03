@@ -67,12 +67,14 @@ export class DexieHistoryService implements HistoryService {
 
   // fetch latest source
   async fetchSourceSuggest(text: string, user_id: string): Promise<string[]> {
+    // ignore case
+    let textLowerCase = text.toLowerCase();
     let res = await database.histories
       .orderBy('update_at')
       .reverse()
       .filter(e => e.user_id === user_id
         && !!e.context?.source?.trim() // source cannot be empty
-        && e.context!!.source!!.includes(text))
+        && e.context!!.source!!.toLowerCase().includes(textLowerCase))
       .toArray();
 
     let tmp = res.map(e => e.context?.source ?? '')

@@ -13,20 +13,8 @@ export class CorsSearchService implements SearchService {
     this.noteService = rendererContainer.get<NoteService>(NoteServiceToken);
   }
 
-  async fetchSuggests(text: string, user_id: string): Promise<Suggest[]> {
-    if (text) {
-      return getSuggests(text);
-    } else {
-      // if text is empty string, we fetch from notes
-      const notes = await this.noteService.fetchLatest(20, user_id);
-      return notes.map(e => {
-        const firstMeaning = e.search_result?.definitions[0]?.meanings[0];
-        return {
-          entry: e.text,
-          explain: firstMeaning?.ZH ?? firstMeaning?.EN,
-        };
-      });
-    }
+  async fetchSuggests(text: string): Promise<Suggest[]> {
+    return getSuggests(text);
   }
 
   async fetchResult(text: string, option: SearchOption): Promise<SearchResult> {

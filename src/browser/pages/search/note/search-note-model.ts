@@ -35,7 +35,7 @@ export interface SearchNoteModel extends Model {
   state: SearchNoteState
 }
 
-const state: SearchNoteState = {
+const initState: SearchNoteState = {
   suggests: [],
   loadingSuggests: false,
   noteInDb: null,
@@ -150,7 +150,6 @@ const effects = {
   },
   * fetchSuggests(action) {
     const rootState: RootState = yield select(state => state.root);
-    const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
     const suggests = yield call([historyService, historyService.fetchSourceSuggest], action.text, rootState.currentUser?.id ?? '');
     yield put({
       type: 'searchNote/mergeState',
@@ -260,7 +259,7 @@ const reducers = {
 
 const searchNoteModel: SearchNoteModel = {
   namespace: 'searchNote',
-  state,
+  state: initState,
   effects,
   reducers,
   sagas: [watchTypeContext, watchSearchTextChange],
