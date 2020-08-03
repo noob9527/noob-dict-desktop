@@ -23,6 +23,7 @@ export interface RootState {
   app: {
     version: String
   }
+  showLoginIndicator: boolean
   currentUser: User | null | undefined
 }
 
@@ -38,21 +39,30 @@ const effects = {
   * [LoginChannel.LOGIN_CODE_RECEIVED](action) {
     const { payload } = action;
     let user = null;
+    yield put({
+      type: 'root/mergeState',
+      payload: { showLoginIndicator: true },
+    });
     try {
       user = yield call([userService, userService.login], payload.code, payload.loginOption);
     } catch (e) {
       logger.error('fail to fetch user info');
     }
-    if (!user) return;
-    yield put({
-      type: 'root/loginSuccess',
-      payload: { user }
-    });
+    if (user) {
+      yield put({
+        type: 'root/loginSuccess',
+        payload: { user },
+      });
+    } else {
+      yield put({
+        type: 'root/loginFailed',
+      });
+    }
   },
   * logout() {
     yield put({
       type: 'root/mergeState',
-      payload: { currentUser: null }
+      payload: { currentUser: null },
     });
     yield call([userService, userService.logout]);
   },
@@ -62,13 +72,20 @@ const reducers = {
   loginSuccess(state, action: any) {
     return {
       ...state,
-      currentUser: action.payload.user
-    }
+      currentUser: action.payload.user,
+      showLoginIndicator: false,
+    };
+  },
+  loginFailed(state) {
+    return {
+      ...state,
+      showLoginIndicator: false,
+    };
   },
   mergeState(state, action: any) {
     return {
       ...state,
-      ...action.payload
+      ...action.payload,
     };
   },
 };
@@ -78,8 +95,9 @@ const rootModel: RootModel = {
   state: {
     theme: dark,
     app: {
-      version: appService.getVersion()
+      version: appService.getVersion(),
     },
+    showLoginIndicator: false,
     currentUser: userService.fetchCurrentUserFromStorage(),
   },
   effects,
@@ -106,7 +124,7 @@ export function* watchClockEvent() {
       // take(END) will cause the saga to terminate by jumping to the finally block
       if (electronIsDev) {
         // in dev mode
-        // we do not sync history after app initilized 
+        // we do not sync history after app initilized
         yield take(chan);
         yield call([globalHistoryService, globalHistoryService.syncHistories]);
       } else {
@@ -136,7 +154,7 @@ function interval(maxTime: number) {
       // The subscriber must return an unsubscribe function
       return () => {
         clearInterval(iv);
-      }
-    }
-  )
+      };
+    },
+  );
 }

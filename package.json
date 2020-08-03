@@ -118,6 +118,7 @@
     "node-sass": "^4.13.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "parcel-bundler": "^1.12.4",
+    "parcel-plugin-electron-dotenv": "^0.1.0",
     "pnp-webpack-plugin": "1.2.1",
     "postcss-flexbugs-fixes": "4.1.0",
     "postcss-loader": "3.0.0",

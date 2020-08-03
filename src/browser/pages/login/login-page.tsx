@@ -22,12 +22,12 @@ const LoginPage = () => {
             window.location.href = githubOption.url;
           }}
         >Login with GitHub</GithubButton>
-        <WeiboButton
-          icon="weibo"
-          onClick={() => {
-            window.location.href = weiboOption.url;
-          }}
-        >Login with Weibo</WeiboButton>
+        {/*<WeiboButton*/}
+        {/*  icon="weibo"*/}
+        {/*  onClick={() => {*/}
+        {/*    window.location.href = weiboOption.url;*/}
+        {/*  }}*/}
+        {/*>Login with Weibo</WeiboButton>*/}
       </Container>
     </ThemedContent>
   )

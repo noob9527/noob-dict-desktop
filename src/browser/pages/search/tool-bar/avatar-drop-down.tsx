@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../root-model';
-import { Avatar, Dropdown, Icon, Menu } from 'antd';
+import { Avatar, Dropdown, Icon, Menu, Spin } from 'antd';
 import styled from 'styled-components';
 import { ThemedTooltip } from '../../../components/themed-ui/tooltip/tooltip';
 import ColorId from '../../../styles/ColorId';
@@ -9,6 +9,22 @@ import ColorId from '../../../styles/ColorId';
 
 const Container = styled.div`
   cursor: pointer;
+`;
+
+const SpinContainer = styled.div`
+  width: 32px;
+  height: 32px;
+  display: flex;
+`;
+
+const StyledSpin = styled(Spin)`
+  &.ant-spin-spinning {
+    margin: auto;
+    display: inline-flex;
+    &.ant-spin-dot-spin {
+      margin: auto;
+    }
+  }
 `;
 
 const ThemedMenu = styled(Menu)`
@@ -28,19 +44,27 @@ const AvatarDropDown: React.FC = () => {
   const rootState: RootState = useSelector((state: any) => state.root);
 
   if (!rootState.currentUser) {
-    return (
-      <Container
-        onClick={() => {
-          dispatch({ type: 'root/login' });
-        }}>
-        {/* eslint-disable-next-line react/jsx-no-undef */}
-        <ThemedTooltip title={'login'}>
-          <Avatar
-            icon={<Icon type={'user'}/>}
-          />
-        </ThemedTooltip>
-      </Container>
-    )
+    if (rootState.showLoginIndicator) {
+      return (
+        <SpinContainer>
+          <StyledSpin/>
+        </SpinContainer>
+      );
+    } else {
+      return (
+        <Container
+          onClick={() => {
+            dispatch({ type: 'root/login' });
+          }}>
+          {/* eslint-disable-next-line react/jsx-no-undef */}
+          <ThemedTooltip title={'login'}>
+            <Avatar
+              icon={<Icon type={'user'}/>}
+            />
+          </ThemedTooltip>
+        </Container>
+      );
+    }
   } else {
     return (
       <Container>
@@ -55,7 +79,7 @@ const AvatarDropDown: React.FC = () => {
           }
         </Dropdown>
       </Container>
-    )
+    );
   }
 
   function getDropdownMenu() {
@@ -75,8 +99,8 @@ const AvatarDropDown: React.FC = () => {
           退出登录
         </Menu.Item>
       </ThemedMenu>
-    )
+    );
   }
 };
 
-export { AvatarDropDown }
+export { AvatarDropDown };

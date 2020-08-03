@@ -7,7 +7,7 @@ import { LoginChannel } from '../../common/ipc-channel';
 import { getWindowHashUrl } from '../utils/path-util';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-constants';
-import { extractCode, getLoginOption, getLoginType } from '../../common/social-login';
+import { extractCode, getLoginOption, getLoginType, githubOption } from '../../common/social-login';
 
 export {
   getOrCreateLoginWindow,
@@ -55,6 +55,36 @@ function createWindow() {
   // https://stackoverflow.com/a/47926513
   window.loadURL(getWindowHashUrl('login'));
 
+  // this works when we don't have related cookie(e.g. the first time we login)
+  // see https://auth0.com/blog/securing-electron-applications-with-openid-connect-and-oauth-2/
+  const filter = {
+    urls: [`${githubOption.params.redirect_uri}*`],
+  };
+  logger.debug('[onBeforeRequest] register filter:', filter);
+  window.webContents.session.webRequest.onBeforeRequest(filter, async ({ url }) => {
+    logger.debug('[onBeforeRequest] url:', url);
+    const code = extractCode(url);
+    logger.debug('[onBeforeRequest] extract code:', code);
+    if (code) {
+      // Close the browser if code found or error
+      window.close();
+
+      const loginType = getLoginType(url);
+      logger.debug('[will-redirect] loginType:', loginType);
+      if (!loginType) return;
+      const loginOption = getLoginOption(loginType);
+      // logger.debug('[will-redirect] loginOption:', loginOption);
+
+      ipcMain.callRenderer(parent, LoginChannel.LOGIN_CODE_RECEIVED, {
+        code,
+        loginType,
+        loginOption,
+      });
+    }
+  });
+
+  // this only works when we have corresponding cookie
+  // we keep this block cuz it produces better user experience(it won't create then close a blank window)
   // we handle success login event here
   window.webContents.on('will-redirect', (event, url, ...args) => {
     const oldUrl = window.webContents.getURL();
@@ -103,6 +133,10 @@ function createWindow() {
   window.on('show', e => {
     logger.log('login window show');
     ipcMain.callRenderer(parent, LoginChannel.LOGIN_WINDOW_OPENED, e);
+    // to mimic the 1st time login behavior
+    // session.defaultSession.clearStorageData({
+    //   storages: ['cookies'],
+    // });
   });
   window.on('closed', async () => {
     ipcMain.callRenderer(parent, LoginChannel.LOGIN_WINDOW_CLOSED);

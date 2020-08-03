@@ -9599,6 +9599,11 @@ parcel-bundler@^1.12.4:
     v8-compile-cache "^2.0.0"
     ws "^5.1.1"
 
+parcel-plugin-electron-dotenv@^0.1.0:
+  version "0.1.0"
+  resolved "https://registry.npm.taobao.org/parcel-plugin-electron-dotenv/download/parcel-plugin-electron-dotenv-0.1.0.tgz#90123a8d1ec8a5dc80109f76f5dd6b9ebb3104e7"
+  integrity sha1-kBI6jR7IpdyAEJ929d1rnrsxBOc=
+
 parent-module@^1.0.0:
   version "1.0.1"
   resolved "https://registry.npm.taobao.org/parent-module/download/parent-module-1.0.1.tgz#691d2709e78c79fae3a156622452d00762caaaa2"
