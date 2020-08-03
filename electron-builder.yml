@@ -7,10 +7,13 @@ mac:
   icon: 'build/assets/icon/icon.icns'
 linux:
   # https://www.electron.build/configuration/linux
-  # do not specify icon here, use icon.icns generate linux icon instead
+  # do not specify icon here
+  # "Linux icon set will be generated automatically based on the macOS icns file or common icon.png."
   target: 'AppImage'
   publish:
     - github
+win:
+  icon: 'build/assets/icon/icon@16x.png'
 files:
   - 'build/**/*'
   - 'node_modules/**/*'

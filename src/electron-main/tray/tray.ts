@@ -3,6 +3,7 @@ import logger from '../../common/utils/logger';
 import { showSearchWindow } from '../window/search-window';
 import { getIconPath } from '../utils/path-util';
 import { mainContainer } from '../../common/container/main-container';
+import { APP_CONSTANTS } from '../../common/app-constants';
 
 export {
   getOrCreateTray,
@@ -23,7 +24,7 @@ function createTray() {
 
   const tray = new Tray(iconPath);
   const menu = createMenu();
-  tray.setToolTip('Electron Demo in the tray.');
+  tray.setToolTip(APP_CONSTANTS.PRODUCT_NAME);
   tray.setContextMenu(menu);
 
   tray.on('click', () => {
