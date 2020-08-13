@@ -2,11 +2,12 @@
 import { Store } from 'redux';
 import { ipcRenderer } from 'electron-better-ipc';
 import {
+  AppChannel,
   AutoUpdaterChannel,
   GlobalShotCutChannel,
   LoginChannel,
   SearchChannel,
-  SettingChannel
+  SettingChannel,
 } from '../common/ipc-channel';
 import { getWindowId } from './utils/window-utils';
 import { WindowId } from '../common/window-constants';
@@ -14,6 +15,7 @@ import { rendererContainer } from '../common/container/renderer-container';
 import { SettingService, SettingServiceToken } from '../common/services/setting-service';
 import { ClipboardService, ClipboardServiceToken } from '../common/services/clipboard-service';
 import logger from '../common/utils/logger';
+import { GlobalHistoryService, GlobalHistoryServiceToken } from '../common/services/global-history-service';
 
 function registerStorageEventListener(store: Store) {
   logger.debug('register storage event listener');
@@ -61,6 +63,15 @@ function registerStorageEventListener(store: Store) {
     });
     ipcRenderer.answerMain(SettingChannel.SETTING_WINDOW_CLOSED, async () => {
       store.dispatch({ type: `_transient/${SettingChannel.SETTING_WINDOW_CLOSED}`, });
+    });
+    // listen app event
+    ipcRenderer.answerMain(AppChannel.APP_QUITING, async () => {
+      store.dispatch({ type: `_transient/${AppChannel.APP_QUITING}`, });
+      const globalHistoryService = rendererContainer.get<GlobalHistoryService>(GlobalHistoryServiceToken);
+      logger.log('about to sync history')
+      await globalHistoryService.syncHistories()
+      logger.log('sync history success!')
+      return true;
     });
 
     // listen search event

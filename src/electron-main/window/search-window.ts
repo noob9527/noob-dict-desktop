@@ -1,4 +1,4 @@
-import { BrowserWindow } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import logger from '../../common/utils/logger';
 import isDev from 'electron-is-dev';
 import { getOrCreateTray } from '../tray/tray';
@@ -9,7 +9,7 @@ import * as fs from 'fs';
 import { getIconPath, getWindowHashUrl } from '../utils/path-util';
 import { getOrCreateSettingWindow } from './setting-window';
 import { ipcMain } from 'electron-better-ipc';
-import { SearchChannel } from '../../common/ipc-channel';
+import { AppChannel, SearchChannel } from '../../common/ipc-channel';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-constants';
 
@@ -105,12 +105,24 @@ function createWindow() {
       window.show();
     }
   });
-  window.on('close', e => {
+
+  let allowAppQuit = false;
+  window.on('close', async e => {
     // close to tray
     // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
     if (!globalState.isQuiting) {
       e.preventDefault();
       window.hide();
+    } else {
+      if (!allowAppQuit) {
+        e.preventDefault();
+        logger.log('app is quiting');
+        allowAppQuit = await ipcMain.callRenderer(window, AppChannel.APP_QUITING, e) as boolean;
+        if (allowAppQuit) {
+          logger.log('app is ready to quit');
+          app.quit();
+        }
+      }
     }
   });
 
@@ -120,7 +132,7 @@ function createWindow() {
     // in an array if your app supports multi windows, this is the time
     // when you should delete the corresponding element.
     destroy();
-    logger.log('closed');
+    logger.log('search window closed');
   });
 
   window.on('show', e => {
