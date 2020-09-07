@@ -36,8 +36,8 @@ dark[ColorId.dropdown_border] = Color('#D4D4D4');
 // list
 // dark[ColorId.list_activeSelectionBackground] = Color('#094771');
 // dark[ColorId.list_activeSelectionForeground] = Color('#3C3C3C');
-// dark[ColorId.list_hoverBackground] = Color('#F0F0F0');
-// dark[ColorId.list_hoverForeground] = Color('#3C3C3C');
+dark[ColorId.list_hoverBackground] = Color('rebeccapurple');
+dark[ColorId.list_hoverForeground] = Color('#D4D4D4');
 
 // non stable
 dark[ColorId.heart] = Color('#eb2f96');

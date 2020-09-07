@@ -3,7 +3,7 @@ import { Link, useRouteMatch } from 'react-router-dom';
 import styled from 'styled-components';
 import ColorId from '../../../styles/ColorId';
 
-const Menu = styled.ul`
+const SearchPanelMenu = styled.ul`
   background-color: ${props => props.theme[ColorId.tab_inactiveBackground]};
   color: ${props => props.theme[ColorId.tab_inactiveForeground]};
   margin: 0;
@@ -22,7 +22,7 @@ const MenuItemElement: React.FC<any> = (props) => {
   );
 };
 
-const MenuItem = styled(MenuItemElement)`
+const SearchPanelMenuItem = styled(MenuItemElement)`
     display: inline-block;
     //border-bottom: none;
     //position: relative;
@@ -54,7 +54,7 @@ const MenuItem = styled(MenuItemElement)`
 `;
 
 export {
-  Menu,
-  MenuItem
+  SearchPanelMenu,
+  SearchPanelMenuItem
 };
 

@@ -1,13 +1,15 @@
 import {
   HistoryCreateAtSearchParam,
+  HistoryParam,
   HistoryService,
-  HistoryUpdateAtSearchParam
+  HistoryUpdateAtSearchParam,
 } from '../../../common/services/db/history-service';
 import { ISearchHistory, SearchHistory } from '../../../common/model/history';
 import database from './database';
 import { injectable } from 'inversify';
 import { v4 as uuidv4 } from 'uuid';
 import logger from '../../../common/utils/logger';
+import { Page } from '../../../common/model/page';
 
 @injectable()
 export class DexieHistoryService implements HistoryService {
@@ -18,6 +20,31 @@ export class DexieHistoryService implements HistoryService {
       .where({ text, user_id })
       .toArray();
     return res.map(e => SearchHistory.wrap(e));
+  }
+
+  async list(param: HistoryParam): Promise<Page<ISearchHistory>> {
+    const sourceLikeLowerCase = param.sourceLike?.toLowerCase();
+    const textLikeLowerCase = param.textLike?.toLowerCase();
+
+    const { page, size } = param;
+    const start = (page - 1) * size;
+    const end = start + size;
+
+    const res = await database.histories
+      .orderBy('create_at')
+      .reverse()
+      .filter(e => e.user_id === param.user_id
+        // source like
+        && (sourceLikeLowerCase == null || (!!e.context?.source?.trim() // source cannot be empty
+          && e.context!!.source!!.toLowerCase().includes(sourceLikeLowerCase)))
+        // text like
+        && (textLikeLowerCase == null || e.text.toLowerCase().includes(textLikeLowerCase))
+      ).toArray();
+    const items = res.slice(start, end);
+    return {
+      totalCount: res.length,
+      items,
+    };
   }
 
   async searchByCreateAt(param: HistoryCreateAtSearchParam): Promise<ISearchHistory[]> {

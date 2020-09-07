@@ -1,26 +1,16 @@
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { INote } from '../../../../common/model/note';
 import { Model } from '../../../redux/common/redux-model';
-import { all, call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
+import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
 import { NoteService, NoteServiceToken } from '../../../../common/services/db/note-service';
 import { ISearchHistory } from '../../../../common/model/history';
 import { HistoryService, HistoryServiceToken } from '../../../../common/services/db/history-service';
 import _ from 'lodash';
 import { RootState } from '../../root-model';
+import { DataWrapper } from '../../../../common/model/data-wrapper';
 
 const noteService = rendererContainer.get<NoteService>(NoteServiceToken);
 const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
-
-export interface DataWrapper<T> {
-  id: number,
-  editing: boolean,
-  typing: boolean,
-  dirty: boolean,
-  syncing: boolean,
-  showSpinner: boolean,
-  oldData: T,
-  newData: T,
-}
 
 export interface SearchNoteState {
   noteInDb: Maybe<INote>,

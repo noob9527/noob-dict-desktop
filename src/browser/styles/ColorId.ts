@@ -27,6 +27,10 @@ enum ColorId {
   tab_activeBackground = 'tab.activeBackground',
   tab_inactiveBackground = 'tab.inactiveBackground',
 
+  // list
+  list_hoverBackground = 'list.hoverBackground',
+  list_hoverForeground = 'list.hoverForeground',
+
   // dropdown
   dropdown_foreground = 'dropdown.foreground',
   dropdown_background = 'dropdown.background',

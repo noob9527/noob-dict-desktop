@@ -1,9 +1,18 @@
 import { ISearchHistory } from '../../model/history';
+import { Page } from '../../model/page';
 
 export const HistoryServiceToken = Symbol.for('history-service');
 
+
 interface HistorySearchParam {
   user_id: string
+}
+
+export interface HistoryParam extends HistorySearchParam {
+  textLike?: string | null
+  sourceLike?: string | null
+  page: number
+  size: number
 }
 
 export interface HistoryCreateAtSearchParam extends HistorySearchParam {
@@ -44,6 +53,8 @@ export interface HistoryService {
    * @param user_id
    */
   findAll(text: string, user_id: string): Promise<ISearchHistory[]>
+
+  list(param: HistoryParam): Promise<Page<ISearchHistory>>
 
   searchByCreateAt(param: HistoryCreateAtSearchParam): Promise<ISearchHistory[]>
 

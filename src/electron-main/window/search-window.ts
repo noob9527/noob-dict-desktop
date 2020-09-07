@@ -98,7 +98,7 @@ function createWindow() {
   // Menu.setApplicationMenu(null);
   // window.setAutoHideMenuBar(true);
 
-  window.loadURL(getWindowHashUrl());
+  window.loadURL(getWindowHashUrl('main/search'));
 
   window.once('ready-to-show', () => {
     if(!process.argv.includes('--background')) {

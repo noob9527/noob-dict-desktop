@@ -5,7 +5,7 @@ import SearchToolBar from './tool-bar/search-tool-bar';
 import ColorId from '../../styles/ColorId';
 import { SearchPanelState } from './panel/search-panel-model';
 import { useDispatch, useSelector } from 'react-redux';
-import { Menu, MenuItem } from './panel/search-panel-menu';
+import { SearchPanelMenu, SearchPanelMenuItem } from './panel/search-panel-menu';
 import { ThemedContent } from '../../components/themed-ui/content/content';
 import styled from 'styled-components';
 import SearchNote from './note/search-note';
@@ -77,7 +77,7 @@ export default () => {
 
   const engineMenuItems = Object.keys(searchPanelState.searchResultMap)
     .filter(e => !!e)
-    .map(e => <MenuItem key={e} to={`/search/engine_view/${e}`}>{e}</MenuItem>);
+    .map(e => <SearchPanelMenuItem key={e} to={`/search/engine_view/${e}`}>{e}</SearchPanelMenuItem>);
   return (
     <SearchPage>
       <Header>
@@ -86,13 +86,13 @@ export default () => {
       </Header>
       <Content>
         <nav>
-          <Menu>
+          <SearchPanelMenu>
             {/*<MenuItem to={'/search/overview'}>OVERVIEW</MenuItem>*/}
             {engineMenuItems}
             {/*{histories.length ? <MenuItem to={'/search/history'}></MenuItem> : null}*/}
             {/*<MenuItem to={'/search/tab1'}>tab1</MenuItem>*/}
             {/*<MenuItem to={'/search/tab2'}>tab2</MenuItem>*/}
-          </Menu>
+          </SearchPanelMenu>
         </nav>
         <ThemedContent>
           {showSearchNote ?

@@ -9,6 +9,7 @@ import searchToolBar from './search/tool-bar/search-tool-bar-model';
 import transientModel from './transient-model';
 import overview from './search/views/overview/overview-model';
 import developer from './developer/developer-model';
+import { tableModel } from './table/table-model';
 
 export {
   root,
@@ -22,5 +23,6 @@ export {
   searchToolBar,
   overview,
   developer,
+  tableModel,
 };
 
