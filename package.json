@@ -36,7 +36,7 @@
     "bizcharts": "^3.5.5",
     "color": "^3.1.2",
     "connected-react-router": "^6.5.2",
-    "dexie": "^2.0.4",
+    "dexie": "^3.2.2",
     "effective-enum": "^0.0.3",
     "electron-better-ipc": "^0.7.0",
     "electron-context-menu": "^0.15.0",
