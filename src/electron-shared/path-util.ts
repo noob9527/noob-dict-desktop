@@ -1,8 +1,5 @@
 import * as path from 'path';
-import isDev from 'electron-is-dev';
-import { Runtime } from '../../common/utils/runtime';
-import { remote } from 'electron';
-
+import { Runtime } from './runtime';
 const assetsPath = 'assets';
 const iconPath = 'icon';
 
@@ -14,7 +11,7 @@ export {
 }
 
 function getWindowStaticUrl(): string {
-  return isDev
+  return Runtime.isDev
     ? 'http://localhost:3000/'
     : `file://${path.join(__dirname, '..', 'build', 'index.html')}`
 }
@@ -29,10 +26,14 @@ function getWindowHashUrl(hashbang: string = ''): string {
 }
 
 function getBuildPath(relativePath: string = '') {
-  const root = Runtime.isRenderer()
-    ? remote.app.getAppPath() + '/build'
+  let root: string;
+  if (Runtime.isRenderer()) {
+    const remote = require('@electron/remote');
+    root = remote.app.getAppPath()
+  } else {
     // note that __dirname will be evaluated to the build directory at runtime
-    : __dirname
+    root = __dirname
+  }
   return path.join(root, ...relativePath.split('/'));
 }
 

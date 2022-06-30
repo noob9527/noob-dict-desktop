@@ -1,4 +1,4 @@
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 
 export {
   removeNormalizeStyle

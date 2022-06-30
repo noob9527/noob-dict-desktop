@@ -8,7 +8,7 @@ import { SettingState } from './setting/setting-model';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { WindowId } from '../../common/window-constants';
 import { getWindowId } from '../utils/window-utils';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 
 const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);

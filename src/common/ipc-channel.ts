@@ -42,12 +42,12 @@ enum LoginChannel {
 }
 
 enum AutoUpdaterChannel {
-  CHECKING_FOR_UPDATE = 'CHECKING_FOR_UPDATE',
-  UPDATE_AVAILABLE = 'UPDATE_AVAILABLE',
-  UPDATE_NOT_AVAILABLE = 'UPDATE_NOT_AVAILABLE',
-  ERROR = 'ERROR',
-  DOWNLOAD_PROGRESS = 'DOWNLOAD_PROGRESS',
-  UPDATE_DOWNLOADED = 'UPDATE_DOWNLOADED',
+  CHECKING_FOR_UPDATE = 'checking-for-update',
+  UPDATE_AVAILABLE = 'update-available',
+  UPDATE_NOT_AVAILABLE = 'update-not-available',
+  ERROR = 'error',
+  DOWNLOAD_PROGRESS = 'download-progress',
+  UPDATE_DOWNLOADED = 'update-downloaded',
 }
 
 enum AppChannel {

@@ -14,7 +14,7 @@ import { WindowId } from '../common/window-constants';
 import { rendererContainer } from '../common/container/renderer-container';
 import { SettingService, SettingServiceToken } from '../common/services/setting-service';
 import { ClipboardService, ClipboardServiceToken } from '../common/services/clipboard-service';
-import logger from '../common/utils/logger';
+import logger from '../electron-shared/logger';
 import { GlobalHistoryService, GlobalHistoryServiceToken } from '../common/services/global-history-service';
 
 function registerStorageEventListener(store: Store) {

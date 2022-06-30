@@ -1,12 +1,13 @@
 import { BrowserWindow } from 'electron';
-import isDev from 'electron-is-dev';
 import { getOrCreateSearchWindow } from './search-window';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 import { ipcMain } from 'electron-better-ipc';
 import { SearchChannel, SettingChannel } from '../../common/ipc-channel';
-import { getWindowHashUrl } from '../utils/path-util';
+import { getWindowHashUrl } from '../../electron-shared/path-util';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-constants';
+import * as remoteMain from '@electron/remote/main';
+import { Runtime } from '../../electron-shared/runtime';
 
 export {
   getOrCreateSettingWindow,
@@ -26,7 +27,7 @@ function createWindow() {
   // https://electronjs.org/docs/api/browser-window#modal-windows
   const parent = getOrCreateSearchWindow();
   const window = new BrowserWindow({
-    width: isDev ? 400 : 400,
+    width: Runtime.isDev ? 400 : 400,
     height: 200,
     modal: true,
     resizable: false,
@@ -40,10 +41,13 @@ function createWindow() {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,
+      // see https://github.com/electron-userland/electron-forge/issues/2567
+      contextIsolation: false,
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
     },
   });
+  remoteMain.enable(window.webContents);
   window.setMenuBarVisibility(false);
 
   // Load a remote URL
@@ -55,7 +59,7 @@ function createWindow() {
   });
   window.on('show', e => {
     logger.log('setting window show');
-    ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_OPENED, e);
+    ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_OPENED);
   });
   window.on('closed', async () => {
     ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_CLOSED);
@@ -63,7 +67,7 @@ function createWindow() {
     logger.log(`${WindowId.SETTING} closed`);
   });
 
-  if (isDev) {
+  if (Runtime.isDev) {
     // window.webContents.openDevTools();
   }
 

@@ -6,7 +6,7 @@ import { HistoryService, HistoryServiceToken } from '../../../common/services/db
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { ISearchHistory } from '../../../common/model/history';
 import { v4 as uuidv4 } from 'uuid';
-import logger from '../../../common/utils/logger';
+import logger from '../../../electron-shared/logger';
 
 @injectable()
 export class DexieNoteService implements NoteService {

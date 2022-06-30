@@ -8,7 +8,7 @@ import { ISearchHistory, SearchHistory } from '../../../common/model/history';
 import database from './database';
 import { injectable } from 'inversify';
 import { v4 as uuidv4 } from 'uuid';
-import logger from '../../../common/utils/logger';
+import logger from '../../../electron-shared/logger';
 import { Page } from '../../../common/model/page';
 
 @injectable()

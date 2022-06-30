@@ -8,7 +8,7 @@ import {
   toggleSearchWindow, topSearchWindow,
 } from './window/search-window';
 import { hidePopupWindow, showPopupWindow } from './window/popup-window';
-import logger from '../common/utils/logger';
+import logger from '../electron-shared/logger';
 import { handleSettingChange } from './setting';
 import { UserProfile } from '../common/model/user-profile';
 import { getOrCreateLoginWindow } from './window/login-window';

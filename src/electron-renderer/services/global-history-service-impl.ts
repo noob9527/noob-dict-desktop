@@ -7,7 +7,7 @@ import { injectable } from 'inversify';
 import { HistoryService, HistoryServiceToken } from '../../common/services/db/history-service';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { NoteService, NoteServiceToken } from '../../common/services/db/note-service';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
 import axios from 'axios';
 import { APP_CONSTANTS } from '../../common/app-constants';

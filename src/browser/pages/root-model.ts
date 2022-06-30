@@ -6,12 +6,12 @@ import { rendererContainer } from '../../common/container/renderer-container';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
 import { LoginChannel } from '../../common/ipc-channel';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 import { User } from '../../common/model/user';
 import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
 import { setInterval } from 'timers';
 import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
-import electronIsDev from 'electron-is-dev';
+import { Runtime } from '../../electron-shared/runtime';
 
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 const userService = rendererContainer.get<UserService>(UserServiceToken);
@@ -122,9 +122,9 @@ export function* watchClockEvent() {
   try {
     while (true) {
       // take(END) will cause the saga to terminate by jumping to the finally block
-      if (electronIsDev) {
+      if (Runtime.isDev) {
         // in dev mode
-        // we do not sync history after app initilized
+        // we do not sync history immediately after app is initialized
         yield take(chan);
         yield call([globalHistoryService, globalHistoryService.syncHistories]);
       } else {

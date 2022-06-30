@@ -7,7 +7,7 @@
 import { Menu } from 'electron';
 import { mainContainer } from '../common/container/main-container';
 import openAboutWindow from 'about-window';
-import { getIconPath, getBuildPath } from './utils/path-util';
+import { getIconPath, getBuildPath } from '../electron-shared/path-util';
 import { APP_CONSTANTS } from '../common/app-constants';
 import gitInfo from './utils/git-info';
 import { getOrCreateSearchWindow } from './window/search-window';

@@ -1,12 +1,13 @@
 import { BrowserWindow, screen } from 'electron';
-import isDev from 'electron-is-dev';
 import * as path from 'path';
 import { mainContainer } from '../../common/container/main-container';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 import { ipcMain } from 'electron-better-ipc';
 import { SearchChannel } from '../../common/ipc-channel';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-constants';
+import * as remoteMain from '@electron/remote/main';
+import { Runtime } from '../../electron-shared/runtime';
 
 export {
   getOrCreatePopupWindow,
@@ -56,9 +57,9 @@ function createWindow() {
   // create a popup window
   // https://electronjs.org/docs/api/frameless-window
   const window = new BrowserWindow({
-    width: isDev ? 50 : 50,
+    width: Runtime.isDev ? 50 : 50,
     height: 50,
-    // width: isDev ? 800 : 800,
+    // width: Runtime.isDev ? 800 : 800,
     // height: 800,
     transparent: true,
     frame: false,
@@ -69,15 +70,18 @@ function createWindow() {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,
+      // see https://github.com/electron-userland/electron-forge/issues/2567
+      contextIsolation: false,
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
     },
   });
+  remoteMain.enable(window.webContents);
   // window.setMenuBarVisibility(false);
 
   // Load a remote URL
   // https://stackoverflow.com/a/47926513
-  window.loadURL(isDev
+  window.loadURL(Runtime.isDev
     ? 'http://localhost:3000/#/popup'
     : `file://${path.join(__dirname, '../build/index.html')}#/popup`,
   );

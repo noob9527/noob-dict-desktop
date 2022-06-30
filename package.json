@@ -29,6 +29,7 @@
     "release": "cross-env NODE_OPTIONS=--max_old_space_size=8192 CI=false npm run renderer:build && npm run main:build && electron-builder build"
   },
   "dependencies": {
+    "@electron/remote": "^2.0.8",
     "@noob9527/noob-dict-core": "^0.0.1",
     "about-window": "https://github.com/noob9527/electron-about-window.git#build",
     "antd": "^3.26.7",
@@ -38,13 +39,11 @@
     "connected-react-router": "^6.5.2",
     "dexie": "^2.0.4",
     "effective-enum": "^0.0.3",
-    "electron-better-ipc": "^0.7.0",
+    "electron-better-ipc": "^2.0.1",
     "electron-context-menu": "^0.15.0",
-    "electron-is-dev": "^1.1.0",
     "electron-log": "^4.1.0",
-    "electron-store": "^5.1.0",
-    "electron-timber": "^0.5.1",
-    "electron-updater": "^4.2.5",
+    "electron-store": "^8.0.2",
+    "electron-updater": "^5.0.5",
     "history": "^4.10.1",
     "inversify": "^5.0.1",
     "moment": "^2.24.0",
@@ -63,9 +62,8 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
-    "@babel/core": "7.4.3",
-    "@babel/plugin-proposal-nullish-coalescing-operator": "^7.7.4",
-    "@babel/plugin-proposal-optional-chaining": "^7.7.5",
+    "@babel/core": "^7.0.0-0",
+    "@babel/preset-env": "^7.0.0-0",
     "@jest-runner/electron": "^2.0.2",
     "@svgr/webpack": "4.1.0",
     "@types/color": "^3.0.0",
@@ -80,8 +78,8 @@
     "@typescript-eslint/eslint-plugin": "1.6.0",
     "@typescript-eslint/parser": "1.6.0",
     "babel-eslint": "10.0.1",
-    "babel-jest": "^24.8.0",
-    "babel-loader": "8.0.5",
+    "babel-jest": "^28.1.1",
+    "babel-loader": "8.2.5",
     "babel-plugin-import": "^1.12.2",
     "babel-plugin-named-asset-import": "^0.3.2",
     "babel-preset-react-app": "^9.0.0",
@@ -93,8 +91,8 @@
     "css-loader": "2.1.1",
     "dotenv": "6.2.0",
     "dotenv-expand": "4.2.0",
-    "electron": "^7.3.3",
-    "electron-builder": "^21.2.0",
+    "electron": "^19.0.6",
+    "electron-builder": "^23.1.0",
     "electron-reload": "^1.5.0",
     "eslint": "^5.16.0",
     "eslint-config-react-app": "^4.0.1",
@@ -115,7 +113,6 @@
     "jest-resolve": "24.7.1",
     "jest-watch-typeahead": "0.3.0",
     "mini-css-extract-plugin": "0.5.0",
-    "node-sass": "^4.13.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
     "parcel-bundler": "^1.12.4",
     "parcel-plugin-electron-dotenv": "^0.1.0",
@@ -128,7 +125,8 @@
     "react-app-polyfill": "^1.0.1",
     "react-dev-utils": "^9.0.1",
     "resolve": "1.10.0",
-    "sass-loader": "7.1.0",
+    "sass": "^1.53.0",
+    "sass-loader": "10",
     "semver": "6.0.0",
     "source-map-explorer": "^2.1.2",
     "style-loader": "0.23.1",
@@ -157,9 +155,6 @@
     "presets": [
       "react-app"
     ],
-    "plugins": [
-      "@babel/plugin-proposal-optional-chaining",
-      "@babel/plugin-proposal-nullish-coalescing-operator"
-    ]
+    "plugins": []
   }
 }

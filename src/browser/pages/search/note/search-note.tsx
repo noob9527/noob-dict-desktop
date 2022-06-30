@@ -2,7 +2,7 @@ import React from 'react';
 import ScrollArea from 'react-scrollbar';
 import styled from 'styled-components';
 import { SearchNoteState } from './search-note-model';
-import HistoryGraph from './history-graph';
+// import HistoryGraph from './history-graph';
 import { SearchPanelState } from '../panel/search-panel-model';
 import HistoryTable from './history-table';
 import { Button, Icon, Tooltip } from 'antd';

@@ -4,7 +4,7 @@ import { getOrCreateSearchWindow, toggleSearchWindow } from './window/search-win
 import { GlobalShotCutChannel, SettingChannel } from '../common/ipc-channel';
 import { globalShortcut } from 'electron';
 import { UserProfile } from '../common/model/user-profile';
-import logger from '../common/utils/logger';
+import logger from '../electron-shared/logger';
 
 function initialSetting() {
   const setting = store.store;

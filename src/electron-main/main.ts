@@ -1,13 +1,17 @@
 // Modules to control application life and create native browser window
 import './ipc-main';
 import { app, globalShortcut, Menu } from 'electron';
-import logger from '../common/utils/logger';
+import logger from '../electron-shared/logger';
 import { getOrCreateSearchWindow, showSearchWindow } from './window/search-window';
 import globalState from './global-state';
 import contextMenu from 'electron-context-menu';
 import { initialSetting } from './setting';
 import { getOrCreateAppMenu } from './menu';
 import { initialAutoUpdater } from './auto-update';
+import * as remoteMain from '@electron/remote/main'
+
+// see https://github.com/electron/remote
+remoteMain.initialize();
 
 contextMenu({
   showInspectElement: true,

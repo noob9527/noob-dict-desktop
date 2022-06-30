@@ -5,7 +5,7 @@ import { LoginOption } from '../../common/social-login';
 import axios from 'axios';
 import { LocalStorageService, LocalStorageServiceToken } from '../../common/services/LocalStorageService';
 import { rendererContainer } from '../../common/container/renderer-container';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 
 const USER_KEY = 'currentUser';
 

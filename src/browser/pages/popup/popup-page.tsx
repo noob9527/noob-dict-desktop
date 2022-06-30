@@ -4,7 +4,7 @@ import ColorId from '../../styles/ColorId';
 import { useDispatch, useSelector } from 'react-redux';
 import { SearchState } from '../search/search-model';
 import { Button, Icon } from 'antd';
-import logger from '../../../common/utils/logger';
+import logger from '../../../electron-shared/logger';
 import { rendererContainer } from "../../../common/container/renderer-container";
 import { SearchUiService, SearchUiServiceToken } from "../../../common/services/search-ui-service";
 import { ClipboardService, ClipboardServiceToken } from "../../../common/services/clipboard-service";

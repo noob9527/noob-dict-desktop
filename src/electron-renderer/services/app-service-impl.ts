@@ -1,5 +1,5 @@
 import { AppService } from '../../common/services/app-service';
-import { remote } from 'electron';
+import * as remote from '@electron/remote';
 import { injectable } from 'inversify';
 
 @injectable()
@@ -9,6 +9,6 @@ export class ElectronAppService implements AppService {
   }
 
   getProcess(): NodeJS.Process {
-    return remote.process
+    return remote.process;
   }
 }

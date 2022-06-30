@@ -1,5 +1,8 @@
+import * as electron from 'electron';
+
 export const Runtime = {
   isRenderer,
+  isDev: isDev(),
 };
 
 function isRenderer() {
@@ -15,3 +18,11 @@ function isRenderer() {
   return process.type === 'renderer'
 }
 
+function isDev(): boolean {
+  if (isRenderer()) {
+    const remote = require('@electron/remote');
+    return !remote.app.isPackaged;
+  } else {
+    return !electron.app.isPackaged;
+  }
+}

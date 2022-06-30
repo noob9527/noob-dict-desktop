@@ -1,7 +1,7 @@
 import { app, Menu, Tray } from 'electron';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 import { showSearchWindow } from '../window/search-window';
-import { getIconPath } from '../utils/path-util';
+import { getIconPath } from '../../electron-shared/path-util';
 import { mainContainer } from '../../common/container/main-container';
 import { APP_CONSTANTS } from '../../common/app-constants';
 

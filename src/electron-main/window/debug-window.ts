@@ -1,11 +1,12 @@
 import { BrowserWindow } from 'electron';
-import isDev from 'electron-is-dev';
 import { getOrCreateSearchWindow } from './search-window';
-import logger from '../../common/utils/logger';
+import logger from '../../electron-shared/logger';
 import { ipcMain } from 'electron-better-ipc';
-import { getWindowHashUrl } from '../utils/path-util';
+import { getWindowHashUrl } from '../../electron-shared/path-util';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-constants';
+import * as remoteMain from '@electron/remote/main';
+import { Runtime } from '../../electron-shared/runtime';
 
 export {
   getOrCreateDeveloperWindow,
@@ -27,12 +28,12 @@ function createWindow() {
   // https://electronjs.org/docs/api/browser-window#modal-windows
   const parent = getOrCreateSearchWindow();
   const window = new BrowserWindow({
-    width: isDev ? 1200 : 1200,
+    width: Runtime.isDev ? 1200 : 1200,
     height: 600,
     // width: 1020,
     // height: 752,
     modal: true,
-    resizable: isDev,
+    resizable: Runtime.isDev,
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
     show: false, // not show until window is ready
@@ -43,10 +44,13 @@ function createWindow() {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,
+      // see https://github.com/electron-userland/electron-forge/issues/2567
+      contextIsolation: false,
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
     },
   });
+  remoteMain.enable(window.webContents);
   window.setMenuBarVisibility(false);
 
   // Load a remote URL

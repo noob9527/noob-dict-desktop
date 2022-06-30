@@ -1,5 +1,5 @@
 import * as fs from 'fs';
-import { getBuildPath } from './path-util';
+import { getBuildPath } from '../../electron-shared/path-util';
 
 const gitInfo = {
   version: fs.readFileSync(getBuildPath('VERSION'), 'utf8'),

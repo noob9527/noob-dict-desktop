@@ -1,17 +1,18 @@
-import { app, BrowserWindow } from 'electron';
-import logger from '../../common/utils/logger';
-import isDev from 'electron-is-dev';
+import { app, BrowserWindow, session } from 'electron';
+import logger from '../../electron-shared/logger';
 import { getOrCreateTray } from '../tray/tray';
 import * as path from 'path';
 import globalState from '../global-state';
 import * as os from 'os';
 import * as fs from 'fs';
-import { getIconPath, getWindowHashUrl } from '../utils/path-util';
+import { getIconPath, getWindowHashUrl } from '../../electron-shared/path-util';
 import { getOrCreateSettingWindow } from './setting-window';
 import { ipcMain } from 'electron-better-ipc';
 import { AppChannel, SearchChannel } from '../../common/ipc-channel';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-constants';
+import * as remoteMain from '@electron/remote/main';
+import { Runtime } from '../../electron-shared/runtime';
 
 export {
   getOrCreateSearchWindow,
@@ -69,13 +70,15 @@ function toggleSearchWindow(option: { isSettingWindowOpen: boolean } = { isSetti
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: isDev ? 1600 : 1200,
+    width: Runtime.isDev ? 1600 : 1200,
     height: 900,
     icon: getIconPath('icon.png'),
     webPreferences: {
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,
+      // see https://github.com/electron-userland/electron-forge/issues/2567
+      contextIsolation: false,
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
     },
@@ -89,6 +92,7 @@ function createWindow() {
     minimizable: false,
     maximizable: false,
   });
+  remoteMain.enable(window.webContents);
 
   // remove menu bar
   // https://stackoverflow.com/questions/39091964/remove-menubar-from-electron-app
@@ -117,7 +121,7 @@ function createWindow() {
       if (!allowAppQuit) {
         e.preventDefault();
         logger.log('app is quiting');
-        allowAppQuit = await ipcMain.callRenderer(window, AppChannel.APP_QUITING, e) as boolean;
+        allowAppQuit = await ipcMain.callRenderer(window, AppChannel.APP_QUITING) as boolean;
         if (allowAppQuit) {
           logger.log('app is ready to quit');
           app.quit();
@@ -137,27 +141,27 @@ function createWindow() {
 
   window.on('show', e => {
     logger.log('search window show');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_SHOWED, e);
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_SHOWED);
   });
   window.on('hide', e => {
     logger.log('search window hide');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_HIDED, e);
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_HIDED);
   });
   window.on('restore', e => {
     logger.log('search window restore');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_RESTORED, e);
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_RESTORED);
   });
   window.on('minimize', e => {
     logger.log('search window minimize');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_MINIMIZED, e);
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_MINIMIZED);
   });
   window.on('focus', e => {
     logger.log('search window focus');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_FOCUS, e);
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_FOCUS);
   });
   window.on('blur', e => {
     logger.log('search window blur');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_BLUR, e);
+    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_BLUR);
   });
 
   window.webContents.on('did-finish-load', () => {
@@ -170,7 +174,7 @@ function createWindow() {
     event.preventDefault();
   });
 
-  if (isDev) {
+  if (Runtime.isDev) {
     // Open the DevTools.
     window.webContents.openDevTools();
     // add devtools
@@ -183,7 +187,7 @@ function createWindow() {
       if (react.length) {
         const reactExt = path.join(reactDir, react[react.length - 1]);
         console.log(`load react dev tools from: ${reactExt}`);
-        BrowserWindow.addDevToolsExtension(reactExt);
+        session.defaultSession.loadExtension(reactExt);
       }
     }
     if (fs.existsSync(reduxDir)) {
@@ -191,7 +195,7 @@ function createWindow() {
       if (redux.length) {
         const reduxExt = path.join(reduxDir, redux[redux.length - 1]);
         console.log(`load redux dev tools from: ${reduxExt}`);
-        BrowserWindow.addDevToolsExtension(reduxExt);
+        session.defaultSession.loadExtension(reduxExt);
       }
     }
   }
