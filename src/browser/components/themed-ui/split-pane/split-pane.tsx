@@ -10,6 +10,7 @@ const ThemedSplitPane = styled(SplitPane)`
   }
   .Pane1 {
     height: 100%;
+    overflow: hidden;
   }
   .Pane2 {
     display: unset !important;
