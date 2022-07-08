@@ -3,6 +3,8 @@ import * as electron from 'electron';
 export const Runtime = {
   isRenderer,
   isDev: isDev(),
+  platform: getPlatform(),
+  isMac: isMac(),
 };
 
 function isRenderer() {
@@ -25,4 +27,21 @@ function isDev(): boolean {
   } else {
     return !electron.app.isPackaged;
   }
+}
+
+function getProcess(): NodeJS.Process {
+  if (isRenderer()) {
+    const remote = require('@electron/remote');
+    return remote.process;
+  } else {
+    return process;
+  }
+}
+
+function getPlatform(): NodeJS.Platform {
+  return getProcess().platform
+}
+
+function isMac(): boolean {
+  return getPlatform() === 'darwin'
 }

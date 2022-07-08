@@ -179,7 +179,13 @@ function createWindow() {
     window.webContents.openDevTools();
     // add devtools
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    const extensionDir = path.join(os.homedir(), '.config/google-chrome/Default/Extensions');
+    let extensionRelativeFolder: string;
+    if (Runtime.isMac) {
+      extensionRelativeFolder = 'Library/Application Support/Google/Chrome/Default/Extensions'
+    } else {
+      extensionRelativeFolder = '.config/google-chrome/Default/Extensions'
+    }
+    const extensionDir = path.join(os.homedir(), extensionRelativeFolder);
     const reactDir = path.join(extensionDir, 'fmkadmapgofadopljbjfkapdkoienihi');
     const reduxDir = path.join(extensionDir, 'lmhkpmbekcpmknklioeibfkpmmfibljd');
     if (fs.existsSync(reactDir)) {

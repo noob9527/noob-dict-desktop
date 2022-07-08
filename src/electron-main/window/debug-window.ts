@@ -32,7 +32,11 @@ function createWindow() {
     height: 600,
     // width: 1020,
     // height: 752,
-    modal: true,
+    // currently in mac, modal window cannot be closed
+    // https://github.com/electron/electron/issues/30232
+    maximizable: false,
+    minimizable: false,
+    modal: !Runtime.isMac,
     resizable: Runtime.isDev,
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully

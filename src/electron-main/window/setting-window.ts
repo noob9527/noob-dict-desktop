@@ -29,8 +29,12 @@ function createWindow() {
   const window = new BrowserWindow({
     width: Runtime.isDev ? 400 : 400,
     height: 200,
-    modal: true,
-    resizable: false,
+    maximizable: false,
+    minimizable: false,
+    // currently in mac, modal window cannot be closed
+    // https://github.com/electron/electron/issues/30232
+    modal: !Runtime.isMac,
+    resizable: Runtime.isDev,
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
     show: false, // not show until window is ready
