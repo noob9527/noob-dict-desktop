@@ -11,10 +11,10 @@ import { getIconPath, getBuildPath } from '../electron-shared/path-util';
 import { APP_CONSTANTS } from '../common/app-constants';
 import gitInfo from './utils/git-info';
 import { getOrCreateSearchWindow } from './window/search-window';
-import { Platform } from './utils/platform-util';
 import { getOrCreateSettingWindow } from './window/setting-window';
 import { getOrCreateLoginWindow } from './window/login-window';
 import { getOrCreateDeveloperWindow } from './window/debug-window';
+import { Runtime } from '../electron-shared/runtime';
 
 export {
   getOrCreateAppMenu,
@@ -37,6 +37,13 @@ function createMenu(): Menu {
       },
     ]
   };
+
+  const use_version_info = [
+    ...['electron', 'chrome', 'node', 'v8']
+            .map(e => [e, Runtime.process.versions[e]]).filter(Boolean), // remove null value
+    ['git', gitInfo.version],
+  ] as [string, string][];
+
   const helpMenu: Electron.MenuItemConstructorOptions = {
     role: 'help',
     submenu: [
@@ -49,14 +56,12 @@ function createMenu(): Menu {
             copyright: APP_CONSTANTS.COPYRIGHT,
             homepage: APP_CONSTANTS.HOME_PAGE,
             package_json_dir: getBuildPath(),
-            use_version_info: [
-              ...['electron', 'chrome', 'node', 'v8']
-                .map(e => [e, process.versions[e]]).filter(Boolean),
-              ['git', gitInfo.version],
-            ],
+            use_version_info,
             win_options: {
               parent: getOrCreateSearchWindow(),
-              model: true,
+              modal: !Runtime.isMac,
+              maximizable: false,
+              minimizable: false,
             }
             // open_devtools: true,
           });
@@ -66,7 +71,7 @@ function createMenu(): Menu {
   };
   const macAppMenu: Electron.MenuItemConstructorOptions = { role: 'appMenu' };
   const template: Electron.MenuItemConstructorOptions[] = [
-    ...(Platform.isMac ? [macAppMenu] : []),
+    ...(Runtime.isMac ? [macAppMenu] : []),
     {
       role: 'fileMenu',
       submenu: [

@@ -1,5 +1,8 @@
 /**
- * note that redirect_uri doesn't have any meaning here as we close the login window
+ * NOTE that redirect_uri doesn't have any meaning here as we close the login window
+ *
+ * WARN: to access env value, we can only use process.env instead of Runtime.process.env here!
+ * I think the reason is, we are using dotenv related packages to build/access the value in renderer process.
  */
 
 enum LoginType {
