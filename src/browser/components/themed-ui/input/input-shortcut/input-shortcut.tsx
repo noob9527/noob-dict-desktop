@@ -1,5 +1,6 @@
 import React, { KeyboardEvent, useRef, useState } from 'react';
 import useEventListener from '../../../../hooks/use-event-listener';
+import logger from '../../../../../electron-shared/logger';
 
 const DIGIT_ZERO = 48;
 const DIGIT_NINE = 57;
@@ -9,7 +10,7 @@ const KEY_Z = 90;
 interface InputShortcutProps {
   value?: string
   className?: string
-  onChange?: (value?: string) => void;
+  onChange?: (value?: string | null) => void;
 }
 
 const InputShortcut = (props: InputShortcutProps) => {
@@ -26,11 +27,15 @@ const InputShortcut = (props: InputShortcutProps) => {
     let key = '';
 
     if (event.key.toLowerCase().startsWith('esc')) {
+      // cancel setting
       setChanging(false);
-    }
-
-    if (isValidKey(event.keyCode)) {
+    } else if (event.key.toLowerCase().startsWith('backspace')) {
+      // erase setting
+      onChange(null);
+      setChanging(false);
+    } else if (isValidKey(event.keyCode)) {
       let prefix = '';
+      if (event.metaKey) prefix += 'Meta+';
       if (event.ctrlKey) prefix += 'Ctrl+';
       if (event.shiftKey) prefix += 'Shift+';
       if (event.altKey) prefix += 'Alt+';
@@ -38,13 +43,17 @@ const InputShortcut = (props: InputShortcutProps) => {
       onChange(key);
       setChanging(false);
     } else {
-      console.debug('invalid key code', event);
+      logger.debug('invalid key code', event);
     }
   }
 
   return (
-    <button className={className} type={'button'} ref={buttonEle} onClick={() => setChanging(!isChanging)}>
-      {isChanging ? '?' : (value ? value : '?')}
+    <button
+      className={className}
+      type={'button'}
+      ref={buttonEle}
+      onClick={() => setChanging(!isChanging)}>
+      {isChanging ? 'press hotkey now' : (value ? value : 'unset')}
     </button>
   );
 };
