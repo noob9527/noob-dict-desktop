@@ -26,7 +26,9 @@
     "test": "node scripts/test.js --config=config/jest/jest.config.js",
     "build:linux": "npm run renderer:build && npm run main:build  && electron-builder build --linux",
     "build": "npm run renderer:build && npm run main:build && electron-builder build",
-    "release": "cross-env NODE_OPTIONS=--max_old_space_size=8192 CI=false npm run renderer:build && npm run main:build && electron-builder build"
+    "//": "if you run yarn release, a release will be drafted (if doesn’t already exist) and artifacts published. ",
+    "//": "https://www.electron.build/configuration/publish.html#how-to-publish",
+    "release": "electron-builder"
   },
   "dependencies": {
     "@electron/remote": "^2.0.8",
