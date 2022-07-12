@@ -1,0 +1,24 @@
+## we currently use github actions
+
+#version: 2
+#jobs:
+#  build_linux:
+#    docker:
+#      - image: electronuserland/builder:wine
+#    steps:
+#      - checkout
+#      - run: yarn && yarn release --win --linux
+#
+#  build_macos:
+#    macos:
+#      xcode: "10.0.0"
+#    steps:
+#      - checkout
+#      - run: yarn && yarn release --mac
+#
+#workflows:
+#  version: 2
+#  build:
+#    jobs:
+#      - build_linux
+#      - build_macos

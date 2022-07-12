@@ -1,4 +1,5 @@
-[![Build Status](https://travis-ci.org/noob9527/noob-dict-desktop.svg?branch=master)](https://travis-ci.org/noob9527/noob-dict-desktop)
+[![build](https://github.com/noob9527/noob-dict-desktop/actions/workflows/build.yml/badge.svg)](https://github.com/noob9527/noob-dict-desktop/actions/workflows/build.yml?branch=dev)
+[![release](https://github.com/noob9527/noob-dict-desktop/actions/workflows/release.yml/badge.svg)](https://github.com/noob9527/noob-dict-desktop/actions/workflows/release.yml)
 # noob dict desktop
 > 中英词典桌面客户端 (electron)
 

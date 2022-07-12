@@ -1,0 +1,54 @@
+# if push master branch
+# we execute this workflow
+name: release
+
+on:
+  push:
+    branches:
+      - master
+
+# This allows a subsequently queued workflow run to interrupt previous runs
+concurrency:
+  group: '${{ github.workflow }} - ${{ github.ref_name }}'
+  cancel-in-progress: true
+
+jobs:
+  release:
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v3
+
+      - name: Install Node.js, NPM and Yarn
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+          cache: yarn
+
+      - name: install npm packages
+        run: yarn
+
+      - name: build renderer
+        env:
+          # somehow create-react-app treat warnings as errors, if process.env.CI = true.
+          # see https://github.com/facebook/create-react-app/issues/3657
+          CI: false
+        run: yarn renderer:build
+
+      - name: build main
+        run: yarn main:build
+
+      - name: release
+        if: runner.os != 'macOS'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn release
+
+      - name: release-mac
+        if: runner.os == 'macOS'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: yarn release --mac --x64 --arm64

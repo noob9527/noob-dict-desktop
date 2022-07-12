@@ -5,15 +5,18 @@ mac:
   # https://www.electron.build/configuration/mac
   category: public.app-category.utilities
   icon: 'build/assets/icon/icon.icns'
+  target:
+    - target: dmg
 linux:
   # https://www.electron.build/configuration/linux
   # do not specify icon here
   # "Linux icon set will be generated automatically based on the macOS icns file or common icon.png."
-  target: 'AppImage'
-  publish:
-    - github
+  target:
+    - target: AppImage
 win:
   icon: 'build/assets/icon/icon@16x.png'
+  target:
+    - target: nsis
 files:
   - 'build/**/*'
   - 'node_modules/**/*'

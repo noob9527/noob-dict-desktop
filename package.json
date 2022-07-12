@@ -13,22 +13,23 @@
     "email": "2061864@qq.com"
   },
   "scripts": {
-    "electron-rebuild": "electron-rebuild install-app-deps",
     "analyze": "source-map-explorer 'build/static/js/*.js'",
     "lint:fix": "eslint --fix src --ext .ts,.tsx",
+    "electron-rebuild": "electron-rebuild install-app-deps",
+    "start": "concurrently \"npm run main:start\" \"npm run renderer:start\" \"wait-on http://localhost:3000 && electron .\"",
+    "test": "node scripts/test.js --config=config/jest/jest.config.js",
+    "build": "npm run renderer:build && npm run main:build && electron-builder build",
+    "build:linux": "npm run renderer:build && npm run main:build && electron-builder build --linux",
     "renderer:start": "BROWSER=none node scripts/start.js",
     "renderer:build": "node scripts/build.js",
     "main:start": "parcel watch ./src/electron-main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js",
     "main:build": "parcel build ./src/electron-main/main.ts --no-source-maps --target electron --out-dir build --out-file main.js --no-minify",
     "electron:start": "concurrently \"npm run main:start\" \"wait-on http://localhost:3000 && electron .\"",
-    "electron:build": "electron-builder build",
-    "start": "concurrently \"npm run main:start\" \"npm run renderer:start\" \"wait-on http://localhost:3000 && electron .\"",
-    "test": "node scripts/test.js --config=config/jest/jest.config.js",
-    "build:linux": "npm run renderer:build && npm run main:build  && electron-builder build --linux",
-    "build": "npm run renderer:build && npm run main:build && electron-builder build",
-    "//": "if you run yarn release, a release will be drafted (if doesn’t already exist) and artifacts published. ",
+    "electron:build": "electron-builder build --publish never",
+    "electron:build:mac": "electron-builder build --publish never --mac --x64 --arm64",
     "//": "https://www.electron.build/configuration/publish.html#how-to-publish",
-    "release": "electron-builder"
+    "release": "electron-builder --publish always",
+    "release:mac": "electron-builder --publish always --mac --x64 --arm64"
   },
   "dependencies": {
     "@electron/remote": "^2.0.8",
