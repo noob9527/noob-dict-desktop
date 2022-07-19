@@ -37,6 +37,7 @@ Reference:
 ### publish
 > Recommended GitHub Releases Workflow
 
+<div style="text-decoration: line-through">
 1. Draft a new release. Set the “Tag version” to the value of version in your application package.json, and prefix it with v. “Release title” can be anything you want.  
   For example, if your application package.json version is 1.0, your draft’s “Tag version” would be v1.0.
 2. Push some commits. Every CI build will update the artifacts attached to this draft.
@@ -45,6 +46,11 @@ Reference:
 The benefit of this workflow is that it allows you to always have the latest artifacts, and the release can be published once it is ready.  
 reference:  
 - [publish](https://www.electron.build/configuration/publish)
+</div>
+
+1. (Optional) If you want to release a new version, increase version in your application package.json.
+2. Merge your commits into master branch, then push it. This will trigger "release" github workflow.
+3. (You don't need to do anything here, Github workflow will finish the job for you) During "release" workflow, if these isn't exist a draft release corresponding to current version(version in package.json). electron-builder will automatically create one for you. Otherwise, electron-builder will (create/update) built files in current draft release.
 
 ### Known issue
 Unable to find icon?
