@@ -2,9 +2,10 @@ import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/e
 import { Model } from '../../redux/common/redux-model';
 import { SearchUiService, SearchUiServiceToken } from '../../../common/services/search-ui-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
-import { SettingState } from '../setting/setting-model';
 import { TransientState } from '../transient-model';
 import { PopupUiService, PopupUiServiceToken } from '../../../common/services/popup-ui-service';
+import { StoreConfig } from '../../../electron-shared/store';
+import { UserProfile } from '../../../common/model/user-profile';
 
 export const SPLIT_PANE_SIZE_MAX = 450;
 export const SPLIT_PANE_SIZE_MIN = 60;
@@ -39,11 +40,11 @@ const effects = {
     });
   },
   * debouncedSelectionTextChange(action) {
-    const settingState: SettingState = yield select(state => state.setting);
+    const profile: UserProfile = yield select(state => state.setting);
     const transientState: TransientState = yield select(state => state._transient);
     const searchState: SearchState = yield select(state => state.search);
 
-    if (!settingState.watchSelection) return;
+    if (!profile.watchSelection) return;
     if (transientState.isSettingWindowOpen) return;
 
     // // selection search only when window is not pinned

@@ -4,12 +4,12 @@ import { rendererContainer } from '../../common/container/renderer-container';
 import { SettingUiService, SettingUiServiceToken } from '../../common/services/setting-ui-service';
 import { SearchUiService, SearchUiServiceToken } from '../../common/services/search-ui-service';
 import { SearchChannel, SettingChannel } from '../../common/ipc-channel';
-import { SettingState } from './setting/setting-model';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { WindowId } from '../../common/window-constants';
 import { getWindowId } from '../utils/window-utils';
 import logger from '../../electron-shared/logger';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
+import { UserProfile } from '../../common/model/user-profile';
 
 const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
 const appService = rendererContainer.get<AppService>(AppServiceToken);
@@ -98,8 +98,8 @@ const effects = {
     }
   },
   * searchWindowOpened() {
-    const settingState: SettingState = yield select(state => state.setting);
-    if (settingState.readClipboard) {
+    const profile: UserProfile = yield select(state => state.setting);
+    if (profile.readClipboard) {
       const clipboardText = rendererContainer.get<ClipboardService>(ClipboardServiceToken).readClipboardText();
       if (clipboardText && clipboardText.length < 20) {
         yield put({

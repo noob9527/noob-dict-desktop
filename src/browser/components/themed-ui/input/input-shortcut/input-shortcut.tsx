@@ -8,7 +8,7 @@ const KEY_A = 65;
 const KEY_Z = 90;
 
 interface InputShortcutProps {
-  value?: string
+  value: Maybe<string>
   className?: string
   onChange?: (value?: string | null) => void;
 }
