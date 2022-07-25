@@ -2,6 +2,15 @@ import React from 'react';
 import { Pronunciation, LanguageTag } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import Speaker from '../shared/speaker/speaker';
+import { rendererContainer } from '../../../../common/container/renderer-container';
+import { ClipboardService, ClipboardServiceToken } from '../../../../common/services/clipboard-service';
+import ColorId from '../../../styles/ColorId';
+import { ThemedTooltip } from '../../themed-ui/tooltip/tooltip';
+
+const StyledSpan = styled.span`
+  color: ${props => props.theme[ColorId.word_link]};
+  cursor: pointer;
+`;
 
 const ItemContainer = styled.span`
   > span + span {
@@ -22,12 +31,20 @@ interface PronunciationListProps {
   pronunciations: Pronunciation[]
 }
 
+const clipboardService = rendererContainer.get<ClipboardService>(ClipboardServiceToken);
+
 const PronunciationItem: React.FC<PronunciationItemProps> = (props: PronunciationItemProps) => {
   const { pronunciation } = props;
   return (
     <ItemContainer>
       <span>{LanguageTag.getLabel(pronunciation.tag)}</span>
-      <span>{pronunciation.phoneticSymbol}</span>
+      <ThemedTooltip title="copy">
+        <StyledSpan onClick={() => {
+          if (pronunciation.phoneticSymbol) {
+            clipboardService.writeClipboardText(pronunciation.phoneticSymbol);
+          }
+        }}>{pronunciation.phoneticSymbol}</StyledSpan>
+      </ThemedTooltip>
       <Speaker src={pronunciation.audio ?? undefined}/>
     </ItemContainer>
   );

@@ -1,11 +1,12 @@
 import React from 'react';
 import { Example, Language } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
-import { Button, Icon } from 'antd';
-import { ThemedTooltip } from '../../themed-ui/tooltip/tooltip';
 import { useDispatch } from 'react-redux';
 import ColorId from '../../../styles/ColorId';
 import Highlight from '../shared/highlight/highlight';
+import { CopyButton } from '../../themed-ui/button/copy-button';
+import { rendererContainer } from '../../../../common/container/renderer-container';
+import { ClipboardService, ClipboardServiceToken } from '../../../../common/services/clipboard-service';
 
 const ItemContainer = styled.li`
   //margin-bottom: 8px;
@@ -26,6 +27,8 @@ interface ExampleItemProp {
   highlightWordSet?: Set<string>
 }
 
+const clipboardService = rendererContainer.get<ClipboardService>(ClipboardServiceToken);
+
 const ExampleItem: React.FC<ExampleItemProp> = (props: ExampleItemProp) => {
   const dispatch = useDispatch();
   const { example, highlightWordSet } = props;
@@ -38,18 +41,23 @@ const ExampleItem: React.FC<ExampleItemProp> = (props: ExampleItemProp) => {
       <div>
         {/*<span>{en}</span>*/}
         <Highlight sentence={en} highlightWords={highlightWordSet}/>
-        <ThemedTooltip title={'save as context'}>
-          <Button tabIndex={-1} type="link" shape="circle" ghost onClick={() => {
-            dispatch({
-              type: 'searchNote/saveExampleToContext',
-              payload: {
-                paragraph: en,
-              },
-            });
-          }}>
-            <Icon type="file-add"/>
-          </Button>
-        </ThemedTooltip>
+        {/*<ThemedTooltip title={'save as context'}>*/}
+        {/*  <Button tabIndex={-1} type="link" shape="circle" ghost onClick={() => {*/}
+        {/*    dispatch({*/}
+        {/*      type: 'searchNote/saveExampleToContext',*/}
+        {/*      payload: {*/}
+        {/*        paragraph: en,*/}
+        {/*      },*/}
+        {/*    });*/}
+        {/*  }}>*/}
+        {/*    <Icon type="file-add"/>*/}
+        {/*  </Button>*/}
+        {/*</ThemedTooltip>*/}
+        <CopyButton
+          onClick={() => {
+            clipboardService.writeClipboardText(en);
+          }}
+        />
       </div>
       <div>{zh}</div>
     </ItemContainer>

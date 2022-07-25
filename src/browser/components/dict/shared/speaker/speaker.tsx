@@ -47,7 +47,7 @@ const Speaker: React.FC<SpeakerProp> = (props) => {
 
   useEventListener('ended', (event) => {
     setPlaying(false);
-  });
+  }, audioEle.current);
 
   return (
     <>

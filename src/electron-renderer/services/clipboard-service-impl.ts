@@ -27,6 +27,10 @@ export class ClipboardServiceImpl implements ClipboardService {
     return clipboard.readText();
   }
 
+  writeClipboardText(text: string) {
+    clipboard.writeText(text);
+  }
+
   readSelectionText(): string {
     return clipboard.readText('selection');
   }

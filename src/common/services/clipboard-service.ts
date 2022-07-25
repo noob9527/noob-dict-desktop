@@ -5,6 +5,8 @@ export interface ClipboardService {
 
   readSelectionText(): string
 
+  writeClipboardText(text: string)
+
   onSelectionTextChange(listener: (newText, oldText) => void)
 
   onClipboardTextChange(listener: (newText, oldText) => void)

@@ -96,28 +96,28 @@ const effects = {
       },
     });
   },
-  * saveExampleToContext(action) {
-    const { paragraph } = action.payload;
-    const searchNoteState: SearchNoteState = yield select(e => e.searchNote);
-    const latest: DataWrapper<ISearchHistory> | undefined = _.maxBy(
-      Object.values(searchNoteState.histories),
-      e => e.id,
-    );
-    if (!latest) return;
-
-    yield put({
-      type: 'searchNote/typeHistoryContext',
-      payload: {
-        history: {
-          ...latest.oldData,
-          context: {
-            ...latest.oldData.context,
-            paragraph,
-          },
-        },
-      },
-    });
-  },
+  // * saveExampleToContext(action) {
+  //   const { paragraph } = action.payload;
+  //   const searchNoteState: SearchNoteState = yield select(e => e.searchNote);
+  //   const latest: DataWrapper<ISearchHistory> | undefined = _.maxBy(
+  //     Object.values(searchNoteState.histories),
+  //     e => e.id,
+  //   );
+  //   if (!latest) return;
+  //
+  //   yield put({
+  //     type: 'searchNote/typeHistoryContext',
+  //     payload: {
+  //       history: {
+  //         ...latest.oldData,
+  //         context: {
+  //           ...latest.oldData.context,
+  //           paragraph,
+  //         },
+  //       },
+  //     },
+  //   });
+  // },
   // manually input search text
   * inputSearchText(action) {
     yield put({
