@@ -5,10 +5,11 @@ import { ipcMain } from 'electron-better-ipc';
 import { LoginChannel } from '../../common/ipc-channel';
 import { getWindowHashUrl } from '../../electron-shared/path-util';
 import { windowContainer } from './windows';
-import { WindowId } from '../../common/window-constants';
+import { WindowId } from '../../common/window-id';
 import { extractCode, getLoginOption, getLoginType, githubOption } from '../../common/social-login';
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
+import { notifyRendererWindowEvents } from '../utils/window-util';
 
 export {
   getOrCreateLoginWindow,
@@ -17,6 +18,12 @@ export {
 function getOrCreateLoginWindow() {
   return windowContainer.find(WindowId.LOGIN)
     ?? windowContainer.add(WindowId.LOGIN, createWindow());
+}
+
+function close() {
+  const window = windowContainer.find(WindowId.LOGIN);
+  if (window == null) return;
+  window.close();
 }
 
 function destroy() {
@@ -36,9 +43,7 @@ function createWindow() {
     // height: 752,
     maximizable: false,
     minimizable: false,
-    // currently in mac, modal window cannot be closed
-    // https://github.com/electron/electron/issues/30232
-    modal: !Runtime.isMac,
+    modal: true,
     resizable: Runtime.isDev,
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
@@ -139,18 +144,24 @@ function createWindow() {
     window.show();
   });
   window.on('show', e => {
-    logger.log('login window show');
-    ipcMain.callRenderer(parent, LoginChannel.LOGIN_WINDOW_OPENED);
     // to mimic the 1st time login behavior
     // session.defaultSession.clearStorageData({
     //   storages: ['cookies'],
     // });
   });
+  // currently in mac, modal window doesn't have close button
+  // hence we listen blur event, and close window
+  // https://github.com/electron/electron/issues/30232
+  if (Runtime.isMac) {
+    window.on('blur', async () => {
+      close();
+    });
+  }
   window.on('closed', async () => {
-    ipcMain.callRenderer(parent, LoginChannel.LOGIN_WINDOW_CLOSED);
     destroy();
-    logger.log(`${WindowId.LOGIN} closed`);
   });
+  // note that we notify parent window here!
+  notifyRendererWindowEvents(WindowId.LOGIN, window, parent)
 
   // if (Runtime.isDev) {
   //   window.webContents.openDevTools();

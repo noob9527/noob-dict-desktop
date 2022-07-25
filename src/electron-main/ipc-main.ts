@@ -33,20 +33,20 @@ ipcMain.answerRenderer(SearchChannel.TOGGLE_PIN_SEARCH_WINDOW, () => {
   return target;
 });
 
-ipcMain.answerRenderer(SearchChannel.TOGGLE_SEARCH_WINDOW, async (data: any) => {
-  return toggleSearchWindow(data);
+ipcMain.answerRenderer(SearchChannel.TOGGLE_SEARCH_WINDOW, async () => {
+  return toggleSearchWindow();
 });
 
-ipcMain.answerRenderer(SearchChannel.SHOW_SEARCH_WINDOW, async (data: any) => {
-  return showSearchWindow(data);
+ipcMain.answerRenderer(SearchChannel.SHOW_SEARCH_WINDOW, async () => {
+  return showSearchWindow();
 });
 
-ipcMain.answerRenderer(SearchChannel.HIDE_SEARCH_WINDOW, async (data: any) => {
-  return hideSearchWindow(data);
+ipcMain.answerRenderer(SearchChannel.HIDE_SEARCH_WINDOW, async () => {
+  return hideSearchWindow();
 });
 
-ipcMain.answerRenderer(SearchChannel.TOP_SEARCH_WINDOW, async (data: any) => {
-  return topSearchWindow(data);
+ipcMain.answerRenderer(SearchChannel.TOP_SEARCH_WINDOW, async () => {
+  return topSearchWindow();
 });
 
 ipcMain.answerRenderer(SearchChannel.SEARCH, async (data: any) => {

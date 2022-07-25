@@ -3,8 +3,6 @@ import { Model } from '../../redux/common/redux-model';
 import { SearchUiService, SearchUiServiceToken } from '../../../common/services/search-ui-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { TransientState } from '../transient-model';
-import { PopupUiService, PopupUiServiceToken } from '../../../common/services/popup-ui-service';
-import { StoreConfig } from '../../../electron-shared/store';
 import { UserProfile } from '../../../common/model/user-profile';
 
 export const SPLIT_PANE_SIZE_MAX = 450;
@@ -45,7 +43,6 @@ const effects = {
     const searchState: SearchState = yield select(state => state.search);
 
     if (!profile.watchSelection) return;
-    if (transientState.isSettingWindowOpen) return;
 
     // // selection search only when window is not pinned
     // if (!searchState.pinned) {

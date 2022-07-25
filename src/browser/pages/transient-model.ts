@@ -1,22 +1,20 @@
 import { Model } from '../redux/common/redux-model';
 import { call, put, select } from '@redux-saga/core/effects';
 import { rendererContainer } from '../../common/container/renderer-container';
-import { SettingUiService, SettingUiServiceToken } from '../../common/services/setting-ui-service';
 import { SearchUiService, SearchUiServiceToken } from '../../common/services/search-ui-service';
-import { SearchChannel, SettingChannel } from '../../common/ipc-channel';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
-import { WindowId } from '../../common/window-constants';
-import { getWindowId } from '../utils/window-utils';
+import { WindowId } from '../../common/window-id';
+import { getCurrentWindowId } from '../utils/window-utils';
 import logger from '../../electron-shared/logger';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { UserProfile } from '../../common/model/user-profile';
+import { WindowEvents } from '../../common/window-events';
 
 const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 
 export interface TransientState {
   focusInput: boolean,
-  isSettingWindowOpen: boolean
   isSearchWindowOpen: boolean
   windowIdentifier: WindowId
 }
@@ -28,8 +26,7 @@ interface TransientModel extends Model {
 const transientState: TransientState = {
   focusInput: false,
   isSearchWindowOpen: !appService.getProcess().argv.includes('--background'),
-  isSettingWindowOpen: false,
-  windowIdentifier: getWindowId(),
+  windowIdentifier: getCurrentWindowId(),
 };
 
 interface ShowSearchWindowAction {
@@ -41,11 +38,8 @@ interface ShowSearchWindowAction {
 
 const effects = {
   * showSearchWindow(action: ShowSearchWindowAction) {
-    const state: TransientState = yield select(state => state._transient);
     logger.log(action);
-    yield call([searchUiService, searchUiService.showSearchWindow], {
-      isSettingWindowOpen: state.isSearchWindowOpen
-    });
+    yield call([searchUiService, searchUiService.showSearchWindow]);
     yield put({
       type: '_transient/mergeState',
       payload: {
@@ -54,16 +48,10 @@ const effects = {
     });
   },
   * hideSearchWindow() {
-    const state: TransientState = yield select(state => state._transient);
-    yield call([searchUiService, searchUiService.hideSearchWindow], {
-      isSettingWindowOpen: state.isSearchWindowOpen
-    });
+    yield call([searchUiService, searchUiService.hideSearchWindow]);
   },
   * topSearchWindow() {
-    const state: TransientState = yield select(state => state._transient);
-    yield call([searchUiService, searchUiService.showSearchWindow], {
-      isSettingWindowOpen: state.isSearchWindowOpen
-    });
+    yield call([searchUiService, searchUiService.showSearchWindow]);
     // yield put({
     //   type: '_transient/mergeState',
     //   payload: {
@@ -78,7 +66,7 @@ const effects = {
     });
   },
   * appHotKeyPressed() {
-    const state: TransientState = yield select(state => state._transient);
+    const state: TransientState = yield select(s => s._transient);
     if (state.isSearchWindowOpen) {
       if (state.focusInput) {
         // if search input is focused, we hide the window
@@ -115,64 +103,33 @@ const effects = {
       },
     });
   },
-  * settingWindowOpened() {
-    yield put({
-      type: '_transient/mergeState',
-      payload: { isSettingWindowOpen: true },
-    });
-  },
-  * [SearchChannel.SEARCH_WINDOW_SHOWED]() {
-    yield put({
-      type: '_transient/searchWindowOpened',
-    });
-  },
-  * [SearchChannel.SEARCH_WINDOW_HIDED]() {
-    yield put({
-      type: '_transient/searchWindowClosed',
-    });
-  },
-  * [SearchChannel.SEARCH_WINDOW_RESTORED]() {
-    yield put({
-      type: '_transient/searchWindowOpened',
-    });
-  },
-  * [SearchChannel.SEARCH_WINDOW_MINIMIZED]() {
-    yield put({
-      type: '_transient/searchWindowClosed',
-    });
-  },
-  * [SearchChannel.SEARCH_WINDOW_FOCUS]() {
-  },
-  * [SearchChannel.SEARCH_WINDOW_BLUR]() {
-  },
 };
 
+[WindowEvents.show, WindowEvents.restore].forEach(event =>
+  effects[WindowId.SEARCH.getEventChannelName(event)] = function * () {
+    yield put({
+      type: '_transient/searchWindowOpened',
+    });
+  }
+);
+
 const reducers = {
-  searchWindowClosed(state, action: any) {
-    return {
-      ...state,
-      isSearchWindowOpen: false,
-    };
-  },
   mergeState(state, action: any) {
     return {
       ...state,
       ...action.payload,
     };
   },
-  [SettingChannel.SETTING_WINDOW_OPENED](state, action: any) {
+};
+
+[WindowEvents.hide, WindowEvents.minimize].forEach(event =>
+  reducers[WindowId.SEARCH.getEventChannelName(event)] = function (state, action: any) {
     return {
       ...state,
-      isSearchWindowOpen: true
-    };
-  },
-  [SettingChannel.SETTING_WINDOW_CLOSED](state, action: any) {
-    return {
-      ...state,
-      isSearchWindowOpen: false
+      isSearchWindowOpen: false,
     };
   }
-};
+);
 
 const transientModel: TransientModel = {
   namespace: '_transient',

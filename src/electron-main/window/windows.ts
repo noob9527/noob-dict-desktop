@@ -1,6 +1,6 @@
 import { BrowserWindow } from 'electron';
 import { ipcMain } from 'electron-better-ipc';
-import { WindowId } from '../../common/window-constants';
+import { WindowId } from '../../common/window-id';
 
 class WindowContainer {
   private map: Map<WindowId, BrowserWindow> = new Map();

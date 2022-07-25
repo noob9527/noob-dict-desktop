@@ -1,13 +1,13 @@
 export const SearchUiServiceToken = Symbol.for('search-ui-service');
 
 export interface SearchUiService {
-  toggleSearchWindow(option: { isSettingWindowOpen }): Promise<void>
+  toggleSearchWindow(): Promise<void>
 
-  showSearchWindow(option: { isSettingWindowOpen })
+  showSearchWindow()
 
-  hideSearchWindow(option: { isSettingWindowOpen })
+  hideSearchWindow()
 
-  topSearchWindow(option: { isSettingWindowOpen })
+  topSearchWindow()
 
   search(option: { text: string })
 

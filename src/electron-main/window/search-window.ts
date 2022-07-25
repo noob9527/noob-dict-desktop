@@ -6,13 +6,13 @@ import globalState from '../global-state';
 import * as os from 'os';
 import * as fs from 'fs';
 import { getIconPath, getWindowHashUrl } from '../../electron-shared/path-util';
-import { getOrCreateSettingWindow } from './setting-window';
 import { ipcMain } from 'electron-better-ipc';
-import { AppChannel, SearchChannel } from '../../common/ipc-channel';
+import { AppChannel } from '../../common/ipc-channel';
 import { windowContainer } from './windows';
-import { WindowId } from '../../common/window-constants';
+import { WindowId } from '../../common/window-id';
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
+import { notifyRendererWindowEvents } from '../utils/window-util';
 
 export {
   getOrCreateSearchWindow,
@@ -31,11 +31,10 @@ function destroy() {
   windowContainer.remove(WindowId.SEARCH);
 }
 
-function showSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+function showSearchWindow() {
   logger.log('show search window');
   const window = getOrCreateSearchWindow();
   window.show();
-  if (option.isSettingWindowOpen) getOrCreateSettingWindow().show();
   // if (window) {
   //   if (window.isMinimized()) window.restore();
   //   window.show();
@@ -44,33 +43,32 @@ function showSearchWindow(option: { isSettingWindowOpen: boolean } = { isSetting
   // }
 }
 
-function hideSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+function hideSearchWindow() {
   logger.log('hide search window');
-  if (option.isSettingWindowOpen) getOrCreateSettingWindow().hide();
   const window = getOrCreateSearchWindow();
   window.hide();
 }
 
-function topSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+function topSearchWindow() {
   const window = getOrCreateSearchWindow();
   window.moveTop();
 }
 
-function toggleSearchWindow(option: { isSettingWindowOpen: boolean } = { isSettingWindowOpen: false }) {
+function toggleSearchWindow() {
   logger.log('toggleSearchWindow', new Date());
   const searchWindow = getOrCreateSearchWindow();
   if (searchWindow.isMinimized() || !searchWindow.isVisible()) {
-    showSearchWindow(option);
+    showSearchWindow();
     return true;
   } else {
-    hideSearchWindow(option);
+    hideSearchWindow();
     return false;
   }
 }
 
 function createWindow() {
   const window = new BrowserWindow({
-    width: Runtime.isDev ? 1600 : 1200,
+    width: Runtime.isDev ? 1600:1200,
     height: 900,
     icon: getIconPath('icon.png'),
     webPreferences: {
@@ -105,7 +103,7 @@ function createWindow() {
   window.loadURL(getWindowHashUrl('main/search'));
 
   window.once('ready-to-show', () => {
-    if(!process.argv.includes('--background')) {
+    if (!process.argv.includes('--background')) {
       window.show();
     }
   });
@@ -139,30 +137,7 @@ function createWindow() {
     logger.log('search window closed');
   });
 
-  window.on('show', e => {
-    logger.log('search window show');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_SHOWED);
-  });
-  window.on('hide', e => {
-    logger.log('search window hide');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_HIDED);
-  });
-  window.on('restore', e => {
-    logger.log('search window restore');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_RESTORED);
-  });
-  window.on('minimize', e => {
-    logger.log('search window minimize');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_MINIMIZED);
-  });
-  window.on('focus', e => {
-    logger.log('search window focus');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_FOCUS);
-  });
-  window.on('blur', e => {
-    logger.log('search window blur');
-    ipcMain.callRenderer(window, SearchChannel.SEARCH_WINDOW_BLUR);
-  });
+  notifyRendererWindowEvents(WindowId.SEARCH, window);
 
   window.webContents.on('did-finish-load', () => {
     getOrCreateTray();
@@ -170,8 +145,12 @@ function createWindow() {
   });
   // stop link from opening new window
   // https://stackoverflow.com/questions/46462248/electron-link-opens-in-new-window
-  window.webContents.on('new-window', (event) => {
-    event.preventDefault();
+  // window.webContents.on('new-window', (event) => {
+  //   event.preventDefault();
+  // });
+  // https://www.electronjs.org/docs/latest/api/web-contents#contentssetwindowopenhandlerhandler
+  window.webContents.setWindowOpenHandler(() => {
+    return { action: 'deny' };
   });
 
   if (Runtime.isDev) {
@@ -181,9 +160,9 @@ function createWindow() {
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
     let extensionRelativeFolder: string;
     if (Runtime.isMac) {
-      extensionRelativeFolder = 'Library/Application Support/Google/Chrome/Default/Extensions'
+      extensionRelativeFolder = 'Library/Application Support/Google/Chrome/Default/Extensions';
     } else {
-      extensionRelativeFolder = '.config/google-chrome/Default/Extensions'
+      extensionRelativeFolder = '.config/google-chrome/Default/Extensions';
     }
     const extensionDir = path.join(os.homedir(), extensionRelativeFolder);
     const reactDir = path.join(extensionDir, 'fmkadmapgofadopljbjfkapdkoienihi');

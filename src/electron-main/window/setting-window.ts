@@ -1,13 +1,12 @@
 import { BrowserWindow } from 'electron';
 import { getOrCreateSearchWindow } from './search-window';
 import logger from '../../electron-shared/logger';
-import { ipcMain } from 'electron-better-ipc';
-import { SearchChannel, SettingChannel } from '../../common/ipc-channel';
 import { getWindowHashUrl } from '../../electron-shared/path-util';
 import { windowContainer } from './windows';
-import { WindowId } from '../../common/window-constants';
+import { WindowId } from '../../common/window-id';
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
+import { notifyRendererWindowEvents } from '../utils/window-util';
 
 export {
   getOrCreateSettingWindow,
@@ -18,7 +17,14 @@ function getOrCreateSettingWindow() {
     ?? windowContainer.add(WindowId.SETTING, createWindow());
 }
 
+function close() {
+  const window = windowContainer.find(WindowId.SETTING);
+  if (window == null) return;
+  window.close();
+}
+
 function destroy() {
+  logger.log('destroy setting window');
   windowContainer.remove(WindowId.SETTING);
 }
 
@@ -31,9 +37,7 @@ function createWindow() {
     height: 200,
     maximizable: false,
     minimizable: false,
-    // currently in mac, modal window cannot be closed
-    // https://github.com/electron/electron/issues/30232
-    modal: !Runtime.isMac,
+    modal: true,
     resizable: Runtime.isDev,
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
@@ -61,15 +65,20 @@ function createWindow() {
   window.once('ready-to-show', () => {
     window.show();
   });
-  window.on('show', e => {
-    logger.log('setting window show');
-    ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_OPENED);
-  });
+  // currently in mac, modal window doesn't have close button
+  // hence we listen blur event, and close window
+  // https://github.com/electron/electron/issues/30232
+  if (Runtime.isMac) {
+    window.on('blur', async () => {
+      close();
+    });
+  }
   window.on('closed', async () => {
-    ipcMain.callRenderer(parent, SettingChannel.SETTING_WINDOW_CLOSED);
     destroy();
-    logger.log(`${WindowId.SETTING} closed`);
   });
+
+  // note that we notify parent window here!
+  notifyRendererWindowEvents(WindowId.SETTING, window, parent)
 
   if (Runtime.isDev) {
     // window.webContents.openDevTools();

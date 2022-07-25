@@ -6,8 +6,8 @@ import { UserProfile } from '../../common/model/user-profile';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { store } from '../../electron-shared/store';
-import { getWindowId } from '../../browser/utils/window-utils';
-import { WindowId } from '../../common/window-constants';
+import { getCurrentWindowId } from '../../browser/utils/window-utils';
+import { WindowId } from '../../common/window-id';
 
 @injectable()
 export class ElectronSettingService implements SettingService {
@@ -34,7 +34,7 @@ export class ElectronSettingService implements SettingService {
 
   async initSetting(): Promise<UserProfile> {
     const res = store.store;
-    if (getWindowId() === WindowId.SEARCH) {
+    if (getCurrentWindowId() === WindowId.SEARCH) {
       await this.handleSettingChange(res, null);
     }
     return res as UserProfile;

@@ -5,7 +5,7 @@ import logger from '../../electron-shared/logger';
 import { ipcMain } from 'electron-better-ipc';
 import { SearchChannel } from '../../common/ipc-channel';
 import { windowContainer } from './windows';
-import { WindowId } from '../../common/window-constants';
+import { WindowId } from '../../common/window-id';
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
 

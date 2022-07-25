@@ -1,10 +1,9 @@
 import { BrowserWindow } from 'electron';
 import { getOrCreateSearchWindow } from './search-window';
 import logger from '../../electron-shared/logger';
-import { ipcMain } from 'electron-better-ipc';
 import { getWindowHashUrl } from '../../electron-shared/path-util';
 import { windowContainer } from './windows';
-import { WindowId } from '../../common/window-constants';
+import { WindowId } from '../../common/window-id';
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
 
@@ -15,6 +14,12 @@ export {
 function getOrCreateDeveloperWindow() {
   return windowContainer.find(WindowId.DEVELOPER)
     ?? windowContainer.add(WindowId.DEVELOPER, createWindow());
+}
+
+function close() {
+  const window = windowContainer.find(WindowId.DEVELOPER);
+  if (window == null) return;
+  window.close();
 }
 
 function destroy() {
@@ -32,11 +37,9 @@ function createWindow() {
     height: 600,
     // width: 1020,
     // height: 752,
-    // currently in mac, modal window cannot be closed
-    // https://github.com/electron/electron/issues/30232
+    modal: true,
     maximizable: false,
     minimizable: false,
-    modal: !Runtime.isMac,
     resizable: Runtime.isDev,
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
@@ -64,12 +67,15 @@ function createWindow() {
   window.once('ready-to-show', () => {
     window.show();
   });
-  window.on('show', e => {
-    logger.log('developer window show');
-    // ipcMain.callRenderer(parent, DeveloperChannel.DEVELOPER_WINDOW_OPENED, e);
-  });
+  // currently in mac, modal window doesn't have close button
+  // hence we listen blur event, and close window
+  // https://github.com/electron/electron/issues/30232
+  if (Runtime.isMac) {
+    window.on('blur', async () => {
+      close();
+    });
+  }
   window.on('closed', async () => {
-    // ipcMain.callRenderer(parent, DeveloperChannel.DEVELOPER_WINDOW_CLOSED);
     destroy();
     logger.log(`${WindowId.DEVELOPER} closed`);
   });
