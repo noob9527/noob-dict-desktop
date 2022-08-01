@@ -41,6 +41,13 @@
       flags += ' --target=7.1.6 --arch=x64 "--dist-url=https://www.electronjs.org/headers" "--build-from-source"'
       ```
 
+1. 如何改变 opencv 版本
+```json
+  "opencv4nodejs": {
+    "autoBuildOpencvVersion": "4.1.2"
+  }
+```
+
 ### tesseract 问题
 1. 不知道为啥 Tesseract 目前只能运行在 electron 的主进程，在渲染进程会报错
 

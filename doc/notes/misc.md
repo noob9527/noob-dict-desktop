@@ -53,7 +53,7 @@ reference:
 3. (You don't need to do anything here, Github workflow will finish the job for you) During "release" workflow, if these isn't exist a draft release corresponding to current version(version in package.json). electron-builder will automatically create one for you. Otherwise, electron-builder will (create/update) built files in current draft release.
 
 ### Known issue
-Unable to find icon?
+1. Unable to find icon?
 to start properly, we have to run
 ```bash
 yarn renderer:build
@@ -67,46 +67,3 @@ at least once, or we can copy assets from public/assets to build/assets manually
   ```
     (electron:31101): libappindicator-WARNING **: 18:59:31.347: Using '/tmp' paths in SNAP environment will lead to unreadable resources
   ```
-1. opencv-build stuck?
-  The install script in opencv-build package need to clone several repo from github, in China mainland, this may take forever. try install opencv-build package with
-  ```bash
-  yarn install --ignore-scripts
-  ```
-  then run the install script behind proxy
-  ```bash
-  ## run install script in opencv-build
-  cd node_modules/opencv-build
-  export http_proxy=your http proxy && node ./install.js
-  ## run install script in opencv4nodejs
-  cd node_modules/opencv4nodejs
-  export http_proxy=your http proxy && node ./install/install.js 
-  ```
-  reference: https://github.com/justadudewhohacks/opencv4nodejs#readme
-
-1. NODE_VERSION_NUMMBER
-```
-Error: The module '/Users/august/projects/node_modules/opencv4nodejs/build/Release/opencv4nodejs.node'
-was compiled against a different Node.js version using
-NODE_MODULE_VERSION 54. This version of Node.js requires
-NODE_MODULE_VERSION 57. Please try re-compiling or re-installing
-```
-```
-electron-rebuild -w opencv4nodejs
-```
-1. fatal error: opencv2/core.hpp: No such file or directory
-  change opencv4nodejs/install/install.js
-  ```javascript
-  let flags = process.env.BINDINGS_DEBUG ? '--jobs max --debug' : '--jobs max'
-  ```
-  to
-  ```javascript
-  let flags = process.env.BINDINGS_DEBUG ? '--jobs max --debug' : '--jobs max'
-  flags += ' --target=7.1.6 --arch=x64 "--dist-url=https://www.electronjs.org/headers" "--build-from-source"'
-  ```
-
-1. change opencv build version
-```json
-  "opencv4nodejs": {
-    "autoBuildOpencvVersion": "4.1.2"
-  }
-```

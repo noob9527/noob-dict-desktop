@@ -65,8 +65,7 @@
     "uuid": "^7.0.3"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-0",
-    "@babel/preset-env": "^7.0.0-0",
+    "@babel/core": "^7.9.0",
     "@jest-runner/electron": "^2.0.2",
     "@svgr/webpack": "4.1.0",
     "@types/color": "^3.0.0",
@@ -148,9 +147,9 @@
   },
   "browserslist": {
     "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
     ],
     "development": [
       "last 1 chrome version",
