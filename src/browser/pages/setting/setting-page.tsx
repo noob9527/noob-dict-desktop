@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import { ThemedCheckbox } from '../../components/themed-ui/input/checkbox';
 import { ThemedContent } from '../../components/themed-ui/content/content';
 import { ThemedInputShortcut } from '../../components/themed-ui/input/input-shortcut/themed-input-shortcut';
 import { UserProfile } from '../../../common/model/user-profile';
+import { EcdictLocationSetting } from './ecdict-location-setting';
 
 const Container = styled.div`
   height: 100vh;
@@ -17,6 +18,7 @@ const Container = styled.div`
 const InlineContainer = styled.span`
   display: inline-flex;
   align-items: center;
+
   > * + * {
     margin-left: 10px;
   }
@@ -24,12 +26,13 @@ const InlineContainer = styled.span`
 
 const SettingPage = () => {
   const dispatch = useDispatch();
-  const profile: UserProfile = useSelector((state: any) => state.setting);
-  const { appHotKey, readClipboard, watchSelection } = profile;
+  const settingState: UserProfile = useSelector((state: any) => state.setting);
+  const { appHotKey, readClipboard, watchSelection } = settingState;
 
   return (
     <ThemedContent>
       <Container>
+        <EcdictLocationSetting/>
         <ThemedCheckbox
           checked={watchSelection}
           onChange={event => {
@@ -39,8 +42,7 @@ const SettingPage = () => {
                 watchSelection: event?.target?.checked!!,
               },
             });
-          }}>
-          watch selection (only on linux)</ThemedCheckbox>
+          }}>Watch Selection (Only on Linux)</ThemedCheckbox>
         <ThemedCheckbox
           checked={readClipboard}
           onChange={event => {
@@ -50,8 +52,7 @@ const SettingPage = () => {
                 readClipboard: event?.target?.checked!!,
               },
             });
-          }}>
-          read clipboard</ThemedCheckbox>
+          }}>Read Clipboard</ThemedCheckbox>
         <InlineContainer>
           <span>hot key:</span>
           <ThemedInputShortcut

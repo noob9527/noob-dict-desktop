@@ -12,16 +12,17 @@ const Container = styled.div`
 
 interface CommonEngineListProps {
   result: SearchResult
+  highlightWords: string[]
 }
 
 const CommonDict: React.FC<CommonEngineListProps> = (props: CommonEngineListProps) => {
-  const { result } = props;
+  const { result, highlightWords } = props;
 
   if (SearchResultType.isSuccessResult(result)) {
     return (
       <Container>
         <Title>{result.title}</Title>
-        <DefinitionList definitions={result.definitions}/>
+        <DefinitionList definitions={result.definitions} highlightWords={highlightWords}/>
       </Container>
     );
   } else if (SearchResultType.isDoYouMeanResult(result)) {

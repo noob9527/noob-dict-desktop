@@ -6,6 +6,11 @@ export interface SettingService {
   initSetting(): Promise<UserProfile>
 
   // called by setting window
+  // -> setting window
+  // -> ElectronSettingService.sendSettingChange
+  // -> src/electron-main/setting.ts
+  // -> src/browser/ipc-renderer.ts registerStorageEventListener
+  // -> ElectronSettingService.handleSettingChange
   sendSettingChange(newValue: UserProfile, oldValue: UserProfile): Promise<UserProfile>
 
   // called by search window

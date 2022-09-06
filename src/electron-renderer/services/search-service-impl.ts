@@ -14,8 +14,8 @@ export class CorsSearchService implements SearchService {
     this.noteService = rendererContainer.get<NoteService>(NoteServiceToken);
   }
 
-  async fetchSuggests(text: string): Promise<Suggest[]> {
-    return NetworkSuggestEngine.getSuggests(text);
+  async fetchSuggests(text: string, option?: SearchOption): Promise<Suggest[]> {
+    return NetworkSuggestEngine.getSuggests(text, option);
   }
 
   async fetchResult(text: string, option: SearchOption): Promise<SearchResult> {
@@ -25,7 +25,7 @@ export class CorsSearchService implements SearchService {
 
 @injectable()
 export class MockSearchService implements SearchService {
-  fetchSuggests(text: string): Promise<Suggest[]> {
+  fetchSuggests(text: string, option?: SearchOption): Promise<Suggest[]> {
     return NetworkSuggestEngine.getSuggests(text, { mock: true });
   }
 

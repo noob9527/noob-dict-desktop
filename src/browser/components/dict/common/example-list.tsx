@@ -13,6 +13,7 @@ const ItemContainer = styled.li`
   .ant-button {
     height: unset;
   }
+
   .anticon {
     color: ${props => props.theme[ColorId.word_link]};
   }
@@ -24,14 +25,13 @@ const ListContainer = styled.ul`
 
 interface ExampleItemProp {
   example: Example
-  highlightWordSet?: Set<string>
+  highlightWords?: string[]
 }
 
 const clipboardService = rendererContainer.get<ClipboardService>(ClipboardServiceToken);
 
 const ExampleItem: React.FC<ExampleItemProp> = (props: ExampleItemProp) => {
-  const dispatch = useDispatch();
-  const { example, highlightWordSet } = props;
+  const { example, highlightWords } = props;
 
   const en = example[Language.Constant.EN].sentence;
   const zh = example[Language.Constant.ZH].sentence;
@@ -39,20 +39,7 @@ const ExampleItem: React.FC<ExampleItemProp> = (props: ExampleItemProp) => {
   return (
     <ItemContainer>
       <div>
-        {/*<span>{en}</span>*/}
-        <Highlight sentence={en} highlightWords={highlightWordSet}/>
-        {/*<ThemedTooltip title={'save as context'}>*/}
-        {/*  <Button tabIndex={-1} type="link" shape="circle" ghost onClick={() => {*/}
-        {/*    dispatch({*/}
-        {/*      type: 'searchNote/saveExampleToContext',*/}
-        {/*      payload: {*/}
-        {/*        paragraph: en,*/}
-        {/*      },*/}
-        {/*    });*/}
-        {/*  }}>*/}
-        {/*    <Icon type="file-add"/>*/}
-        {/*  </Button>*/}
-        {/*</ThemedTooltip>*/}
+        <Highlight sentence={en} highlightWords={highlightWords}/>
         <CopyButton
           onClick={() => {
             clipboardService.writeClipboardText(en);
@@ -66,17 +53,20 @@ const ExampleItem: React.FC<ExampleItemProp> = (props: ExampleItemProp) => {
 
 interface ExampleListProp {
   examples: Example[]
-  highlightWordSet?: Set<string>
+  highlightWords?: string[]
 }
 
 const ExampleList: React.FC<ExampleListProp> = (props: ExampleListProp) => {
-  const { examples, highlightWordSet } = props;
+  const { examples, highlightWords } = props;
+  if (examples.length===0) {
+    return <></>;
+  }
   return (
     <>
       <h4>Examples:</h4>
       <ListContainer>
         {examples.map((def, i) =>
-          (<ExampleItem example={def} highlightWordSet={highlightWordSet} key={i}/>))
+          (<ExampleItem example={def} highlightWords={highlightWords} key={i}/>))
         }
       </ListContainer>
     </>

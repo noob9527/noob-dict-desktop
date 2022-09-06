@@ -1,6 +1,6 @@
 import { CorsSearchService, MockSearchService } from './search-service-impl';
 import { rendererContainer } from '../../common/container/renderer-container';
-import { SearchService, SearchServiceToken } from '../../common/services/search-service';
+import { SearchService, CorsSearchServiceToken, EcDictSearchServiceToken } from '../../common/services/search-service';
 import { SettingUiService, SettingUiServiceToken } from '../../common/services/setting-ui-service';
 import { ElectronSettingUiService } from './setting-ui-service-impl';
 import { SearchUiService, SearchUiServiceToken } from '../../common/services/search-ui-service';
@@ -24,14 +24,17 @@ import { CorsUserService } from './user-service-impl';
 import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
 import { ElectronLoginUiService } from './login-ui-service-impl';
 import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
-import { GlobalHistoryServiceImpl } from './global-history-service-impl';
 import { LocalStorageService, LocalStorageServiceToken } from '../../common/services/local-storage-service';
 import { LocalStorageServiceImpl } from './local-storage-service-impl';
 import { GlobalHistoryServiceImplV2 } from './global-history-service-impl-v2';
+import { EcDictSearchService } from './ecdict-search-service';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
-  rendererContainer.bind<SearchService>(SearchServiceToken).to(CorsSearchService);
+
+  rendererContainer.bind<SearchService>(CorsSearchServiceToken).to(CorsSearchService);
+  rendererContainer.bind<SearchService>(EcDictSearchServiceToken).to(EcDictSearchService);
+
   rendererContainer.bind<SearchUiService>(SearchUiServiceToken).to(ElectronSearchUiService);
   rendererContainer.bind<SettingUiService>(SettingUiServiceToken).to(ElectronSettingUiService);
   rendererContainer.bind<SettingService>(SettingServiceToken).to(ElectronSettingService);

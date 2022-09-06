@@ -7,8 +7,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { SearchNoteState } from './search-note-model';
 import { InlineEditTextarea } from './inline-edit-textarea';
 import { InlineEditText } from './inline-edit-text';
+import Highlight from '../../../components/dict/shared/highlight/highlight';
+import { SearchPanelState } from '../panel/search-panel-model';
 
-interface HistoryViewProps {
+interface HistoryTableProps {
 }
 
 
@@ -49,9 +51,10 @@ const Container = styled.div`
   }
 `;
 
-const HistoryTable: React.FC<HistoryViewProps> = (props) => {
+const HistoryTable: React.FC<HistoryTableProps> = (props) => {
   const dispatch = useDispatch();
   const noteState: SearchNoteState = useSelector((state: any) => state.searchNote);
+  const panelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
   const histories = _.sortBy(Object.values(noteState.histories), e => {
     return -e.oldData.create_at;
   });
@@ -100,6 +103,13 @@ const HistoryTable: React.FC<HistoryViewProps> = (props) => {
                         },
                       });
                     }}
+                    valueElement={(
+                      <>
+                        <Highlight
+                          sentence={e.newData.context?.paragraph ?? ''}
+                          highlightWords={panelState.highlightWords}/>
+                      </>
+                    )}
                     value={e.newData.context?.paragraph ?? ''}
                     placeholder={`give me more context about '${e.oldData.text}' to improve your memory`}
                     onChange={value => {

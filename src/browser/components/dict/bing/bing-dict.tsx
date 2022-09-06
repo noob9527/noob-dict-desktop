@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResult, SearchResultType } from '@noob9527/noob-dict-core';
+import { SearchEmptyResult, SearchResult, SearchResultType } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import Title from '../common/title';
 import ExampleList from '../common/example-list';
@@ -12,19 +12,15 @@ import DoYouMeanGroup from '../common/do-you-mean-group';
 const Container = styled.div`
 `;
 
-interface CommonEngineViewProps {
+interface BingEngineViewProps {
   result: SearchResult
+  highlightWords: string[]
 }
 
-const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps) => {
-  const { result } = props;
+const BingDict: React.FC<BingEngineViewProps> = (props: BingEngineViewProps) => {
+  const { result, highlightWords } = props;
 
   if (SearchResultType.isSuccessResult(result)) {
-    const highlightWords = new Set([
-      result.target,
-      result.title!!,
-      ...Object.values(result.wordForms) as string[],
-    ]);
     return (
       <Container>
         <Title>{result.title}</Title>
@@ -32,7 +28,7 @@ const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps)
         <BingDefinitionList definitions={result.definitions}/>
         <WordFormList wordForms={result.wordForms}/>
         <hr/>
-        <ExampleList examples={result.examples} highlightWordSet={highlightWords}/>
+        <ExampleList examples={result.examples} highlightWords={highlightWords}/>
       </Container>
     );
   } else if (SearchResultType.isDoYouMeanResult(result)) {

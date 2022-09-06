@@ -1,4 +1,5 @@
 import { ISearchHistory } from './history';
+import { EcDictSearchSuccessResult } from '@noob9527/noob-dict-ecdict';
 
 
 // note is just histories group by text
@@ -12,6 +13,7 @@ export interface INote {
   update_times: number // In general, the more update times, the more significant a word is
   // extra
   histories: ISearchHistory[]
+  ecDictSearchResult: EcDictSearchSuccessResult | null
 }
 
 export class Note implements INote {
@@ -24,6 +26,7 @@ export class Note implements INote {
   update_times = 0;
   // extra
   histories: ISearchHistory[] = [];
+  ecDictSearchResult: EcDictSearchSuccessResult | null = null;
 
   static wrap(note: Partial<INote>): Note {
     const res = new Note();

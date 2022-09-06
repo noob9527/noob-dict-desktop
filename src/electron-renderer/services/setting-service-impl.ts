@@ -18,9 +18,18 @@ export class ElectronSettingService implements SettingService {
     this.clipboardService = rendererContainer.get<ClipboardService>(ClipboardServiceToken);
   }
 
+  // called by setting window
+  // -> setting window
+  // -> ElectronSettingService.sendSettingChange
+  // -> src/electron-main/setting.ts
+  // -> src/browser/ipc-renderer.ts registerStorageEventListener
+  // -> ElectronSettingService.handleSettingChange
   async sendSettingChange(newValue: UserProfile, oldValue: UserProfile): Promise<UserProfile> {
-    const res = await ipcRenderer.callMain(SettingChannel.SETTING_CHANGE, { newValue, oldValue });
-    return res as UserProfile;
+    return ipcRenderer
+      .callMain<{ newValue: UserProfile, oldValue: UserProfile }, UserProfile>(
+        SettingChannel.SETTING_CHANGE,
+        { newValue, oldValue }
+      );
   }
 
   async handleSettingChange(newValue: UserProfile, oldValue: UserProfile | null): Promise<UserProfile> {
@@ -34,7 +43,7 @@ export class ElectronSettingService implements SettingService {
 
   async initSetting(): Promise<UserProfile> {
     const res = store.store;
-    if (getCurrentWindowId() === WindowId.SEARCH) {
+    if (getCurrentWindowId()===WindowId.SEARCH) {
       await this.handleSettingChange(res, null);
     }
     return res as UserProfile;

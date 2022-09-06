@@ -1,11 +1,19 @@
 import { ipcMain } from 'electron-better-ipc';
 import { getOrCreateSettingWindow } from './window/setting-window';
-import { AppChannel, LoginChannel, PopupChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
+import {
+  AppChannel,
+  EcDictChannel,
+  LoginChannel,
+  PopupChannel,
+  SearchChannel,
+  SettingChannel
+} from '../common/ipc-channel';
 import {
   getOrCreateSearchWindow,
   hideSearchWindow,
   showSearchWindow,
-  toggleSearchWindow, topSearchWindow,
+  toggleSearchWindow,
+  topSearchWindow,
 } from './window/search-window';
 import { hidePopupWindow, showPopupWindow } from './window/popup-window';
 import logger from '../electron-shared/logger';
@@ -13,6 +21,7 @@ import { handleSettingChange } from './setting';
 import { UserProfile } from '../common/model/user-profile';
 import { getOrCreateLoginWindow } from './window/login-window';
 import { getClientAppId } from './utils/env-util';
+import { ecDictSearchService, isEcDictAvailable } from './ecdict';
 
 // setting channel
 ipcMain.answerRenderer(SettingChannel.OPEN_SETTING_WINDOW, () => {
@@ -22,6 +31,7 @@ ipcMain.answerRenderer(SettingChannel.OPEN_SETTING_WINDOW, () => {
 
 ipcMain.answerRenderer(SettingChannel.SETTING_CHANGE, async data => {
   const { newValue, oldValue } = data as { newValue: UserProfile, oldValue: UserProfile };
+  logger.log('setting change', newValue);
   return handleSettingChange(newValue, oldValue);
 });
 
@@ -54,7 +64,7 @@ ipcMain.answerRenderer(SearchChannel.SEARCH, async (data: any) => {
   const window = getOrCreateSearchWindow();
   await showSearchWindow();
   if (data.text) {
-    await ipcMain.callRenderer(window, SearchChannel.SEARCH, { text: data.text })
+    await ipcMain.callRenderer(window, SearchChannel.SEARCH, { text: data.text });
   }
 });
 
@@ -73,6 +83,22 @@ ipcMain.answerRenderer(PopupChannel.HIDE_POPUP_WINDOW, () => {
 ipcMain.answerRenderer(LoginChannel.SHOW_LOGIN_WINDOW, () => {
   getOrCreateLoginWindow();
   return true;
+});
+
+ipcMain.answerRenderer(EcDictChannel.FETCH_AVAILABLE, async () => {
+  return isEcDictAvailable();
+});
+
+ipcMain.answerRenderer(EcDictChannel.FETCH_SUGGESTS, async (data: any) => {
+  return await ecDictSearchService.fetchSuggests(data.text, data.option);
+});
+
+ipcMain.answerRenderer(EcDictChannel.FETCH_RESULT, async (data: any) => {
+  return await ecDictSearchService.fetchResult(data.text, data.option);
+});
+
+ipcMain.answerRenderer(EcDictChannel.FETCH_RESULT_BATCH, async (data: any) => {
+  return await ecDictSearchService.fetchResultBatch(data.textArray, data.option);
 });
 
 ipcMain.answerRenderer(AppChannel.GET_CLIENT_APP_ID, () => {

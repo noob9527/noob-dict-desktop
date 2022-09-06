@@ -1,6 +1,8 @@
 import React from 'react';
 import styled from 'styled-components';
 import ColorId from '../../../../styles/ColorId';
+import Highlighter from 'react-highlight-words';
+import { findHighlightWordPos } from '../../../../../common/utils/find-highlight-word-pos';
 
 const Sentence = styled.span`
 `;
@@ -17,7 +19,7 @@ interface HighlightProp {
   sentence: string
   // array of [startIndex, endIndex]
   posList?: [number, number][]
-  highlightWords?: Set<string>
+  highlightWords?: string[]
 }
 
 interface PosHighlightProp {
@@ -27,25 +29,31 @@ interface PosHighlightProp {
 
 interface WordHighlightProp {
   sentence: string
-  highlightWords: Set<string>
+  highlightWords: string[]
 }
 
 const PosHighlight: React.FC<PosHighlightProp> = (props) => {
-  const { sentence } = props;
-  return <Sentence>{sentence}</Sentence>;
+  const { sentence, posList } = props;
+
+  return (
+    <Highlighter
+      searchWords={[]}
+      textToHighlight={sentence}
+      highlightTag={({ children }) => (<HighlightSpan>{children}</HighlightSpan>)}
+      findChunks={() => {
+        return posList.map(([start, end]) => ({ start, end }));
+      }}
+    />
+  );
 };
 
 const WordHighlight: React.FC<WordHighlightProp> = (props) => {
   const { sentence, highlightWords } = props;
-  const words = sentence.split(/\s+/);
-  // return <Sentence>{sentence}</Sentence>;
-  return <Sentence>{words.map((e, i) =>
-    (highlightWords.has(e)
-        ? <HighlightSpan key={i}>{e} </HighlightSpan>
-        : <NormalSpan key={i}>{e} </NormalSpan>
-    ))
-  }
-  </Sentence>;
+  const posList = findHighlightWordPos(
+    sentence,
+    highlightWords,
+  );
+  return <PosHighlight sentence={sentence} posList={posList}/>;
 };
 
 const Highlight: React.FC<HighlightProp> = (props) => {
@@ -54,7 +62,7 @@ const Highlight: React.FC<HighlightProp> = (props) => {
   if (posList && posList.length)
     return <PosHighlight sentence={sentence} posList={posList}/>;
 
-  if (highlightWords && highlightWords.size)
+  if (highlightWords && highlightWords.length)
     return <WordHighlight sentence={sentence} highlightWords={highlightWords}/>;
 
   return <Sentence>{sentence}</Sentence>;

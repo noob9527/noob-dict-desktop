@@ -9,8 +9,10 @@ import { NetworkEngineId } from '@noob9527/noob-dict-net-engines';
 
 
 const EngineView: React.FC = () => {
-  const engine: NetworkEngineId = (useParams() as any).engine;
   const state: SearchPanelState = useSelector((state: any) => state.searchPanel);
+  const engine: NetworkEngineId = (useParams() as any).engine
+    ?? state.primaryResult?.engine
+    ?? NetworkEngineId.BING;
   const result = state.searchResultMap[engine];
 
   if (!result) return (<ThemedEmpty/>);
@@ -18,9 +20,9 @@ const EngineView: React.FC = () => {
   // noinspection JSRedundantSwitchStatement
   switch (result.engine) {
     case NetworkEngineId.BING:
-      return <BingDict result={result}/>;
+      return <BingDict result={result} highlightWords={state.highlightWords}/>;
     default:
-      return <CommonEngineView result={result}/>;
+      return <CommonEngineView result={result} highlightWords={state.highlightWords}/>;
   }
 };
 

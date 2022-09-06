@@ -33,11 +33,14 @@ function createWindow() {
   // https://electronjs.org/docs/api/browser-window#modal-windows
   const parent = getOrCreateSearchWindow();
   const window = new BrowserWindow({
-    width: Runtime.isDev ? 400 : 400,
-    height: 200,
+    width: Runtime.isDev ? 1200 : 400,
+    height: Runtime.isDev ? 600 : 200,
     maximizable: false,
     minimizable: false,
-    modal: true,
+
+    // currently in mac, modal window doesn't have close button
+    // and cannot be closed
+    modal: !Runtime.isMac,
     resizable: Runtime.isDev,
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
@@ -65,14 +68,14 @@ function createWindow() {
   window.once('ready-to-show', () => {
     window.show();
   });
-  // currently in mac, modal window doesn't have close button
-  // hence we listen blur event, and close window
-  // https://github.com/electron/electron/issues/30232
-  if (Runtime.isMac) {
-    window.on('blur', async () => {
-      close();
-    });
-  }
+  // // currently in mac, modal window doesn't have close button
+  // // hence we listen blur event, and close window
+  // // https://github.com/electron/electron/issues/30232
+  // if (Runtime.isMac) {
+  //   window.on('blur', async () => {
+  //     close();
+  //   });
+  // }
   window.on('closed', async () => {
     destroy();
   });
@@ -81,7 +84,7 @@ function createWindow() {
   notifyRendererWindowEvents(WindowId.SETTING, window, parent)
 
   if (Runtime.isDev) {
-    // window.webContents.openDevTools();
+    window.webContents.openDevTools();
   }
 
   return window;

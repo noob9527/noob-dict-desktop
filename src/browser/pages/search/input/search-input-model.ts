@@ -1,10 +1,19 @@
 import { Suggest } from '@noob9527/noob-dict-core';
-import { call, cancel, delay, fork, put, take, select } from '@redux-saga/core/effects';
+import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
-import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
+import {
+  CorsSearchServiceToken,
+  EcDictSearchServiceToken,
+  SearchService
+} from '../../../../common/services/search-service';
 import { RootState } from '../../root-model';
 import { NoteService, NoteServiceToken } from '../../../../common/services/db/note-service';
+import { INote } from '../../../../common/model/note';
+import { EcDictSearchService } from '../../../../electron-renderer/services/ecdict-search-service';
+import logger from '../../../../electron-shared/logger';
+import { EcDictSearchSuccessResult } from '@noob9527/noob-dict-ecdict';
+import { TransientState } from '../../transient-model';
 
 export interface SearchInputState {
   text: string,
@@ -47,33 +56,51 @@ const effects = {
   },
   * fetchSuggests(action) {
     const rootState: RootState = yield select(state => state.root);
-    const searchService = rendererContainer.get<SearchService>(SearchServiceToken);
+    const transientState: TransientState = yield select(state => state._transient);
+    const searchService = rendererContainer.get<SearchService>(CorsSearchServiceToken);
+    const ecDictSearchService = rendererContainer.get<EcDictSearchService>(EcDictSearchServiceToken);
     const noteService = rendererContainer.get<NoteService>(NoteServiceToken);
 
     const { text } = action;
     const user_id = rootState.currentUser?.id ?? '';
 
-    let suggests: Suggest[];
-    if (text) {
-      suggests = yield call([searchService, searchService.fetchSuggests], text);
-    } else {
-      const notes = yield call([noteService, noteService.fetchLatest], 20, user_id);
-      suggests = notes.map(e => {
-        const firstMeaning = e.search_result?.definitions[0]?.meanings[0];
-        return {
-          entry: e.text,
-          explain: firstMeaning?.ZH ?? firstMeaning?.EN,
-        };
+    let suggests: Suggest[] = [];
+    try {
+      if (text) {
+        if (transientState.ecDictAvailable) {
+          suggests = yield call([ecDictSearchService, ecDictSearchService.fetchSuggests], text);
+        } else {
+          suggests = yield call([searchService, searchService.fetchSuggests], text);
+        }
+      } else {
+        const notes: INote[] = yield call([noteService, noteService.fetchLatest], 20, user_id);
+        if (transientState.ecDictAvailable) {
+          const ecDictSearchResults: { [index in string]: EcDictSearchSuccessResult | null } = yield call(
+            [ecDictSearchService, ecDictSearchService.fetchResultBatch],
+            notes.map(e => e.text)
+          );
+          notes.forEach(e => {
+            e.ecDictSearchResult = ecDictSearchResults[e.text] ?? null;
+          });
+        }
+        suggests = notes.map(e => {
+          return {
+            entry: e.text,
+            explain: e.ecDictSearchResult?.translation?.replace(/\n/g, '; '),
+          };
+        });
+      }
+    } catch (e) {
+      logger.error(e);
+    } finally {
+      yield put({
+        type: 'searchInput/mergeState',
+        payload: {
+          suggests,
+          loadingSuggests: false,
+        },
       });
     }
-
-    yield put({
-      type: 'searchInput/mergeState',
-      payload: {
-        suggests,
-        loadingSuggests: false,
-      },
-    });
   },
 };
 

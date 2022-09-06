@@ -1,28 +1,58 @@
-import { SearchResult, SearchResultType } from '@noob9527/noob-dict-core';
+import { SearchEmptyResult, SearchResult, SearchResultType } from '@noob9527/noob-dict-core';
 import { NetworkEngineId } from '@noob9527/noob-dict-net-engines';
 import { all, call, put, select, take } from '@redux-saga/core/effects';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
-import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
+import {
+  SearchService,
+  CorsSearchServiceToken,
+  EcDictSearchServiceToken,
+  EcDictId
+} from '../../../../common/services/search-service';
 import { push } from 'connected-react-router';
 import { RootState } from '../../root-model';
+import { EcDictSearchService } from '../../../../electron-renderer/services/ecdict-search-service';
+import { EcDictSearchSuccessResult } from '@noob9527/noob-dict-ecdict';
 
-export type SearchResultMap = { [index in NetworkEngineId]?: Maybe<SearchResult> };
+export interface SearchResultMap {
+  [NetworkEngineId.BING]?: Maybe<SearchResult>,
+  [NetworkEngineId.CAMBRIDGE]?: Maybe<SearchResult>,
+}
 
 export interface SearchPanelState {
-  translatedText: string,
-  engines: NetworkEngineId[],
-  primaryResult: Maybe<SearchResult>,
-  searchResultMap: SearchResultMap,
+  translatedText: string
+  engines: string[]
+  primaryResult: Maybe<SearchResult>
+  searchResultMap: SearchResultMap
+  ecDictSearchResult: EcDictSearchSuccessResult | SearchEmptyResult | null
+  highlightWords: string[],
 }
 
 export interface SearchPanelModel extends Model {
   state: SearchPanelState
 }
 
+function* fetchEcDictResult(action) {
+  const { text, engine } = action.payload;
+  const ecDictSearchService = rendererContainer.get<EcDictSearchService>(EcDictSearchServiceToken);
+  let result: EcDictSearchSuccessResult | SearchEmptyResult | null = null;
+  try {
+    result = yield call([ecDictSearchService, ecDictSearchService.fetchResult], text, { engine });
+  } catch (e) {
+    console.error(e);
+  }
+
+  yield put({
+    type: 'searchPanel/fetchEcDictResultFinished',
+    payload: {
+      ecDictSearchResult: result,
+    },
+  });
+}
+
 function* fetchSingleResult(action) {
   const { text, engine } = action.payload;
-  const searchService = rendererContainer.get<SearchService>(SearchServiceToken);
+  const searchService = rendererContainer.get<SearchService>(CorsSearchServiceToken);
 
   let result: SearchResult | null | undefined = null;
 
@@ -54,10 +84,7 @@ function* fetchResults(action: FetchResultsAction) {
 
   // reset translatedText
   yield put({
-    type: 'searchPanel/mergeState',
-    payload: {
-      translatedText: '',
-    },
+    type: 'searchPanel/clearPreviousResult',
   });
 
   yield all([
@@ -70,6 +97,13 @@ function* fetchResults(action: FetchResultsAction) {
           engine,
         },
       });
+    }),
+    put({
+      type: 'searchPanel/fetchEcDictResult',
+      payload: {
+        text,
+        engine: EcDictId,
+      },
     }),
   ]);
 
@@ -114,6 +148,7 @@ function* fetchResults(action: FetchResultsAction) {
 const effects = {
   fetchSingleResult,
   fetchResults,
+  fetchEcDictResult,
 };
 
 const reducers = {
@@ -131,6 +166,28 @@ const reducers = {
         ...state.searchResultMap,
         [engine]: result,
       },
+      highlightWords: Array.from(new Set(state.highlightWords.concat(getHighlightWords(result)))),
+    };
+  },
+  fetchEcDictResultFinished(state, action: any) {
+    const result = action.payload.ecDictSearchResult;
+    return {
+      ...state,
+      ecDictSearchResult: result,
+      highlightWords: Array.from(new Set(state.highlightWords.concat(getHighlightWords(result)))),
+    };
+  },
+  clearPreviousResult(state) {
+    return {
+      ...state,
+      translatedText: '',
+      primaryResult: null,
+      ecDictSearchResult: null,
+      searchResultMap: {
+        [NetworkEngineId.BING]: null,
+        [NetworkEngineId.CAMBRIDGE]: null,
+      },
+      highlightWords: [],
     };
   },
 };
@@ -141,10 +198,12 @@ const searchPanelModel: SearchPanelModel = {
     engines: [NetworkEngineId.BING, NetworkEngineId.CAMBRIDGE],
     translatedText: '',
     primaryResult: null,
+    ecDictSearchResult: null,
     searchResultMap: {
       [NetworkEngineId.BING]: null,
       [NetworkEngineId.CAMBRIDGE]: null,
     },
+    highlightWords: [],
   },
   effects,
   reducers,
@@ -154,12 +213,35 @@ export default searchPanelModel;
 
 function getResultRank(result: SearchResult | null | undefined): number {
   if (!result) return 0;
+  let res = 0;
   switch (result.type) {
     case SearchResultType.Constant.SUCCESS:
-      return 30;
+      res += 300;
+      break;
     case SearchResultType.Constant.DO_YOU_MEAN:
-      return 20;
+      res += 200;
+      break;
     case SearchResultType.Constant.EMPTY:
-      return 10;
+      res += 100;
+      break;
   }
+  switch (result.engine) {
+    case NetworkEngineId.BING:
+      res += 90;
+      break;
+    case NetworkEngineId.CAMBRIDGE:
+      res += 80;
+      break;
+  }
+  return res;
+}
+
+function getHighlightWords(result: SearchResult | null | undefined): string[] {
+  if (!result) return [];
+  if (!SearchResultType.isSuccessResult(result)) return [];
+  return [
+    result.target,
+    result.title!!,
+    ...Object.values(result.wordForms) as string[]
+  ];
 }

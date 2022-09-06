@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { ReactElement, useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import { ThemedTextArea } from '../../../components/themed-ui/input/textarea';
 import ColorId from '../../../styles/ColorId';
@@ -7,7 +7,7 @@ import { usePrevious } from '../../../hooks/use-previous';
 const Container = styled.div`
   .inline-edit-textarea-display {
     white-space: pre-line;
-    span {
+    > span {
       border-bottom: 1px dashed ${props => props.theme[ColorId.foreground]};
       cursor: pointer;
       &:hover {
@@ -35,6 +35,7 @@ const EditorContainer = styled.div`
 
 interface InlineEditTextareaProps {
   value?: string
+  valueElement?: ReactElement,
   onChange?: (value) => void
   placeholder?: string
   editing?: boolean
@@ -51,6 +52,7 @@ const defaultProps: InlineEditTextareaProps = {
 const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
   const {
     value,
+    valueElement,
     editing,
     placeholder,
     onChange,
@@ -71,6 +73,9 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
     }
   }, [editing]);
 
+  const displayValue = value?.trim()
+    ? value : placeholder;
+
   return (
     <Container>
       <div hidden={isEditing} className={'inline-edit-textarea-display'}>
@@ -87,7 +92,7 @@ const InlineEditTextarea: React.FC<InlineEditTextareaProps> = (props) => {
               }
             }, 100);
           }}>
-            {value?.trim() ? value : placeholder}
+            {valueElement ? valueElement : displayValue}
           </span>
       </div>
       <EditorContainer hidden={!isEditing} className={'inline-edit-textarea-edit'}>

@@ -1,8 +1,13 @@
 import SplitPane from 'react-split-pane';
 import styled from 'styled-components';
-import ColorId from '../../../styles/ColorId';
+import ColorId from '../../styles/ColorId';
 
 const ThemedSplitPane = styled(SplitPane)`
+  // unset height: 100%
+  // unset min-height: 100%
+  height: unset !important;
+  min-height: unset !important;
+
   // ---------------------------------
   // this part may not suit for general situation
   &.SplitPane {

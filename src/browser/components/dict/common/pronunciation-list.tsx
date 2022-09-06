@@ -4,13 +4,8 @@ import styled from 'styled-components';
 import Speaker from '../shared/speaker/speaker';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { ClipboardService, ClipboardServiceToken } from '../../../../common/services/clipboard-service';
-import ColorId from '../../../styles/ColorId';
 import { ThemedTooltip } from '../../themed-ui/tooltip/tooltip';
-
-const StyledSpan = styled.span`
-  color: ${props => props.theme[ColorId.word_link]};
-  cursor: pointer;
-`;
+import { InteractiveText } from '../../themed-ui/content/interactive-text/interactive-text';
 
 const ItemContainer = styled.span`
   > span + span {
@@ -53,13 +48,13 @@ const PronunciationItem: React.FC<PronunciationItemProps> = (props: Pronunciatio
     <ItemContainer>
       <span>{label}</span>
       <ThemedTooltip title="copy">
-        <StyledSpan onClick={() => {
+        <InteractiveText onClick={() => {
           if (pronunciation.phoneticSymbol) {
             clipboardService.writeClipboardText(pronunciation.phoneticSymbol);
           }
-        }}>{pronunciation.phoneticSymbol}</StyledSpan>
+        }}>{pronunciation.phoneticSymbol}</InteractiveText>
       </ThemedTooltip>
-      <Speaker src={pronunciation.audio ?? undefined}/>
+      {pronunciation.audio ? (<Speaker src={pronunciation.audio}/>) : null}
     </ItemContainer>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import ColorId from '../../../styles/ColorId';
 
@@ -11,12 +11,13 @@ const SearchPanelMenu = styled.ul`
 `;
 
 const MenuItemElement: React.FC<any> = (props) => {
-  let { to, className, children } = props;
-  const match = useRouteMatch({
-    path: to,
-    exact: true
-  });
-  className += match ? ' active' : '';
+  let { active, to, className, children } = props;
+  // const match = useRouteMatch({
+  //   path: to,
+  //   exact: true
+  // });
+  // className += match ? ' active' : '';
+  className += (active ? ' active' : '');
   return (
     <li className={className}><Link tabIndex={-1} to={to}>{children}</Link></li>
   );

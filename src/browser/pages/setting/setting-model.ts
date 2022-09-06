@@ -2,41 +2,41 @@ import { Model } from '../../redux/common/redux-model';
 import { call, put, select } from '@redux-saga/core/effects';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { SettingService, SettingServiceToken } from '../../../common/services/setting-service';
-
-export interface SettingState {
-  appHotKey: string
-  readClipboard: boolean
-  watchSelection: boolean
-}
+import logger from '../../../electron-shared/logger';
+import { UserProfile } from '../../../common/model/user-profile';
 
 export interface SettingModel extends Model {
-  state: SettingState
+  state: UserProfile
 }
-
-const state = {
-  appHotKey: '',
-  readClipboard: false,
-  watchSelection: false,
-};
 
 const effects = {
   * init() {
     const settingService = rendererContainer.get<SettingService>(SettingServiceToken);
     const setting = yield call([settingService, settingService.initSetting]);
     yield put({
-      type: 'setting/mergeState',
+      type: 'setting/settingChanged',
       payload: setting,
     });
   },
   // is designed to be called by setting window
-  * settingChange(action) {
+  * settingChange(action: { type: 'setting/settingChange', payload: Partial<UserProfile> }) {
     const settingService = rendererContainer.get<SettingService>(SettingServiceToken);
-    const oldValue = yield select((state: any) => state.setting);
-    const newValue = { ...oldValue, ...action.payload };
+    const oldValue: UserProfile = yield select((state: any) => state.setting);
+    const newValue: UserProfile = { ...oldValue, ...action.payload };
+    logger.log('setting change', oldValue, newValue);
     const actualNewValue = yield call([settingService, settingService.sendSettingChange], newValue, oldValue);
     yield put({
-      type: 'setting/mergeState',
+      type: 'setting/settingChanged',
       payload: actualNewValue,
+    });
+  },
+  * settingChanged(action: { type: 'setting/settingChanged', payload: UserProfile }) {
+    yield put({
+      type: 'setting/mergeState',
+      payload: action.payload,
+    });
+    yield put({
+      type: '_transient/setEcDictAvailable',
     });
   },
 };
@@ -52,7 +52,12 @@ const reducers = {
 
 const settingModel: SettingModel = {
   namespace: 'setting',
-  state,
+  state: {
+    appHotKey: '',
+    readClipboard: false,
+    watchSelection: false,
+    ecDictFileLocation: null,
+  },
   effects,
   reducers,
 };

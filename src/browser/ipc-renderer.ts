@@ -30,7 +30,7 @@ function registerStorageEventListener(store: Store) {
       await settingService.handleSettingChange(data.newValue, data.oldValue);
     }
     store.dispatch({
-      type: 'setting/mergeState',
+      type: 'setting/settingChanged',
       payload: data.newValue,
     });
     return data.newValue;

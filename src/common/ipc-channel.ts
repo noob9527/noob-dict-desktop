@@ -41,6 +41,13 @@ enum AppChannel {
   GET_CLIENT_APP_ID= 'GET_CLIENT_APP_ID',
 }
 
+enum EcDictChannel {
+  FETCH_AVAILABLE = 'FETCH_AVAILABLE',
+  FETCH_SUGGESTS = 'FETCH_SUGGESTS',
+  FETCH_RESULT = 'FETCH_RESULT',
+  FETCH_RESULT_BATCH = 'FETCH_RESULT_BATCH',
+}
+
 // enum TrayChannel {
 //   PUT_IN_TRAY = 'PUT_IN_TRAY',
 //   REMOVE_TRAY = 'REMOVE_TRAY'
@@ -54,5 +61,6 @@ export {
   AutoUpdaterChannel,
   LoginChannel,
   AppChannel,
+  EcDictChannel,
 };
 

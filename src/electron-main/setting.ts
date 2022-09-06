@@ -5,16 +5,25 @@ import { GlobalShotCutChannel, SettingChannel } from '../common/ipc-channel';
 import { globalShortcut } from 'electron';
 import { UserProfile } from '../common/model/user-profile';
 import logger from '../electron-shared/logger';
+import { handleEcDictFileLocationChange } from './ecdict';
 
-function initialSetting() {
+export function initialSetting() {
   const setting = store.store;
   if (setting.appHotKey) {
     handleAppHotKeyChange(setting.appHotKey);
   }
+  handleEcDictFileLocationChange(setting.ecDictFileLocation);
 }
 
-async function handleSettingChange(newValue: UserProfile, oldValue: UserProfile): Promise<UserProfile> {
+// called by setting window
+// -> setting window
+// -> ElectronSettingService.sendSettingChange
+// -> src/electron-main/setting.ts
+// -> src/browser/ipc-renderer.ts registerStorageEventListener
+// -> ElectronSettingService.handleSettingChange
+export async function handleSettingChange(newValue: UserProfile, oldValue: UserProfile): Promise<UserProfile> {
   newValue.appHotKey = handleAppHotKeyChange(newValue.appHotKey, oldValue.appHotKey);
+  handleEcDictFileLocationChange(newValue.ecDictFileLocation, oldValue.ecDictFileLocation);
   store.store = newValue; // sync to electron store
   const res = await ipcMain.callRenderer(getOrCreateSearchWindow(), SettingChannel.SETTING_CHANGE, {
     newValue,
@@ -48,8 +57,3 @@ function handleAppHotKeyChange(newValue: string | null, oldValue: string | null 
   }
   return newValue;
 }
-
-export {
-  initialSetting,
-  handleSettingChange,
-};
