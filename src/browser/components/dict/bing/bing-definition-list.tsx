@@ -1,5 +1,5 @@
 import React from 'react';
-import { Definition } from '@noob9527/noob-dict-core';
+import { Definition, PartOfSpeech } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import BingMeaningList from './bing-meaning-list';
 
@@ -24,9 +24,13 @@ interface BingDefinitionItemProp {
 
 const BingDefinitionItem: React.FC<BingDefinitionItemProp> = (props: BingDefinitionItemProp) => {
   const { definition } = props;
+
+  const posLabel = PartOfSpeech
+      .ofOrNull(definition.partOfSpeech ?? '')?.symbols[0]
+    ?? definition.partOfSpeech
   return (
     <ItemContainer>
-      <span>{definition.partOfSpeech}</span>
+      <span>{posLabel}</span>
       <BingMeaningList meanings={definition.meanings}/>
     </ItemContainer>
   );

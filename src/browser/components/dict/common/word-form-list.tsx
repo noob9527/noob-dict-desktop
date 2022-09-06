@@ -1,5 +1,5 @@
 import React from 'react';
-import { WordForm, WordFormToken } from '@noob9527/noob-dict-core';
+import { WordForm } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 
 const ItemContainer = styled.span`
@@ -13,18 +13,26 @@ const ListContainer = styled.div`
 
 
 interface WordFormItemProp {
-  wordForm: WordForm
+  wordForm: string
+  wordFormValue: string,
 }
 interface WordFormListProp {
-  wordForms: WordForm[]
+  wordForms: WordForm.Data
 }
 
 const WordFormItem: React.FC<WordFormItemProp> = (props: WordFormItemProp) => {
-  const { wordForm } = props;
+  const { wordForm, wordFormValue } = props;
+  let label: string;
+  try {
+    const wordFormEnum = WordForm.of(wordForm);
+    label = wordFormEnum.description;
+  } catch (e) {
+    label = wordForm;
+  }
   return (
     <ItemContainer>
-      <span>{WordFormToken.getLabel(wordForm[0])}: </span>
-      <span>{wordForm[1]}</span>
+      <span>{label}: </span>
+      <span>{wordFormValue}</span>
     </ItemContainer>
   );
 };
@@ -32,7 +40,9 @@ const WordFormList: React.FC<WordFormListProp> = (props: WordFormListProp) => {
   const { wordForms } = props;
   return (
     <ListContainer>
-      {wordForms.map((def, i) => (<WordFormItem wordForm={def} key={i}/>))}
+      {Object.entries(wordForms).map(([wordForm, value]) =>
+        (<WordFormItem wordForm={wordForm} wordFormValue={value ?? ''} key={wordForm}/>)
+      )}
     </ListContainer>
   );
 };

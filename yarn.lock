@@ -5810,10 +5810,10 @@ ee-first@1.1.1:
   resolved "https://registry.npmmirror.com/ee-first/-/ee-first-1.1.1.tgz#590c61156b0ae2f4f0255732a158b266bc56b21d"
   integrity sha512-WMwm9LhRUo+WUaRN+vRuETqG89IgZphVSNkdFgeb6sS/E4OrDIN7t48CAewSHXc6C8lefD8KKfr5vY61brQlow==
 
-effective-enum@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmmirror.com/effective-enum/-/effective-enum-1.0.0.tgz#551bfe517682c888b7a52247f682f75484d20875"
-  integrity sha512-TupxFFsHSWIMRJJ6+wvl14og2xjhgJHZUHnVhHWzGYePn4I7XIXu5zuwOgmYHWtNX59GFt+jCH4/WV6hKg6zlg==
+effective-enum@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npmmirror.com/effective-enum/-/effective-enum-1.0.5.tgz#8421decfaf895d801ac8c06c378e5132b696ac71"
+  integrity sha512-rdyZ5Mx2wVldxKIQXYcB1j462wNF1OnZho8MSsz1Ih91OVDpl/oDpq/YQaVwPs0TrkSE2cuA6daHjLFRvE4Jrw==
   dependencies:
     reflect-metadata "^0.1.12"
 

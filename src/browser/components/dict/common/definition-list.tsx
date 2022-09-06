@@ -1,5 +1,5 @@
 import React from 'react';
-import { Definition } from '@noob9527/noob-dict-core';
+import { Definition, PartOfSpeech } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import PronunciationList from './pronunciation-list';
 import WordFormList from './word-form-list';
@@ -27,11 +27,15 @@ const DefinitionItem: React.FC<DefinitionItemProp> = (props: DefinitionItemProp)
   const { definition } = props;
   const highlightWords = new Set([
     definition.title!!,
-    ...definition.wordForms.map(e => e[1]),
+    ...Object.values(definition.wordForms) as string[],
   ]);
+
+  const posLabel = PartOfSpeech
+    .ofOrNull(definition.partOfSpeech ?? '')?.symbols[0]
+    ?? definition.partOfSpeech
   return (
     <ItemContainer>
-      <span>{definition.partOfSpeech}</span>
+      <span>{posLabel}</span>
       <PronunciationList pronunciations={definition.pronunciations}/>
       <WordFormList wordForms={definition.wordForms}/>
       <MeaningList meanings={definition.meanings}/>

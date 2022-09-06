@@ -1,4 +1,5 @@
-import { EngineIdentifier, SearchResult, SearchResults, SearchResultType } from '@noob9527/noob-dict-core';
+import { SearchResult, SearchResultType } from '@noob9527/noob-dict-core';
+import { NetworkEngineId } from '@noob9527/noob-dict-net-engines';
 import { all, call, put, select, take } from '@redux-saga/core/effects';
 import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
@@ -7,11 +8,11 @@ import { push } from 'connected-react-router';
 import { simplifyResult } from '../../../../common/model/search-domain';
 import { RootState } from '../../root-model';
 
-export type SearchResultMap = { [index in EngineIdentifier]?: Maybe<SearchResult> };
+export type SearchResultMap = { [index in NetworkEngineId]?: Maybe<SearchResult> };
 
 export interface SearchPanelState {
   translatedText: string,
-  engines: EngineIdentifier[],
+  engines: NetworkEngineId[],
   primaryResult: Maybe<SearchResult>,
   searchResultMap: SearchResultMap,
 }
@@ -49,7 +50,7 @@ function* fetchResults(action: FetchResultsAction) {
   const { text } = action;
   if (!text.trim()) return;
 
-  const engines: EngineIdentifier[] = yield select((state: any) => state.searchPanel.engines);
+  const engines: NetworkEngineId[] = yield select((state: any) => state.searchPanel.engines);
   const rootState: RootState = yield select((state: any) => state.root);
 
   // reset translatedText
@@ -87,7 +88,7 @@ function* fetchResults(action: FetchResultsAction) {
       primaryResult = result;
     }
 
-    if (result && SearchResults.isSuccessResult(result)) {
+    if (result && SearchResultType.isSuccessResult(result)) {
       const history = {
         text,
         user_id: rootState.currentUser?.id ?? '',
@@ -139,12 +140,12 @@ const reducers = {
 const searchPanelModel: SearchPanelModel = {
   namespace: 'searchPanel',
   state: {
-    engines: [EngineIdentifier.BING, EngineIdentifier.CAMBRIDGE],
+    engines: [NetworkEngineId.BING, NetworkEngineId.CAMBRIDGE],
     translatedText: '',
     primaryResult: null,
     searchResultMap: {
-      [EngineIdentifier.BING]: null,
-      [EngineIdentifier.CAMBRIDGE]: null,
+      [NetworkEngineId.BING]: null,
+      [NetworkEngineId.CAMBRIDGE]: null,
     },
   },
   effects,
@@ -156,11 +157,11 @@ export default searchPanelModel;
 function getResultRank(result: SearchResult | null | undefined): number {
   if (!result) return 0;
   switch (result.type) {
-    case SearchResultType.SUCCESS:
+    case SearchResultType.Constant.SUCCESS:
       return 30;
-    case SearchResultType.DO_YOU_MEAN:
+    case SearchResultType.Constant.DO_YOU_MEAN:
       return 20;
-    case SearchResultType.EMPTY:
+    case SearchResultType.Constant.EMPTY:
       return 10;
   }
 }

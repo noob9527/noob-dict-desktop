@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResult, SearchResults } from '@noob9527/noob-dict-core';
+import { SearchResult, SearchResultType } from '@noob9527/noob-dict-core';
 import DefinitionList from './definition-list';
 import styled from 'styled-components';
 import Title from './title';
@@ -17,14 +17,14 @@ interface CommonEngineListProps {
 const CommonDict: React.FC<CommonEngineListProps> = (props: CommonEngineListProps) => {
   const { result } = props;
 
-  if (SearchResults.isSuccessResult(result)) {
+  if (SearchResultType.isSuccessResult(result)) {
     return (
       <Container>
         <Title>{result.title}</Title>
         <DefinitionList definitions={result.definitions}/>
       </Container>
     );
-  } else if (SearchResults.isDoYouMeanResult(result)) {
+  } else if (SearchResultType.isDoYouMeanResult(result)) {
     return (<DoYouMeanGroup target={result.target} doYouMeanItems={result.doYouMean}/>);
   } else {
     return (<ThemedEmpty/>);

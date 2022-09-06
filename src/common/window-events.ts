@@ -1,7 +1,7 @@
-import { Enum, EnumClass, EnumValue } from 'effective-enum';
+import { EnumFactory, EnumClass, EnumValue } from 'effective-enum';
 
 @EnumClass
-class WindowEvents extends Enum<WindowEvents>() {
+class WindowEvents extends EnumFactory<WindowEvents>() {
   @EnumValue
   static readonly show = new WindowEvents('show');
   @EnumValue

@@ -1,8 +1,8 @@
-import { Enum, EnumClass, EnumValue } from 'effective-enum';
+import { EnumFactory, EnumClass, EnumValue } from 'effective-enum';
 import { WindowEvents } from './window-events';
 
 @EnumClass
-class WindowId extends Enum<WindowId>() {
+class WindowId extends EnumFactory<WindowId>() {
   @EnumValue
   static readonly SEARCH = new WindowId('SEARCH');
   @EnumValue

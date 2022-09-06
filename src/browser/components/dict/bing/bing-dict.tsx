@@ -1,5 +1,5 @@
 import React from 'react';
-import { SearchResult, SearchResults } from '@noob9527/noob-dict-core';
+import { SearchResult, SearchResultType } from '@noob9527/noob-dict-core';
 import styled from 'styled-components';
 import Title from '../common/title';
 import ExampleList from '../common/example-list';
@@ -19,11 +19,11 @@ interface CommonEngineViewProps {
 const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps) => {
   const { result } = props;
 
-  if (SearchResults.isSuccessResult(result)) {
+  if (SearchResultType.isSuccessResult(result)) {
     const highlightWords = new Set([
       result.target,
       result.title!!,
-      ...result.wordForms.map(e => e[1])
+      ...Object.values(result.wordForms) as string[],
     ]);
     return (
       <Container>
@@ -35,7 +35,7 @@ const BingDict: React.FC<CommonEngineViewProps> = (props: CommonEngineViewProps)
         <ExampleList examples={result.examples} highlightWordSet={highlightWords}/>
       </Container>
     );
-  } else if (SearchResults.isDoYouMeanResult(result)) {
+  } else if (SearchResultType.isDoYouMeanResult(result)) {
     return (<DoYouMeanGroup target={result.target} doYouMeanItems={result.doYouMean}/>);
   } else {
     return (<ThemedEmpty/>);

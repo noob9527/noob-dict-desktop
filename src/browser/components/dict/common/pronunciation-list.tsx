@@ -35,9 +35,23 @@ const clipboardService = rendererContainer.get<ClipboardService>(ClipboardServic
 
 const PronunciationItem: React.FC<PronunciationItemProps> = (props: PronunciationItemProps) => {
   const { pronunciation } = props;
+  let label: string;
+  switch(pronunciation.tag) {
+    case LanguageTag.Constant.EN_GB:
+      label = '英'
+      break;
+    case LanguageTag.Constant.EN_US:
+      label = '美'
+      break;
+    case LanguageTag.Constant.ZH_CN:
+      label = '中'
+      break;
+    default:
+      label = 'UNKNOWN'
+  }
   return (
     <ItemContainer>
-      <span>{LanguageTag.getLabel(pronunciation.tag)}</span>
+      <span>{label}</span>
       <ThemedTooltip title="copy">
         <StyledSpan onClick={() => {
           if (pronunciation.phoneticSymbol) {

@@ -33,8 +33,8 @@ const ExampleItem: React.FC<ExampleItemProp> = (props: ExampleItemProp) => {
   const dispatch = useDispatch();
   const { example, highlightWordSet } = props;
 
-  const en = example[Language.EN].sentence;
-  const zh = example[Language.ZH].sentence;
+  const en = example[Language.Constant.EN].sentence;
+  const zh = example[Language.Constant.ZH].sentence;
 
   return (
     <ItemContainer>

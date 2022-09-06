@@ -41,7 +41,7 @@
     "color": "^3.1.2",
     "connected-react-router": "^6.5.2",
     "dexie": "^2.0.4",
-    "effective-enum": "^1.0.0",
+    "effective-enum": "^1.0.5",
     "electron-better-ipc": "^2.0.1",
     "electron-context-menu": "^0.15.0",
     "electron-log": "^4.1.0",
