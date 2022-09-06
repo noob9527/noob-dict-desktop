@@ -5,7 +5,6 @@ import { Model } from '../../../redux/common/redux-model';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { SearchService, SearchServiceToken } from '../../../../common/services/search-service';
 import { push } from 'connected-react-router';
-import { simplifyResult } from '../../../../common/model/search-domain';
 import { RootState } from '../../root-model';
 
 export type SearchResultMap = { [index in NetworkEngineId]?: Maybe<SearchResult> };
@@ -92,7 +91,6 @@ function* fetchResults(action: FetchResultsAction) {
       const history = {
         text,
         user_id: rootState.currentUser?.id ?? '',
-        search_result: simplifyResult(result)
       };
       // fetch from notes
       yield put({

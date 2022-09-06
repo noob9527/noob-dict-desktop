@@ -1,5 +1,4 @@
 import { ISearchHistory } from './history';
-import { ISimpleSearchResult } from './search-domain';
 
 
 // note is just histories group by text
@@ -11,7 +10,6 @@ export interface INote {
   create_at: number
   update_at: number
   update_times: number // In general, the more update times, the more significant a word is
-  search_result?: ISimpleSearchResult
   // extra
   histories: ISearchHistory[]
 }
@@ -24,7 +22,6 @@ export class Note implements INote {
   create_at!: number;
   update_at!: number;
   update_times = 0;
-  search_result?: ISimpleSearchResult;
   // extra
   histories: ISearchHistory[] = [];
 

@@ -1,11 +1,10 @@
-import { Context, ISimpleSearchResult } from './search-domain';
+import { Context } from './search-domain';
 
 export interface ISearchHistory {
   id?: Maybe<number>
   user_id: string
   text: string
   context: Context | null | undefined
-  search_result?: ISimpleSearchResult
   create_at: number
   update_at: number
 }
@@ -17,7 +16,6 @@ export class SearchHistory implements ISearchHistory {
   context = null;
   create_at!: number;
   update_at!: number;
-  search_result?: ISimpleSearchResult;
 
   static wrap(history: Partial<ISearchHistory>) {
     const res = new SearchHistory();

@@ -52,7 +52,6 @@ export class DexieNoteService implements NoteService {
     if (!note) {
       note = Note.create({
         user_id: history.user_id,
-        search_result: history.search_result,
         text: history.text
       });
       await this.add(note)
