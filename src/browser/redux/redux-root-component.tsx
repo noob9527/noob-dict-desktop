@@ -6,7 +6,7 @@ import { registerUserChangeListener } from '../utils/axios';
 
 export const createReduxRootComponent = (store, history) => {
   store.dispatch({
-    type: 'setting/init',
+    type: 'root/init',
   });
   registerStorageEventListener(store);
   registerUserChangeListener(store);

@@ -3,13 +3,13 @@ import {
   HistoryParam,
   HistoryService,
   HistoryUpdateAtSearchParam,
-} from '../../../common/services/db/history-service';
-import { ISearchHistory, SearchHistory } from '../../../common/model/history';
-import database from './database';
+} from '../../../../common/services/db/history-service';
+import { ISearchHistory, SearchHistory } from '../../../../common/model/history';
+import database from './dexie-index-db';
 import { injectable } from 'inversify';
 import { v4 as uuidv4 } from 'uuid';
-import logger from '../../../electron-shared/logger';
-import { Page } from '../../../common/model/page';
+import logger from '../../../../electron-shared/logger';
+import { Page } from '../../../../common/model/page';
 
 @injectable()
 export class DexieHistoryService implements HistoryService {

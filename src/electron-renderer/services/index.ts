@@ -14,9 +14,9 @@ import { ElectronSettingService } from './setting-service-impl';
 import { ClipboardServiceImpl } from './clipboard-service-impl';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { HistoryService, HistoryServiceToken } from '../../common/services/db/history-service';
-import { DexieHistoryService } from './db/history-service-impl';
+import { DexieHistoryService } from './db/dexie/dexie-history-service';
 import { NoteService, NoteServiceToken } from '../../common/services/db/note-service';
-import { DexieNoteService } from './db/note-service-impl';
+import { DexieNoteService } from './db/dexie/dexie-note-service';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { ElectronAppService } from './app-service-impl';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
@@ -25,8 +25,9 @@ import { LoginUiService, LoginUiServiceToken } from '../../common/services/login
 import { ElectronLoginUiService } from './login-ui-service-impl';
 import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
 import { GlobalHistoryServiceImpl } from './global-history-service-impl';
-import { LocalStorageService, LocalStorageServiceToken } from '../../common/services/LocalStorageService';
+import { LocalStorageService, LocalStorageServiceToken } from '../../common/services/local-storage-service';
 import { LocalStorageServiceImpl } from './local-storage-service-impl';
+import { GlobalHistoryServiceImplV2 } from './global-history-service-impl-v2';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -39,7 +40,7 @@ function registerAllService() {
   rendererContainer.bind<AppService>(AppServiceToken).to(ElectronAppService);
   rendererContainer.bind<UserService>(UserServiceToken).to(CorsUserService);
   rendererContainer.bind<LoginUiService>(LoginUiServiceToken).to(ElectronLoginUiService);
-  rendererContainer.bind<GlobalHistoryService>(GlobalHistoryServiceToken).to(GlobalHistoryServiceImpl);
+  rendererContainer.bind<GlobalHistoryService>(GlobalHistoryServiceToken).to(GlobalHistoryServiceImplV2);
   rendererContainer.bind<LocalStorageService>(LocalStorageServiceToken).to(LocalStorageServiceImpl);
 
   // db

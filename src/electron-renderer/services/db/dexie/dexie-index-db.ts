@@ -1,8 +1,8 @@
 import Dexie from 'dexie';
-import { INote } from '../../../common/model/note';
-import { ISearchHistory } from '../../../common/model/history';
+import { INote } from '../../../../common/model/note';
+import { ISearchHistory } from '../../../../common/model/history';
 
-class Database extends Dexie {
+class DexieIndexDb extends Dexie {
   notes: Dexie.Table<INote, number>;
   histories: Dexie.Table<ISearchHistory, number>;
 
@@ -23,7 +23,7 @@ class Database extends Dexie {
   }
 }
 
-const database = new Database('database');
+const database = new DexieIndexDb('database');
 
 database.open().catch(e => {
   console.error(`Open failed: ${e.stack}`);

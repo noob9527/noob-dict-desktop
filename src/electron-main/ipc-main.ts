@@ -1,6 +1,6 @@
 import { ipcMain } from 'electron-better-ipc';
 import { getOrCreateSettingWindow } from './window/setting-window';
-import { LoginChannel, PopupChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
+import { AppChannel, LoginChannel, PopupChannel, SearchChannel, SettingChannel } from '../common/ipc-channel';
 import {
   getOrCreateSearchWindow,
   hideSearchWindow,
@@ -12,6 +12,7 @@ import logger from '../electron-shared/logger';
 import { handleSettingChange } from './setting';
 import { UserProfile } from '../common/model/user-profile';
 import { getOrCreateLoginWindow } from './window/login-window';
+import { getClientAppId } from './utils/env-util';
 
 // setting channel
 ipcMain.answerRenderer(SettingChannel.OPEN_SETTING_WINDOW, () => {
@@ -72,4 +73,8 @@ ipcMain.answerRenderer(PopupChannel.HIDE_POPUP_WINDOW, () => {
 ipcMain.answerRenderer(LoginChannel.SHOW_LOGIN_WINDOW, () => {
   getOrCreateLoginWindow();
   return true;
+});
+
+ipcMain.answerRenderer(AppChannel.GET_CLIENT_APP_ID, () => {
+  return getClientAppId();
 });

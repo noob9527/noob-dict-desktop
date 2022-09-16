@@ -1,7 +1,5 @@
 import {
   GlobalHistoryService,
-  SyncHistoriesRequest,
-  SyncHistoriesResponse
 } from '../../common/services/global-history-service';
 import { injectable } from 'inversify';
 import { HistoryService, HistoryServiceToken } from '../../common/services/db/history-service';
@@ -11,7 +9,17 @@ import logger from '../../electron-shared/logger';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
 import axios from 'axios';
 import { APP_CONSTANTS } from '../../common/app-constants';
-import { SearchHistory } from '../../common/model/history';
+import { ISearchHistory, SearchHistory } from '../../common/model/history';
+
+interface SyncHistoriesRequest {
+  clientLastSyncTime: number
+  itemSinceLastSync: ISearchHistory[]
+}
+
+interface SyncHistoriesResponse {
+  serverLastSyncTime: number
+  itemSinceLastSync: ISearchHistory[]
+}
 
 @injectable()
 export class GlobalHistoryServiceImpl implements GlobalHistoryService {
@@ -69,6 +77,15 @@ export class GlobalHistoryServiceImpl implements GlobalHistoryService {
     methodLogger.debug('end sync histories');
   }
 
+  /**
+   * doesn't support, fall back to sync histories.
+   * @param pageSize
+   * @param pageLimit
+   */
+  syncHistoryPages(pageSize: number, pageLimit: number) {
+    this.syncHistories();
+  }
+
   async sync2server(request: SyncHistoriesRequest): Promise<SyncHistoriesResponse> {
     const res = await axios.patch(`${APP_CONSTANTS.API_PREFIX}/histories`, request);
     const data = res.data as SyncHistoriesResponse;
@@ -84,8 +101,8 @@ export class GlobalHistoryServiceImpl implements GlobalHistoryService {
 
   updateLastSyncTime(date: Date) {
     this.userService.patchCurrentUser({
-      last_sync_time: date.toISOString()
-    })
+      last_sync_time: date.toISOString(),
+    });
   }
 
 }

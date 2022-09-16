@@ -37,7 +37,7 @@ function createWindow() {
     height: 600,
     // width: 1020,
     // height: 752,
-    modal: true,
+    modal: !Runtime.isMac,
     maximizable: false,
     minimizable: false,
     resizable: Runtime.isDev,
@@ -67,14 +67,14 @@ function createWindow() {
   window.once('ready-to-show', () => {
     window.show();
   });
-  // currently in mac, modal window doesn't have close button
-  // hence we listen blur event, and close window
-  // https://github.com/electron/electron/issues/30232
-  if (Runtime.isMac) {
-    window.on('blur', async () => {
-      close();
-    });
-  }
+  // // currently in mac, modal window doesn't have close button
+  // // hence we listen blur event, and close window
+  // // https://github.com/electron/electron/issues/30232
+  // if (Runtime.isMac) {
+  //   window.on('blur', async () => {
+  //     close();
+  //   });
+  // }
   window.on('closed', async () => {
     destroy();
     logger.log(`${WindowId.DEVELOPER} closed`);

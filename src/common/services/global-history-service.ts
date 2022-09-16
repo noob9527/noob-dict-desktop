@@ -1,16 +1,4 @@
-import { ISearchHistory } from '../model/history';
-
 export const GlobalHistoryServiceToken = Symbol.for('global-history-service');
-
-export interface SyncHistoriesRequest {
-  clientLastSyncTime: number
-  itemSinceLastSync: ISearchHistory[]
-}
-
-export interface SyncHistoriesResponse {
-  serverLastSyncTime: number
-  itemSinceLastSync: ISearchHistory[]
-}
 
 export interface GlobalHistoryService {
   /**
@@ -18,8 +6,6 @@ export interface GlobalHistoryService {
    */
   syncHistories()
 
-  sync2server(request: SyncHistoriesRequest): Promise<SyncHistoriesResponse>
+  syncHistoryPages(pageSize: number, pageLimit: number)
 
-  updateLastSyncTime(date: Date)
-  getLastSyncTime(): Date
 }

@@ -11,4 +11,12 @@ export interface UserService {
   patchCurrentUser(patch: Partial<User>): User
 
   logout()
+
+  getLastEvaluatedUpdateAt(): Promise<Date|null>
+
+  setLastEvaluatedUpdateAt(date: Date): Promise<void>
+
+  getLastSyncTime(): Promise<Date|null>
+
+  setLastSyncTime(date: Date): Promise<void>
 }

@@ -60,12 +60,15 @@ module.exports = {
       runner: '@jest-runner/electron/main',
       testEnvironment: 'node',
       testMatch: [
-        // main
+        // electron-main
         '<rootDir>/src/electron-main/**/__tests__/**/*.{js,jsx,ts,tsx}',
         '<rootDir>/src/electron-main/**/*.{spec,test}.{js,jsx,ts,tsx}',
         // common
         '<rootDir>/src/common/**/__tests__/**/*.{js,jsx,ts,tsx}',
         '<rootDir>/src/common/**/*.{spec,test}.{js,jsx,ts,tsx}',
+        // electron-shared
+        '<rootDir>/src/electron-shared/**/__tests__/**/*.{js,jsx,ts,tsx}',
+        '<rootDir>/src/electron-shared/**/*.{spec,test}.{js,jsx,ts,tsx}',
         // node
         '<rootDir>/src/node/**/__tests__/**/*.{js,jsx,ts,tsx}',
         '<rootDir>/src/node/**/*.{spec,test}.{js,jsx,ts,tsx}',

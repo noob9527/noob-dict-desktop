@@ -1,7 +1,6 @@
 import { Model } from '../redux/common/redux-model';
 import { dark } from '../theme/dark';
-import { call, put, take } from '@redux-saga/core/effects';
-import { END, eventChannel } from 'redux-saga';
+import { call, put } from '@redux-saga/core/effects';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
@@ -9,14 +8,10 @@ import { LoginChannel } from '../../common/ipc-channel';
 import logger from '../../electron-shared/logger';
 import { User } from '../../common/model/user';
 import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
-import { setInterval } from 'timers';
-import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
-import { Runtime } from '../../electron-shared/runtime';
 
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 const userService = rendererContainer.get<UserService>(UserServiceToken);
 const loginUiService = rendererContainer.get<LoginUiService>(LoginUiServiceToken);
-const globalHistoryService = rendererContainer.get<GlobalHistoryService>(GlobalHistoryServiceToken);
 
 export interface RootState {
   theme: any
@@ -25,6 +20,7 @@ export interface RootState {
   }
   showLoginIndicator: boolean
   currentUser: User | null | undefined
+  lastEvaluatedUpdateAt: Date | null,
 }
 
 export interface RootModel extends Model {
@@ -32,6 +28,50 @@ export interface RootModel extends Model {
 }
 
 const effects = {
+  * init() {
+    yield put({
+      type: 'root/refreshUserFromStorage',
+    });
+    yield put({
+      type: 'setting/init',
+    });
+  },
+  * refreshUserFromStorage() {
+    yield put({
+      type: 'root/setCurrentUser',
+    });
+    yield put({
+      type: 'root/setLastEvaluatedUpdateAt',
+    });
+  },
+  // sync state.currentUser from storage
+  * setCurrentUser() {
+    try {
+      const currentUser = yield call([userService, userService.fetchCurrentUserFromStorage]);
+      yield put({
+        type: 'root/mergeState',
+        payload: {
+          currentUser,
+        },
+      });
+    } catch (e) {
+      logger.error('fail to fetch currentUser');
+    }
+  },
+  // sync state.lastEvaluatedUpdateAt from storage
+  * setLastEvaluatedUpdateAt() {
+    try {
+      const lastEvaluatedUpdateAt = yield call([userService, userService.getLastEvaluatedUpdateAt]);
+      yield put({
+        type: 'root/mergeState',
+        payload: {
+          lastEvaluatedUpdateAt,
+        },
+      });
+    } catch (e) {
+      logger.error('fail to fetch lastEvaluatedUpdateAt');
+    }
+  },
   * login() {
     console.log('login');
     yield call([loginUiService, loginUiService.open]);
@@ -53,6 +93,9 @@ const effects = {
         type: 'root/loginSuccess',
         payload: { user },
       });
+      yield put({
+        type: 'root/setLastEvaluatedUpdateAt',
+      });
     } else {
       yield put({
         type: 'root/loginFailed',
@@ -62,7 +105,10 @@ const effects = {
   * logout() {
     yield put({
       type: 'root/mergeState',
-      payload: { currentUser: null },
+      payload: {
+        currentUser: null,
+        lastEvaluatedUpdateAt: null,
+      },
     });
     yield call([userService, userService.logout]);
   },
@@ -98,63 +144,12 @@ const rootModel: RootModel = {
       version: appService.getVersion(),
     },
     showLoginIndicator: false,
-    currentUser: userService.fetchCurrentUserFromStorage(),
+    currentUser: null,
+    lastEvaluatedUpdateAt: null,
   },
   effects,
   reducers,
-  sagas: [watchClockEvent],
 };
 
 export default rootModel;
 
-// call sync for each hour
-const DURATION = 1000 * 60 * 60;
-
-/**
- * call sync histories for each DURATION
- * it's just an example shows how to setInterval in redux-saga way
- * we do not actually need it, in fact, we just need to syncHistories one time after app initialized
- * see:
- * https://github.com/redux-saga/redux-saga/blob/master/docs/advanced/Channels.md#using-the-eventchannel-factory-to-connect-to-external-events
- */
-export function* watchClockEvent() {
-  const chan = yield call(interval, Number.MAX_SAFE_INTEGER);
-  try {
-    while (true) {
-      // take(END) will cause the saga to terminate by jumping to the finally block
-      if (Runtime.isDev) {
-        // in dev mode
-        // we do not sync history immediately after app is initialized
-        yield take(chan);
-        yield call([globalHistoryService, globalHistoryService.syncHistories]);
-      } else {
-        yield call([globalHistoryService, globalHistoryService.syncHistories]);
-        yield take(chan);
-      }
-      // let times = yield take(chan);
-      // console.log(`times: ${times}`);
-    }
-  } finally {
-    // 'clock terminated'
-  }
-}
-
-function interval(maxTime: number) {
-  let times = 0;
-  return eventChannel(emitter => {
-      const iv = setInterval(() => {
-        times++;
-        if (times >= maxTime) {
-          // this causes the channel to close
-          emitter(END);
-        } else {
-          emitter(times);
-        }
-      }, DURATION);
-      // The subscriber must return an unsubscribe function
-      return () => {
-        clearInterval(iv);
-      };
-    },
-  );
-}

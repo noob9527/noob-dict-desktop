@@ -1,12 +1,14 @@
 import { Model } from '../../redux/common/redux-model';
-import { put, select } from '@redux-saga/core/effects';
+import { call, put, select } from '@redux-saga/core/effects';
 import { RootState } from '../root-model';
 import { rendererContainer } from '../../../common/container/renderer-container';
-import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../../common/services/global-history-service';
+import { UserService, UserServiceToken } from '../../../common/services/user-service';
 
-const globalHistoryService = rendererContainer.get<GlobalHistoryService>(GlobalHistoryServiceToken);
+const userService = rendererContainer.get<UserService>(UserServiceToken);
 
 export interface DeveloperState {
+  syncHistoryPageSize: number,
+  syncHistoryPageLimit: number,
 }
 
 export interface DeveloperModel extends Model {
@@ -14,20 +16,16 @@ export interface DeveloperModel extends Model {
 }
 
 const effects = {
-  * resetLastSyncTime() {
+  * resetSyncFlag() {
     const rootState: RootState = yield select(state => state.root);
     const { currentUser } = rootState;
-    if (currentUser == null) return;
+    if (currentUser==null) return;
 
-    const lastSyncTime = new Date(0);
-    globalHistoryService.updateLastSyncTime(lastSyncTime);
-    currentUser.last_sync_time = lastSyncTime.toISOString();
+    const epoch = new Date(0);
+    yield call([userService, userService.setLastEvaluatedUpdateAt], epoch);
     yield put({
-      type: 'root/mergeState',
-      payload: {
-        user: currentUser
-      }
-    })
+      type: 'root/setLastEvaluatedUpdateAt',
+    });
   },
 };
 
@@ -42,7 +40,10 @@ const reducers = {
 
 const developerModel: DeveloperModel = {
   namespace: 'developer',
-  state: {},
+  state: {
+    syncHistoryPageSize: 20,
+    syncHistoryPageLimit: 5,
+  },
   effects,
   reducers,
 };

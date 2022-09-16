@@ -1,4 +1,4 @@
-import database from './database';
+import database from './dexie-index-db';
 
 describe('database', () => {
   it('isOpen', async () => {
