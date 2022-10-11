@@ -6,7 +6,11 @@ mac:
   category: public.app-category.utilities
   icon: 'build/assets/icon/icon.icns'
   target:
-    - target: dmg
+#    - target: dmg
+    # "dmg and zip for Squirrel.Mac."
+    # it seems like we need "default" target to auto update
+    # see https://www.electron.build/configuration/mac
+    - target: default
 linux:
   # https://www.electron.build/configuration/linux
   # do not specify icon here
