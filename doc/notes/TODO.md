@@ -7,3 +7,4 @@
 - vocabulary quiz?
 - anki?
 - alfred API?
+- sqlite?

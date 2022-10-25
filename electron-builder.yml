@@ -6,11 +6,13 @@ mac:
   category: public.app-category.utilities
   icon: 'build/assets/icon/icon.icns'
   target:
-#    - target: dmg
     # "dmg and zip for Squirrel.Mac."
     # it seems like we need "default" target to auto update
     # see https://www.electron.build/configuration/mac
-    - target: default
+#    - target: default
+    # Anyway, it seems like we need Code Signing to enable auto update in Mac
+    # Hence, we just use "dmg" target now.
+    - target: dmg
 linux:
   # https://www.electron.build/configuration/linux
   # do not specify icon here
