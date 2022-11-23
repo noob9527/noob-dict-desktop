@@ -27,7 +27,8 @@ export const ecDictSearchService = {
     return ecDict.search(text, option);
   },
 
-  async fetchResultBatch(textArray: string[], option?: SearchOption): Promise<EcDictSearchSuccessResult | SearchEmptyResult> {
+  async fetchResultBatch(textArray: string[], option?: SearchOption)
+    : Promise<{ [index in string]: EcDictSearchSuccessResult | null }> {
     if (!ecDict) throw new Error('EcDict has not be initialized!');
     return ecDict.searchBatch(textArray, option);
   },

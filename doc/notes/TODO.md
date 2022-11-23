@@ -8,3 +8,4 @@
 - anki?
 - alfred API?
 - sqlite?
+- global sync window?
