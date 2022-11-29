@@ -4,8 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ThemedCheckbox } from '../../components/themed-ui/input/checkbox';
 import { ThemedContent } from '../../components/themed-ui/content/content';
 import { ThemedInputShortcut } from '../../components/themed-ui/input/input-shortcut/themed-input-shortcut';
-import { UserProfile } from '../../../common/model/user-profile';
+import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
 import { EcdictLocationSetting } from './ecdict-location-setting';
+import { rendererContainer } from '../../../common/container/renderer-container';
+import { shell } from 'electron';
+import { AppService, AppServiceToken } from '../../../common/services/app-service';
+const appService = rendererContainer.get<AppService>(AppServiceToken);
 
 const Container = styled.div`
   height: 100vh;
@@ -28,10 +32,20 @@ const SettingPage = () => {
   const dispatch = useDispatch();
   const settingState: UserProfile = useSelector((state: any) => state.setting);
   const { appHotKey, readClipboard, watchSelection } = settingState;
+  const userDataFolder = appService.getUserDataFolder();
 
   return (
     <ThemedContent>
       <Container>
+        <div>
+          <span>User Data Folder: </span>
+          <a
+            onClick={() => {
+              shell.showItemInFolder(userDataFolder);
+            }}
+            role="button"
+          >{userDataFolder}</a>
+        </div>
         <EcdictLocationSetting/>
         <ThemedCheckbox
           checked={watchSelection}

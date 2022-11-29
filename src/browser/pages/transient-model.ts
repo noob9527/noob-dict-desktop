@@ -7,7 +7,7 @@ import { WindowId } from '../../common/window-id';
 import { getCurrentWindowId } from '../utils/window-utils';
 import logger from '../../electron-shared/logger';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
-import { UserProfile } from '../../common/model/user-profile';
+import { UserProfile } from '../../electron-shared/user-profile/user-profile';
 import { WindowEvents } from '../../common/window-events';
 import { EcDictSearchService } from '../../electron-renderer/services/ecdict-search-service';
 import { EcDictSearchServiceToken } from '../../common/services/search-service';

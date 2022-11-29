@@ -1,4 +1,4 @@
-import { UserProfile } from '../model/user-profile';
+import { UserProfile } from '../../electron-shared/user-profile/user-profile';
 
 export const SettingServiceToken = Symbol.for('setting-service');
 

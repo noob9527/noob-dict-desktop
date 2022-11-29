@@ -5,10 +5,11 @@ import logger from '../electron-shared/logger';
 import { getOrCreateSearchWindow, showSearchWindow } from './window/search-window';
 import globalState from './global-state';
 import contextMenu from 'electron-context-menu';
-import { initialSetting } from './setting';
+import { initSetting } from './setting';
 import { getOrCreateAppMenu } from './menu';
 import { initialAutoUpdater } from './auto-update';
 import * as remoteMain from '@electron/remote/main'
+import * as path from 'path';
 
 // see https://github.com/electron/remote
 remoteMain.initialize();
@@ -36,7 +37,7 @@ app.on('ready', () => {
 
   getOrCreateSearchWindow();
 
-  initialSetting();
+  initSetting();
 
   Menu.setApplicationMenu(getOrCreateAppMenu());
 

@@ -3,4 +3,5 @@ export interface UserProfile {
   readClipboard: boolean
   watchSelection: boolean
   ecDictFileLocation: string | null
+  dbFileLocation: string | null
 }

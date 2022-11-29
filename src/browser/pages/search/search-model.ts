@@ -3,7 +3,7 @@ import { Model } from '../../redux/common/redux-model';
 import { SearchUiService, SearchUiServiceToken } from '../../../common/services/search-ui-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { TransientState } from '../transient-model';
-import { UserProfile } from '../../../common/model/user-profile';
+import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
 import { Runtime } from '../../../electron-shared/runtime';
 import { END, eventChannel } from 'redux-saga';
 import { setInterval } from 'timers';

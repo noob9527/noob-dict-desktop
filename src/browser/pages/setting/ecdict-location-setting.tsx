@@ -2,7 +2,7 @@ import { ThemedButton } from '../../components/themed-ui/button/button';
 import React, { useRef } from 'react';
 import { TransientState } from '../transient-model';
 import { useDispatch, useSelector } from 'react-redux';
-import { UserProfile } from '../../../common/model/user-profile';
+import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
 import styled from 'styled-components';
 import { shell } from 'electron';
 import { Icon } from 'antd';

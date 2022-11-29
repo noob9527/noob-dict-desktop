@@ -18,7 +18,7 @@ import {
 import { hidePopupWindow, showPopupWindow } from './window/popup-window';
 import logger from '../electron-shared/logger';
 import { handleSettingChange } from './setting';
-import { UserProfile } from '../common/model/user-profile';
+import { UserProfile } from '../electron-shared/user-profile/user-profile';
 import { getOrCreateLoginWindow } from './window/login-window';
 import { getClientAppId } from './utils/env-util';
 import { ecDictSearchService, isEcDictAvailable } from './ecdict';

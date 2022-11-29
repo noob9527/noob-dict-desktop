@@ -2,12 +2,12 @@ import { SettingService } from '../../common/services/setting-service';
 import { injectable } from 'inversify';
 import { ipcRenderer } from 'electron-better-ipc';
 import { SettingChannel } from '../../common/ipc-channel';
-import { UserProfile } from '../../common/model/user-profile';
+import { UserProfile } from '../../electron-shared/user-profile/user-profile';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { rendererContainer } from '../../common/container/renderer-container';
-import { store } from '../../electron-shared/store';
 import { getCurrentWindowId } from '../../browser/utils/window-utils';
 import { WindowId } from '../../common/window-id';
+import { ElectronStoreUserProfileService } from '../../electron-shared/user-profile/electron-store-user-profile-service';
 
 @injectable()
 export class ElectronSettingService implements SettingService {
@@ -42,7 +42,10 @@ export class ElectronSettingService implements SettingService {
   }
 
   async initSetting(): Promise<UserProfile> {
-    const res = store.store;
+    ElectronStoreUserProfileService.init();
+    const res = ElectronStoreUserProfileService
+      .instance()
+      .getProfile();
     if (getCurrentWindowId()===WindowId.SEARCH) {
       await this.handleSettingChange(res, null);
     }

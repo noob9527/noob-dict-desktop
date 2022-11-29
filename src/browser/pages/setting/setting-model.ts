@@ -3,10 +3,12 @@ import { call, put, select } from '@redux-saga/core/effects';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { SettingService, SettingServiceToken } from '../../../common/services/setting-service';
 import logger from '../../../electron-shared/logger';
-import { UserProfile } from '../../../common/model/user-profile';
+import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
+
+type SettingState = UserProfile;
 
 export interface SettingModel extends Model {
-  state: UserProfile
+  state: SettingState
 }
 
 const effects = {
@@ -57,6 +59,7 @@ const settingModel: SettingModel = {
     readClipboard: false,
     watchSelection: false,
     ecDictFileLocation: null,
+    dbFileLocation: null,
   },
   effects,
   reducers,

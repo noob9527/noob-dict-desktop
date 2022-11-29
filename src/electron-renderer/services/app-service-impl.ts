@@ -11,6 +11,10 @@ export class ElectronAppService implements AppService {
     return remote.app.getVersion();
   }
 
+  getUserDataFolder() {
+    return remote.app.getPath('userData');
+  }
+
   getProcess(): NodeJS.Process {
     return Runtime.process;
   }

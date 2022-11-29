@@ -1,6 +1,6 @@
 import { AnyAction, Reducer, ReducersMapObject } from 'redux';
 import { Saga } from 'redux-saga';
-import { UserProfile } from '../../../common/model/user-profile';
+import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
 
 
 export interface Model {
