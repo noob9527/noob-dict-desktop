@@ -2,8 +2,8 @@ import { SearchService } from '../../common/services/search-service';
 import { SearchEmptyResult, SearchOption } from '@noob9527/noob-dict-core';
 import { injectable } from 'inversify';
 import { ipcRenderer } from 'electron-better-ipc';
-import { EcDictChannel } from '../../common/ipc-channel';
 import { EcDictSearchSuccessResult, EcDictSuggest } from '@noob9527/noob-dict-ecdict';
+import { EcDictChannel } from '../../electron-shared/ipc/ipc-channel-ecdict';
 
 // this implementation only works if you can circumvent the CORS problem
 @injectable()

@@ -1,11 +1,12 @@
 import { ipcMain } from 'electron-better-ipc';
 import { getOrCreateSearchWindow, toggleSearchWindow } from './window/search-window';
-import { GlobalShotCutChannel, SettingChannel } from '../common/ipc-channel';
 import { globalShortcut } from 'electron';
 import { UserProfile } from '../electron-shared/user-profile/user-profile';
 import logger from '../electron-shared/logger';
 import { handleEcDictFileLocationChange } from './ecdict';
 import { ElectronStoreUserProfileService } from '../electron-shared/user-profile/electron-store-user-profile-service';
+import { SettingChannel } from '../electron-shared/ipc/ipc-channel-setting';
+import { GlobalShotCutChannel } from '../electron-shared/ipc/ipc-channel-global-shot-cut';
 
 export function initSetting() {
   ElectronStoreUserProfileService.init();

@@ -1,5 +1,5 @@
 // Modules to control application life and create native browser window
-import './ipc-main';
+import './ipc/ipc-main';
 import { app, globalShortcut, Menu } from 'electron';
 import logger from '../electron-shared/logger';
 import { getOrCreateSearchWindow, showSearchWindow } from './window/search-window';

@@ -1,22 +1,20 @@
 // sync state between windows
 import { Store } from 'redux';
 import { ipcRenderer } from 'electron-better-ipc';
-import {
-  AppChannel,
-  AutoUpdaterChannel,
-  GlobalShotCutChannel,
-  LoginChannel,
-  SearchChannel,
-  SettingChannel,
-} from '../common/ipc-channel';
-import { getCurrentWindowId } from './utils/window-utils';
-import { WindowId } from '../common/window-id';
-import { rendererContainer } from '../common/container/renderer-container';
-import { SettingService, SettingServiceToken } from '../common/services/setting-service';
-import { ClipboardService, ClipboardServiceToken } from '../common/services/clipboard-service';
-import logger from '../electron-shared/logger';
-import { GlobalHistoryService, GlobalHistoryServiceToken } from '../common/services/global-history-service';
-import { WindowEvents } from '../common/window-events';
+import { getCurrentWindowId } from '../utils/window-utils';
+import { WindowId } from '../../common/window-id';
+import { rendererContainer } from '../../common/container/renderer-container';
+import { SettingService, SettingServiceToken } from '../../common/services/setting-service';
+import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
+import logger from '../../electron-shared/logger';
+import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
+import { WindowEvents } from '../../common/window-events';
+import { SettingChannel } from '../../electron-shared/ipc/ipc-channel-setting';
+import { SearchChannel } from '../../electron-shared/ipc/ipc-channel-search';
+import { AutoUpdaterChannel } from '../../electron-shared/ipc/ipc-channel-auto-updater';
+import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app';
+import { GlobalShotCutChannel } from '../../electron-shared/ipc/ipc-channel-global-shot-cut';
+import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
 
 function registerStorageEventListener(store: Store) {
   logger.debug('register storage event listener');

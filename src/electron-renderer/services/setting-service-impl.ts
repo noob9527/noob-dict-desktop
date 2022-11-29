@@ -1,13 +1,13 @@
 import { SettingService } from '../../common/services/setting-service';
 import { injectable } from 'inversify';
 import { ipcRenderer } from 'electron-better-ipc';
-import { SettingChannel } from '../../common/ipc-channel';
 import { UserProfile } from '../../electron-shared/user-profile/user-profile';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { getCurrentWindowId } from '../../browser/utils/window-utils';
 import { WindowId } from '../../common/window-id';
 import { ElectronStoreUserProfileService } from '../../electron-shared/user-profile/electron-store-user-profile-service';
+import { SettingChannel } from '../../electron-shared/ipc/ipc-channel-setting';
 
 @injectable()
 export class ElectronSettingService implements SettingService {

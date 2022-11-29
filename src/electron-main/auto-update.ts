@@ -1,8 +1,8 @@
 import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
-import { AutoUpdaterChannel } from '../common/ipc-channel';
 import { windowContainer } from './window/windows';
 import logger from '../electron-shared/logger';
+import { AutoUpdaterChannel } from '../electron-shared/ipc/ipc-channel-auto-updater';
 
 export {
   initialAutoUpdater,

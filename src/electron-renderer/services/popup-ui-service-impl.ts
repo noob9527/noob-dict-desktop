@@ -1,7 +1,7 @@
 import { PopupUiService } from '../../common/services/popup-ui-service';
 import { ipcRenderer } from 'electron-better-ipc';
 import { injectable } from 'inversify';
-import { PopupChannel } from '../../common/ipc-channel';
+import { PopupChannel } from '../../electron-shared/ipc/ipc-channel-popup';
 
 
 @injectable()

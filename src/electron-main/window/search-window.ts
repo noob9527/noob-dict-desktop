@@ -7,12 +7,12 @@ import * as os from 'os';
 import * as fs from 'fs';
 import { getIconPath, getWindowHashUrl } from '../../electron-shared/path-util';
 import { ipcMain } from 'electron-better-ipc';
-import { AppChannel } from '../../common/ipc-channel';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-id';
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
 import { notifyRendererWindowEvents } from '../utils/window-util';
+import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app';
 
 export {
   getOrCreateSearchWindow,

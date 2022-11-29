@@ -3,7 +3,7 @@ import * as remote from '@electron/remote';
 import { injectable } from 'inversify';
 import { Runtime } from '../../electron-shared/runtime';
 import { ipcRenderer } from 'electron-better-ipc';
-import { AppChannel } from '../../common/ipc-channel';
+import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app';
 
 @injectable()
 export class ElectronAppService implements AppService {

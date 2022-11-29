@@ -1,7 +1,7 @@
 import { SettingUiService } from '../../common/services/setting-ui-service';
 import { ipcRenderer } from 'electron-better-ipc';
 import { injectable } from 'inversify';
-import { SettingChannel } from '../../common/ipc-channel';
+import { SettingChannel } from '../../electron-shared/ipc/ipc-channel-setting';
 
 
 @injectable()

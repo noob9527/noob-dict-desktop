@@ -2,7 +2,6 @@ import { BrowserWindow } from 'electron';
 import { getOrCreateSearchWindow } from './search-window';
 import logger from '../../electron-shared/logger';
 import { ipcMain } from 'electron-better-ipc';
-import { LoginChannel } from '../../common/ipc-channel';
 import { getWindowHashUrl } from '../../electron-shared/path-util';
 import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-id';
@@ -10,6 +9,7 @@ import { extractCode, getLoginOption, getLoginType, githubOption } from '../../c
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
 import { notifyRendererWindowEvents } from '../utils/window-util';
+import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
 
 export {
   getOrCreateLoginWindow,

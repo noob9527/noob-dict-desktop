@@ -1,7 +1,7 @@
 import { LoginUiService } from '../../common/services/login-ui-service';
 import { ipcRenderer } from 'electron-better-ipc';
 import { injectable } from 'inversify';
-import { LoginChannel } from '../../common/ipc-channel';
+import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
 
 
 @injectable()

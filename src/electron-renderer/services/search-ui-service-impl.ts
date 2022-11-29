@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { SearchUiService } from '../../common/services/search-ui-service';
 import { ipcRenderer } from 'electron-better-ipc';
-import { SearchChannel } from '../../common/ipc-channel';
+import { SearchChannel } from '../../electron-shared/ipc/ipc-channel-search';
 
 @injectable()
 export class ElectronSearchUiService implements SearchUiService {

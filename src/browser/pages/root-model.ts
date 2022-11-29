@@ -4,10 +4,10 @@ import { call, put } from '@redux-saga/core/effects';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
-import { LoginChannel } from '../../common/ipc-channel';
 import logger from '../../electron-shared/logger';
 import { User } from '../../common/model/user';
 import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
+import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
 
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 const userService = rendererContainer.get<UserService>(UserServiceToken);
