@@ -2101,10 +2101,10 @@
   dependencies:
     effective-enum "^1.0.5"
 
-"@noob9527/noob-dict-ecdict@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.npmmirror.com/@noob9527/noob-dict-ecdict/-/noob-dict-ecdict-0.0.1.tgz#38ca97361d681316c82fd7283bee2ad8c525790a"
-  integrity sha512-mzrNLZY1s8CkFP+Ak6CHpuax587isewOW/DBcKJI2ep1Vb3Glil+uui+VKcBw9zCwuui9tsKlkMqxPo616H98A==
+"@noob9527/noob-dict-ecdict@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@noob9527/noob-dict-ecdict/-/noob-dict-ecdict-0.0.2.tgz#373a8068f7c9a0d196a943922cee3526acf60774"
+  integrity sha512-dpcGSxPLJA2rLi5pwlVWmCXULgEjQAb4uritqKxCatQ5EJBN+kNgHLy2+X5n2Bd6gqZBgRxnsCU/QjXAiZMEWA==
   dependencies:
     "@noob9527/noob-dict-core" "^1.0.0"
     axios "^0.27.2"
