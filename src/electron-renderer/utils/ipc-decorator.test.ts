@@ -1,5 +1,8 @@
-import { getDefaultChannelByMethodName, ipcCallMain } from './ipc-decorator';
+import 'reflect-metadata';
+import { Delegate, getDefaultChannelByMethodName, ipcAnswerRenderer, ipcCallMain } from './ipc-decorator';
 import { ipcRenderer } from 'electron-better-ipc';
+import { LOCAL_DB_HISTORY_PREFIX } from '../../electron-shared/ipc/ipc-channel-local-db';
+import { ISearchHistory } from '../../common/model/history';
 
 jest.mock('electron-better-ipc', () => {
   const originalModule = jest.requireActual('electron-better-ipc');
@@ -23,8 +26,8 @@ afterEach(() => {
 describe('ipc-decorator', () => {
   describe('getDefaultChannelByMethodName', () => {
     it('basic case', () => {
-      const res = getDefaultChannelByMethodName('fooBar')
-      expect(res).toBe('FOO_BAR')
+      const res = getDefaultChannelByMethodName('fooBar');
+      expect(res).toBe('FOO_BAR');
     });
   });
 
@@ -65,4 +68,19 @@ describe('ipc-decorator', () => {
   //     expect(ipcRenderer.callMain).toHaveBeenCalledWith('FOO', params);
   //   });
   // });
+
+  describe('ipcAnswerRenderer', () => {
+    class MainNoteService extends Delegate {
+      @ipcAnswerRenderer('CHANNEL_PREFIX')
+      async add(history: ISearchHistory): Promise<ISearchHistory> {
+        return {} as ISearchHistory;
+      }
+    }
+
+    it('basic case', () => {
+      const service = new MainNoteService();
+      service.startListen();
+    });
+
+  });
 });

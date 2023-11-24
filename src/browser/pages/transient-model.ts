@@ -11,6 +11,7 @@ import { UserProfile } from '../../electron-shared/user-profile/user-profile';
 import { WindowEvents } from '../../common/window-events';
 import { EcDictSearchService } from '../../electron-renderer/services/ecdict-search-service';
 import { EcDictSearchServiceToken } from '../../common/services/search-service';
+import { LocalDbService, LocalDbServiceToken } from '../../common/services/db/local-db-service';
 
 const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
 const appService = rendererContainer.get<AppService>(AppServiceToken);
@@ -20,6 +21,7 @@ export interface TransientState {
   isSearchWindowOpen: boolean
   windowIdentifier: WindowId
   ecDictAvailable: boolean,
+  localDbAvailable: boolean,
 }
 
 interface TransientModel extends Model {
@@ -31,6 +33,7 @@ const transientState: TransientState = {
   isSearchWindowOpen: !appService.getProcess().argv.includes('--background'),
   windowIdentifier: getCurrentWindowId(),
   ecDictAvailable: false,
+  localDbAvailable: false,
 };
 
 interface ShowSearchWindowAction {
@@ -114,6 +117,16 @@ const effects = {
       type: '_transient/mergeState',
       payload: {
         ecDictAvailable: available,
+      },
+    });
+  },
+  * setLocalDbAvailable() {
+    const localDbService = rendererContainer.get<LocalDbService>(LocalDbServiceToken);
+    const available = yield call([localDbService, localDbService.fetchAvailable]);
+    yield put({
+      type: '_transient/mergeState',
+      payload: {
+        localDbAvailable: available,
       },
     });
   },

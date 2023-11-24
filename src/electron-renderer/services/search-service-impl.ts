@@ -1,7 +1,7 @@
 import { SearchService } from '../../common/services/search-service';
 import { SearchOption, SearchResult, Suggest } from '@noob9527/noob-dict-core';
 import { injectable } from 'inversify';
-import { NoteService, NoteServiceToken } from '../../common/services/db/note-service';
+import { NoteService, LocalNoteServiceToken } from '../../common/services/db/note-service';
 import { rendererContainer } from '../../common/container/renderer-container';
 import { NetworkSearchEngine, NetworkSuggestEngine } from '@noob9527/noob-dict-net-engines';
 
@@ -11,7 +11,7 @@ export class CorsSearchService implements SearchService {
   private noteService: NoteService;
 
   constructor() {
-    this.noteService = rendererContainer.get<NoteService>(NoteServiceToken);
+    this.noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken);
   }
 
   async fetchSuggests(text: string, option?: SearchOption): Promise<Suggest[]> {

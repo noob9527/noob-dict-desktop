@@ -1,8 +1,8 @@
 import { GlobalHistoryService, } from '../../common/services/global-history-service';
 import { inject, injectable } from 'inversify';
-import { HistoryService, HistoryServiceToken } from '../../common/services/db/history-service';
+import { HistoryService, LocalHistoryServiceToken } from '../../common/services/db/history-service';
 import { rendererContainer } from '../../common/container/renderer-container';
-import { NoteService, NoteServiceToken } from '../../common/services/db/note-service';
+import { NoteService, LocalNoteServiceToken } from '../../common/services/db/note-service';
 import logger from '../../electron-shared/logger';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
 import axios from 'axios';
@@ -45,8 +45,8 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
     // @inject(UserServiceToken) private userService: UserService,
     // @inject(AppServiceToken) private appService: AppService,
   ) {
-    this.historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
-    this.noteService = rendererContainer.get<NoteService>(NoteServiceToken);
+    this.historyService = rendererContainer.get<HistoryService>(LocalHistoryServiceToken);
+    this.noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken);
     this.userService = rendererContainer.get<UserService>(UserServiceToken);
     this.appService = rendererContainer.get<AppService>(AppServiceToken);
   }

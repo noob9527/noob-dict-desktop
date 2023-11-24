@@ -5,7 +5,7 @@ import { SettingService, SettingServiceToken } from '../../../common/services/se
 import logger from '../../../electron-shared/logger';
 import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
 
-type SettingState = UserProfile;
+export type SettingState = UserProfile;
 
 export interface SettingModel extends Model {
   state: SettingState
@@ -39,6 +39,9 @@ const effects = {
     });
     yield put({
       type: '_transient/setEcDictAvailable',
+    });
+    yield put({
+      type: '_transient/setLocalDbAvailable',
     });
   },
 };

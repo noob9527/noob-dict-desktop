@@ -18,12 +18,14 @@ export class ElectronSettingService implements SettingService {
     this.clipboardService = rendererContainer.get<ClipboardService>(ClipboardServiceToken);
   }
 
-  // called by setting window
-  // -> setting window
-  // -> ElectronSettingService.sendSettingChange
-  // -> src/electron-main/setting.ts
-  // -> src/browser/ipc-renderer.ts registerStorageEventListener
-  // -> ElectronSettingService.handleSettingChange
+// called by setting window
+// -> setting window
+// -> ElectronSettingService.sendSettingChange
+// -> ipc call main
+// -> src/electron-main/setting.ts (this method)
+// -> ipc call renderer
+// -> ElectronSettingService.handleSettingChange
+// -> dispatch redux event
   async sendSettingChange(newValue: UserProfile, oldValue: UserProfile): Promise<UserProfile> {
     return ipcRenderer
       .callMain<{ newValue: UserProfile, oldValue: UserProfile }, UserProfile>(

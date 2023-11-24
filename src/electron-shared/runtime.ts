@@ -18,7 +18,12 @@ function isRenderer() {
   // We're in node.js somehow
   if (!process.type) return false;
 
-  return process.type === 'renderer'
+  if(process.argv.includes('--app-path=/Users/xy/Workspace/code/personal/noob-dict/noob-dict-desktop/node_modules/@jest-runner/electron/build')) {
+    // jest runner
+    return false;
+  }
+
+  return process.type === 'renderer';
 }
 
 function isDev(): boolean {
@@ -26,6 +31,10 @@ function isDev(): boolean {
     const remote = require('@electron/remote');
     return !remote.app.isPackaged;
   } else {
+    if (!electron.app) {
+      // jest runner
+      return true;
+    }
     return !electron.app.isPackaged;
   }
 }

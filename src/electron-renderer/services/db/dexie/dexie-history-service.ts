@@ -53,8 +53,6 @@ export class DexieHistoryService implements HistoryService {
       .between(
         param.createAtBetween.lowerBound,
         param.createAtBetween.upperBound ?? (new Date()).getTime(),
-        param.createAtBetween.includeLower ?? true,
-        param.createAtBetween.includeUpper ?? true,
       )
       .filter(e => e.user_id === param.user_id)
       .toArray();
@@ -67,8 +65,6 @@ export class DexieHistoryService implements HistoryService {
       .between(
         param.updateAtBetween.lowerBound,
         param.updateAtBetween.upperBound ?? (new Date()).getTime(),
-        param.updateAtBetween.includeLower ?? true,
-        param.updateAtBetween.includeUpper ?? true,
       )
       .filter(e => e.user_id === param.user_id)
       .toArray();

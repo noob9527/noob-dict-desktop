@@ -3,8 +3,8 @@ import { INote } from '../../../../common/model/note';
 import { ISearchHistory } from '../../../../common/model/history';
 
 class DexieIndexDb extends Dexie {
-  notes: Dexie.Table<INote, number>;
-  histories: Dexie.Table<ISearchHistory, number>;
+  notes: Dexie.Table<INote, string>;
+  histories: Dexie.Table<ISearchHistory, string>;
 
   constructor(databaseName: string) {
     super(databaseName);

@@ -6,12 +6,12 @@ import { rendererContainer } from '../../../../../common/container/renderer-cont
 import {
   HistoryCreateAtSearchParam,
   HistoryService,
-  HistoryServiceToken,
+  LocalHistoryServiceToken,
 } from '../../../../../common/services/db/history-service';
 import moment from 'moment';
 import { RootState } from '../../../root-model';
 
-const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
+const historyService = rendererContainer.get<HistoryService>(LocalHistoryServiceToken);
 
 export interface OverviewState {
   searchParams: HistoryCreateAtSearchParam,

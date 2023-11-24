@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ThemedCheckbox } from '../../components/themed-ui/input/checkbox';
 import { ThemedContent } from '../../components/themed-ui/content/content';
 import { ThemedInputShortcut } from '../../components/themed-ui/input/input-shortcut/themed-input-shortcut';
-import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
 import { EcdictLocationSetting } from './ecdict-location-setting';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { shell } from 'electron';
 import { AppService, AppServiceToken } from '../../../common/services/app-service';
+import { DbLocationSetting } from './db-location-setting';
+import { SettingState } from './setting-model';
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 
 const Container = styled.div`
@@ -30,7 +31,7 @@ const InlineContainer = styled.span`
 
 const SettingPage = () => {
   const dispatch = useDispatch();
-  const settingState: UserProfile = useSelector((state: any) => state.setting);
+  const settingState: SettingState = useSelector((state: any) => state.setting);
   const { appHotKey, readClipboard, watchSelection } = settingState;
   const userDataFolder = appService.getUserDataFolder();
 
@@ -46,6 +47,7 @@ const SettingPage = () => {
             role="button"
           >{userDataFolder}</a>
         </div>
+        <DbLocationSetting/>
         <EcdictLocationSetting/>
         <ThemedCheckbox
           checked={watchSelection}
