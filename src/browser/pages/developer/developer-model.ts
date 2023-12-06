@@ -3,8 +3,11 @@ import { call, put, select } from '@redux-saga/core/effects';
 import { RootState } from '../root-model';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { UserService, UserServiceToken } from '../../../common/services/user-service';
+import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../../common/services/global-history-service';
 
 const userService = rendererContainer.get<UserService>(UserServiceToken);
+const globalHistoryService = rendererContainer
+  .get<GlobalHistoryService>(GlobalHistoryServiceToken);
 
 export interface DeveloperState {
   syncHistoryPageSize: number,
@@ -26,6 +29,9 @@ const effects = {
     yield put({
       type: 'root/setLastEvaluatedUpdateAt',
     });
+  },
+  * migrateLocalDB() {
+    yield call([globalHistoryService, globalHistoryService.migrateToSqlite]);
   },
 };
 

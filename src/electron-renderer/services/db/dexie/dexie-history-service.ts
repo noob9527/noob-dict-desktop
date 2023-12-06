@@ -15,6 +15,15 @@ import { Page } from '../../../../common/model/page';
 export class DexieHistoryService implements HistoryService {
   private log = logger.getLogger(DexieHistoryService.name);
 
+  async findForMigration() {
+    const array = await database.histories.toArray()
+    return array.map(e => SearchHistory.wrap(e))
+  }
+
+  async countAll() {
+    return database.histories.count()
+  }
+
   async findAll(text: string, user_id: string = ''): Promise<ISearchHistory[]> {
     const res = await database.histories
       .where({ text, user_id })

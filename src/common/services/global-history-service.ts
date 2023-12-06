@@ -8,4 +8,9 @@ export interface GlobalHistoryService {
 
   syncHistoryPages(pageSize: number, pageLimit: number)
 
+  /**
+   * indexed db to sqlite
+   */
+  migrateToSqlite()
+
 }

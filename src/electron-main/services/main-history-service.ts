@@ -120,8 +120,9 @@ export class MainHistoryService extends Delegate implements HistoryService {
     history.id = history.id ?? uuidv4();
 
     // https://sequelize.org/docs/v6/core-concepts/model-instances/#a-very-useful-shortcut-the-create-method
-    return SearchHistoryModel.create(history)
-      .then(e => e.toDTO());
+    const model = SearchHistoryModel.of(history);
+    await model.save();
+    return model.toDTO();
   }
 
   @ipcAnswerRenderer(LOCAL_DB_HISTORY_PREFIX)

@@ -31,7 +31,7 @@ export class SearchHistoryModel extends Model {
       paragraph: this.context_paragraph ?? '',
       source: this.context_source ?? '',
       remark: '',
-    }:null;
+    } : null;
   }
 
   toDTO(): ISearchHistory {

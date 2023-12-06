@@ -1,8 +1,12 @@
 import { GlobalHistoryService, } from '../../common/services/global-history-service';
 import { inject, injectable } from 'inversify';
-import { HistoryService, LocalHistoryServiceToken } from '../../common/services/db/history-service';
+import {
+  DexieHistoryServiceToken,
+  HistoryService,
+  LocalHistoryServiceToken
+} from '../../common/services/db/history-service';
 import { rendererContainer } from '../../common/container/renderer-container';
-import { NoteService, LocalNoteServiceToken } from '../../common/services/db/note-service';
+import { NoteService, LocalNoteServiceToken, DexieNoteServiceToken } from '../../common/services/db/note-service';
 import logger from '../../electron-shared/logger';
 import { UserService, UserServiceToken } from '../../common/services/user-service';
 import axios from 'axios';
@@ -10,6 +14,8 @@ import { APP_CONSTANTS } from '../../common/app-constants';
 import { ISearchHistory, SearchHistory } from '../../common/model/history';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { User } from '../../common/model/user';
+import { DexieNoteService } from './db/dexie/dexie-note-service';
+import { DexieHistoryService } from './db/dexie/dexie-history-service';
 
 interface SyncHistoriesRequestV2 {
   clientLastSyncTime: Date
@@ -35,6 +41,8 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
   private noteService: NoteService;
   private userService: UserService;
   private appService: AppService;
+  private dexieNoteService: NoteService;
+  private dexieHistoryService: HistoryService;
 
   private log = logger.getLogger('GlobalHistoryServiceImpl');
 
@@ -47,6 +55,8 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
   ) {
     this.historyService = rendererContainer.get<HistoryService>(LocalHistoryServiceToken);
     this.noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken);
+    this.dexieNoteService = rendererContainer.get<DexieNoteService>(DexieNoteServiceToken);
+    this.dexieHistoryService = rendererContainer.get<DexieHistoryService>(DexieHistoryServiceToken);
     this.userService = rendererContainer.get<UserService>(UserServiceToken);
     this.appService = rendererContainer.get<AppService>(AppServiceToken);
   }
@@ -157,6 +167,15 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
         lowerBound: (new Date(last_sync_time)).valueOf(),
       }
     });
+  }
+
+  async migrateToSqlite() {
+    const methodLogger = this.log.getLogger('migrateToSqlite');
+    const service = this.dexieHistoryService as DexieHistoryService;
+    const items = await service.findForMigration();
+    methodLogger.debug(`about to migrate ${items.length} items`);
+    const promises = items.map(e => this.noteService.syncHistory(e));
+    await Promise.all(promises);
   }
 
 }

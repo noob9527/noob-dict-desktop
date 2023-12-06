@@ -1,8 +1,13 @@
 import { ISearchHistory } from '../../model/history';
 import { Page } from '../../model/page';
 
+// used in renderer process
 export const DexieHistoryServiceToken = Symbol.for('dexie-history-service');
+
+// used in renderer process
 export const LocalHistoryServiceToken = Symbol.for('local-history-service');
+
+// used in main process
 export const MainHistoryServiceToken = Symbol.for('main-history-service');
 
 
