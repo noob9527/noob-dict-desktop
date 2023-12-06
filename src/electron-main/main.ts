@@ -9,7 +9,6 @@ import { initSetting } from './setting';
 import { getOrCreateAppMenu } from './menu';
 import { initialAutoUpdater } from './auto-update';
 import * as remoteMain from '@electron/remote/main'
-import * as path from 'path';
 
 // see https://github.com/electron/remote
 remoteMain.initialize();

@@ -94,6 +94,14 @@ const DeveloperPage = () => {
               });
             }}
           >Reset Sync Flag</ThemedButton>
+
+          <ThemedButton
+            onClick={() => {
+              dispatch({
+                type: 'developer/migrateLocalDB',
+              });
+            }}
+          >Migrate Local DB</ThemedButton>
         </div>
 
       </Container>

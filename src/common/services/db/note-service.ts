@@ -1,7 +1,14 @@
 import { INote } from '../../model/note';
 import { ISearchHistory } from '../../model/history';
 
-export const NoteServiceToken = Symbol.for('note-service');
+// used in renderer process
+export const DexieNoteServiceToken = Symbol.for('dexie-note-service');
+
+// used in renderer process
+export const LocalNoteServiceToken = Symbol.for('local-note-service');
+
+// used in main process
+export const MainNoteServiceToken = Symbol.for('main-note-service');
 
 export interface NoteService {
   // cascade fetch corresponding histories

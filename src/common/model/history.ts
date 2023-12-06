@@ -1,7 +1,7 @@
 import { Context } from './search-domain';
 
 export interface ISearchHistory {
-  id?: Maybe<number>
+  id?: Maybe<string>
   user_id: string
   text: string
   context: Context | null | undefined
@@ -10,7 +10,7 @@ export interface ISearchHistory {
 }
 
 export class SearchHistory implements ISearchHistory {
-  id?: Maybe<number>;
+  id?: Maybe<string>;
   user_id: string = '';
   text: string = '';
   context = null;

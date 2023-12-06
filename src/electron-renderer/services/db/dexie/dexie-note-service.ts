@@ -2,7 +2,7 @@ import database from './dexie-index-db';
 import { injectable } from 'inversify';
 import { NoteService } from '../../../../common/services/db/note-service';
 import { INote, Note } from '../../../../common/model/note';
-import { HistoryService, HistoryServiceToken } from '../../../../common/services/db/history-service';
+import { HistoryService, DexieHistoryServiceToken } from '../../../../common/services/db/history-service';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { ISearchHistory } from '../../../../common/model/history';
 import { v4 as uuidv4 } from 'uuid';
@@ -14,7 +14,7 @@ export class DexieNoteService implements NoteService {
   private log = logger.getLogger(DexieNoteService.name);
 
   constructor() {
-    this.historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
+    this.historyService = rendererContainer.get<HistoryService>(DexieHistoryServiceToken);
   }
 
   async fetch(text: string, user_id: string = ''): Promise<Maybe<INote>> {

@@ -13,9 +13,13 @@ import { SettingService, SettingServiceToken } from '../../common/services/setti
 import { ElectronSettingService } from './setting-service-impl';
 import { ClipboardServiceImpl } from './clipboard-service-impl';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
-import { HistoryService, HistoryServiceToken } from '../../common/services/db/history-service';
+import {
+  HistoryService,
+  DexieHistoryServiceToken,
+  LocalHistoryServiceToken
+} from '../../common/services/db/history-service';
 import { DexieHistoryService } from './db/dexie/dexie-history-service';
-import { NoteService, NoteServiceToken } from '../../common/services/db/note-service';
+import { NoteService, DexieNoteServiceToken, LocalNoteServiceToken } from '../../common/services/db/note-service';
 import { DexieNoteService } from './db/dexie/dexie-note-service';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { ElectronAppService } from './app-service-impl';
@@ -28,6 +32,10 @@ import { LocalStorageService, LocalStorageServiceToken } from '../../common/serv
 import { LocalStorageServiceImpl } from './local-storage-service-impl';
 import { GlobalHistoryServiceImplV2 } from './global-history-service-impl-v2';
 import { EcDictSearchService } from './ecdict-search-service';
+import { LocalDbService, LocalDbServiceToken } from '../../common/services/db/local-db-service';
+import { SqliteLocalDbService } from './db/sqlite/sqlite-local-db-service';
+import { SqliteHistoryService } from './db/sqlite/sqlite-history-service';
+import { SqliteNoteService } from './db/sqlite/sqlite-note-service';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -46,9 +54,14 @@ function registerAllService() {
   rendererContainer.bind<GlobalHistoryService>(GlobalHistoryServiceToken).to(GlobalHistoryServiceImplV2);
   rendererContainer.bind<LocalStorageService>(LocalStorageServiceToken).to(LocalStorageServiceImpl);
 
-  // db
-  rendererContainer.bind<HistoryService>(HistoryServiceToken).to(DexieHistoryService);
-  rendererContainer.bind<NoteService>(NoteServiceToken).to(DexieNoteService);
+  // db dexie
+  rendererContainer.bind<HistoryService>(DexieHistoryServiceToken).to(DexieHistoryService);
+  rendererContainer.bind<NoteService>(DexieNoteServiceToken).to(DexieNoteService);
+
+  // db sqlite
+  rendererContainer.bind<LocalDbService>(LocalDbServiceToken).to(SqliteLocalDbService);
+  rendererContainer.bind<HistoryService>(LocalHistoryServiceToken).to(SqliteHistoryService);
+  rendererContainer.bind<NoteService>(LocalNoteServiceToken).to(SqliteNoteService);
 }
 
 registerAllService();

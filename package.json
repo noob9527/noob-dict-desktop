@@ -1,6 +1,6 @@
 {
   "name": "noob-dict-desktop",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "A dictionary aim to help myself learning English",
   "private": true,
   "main": "build/main.js",
@@ -64,6 +64,8 @@
     "redux": "^4.0.4",
     "redux-saga": "^1.1.1",
     "reflect-metadata": "^0.1.13",
+    "sequelize": "^6.21.3",
+    "sqlite3": "^5.0.10",
     "styled-components": "^4.4.1",
     "typescript": "^3.7.3",
     "uuid": "^7.0.3"

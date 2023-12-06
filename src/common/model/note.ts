@@ -4,7 +4,7 @@ import { EcDictSearchSuccessResult } from '@noob9527/noob-dict-ecdict';
 
 // note is just histories group by text
 export interface INote {
-  id?: Maybe<number>
+  id?: Maybe<string>
   user_id: string
   text: string
   remark: string
@@ -17,7 +17,7 @@ export interface INote {
 }
 
 export class Note implements INote {
-  id?: Maybe<number>;
+  id?: Maybe<string>;
   user_id: string = '';
   text: string = '';
   remark = '';

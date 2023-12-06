@@ -1,7 +1,14 @@
 import { ISearchHistory } from '../../model/history';
 import { Page } from '../../model/page';
 
-export const HistoryServiceToken = Symbol.for('history-service');
+// used in renderer process
+export const DexieHistoryServiceToken = Symbol.for('dexie-history-service');
+
+// used in renderer process
+export const LocalHistoryServiceToken = Symbol.for('local-history-service');
+
+// used in main process
+export const MainHistoryServiceToken = Symbol.for('main-history-service');
 
 
 interface HistorySearchParam {
@@ -19,8 +26,6 @@ export interface HistoryCreateAtSearchParam extends HistorySearchParam {
   createAtBetween: {
     lowerBound: number,
     upperBound?: number,
-    includeLower?: boolean,
-    includeUpper?: boolean,
   }
 }
 
@@ -28,8 +33,6 @@ export interface HistoryUpdateAtSearchParam extends HistorySearchParam {
   updateAtBetween: {
     lowerBound: number,
     upperBound?: number,
-    includeLower?: boolean,
-    includeUpper?: boolean,
   }
 }
 

@@ -15,6 +15,15 @@ import { Page } from '../../../../common/model/page';
 export class DexieHistoryService implements HistoryService {
   private log = logger.getLogger(DexieHistoryService.name);
 
+  async findForMigration() {
+    const array = await database.histories.toArray()
+    return array.map(e => SearchHistory.wrap(e))
+  }
+
+  async countAll() {
+    return database.histories.count()
+  }
+
   async findAll(text: string, user_id: string = ''): Promise<ISearchHistory[]> {
     const res = await database.histories
       .where({ text, user_id })
@@ -53,8 +62,6 @@ export class DexieHistoryService implements HistoryService {
       .between(
         param.createAtBetween.lowerBound,
         param.createAtBetween.upperBound ?? (new Date()).getTime(),
-        param.createAtBetween.includeLower ?? true,
-        param.createAtBetween.includeUpper ?? true,
       )
       .filter(e => e.user_id === param.user_id)
       .toArray();
@@ -67,8 +74,6 @@ export class DexieHistoryService implements HistoryService {
       .between(
         param.updateAtBetween.lowerBound,
         param.updateAtBetween.upperBound ?? (new Date()).getTime(),
-        param.updateAtBetween.includeLower ?? true,
-        param.updateAtBetween.includeUpper ?? true,
       )
       .filter(e => e.user_id === param.user_id)
       .toArray();

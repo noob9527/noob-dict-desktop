@@ -2,15 +2,15 @@ import { rendererContainer } from '../../../../common/container/renderer-contain
 import { INote } from '../../../../common/model/note';
 import { Model } from '../../../redux/common/redux-model';
 import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
-import { NoteService, NoteServiceToken } from '../../../../common/services/db/note-service';
+import { NoteService, LocalNoteServiceToken } from '../../../../common/services/db/note-service';
 import { ISearchHistory } from '../../../../common/model/history';
-import { HistoryService, HistoryServiceToken } from '../../../../common/services/db/history-service';
+import { HistoryService, LocalHistoryServiceToken } from '../../../../common/services/db/history-service';
 import _ from 'lodash';
 import { RootState } from '../../root-model';
 import { DataWrapper } from '../../../../common/model/data-wrapper';
 
-const noteService = rendererContainer.get<NoteService>(NoteServiceToken);
-const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
+const noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken);
+const historyService = rendererContainer.get<HistoryService>(LocalHistoryServiceToken);
 
 export interface SearchNoteState {
   noteInDb: Maybe<INote>,
@@ -36,13 +36,17 @@ const effects = {
   * fetchOrCreateNote(action) {
     const { history } = action.payload;
     let note = yield call([noteService, noteService.addHistory], history);
+    const latestHistory = _.maxBy(note.histories, (e: ISearchHistory) => {
+      return e.create_at;
+    });
     const histories = note.histories.reduce((acc, curr, i, arr) => {
       return {
         ...acc,
         [curr.id]: {
           id: curr.id,
           typing: false,
-          editing: i === arr.length - 1,
+          // the last element is editing
+          editing: curr.id === latestHistory!!.id,
           dirty: false,
           syncing: false,
           showSpinner: false,

@@ -1,7 +1,7 @@
 import { Model } from '../../redux/common/redux-model';
 import { rendererContainer } from '../../../common/container/renderer-container';
-import { NoteService, NoteServiceToken } from '../../../common/services/db/note-service';
-import { HistoryParam, HistoryService, HistoryServiceToken } from '../../../common/services/db/history-service';
+import { NoteService, LocalNoteServiceToken } from '../../../common/services/db/note-service';
+import { HistoryParam, HistoryService, LocalHistoryServiceToken } from '../../../common/services/db/history-service';
 import { ISearchHistory } from '../../../common/model/history';
 import { call, delay, put, select } from '@redux-saga/core/effects';
 import { RootState } from '../root-model';
@@ -9,8 +9,8 @@ import { DataWrapper } from '../../../common/model/data-wrapper';
 import { Page } from '../../../common/model/page';
 import { SearchNoteState } from '../search/note/search-note-model';
 
-const noteService = rendererContainer.get<NoteService>(NoteServiceToken);
-const historyService = rendererContainer.get<HistoryService>(HistoryServiceToken);
+const noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken);
+const historyService = rendererContainer.get<HistoryService>(LocalHistoryServiceToken);
 
 export interface TableState {
   historyParam: HistoryParam,

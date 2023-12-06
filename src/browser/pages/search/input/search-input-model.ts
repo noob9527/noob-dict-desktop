@@ -8,7 +8,7 @@ import {
   SearchService
 } from '../../../../common/services/search-service';
 import { RootState } from '../../root-model';
-import { NoteService, NoteServiceToken } from '../../../../common/services/db/note-service';
+import { NoteService, LocalNoteServiceToken } from '../../../../common/services/db/note-service';
 import { INote } from '../../../../common/model/note';
 import { EcDictSearchService } from '../../../../electron-renderer/services/ecdict-search-service';
 import logger from '../../../../electron-shared/logger';
@@ -59,7 +59,7 @@ const effects = {
     const transientState: TransientState = yield select(state => state._transient);
     const searchService = rendererContainer.get<SearchService>(CorsSearchServiceToken);
     const ecDictSearchService = rendererContainer.get<EcDictSearchService>(EcDictSearchServiceToken);
-    const noteService = rendererContainer.get<NoteService>(NoteServiceToken);
+    const noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken);
 
     const { text } = action;
     const user_id = rootState.currentUser?.id ?? '';
