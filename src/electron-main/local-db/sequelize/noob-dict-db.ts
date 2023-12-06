@@ -34,9 +34,13 @@ export class NoobDictDB {
       foreignKey: 'text',
       constraints: false,
     });
-    this.sequelize.sync({ alter: true });
-    // SearchHistoryModel.sync({ alter: true });
-    // SearchNoteModel.sync({ alter: true });
+
+    // NEVER enable `alter`, or `force` option in production!!!
+    // seems like there's a bug with alter = true option.
+    // the 1st time run it, it will create multi columns unique constraint correctly
+    // run it another time will drop the unique index.
+    // https://sequelize.org/docs/v6/core-concepts/model-basics/#model-synchronization
+    this.sequelize.sync({ alter: false });
   }
 
   async testDbConnection(): Promise<boolean> {
