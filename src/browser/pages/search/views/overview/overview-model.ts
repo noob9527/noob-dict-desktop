@@ -1,7 +1,7 @@
 import { Model } from '../../../../redux/common/redux-model';
 import { call, fork, put, select, take } from '@redux-saga/core/effects';
 import { LOCATION_CHANGE, LocationChangeAction } from 'connected-react-router';
-import { ISearchHistory } from '../../../../../common/model/history';
+import { type ISearchHistory } from '../../../../../common/model/history';
 import { rendererContainer } from '../../../../../common/container/renderer-container';
 import {
   HistoryCreateAtSearchParam,

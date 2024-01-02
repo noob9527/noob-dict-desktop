@@ -34,7 +34,7 @@ xdescribe('GlobalHistoryServiceImplV2', () => {
       try{
         res = await globalHistoryService.callSyncHistoryAPI(request);
         console.log(res);
-      } catch (e) {
+      } catch (e: any) {
         console.log(e.message);
       }
     });

@@ -1,12 +1,12 @@
 import { Delegate, ipcAnswerRenderer } from '../../electron-renderer/utils/ipc-decorator';
 import { v4 as uuidv4 } from 'uuid';
 import {
-  HistoryCreateAtSearchParam,
-  HistoryParam,
+  type HistoryCreateAtSearchParam,
+  type HistoryParam,
+  type HistoryUpdateAtSearchParam,
   HistoryService,
-  HistoryUpdateAtSearchParam
 } from '../../common/services/db/history-service';
-import { ISearchHistory } from '../../common/model/history';
+import { type ISearchHistory } from '../../common/model/history';
 import { Page } from '../../common/model/page';
 import logger from '../../electron-shared/logger';
 import { SearchHistoryModel } from '../local-db/sequelize/search-history-model';

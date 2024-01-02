@@ -1,6 +1,6 @@
 import Dexie from 'dexie';
 import { INote } from '../../../../common/model/note';
-import { ISearchHistory } from '../../../../common/model/history';
+import { type ISearchHistory } from '../../../../common/model/history';
 
 class DexieIndexDb extends Dexie {
   notes: Dexie.Table<INote, string>;

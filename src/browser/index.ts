@@ -1,3 +1,6 @@
+// As we don't use webpack anymore.
+// seems like we have to load the antd.css all at once.
+import 'antd/dist/antd.css';
 import * as models from './pages/models';
 import dva from './redux/common/dva';
 import { RootComponent } from './pages/root.component';

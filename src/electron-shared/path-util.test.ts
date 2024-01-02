@@ -1,4 +1,4 @@
-import { getIconPath, getUserDataPath } from './path-util';
+import { getIconPath, getPublicPath, getUserDataPath } from './path-util';
 
 describe('path-util', () => {
   it('getAssetsPath', () => {
@@ -9,4 +9,10 @@ describe('path-util', () => {
     const res = getUserDataPath('DB.sqlite');
     console.log(res);
   });
+
+  it('getPublicPath', () => {
+    const res = getPublicPath();
+    console.log(res);
+  });
+
 });

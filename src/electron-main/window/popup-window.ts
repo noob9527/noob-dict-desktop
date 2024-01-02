@@ -67,6 +67,7 @@ function createWindow() {
     maximizable: false,
     minimizable: false,
     webPreferences: {
+      preload: path.join(__dirname, 'electron-preload.js'),
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,

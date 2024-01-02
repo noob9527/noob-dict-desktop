@@ -1,7 +1,7 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
 import { INote } from '../../../common/model/note';
-import { ISearchHistory } from '../../../common/model/history';
-import { EcDictSearchSuccessResult } from '../../../../../noob-dict-ecdict/src';
+import { type ISearchHistory } from '../../../common/model/history';
+import { EcDictSearchSuccessResult } from '@noob9527/noob-dict-ecdict';
 
 export class SearchNoteModel extends Model implements INote {
 

@@ -5,7 +5,7 @@ import { Select, Spin } from 'antd';
 import styles from './inline-edit-text.module.scss';
 import { ThemedInput } from '../../../components/themed-ui/input/input';
 import { SearchNoteState } from './search-note-model';
-import { ISearchHistory } from '../../../../common/model/history';
+import { type ISearchHistory } from '../../../../common/model/history';
 import { SelectValue } from 'antd/es/select';
 import { useDispatch, useSelector } from 'react-redux';
 import { DataWrapper } from '../../../../common/model/data-wrapper';

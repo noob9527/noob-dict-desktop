@@ -2,7 +2,7 @@ import 'reflect-metadata';
 import { Delegate, getDefaultChannelByMethodName, ipcAnswerRenderer, ipcCallMain } from './ipc-decorator';
 import { ipcRenderer } from 'electron-better-ipc';
 import { LOCAL_DB_HISTORY_PREFIX } from '../../electron-shared/ipc/ipc-channel-local-db';
-import { ISearchHistory } from '../../common/model/history';
+import type { ISearchHistory } from '../../common/model/history';
 
 jest.mock('electron-better-ipc', () => {
   const originalModule = jest.requireActual('electron-better-ipc');

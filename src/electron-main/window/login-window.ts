@@ -10,6 +10,7 @@ import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
 import { notifyRendererWindowEvents } from '../utils/window-util';
 import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
+import path from 'path';
 
 export {
   getOrCreateLoginWindow,
@@ -52,6 +53,7 @@ function createWindow() {
 
     parent,
     webPreferences: {
+      preload: path.join(__dirname, 'electron-preload.js'),
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,
@@ -66,7 +68,11 @@ function createWindow() {
 
   // Load a remote URL
   // https://stackoverflow.com/a/47926513
-  window.loadURL(getWindowHashUrl('login'));
+  const loginWindowUrl = getWindowHashUrl('login')
+  window.loadURL(loginWindowUrl);
+  if (!(githubOption.params.redirect_uri && githubOption.params.client_id)) {
+    throw new Error('"client_id" and "redirect_uri" are required')
+  }
 
   // this works when we don't have related cookie(e.g. the first time we login)
   // see https://auth0.com/blog/securing-electron-applications-with-openid-connect-and-oauth-2/

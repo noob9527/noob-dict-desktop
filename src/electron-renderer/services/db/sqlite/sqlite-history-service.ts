@@ -1,10 +1,10 @@
 import {
-  HistoryCreateAtSearchParam,
-  HistoryParam,
+  type HistoryCreateAtSearchParam,
+  type HistoryParam,
+  type HistoryUpdateAtSearchParam,
   HistoryService,
-  HistoryUpdateAtSearchParam
 } from '../../../../common/services/db/history-service';
-import { ISearchHistory } from '../../../../common/model/history';
+import { type ISearchHistory } from '../../../../common/model/history';
 import { injectable } from 'inversify';
 import { Page } from '../../../../common/model/page';
 import { ipcCallMain } from '../../../utils/ipc-decorator';

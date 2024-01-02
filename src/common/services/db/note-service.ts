@@ -1,5 +1,5 @@
 import { INote } from '../../model/note';
-import { ISearchHistory } from '../../model/history';
+import { type ISearchHistory } from '../../model/history';
 
 // used in renderer process
 export const DexieNoteServiceToken = Symbol.for('dexie-note-service');

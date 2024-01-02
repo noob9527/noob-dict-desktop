@@ -4,6 +4,7 @@
  * WARN: to access env value, we can only use process.env instead of Runtime.process.env here!
  * I think the reason is, we are using dotenv related packages to build/access the value in renderer process.
  */
+import { Runtime } from '../electron-shared/runtime';
 
 enum LoginType {
   GITHUB = 'GITHUB',
@@ -29,8 +30,8 @@ const githubOption: LoginOption = {
   tokenExchangeUrl: 'https://a3eks8ljq9.execute-api.ap-east-1.amazonaws.com/prod/auth/github',
   endpoint: 'https://github.com/login/oauth/authorize',
   params: {
-    client_id: process.env.REACT_APP_GITHUB_CLIENT_ID!!,
-    redirect_uri: process.env.REACT_APP_GITHUB_REDIRECT_URI!!,
+    client_id: Runtime.env.REACT_APP_GITHUB_CLIENT_ID!!,
+    redirect_uri: Runtime.env.REACT_APP_GITHUB_REDIRECT_URI!!,
     scope: 'user',
   },
   get url() {

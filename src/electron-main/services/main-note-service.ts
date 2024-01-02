@@ -1,6 +1,6 @@
 import { Delegate, ipcAnswerRenderer } from '../../electron-renderer/utils/ipc-decorator';
 import { LOCAL_DB_NOTE_PREFIX } from '../../electron-shared/ipc/ipc-channel-local-db';
-import { ISearchHistory } from '../../common/model/history';
+import type { ISearchHistory } from '../../common/model/history';
 import { HistoryService, MainHistoryServiceToken } from '../../common/services/db/history-service';
 import { mainContainer } from '../../common/container/main-container';
 import { NoteService } from '../../common/services/db/note-service';
@@ -104,7 +104,7 @@ export class MainNoteService extends Delegate implements NoteService {
     note.update_at = now;
 
     // https://sequelize.org/docs/v6/core-concepts/model-instances/#a-very-useful-shortcut-the-create-method
-    return SearchNoteModel.create(note)
+    return SearchNoteModel.create(note as any)
       .then(e => e.toDTO());
   }
 

@@ -6,6 +6,7 @@ import { windowContainer } from './windows';
 import { WindowId } from '../../common/window-id';
 import * as remoteMain from '@electron/remote/main';
 import { Runtime } from '../../electron-shared/runtime';
+import path from 'path';
 
 export {
   getOrCreateDeveloperWindow,
@@ -48,6 +49,7 @@ function createWindow() {
 
     parent,
     webPreferences: {
+      preload: path.join(__dirname, 'electron-preload.js'),
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,

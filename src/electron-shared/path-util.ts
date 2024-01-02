@@ -6,6 +6,7 @@ const iconPath = 'icon';
 
 export {
   getBuildPath,
+  getPublicPath,
   getIconPath,
   getAssetsPath,
   getWindowHashUrl,
@@ -15,8 +16,8 @@ export {
 
 function getWindowStaticUrl(): string {
   return Runtime.isDev
-    ? 'http://localhost:3000/'
-    :`file://${path.join(__dirname, '..', 'build', 'index.html')}`;
+    ? process.env.VITE_DEV_SERVER_URL!!
+    : `file://${path.join(__dirname, '..', 'build', 'index.html')}`;
 }
 
 // https://stackoverflow.com/a/47926513
@@ -28,11 +29,48 @@ function getWindowHashUrl(hashbang: string = ''): string {
   }
 }
 
+/**
+ * <root>/build/
+ *
+ * we might use some build plugin to generate files
+ * the generated file will be put into this folder.
+ * @param relativePath
+ */
 function getBuildPath(relativePath: string = '') {
   let root: string;
   if (Runtime.isRenderer()) {
-    const remote = require('@electron/remote');
-    root = remote.app.getAppPath();
+    // const remote = require('@electron/remote');
+    // root = remote.app.getAppPath();
+    // <root>/build
+    root = (window as any).bridge.appPath;
+  } else {
+    // note that __dirname will be evaluated to the build directory at runtime
+    root = __dirname;
+  }
+  return path.join(root, ...relativePath.split('/'));
+}
+
+/**
+ * <root>/public/assets/
+ *
+ * for old build processes, we use
+ * `getBuildPath(`${assetsPath}/${relativePath}`);`
+ * to get assets path.
+ * this requires we copy public/assets to build/assets first,
+ * which means we need to run `yarn build` at least once
+ * to make `yarn dev` works.
+ * (because the build processes will do the copy job).
+ *
+ * now, we just access <root>/public/assets directly.
+ *
+ * @see https://vitejs.dev/guide/assets.html#the-public-directory
+ * @param relativePath
+ */
+function getPublicPath(relativePath: string = '') {
+  let root: string;
+  if (Runtime.isDev) {
+    // <root>/public
+    root = path.resolve(path.join(__dirname, '../public'));
   } else {
     // note that __dirname will be evaluated to the build directory at runtime
     root = __dirname;
@@ -41,7 +79,7 @@ function getBuildPath(relativePath: string = '') {
 }
 
 function getAssetsPath(relativePath: string = '') {
-  return getBuildPath(`${assetsPath}/${relativePath}`);
+  return getPublicPath(`${assetsPath}/${relativePath}`);
 }
 
 function getIconPath(relativePath: string = '') {
@@ -51,8 +89,9 @@ function getIconPath(relativePath: string = '') {
 function getUserDataPath(relativePath: string = '') {
   let folder: string;
   if (Runtime.isRenderer()) {
-    const remote = require('@electron/remote');
-    folder = remote.app.getPath('userData');
+    // const remote = require('@electron/remote');
+    // folder = remote.app.getPath('userData');
+    folder = (window as any).bridge.userDataPath;
   } else {
     const electron = require('electron');
     folder = electron.app.getPath('userData');

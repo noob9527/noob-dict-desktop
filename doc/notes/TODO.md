@@ -9,3 +9,7 @@
 - alfred API?
 - sqlite?
 - global sync window?
+- vite
+  - electron-log
+  - about-window
+  - git version?

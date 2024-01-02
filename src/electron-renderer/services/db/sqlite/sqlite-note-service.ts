@@ -1,6 +1,6 @@
 import { NoteService } from '../../../../common/services/db/note-service';
-import { ISearchHistory } from '../../../../common/model/history';
-import { INote } from '../../../../common/model/note';
+import type { ISearchHistory } from '../../../../common/model/history';
+import type { INote } from '../../../../common/model/note';
 import { ipcCallMain } from '../../../utils/ipc-decorator';
 import { LOCAL_DB_NOTE_PREFIX } from '../../../../electron-shared/ipc/ipc-channel-local-db';
 import { injectable } from 'inversify';

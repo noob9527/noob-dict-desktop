@@ -2,7 +2,8 @@
  * reference:
  * - https://github.com/megahertz/electron-log
  */
-import log from 'electron-log';
+// todo: vite
+// import log from 'electron-log';
 import { Runtime } from './runtime';
 
 interface Logger {
@@ -21,7 +22,7 @@ interface Logger {
 
 const internalLogger = Runtime.isRenderer()
         ? console
-        : log;
+        : console;
 
 class LoggerImpl implements Logger {
 

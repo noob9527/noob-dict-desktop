@@ -1,5 +1,5 @@
 import { DataTypes, Model, Sequelize } from 'sequelize';
-import { ISearchHistory } from '../../../common/model/history';
+import { type ISearchHistory } from '../../../common/model/history';
 import { Context } from '../../../common/model/search-domain';
 import logger from '../../../electron-shared/logger';
 
@@ -23,7 +23,7 @@ export class SearchHistoryModel extends Model {
       context_paragraph: history.context?.paragraph,
     }
     logger.debug('SearchHistory.of', model);
-    return super.build(model);
+    return SearchHistoryModel.build(model);
   }
 
   get context(): Context | null {

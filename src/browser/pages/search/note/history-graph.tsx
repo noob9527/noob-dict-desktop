@@ -1,7 +1,7 @@
 import React from 'react';
 import * as _ from 'lodash';
 import { Axis, Chart, Geom, Tooltip } from 'bizcharts';
-import { ISearchHistory } from '../../../../common/model/history';
+import { type ISearchHistory } from '../../../../common/model/history';
 
 interface HistoryViewProps {
   histories: ISearchHistory[]

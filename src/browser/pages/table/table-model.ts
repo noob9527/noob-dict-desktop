@@ -2,7 +2,7 @@ import { Model } from '../../redux/common/redux-model';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { NoteService, LocalNoteServiceToken } from '../../../common/services/db/note-service';
 import { HistoryParam, HistoryService, LocalHistoryServiceToken } from '../../../common/services/db/history-service';
-import { ISearchHistory } from '../../../common/model/history';
+import { type ISearchHistory } from '../../../common/model/history';
 import { call, delay, put, select } from '@redux-saga/core/effects';
 import { RootState } from '../root-model';
 import { DataWrapper } from '../../../common/model/data-wrapper';
