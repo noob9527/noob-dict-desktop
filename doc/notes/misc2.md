@@ -7,6 +7,8 @@ Then we move to vite, you may want to check out the following links:
 - https://github.com/electron-vite/vite-plugin-electron-renderer
 - https://github.com/electron-vite/electron-vite-react
 
+during the migration from webpack to vite, I left jest/babel config unchanged, babel is only used for jest now. i.e. if we set up a new unit test framework, we can safely remove all babel related config/dependencies.
+
 ### Scripts explanation
 TBD
 

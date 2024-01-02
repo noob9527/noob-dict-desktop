@@ -47,7 +47,7 @@ describe('ipc-decorator', () => {
       const res = fooService.foo(...params);
       expect(res).toStrictEqual(params);
       expect(ipcRenderer.callMain).toBeCalledTimes(1);
-      expect(ipcRenderer.callMain).toHaveBeenCalledWith(channel, params);
+      expect(ipcRenderer.callMain).toHaveBeenCalledWith(`${channel}/FOO`, params);
     });
   });
 

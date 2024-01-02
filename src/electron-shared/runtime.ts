@@ -5,13 +5,7 @@ export const Runtime = {
   isDev: isDev(),
   platform: getPlatform(),
   isMac: isMac(),
-  env: loadEnv(),
 };
-
-function loadEnv() {
-  // https://vitejs.dev/guide/env-and-mode
-  return import.meta.env;
-}
 
 function isRenderer() {
   // running in a web browser

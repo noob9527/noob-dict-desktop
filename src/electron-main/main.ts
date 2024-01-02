@@ -9,9 +9,16 @@ import { initSetting } from './setting';
 import { getOrCreateAppMenu } from './menu';
 import { initialAutoUpdater } from './auto-update';
 import * as remoteMain from '@electron/remote/main'
+import { Env } from '../electron-shared/env';
 
 // see https://github.com/electron/remote
 remoteMain.initialize();
+
+// verify env
+logger.debug('REACT_APP_ENV_LOAD_FLAG', Env.REACT_APP_ENV_LOAD_FLAG);
+if(!Env.REACT_APP_ENV_LOAD_FLAG) {
+  throw new Error('failed to load env');
+}
 
 contextMenu({
   showInspectElement: true,
@@ -77,8 +84,3 @@ app.on('before-quit', () => {
 // https://github.com/electron/electron/issues/12820
 app.disableHardwareAcceleration();
 
-// hot reload
-try {
-  require('electron-reloader')(module);
-} catch (_) {
-}
