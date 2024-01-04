@@ -1,12 +1,13 @@
 import 'reflect-metadata';
 import { Delegate, getDefaultChannelByMethodName, ipcAnswerRenderer, ipcCallMain } from './ipc-decorator';
-import { ipcRenderer } from 'electron-better-ipc';
+import { ipcMain, ipcRenderer } from 'electron-better-ipc';
 import { LOCAL_DB_HISTORY_PREFIX } from '../../electron-shared/ipc/ipc-channel-local-db';
 import type { ISearchHistory } from '../../common/model/history';
 
 jest.mock('electron-better-ipc', () => {
   const originalModule = jest.requireActual('electron-better-ipc');
 
+  console.log(originalModule);
   //Mock the default export and named export 'foo'
   return {
     __esModule: true,
@@ -14,6 +15,10 @@ jest.mock('electron-better-ipc', () => {
     ipcRenderer: {
       callMain: jest.fn((channel: string, data?: any) => {
         return data;
+      }),
+    },
+    ipcMain: {
+      answerRenderer: jest.fn((channel: string, callback: (data: any) => Promise<any>) => {
       }),
     }
   };
