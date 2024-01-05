@@ -1,28 +1,23 @@
-import { Runtime } from './runtime';
-
-export const Env = loadEnv();
+export const Env = loadEnv()
 
 /**
- * todo: we need ensure that it works in dev, prod, test environment.
- *
  * `import.meta.env` is the standard way to access env in vite build system.
  *
  * however, access it in jest environment would throw
  * 'SyntaxError: Cannot use 'import.meta' outside a module'.
  * even worse, it's a 'build time' error, not runtime error.
- * I haven't found a way to solve it.
  *
- * i.e. all tests import { Env } from this file will throw error.
+ * this [vite plugin](https://github.com/IndexXuan/vite-plugin-env-compatible)
+ * claims it bind env variables to process.env. but somehow it doesn't work
+ * after the app is packaged.
  *
- * @see https://vitejs.dev/guide/env-and-mode
- * @see https://github.com/IndexXuan/vite-plugin-env-compatible/tree/main
+ * currently, we use a "babel plugin" to solve it.
+ * - https://vitejs.dev/guide/env-and-mode
+ * - https://github.com/vitejs/vite/issues/1149
+ * - https://github.com/FredKSchott/create-snowpack-app/commit/c84d51bf5d10db82d6ff459dc9618710ea72f293#diff-93c47b837494a218df311b047db676e584f7a3307ed4c630e1c77dda7a404299
+ * - https://github.com/vitejs/vite/issues/1149#issuecomment-756912108
  */
 function loadEnv() {
-  if (Runtime.isDev) {
-    // somehow this doesn't work when app is packaged
-    return process.env;
-  } else {
-    // this doesn't work in jest env
-    return import.meta.env;
-  }
+  // return process.env;
+  return import.meta.env
 }

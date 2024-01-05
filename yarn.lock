@@ -4832,7 +4832,7 @@ dotenv-expand@4.2.0:
   resolved "https://registry.npmmirror.com/dotenv-expand/-/dotenv-expand-4.2.0.tgz#def1f1ca5d6059d24a766e587942c21106ce1275"
   integrity sha512-pHWVt6L/YkqbBCMb1hG6e7oO0WdMhlapDIibl+BZ9PncVE3i+G77uvNr8GUxW2ItSituOK8QOYC9oOJjwWD94A==
 
-dotenv-expand@5.1.0, dotenv-expand@^5.1.0:
+dotenv-expand@^5.1.0:
   version "5.1.0"
   resolved "https://registry.npmmirror.com/dotenv-expand/-/dotenv-expand-5.1.0.tgz#3fbaf020bfd794884072ea26b1e9791d45a629f0"
   integrity sha512-YXQl1DSa4/PQyRfgrv6aoNjhasp/p4qs9FjJ4q4cQk+8m4r6k4ZSiEyytKG8f8W9gi8WsQtIObNmKd+tMzNTmA==
@@ -4841,11 +4841,6 @@ dotenv@6.2.0:
   version "6.2.0"
   resolved "https://registry.npmmirror.com/dotenv/-/dotenv-6.2.0.tgz#941c0410535d942c8becf28d3f357dbd9d476064"
   integrity sha512-HygQCKUBSFl8wKQZBSemMywRWcEDNidvNbjGVyZu3nbZ8qq9ubiPoGLMdRDpfSrpkkm9BXYFkpKxxFX38o/76w==
-
-dotenv@8.2.0:
-  version "8.2.0"
-  resolved "https://registry.npmmirror.com/dotenv/-/dotenv-8.2.0.tgz#97e619259ada750eea3e4ea3e26bceea5424b16a"
-  integrity sha512-8sJ78ElpbDJBHNeBzUbUVLsqKdccaa/BXF1uPTw3GrvQTBgrQrtObr2mUrE38vzYd8cEv+m/JBfDLioYcfXoaw==
 
 dotenv@^9.0.2:
   version "9.0.2"
@@ -11823,14 +11818,6 @@ vite-plugin-electron@^0.15.3:
   version "0.15.4"
   resolved "https://registry.npmmirror.com/vite-plugin-electron/-/vite-plugin-electron-0.15.4.tgz#29552461940ed7ec398f59ee8b5ee63aa559a6c9"
   integrity sha512-aXGDjTXebJxNX+cf+KSZEsa9BcMrTbNhjZJaUhU5999/ATYZq4PlZpebfyeslyuYpjk6OdyA/pNC+fTeDYK5Kw==
-
-vite-plugin-env-compatible@^2.0.1:
-  version "2.0.1"
-  resolved "https://registry.npmmirror.com/vite-plugin-env-compatible/-/vite-plugin-env-compatible-2.0.1.tgz#9f9f3bc973d6d49b5ad41c14f9b66a691f96eac3"
-  integrity sha512-DRrOZTg/W44ojVQQfGSMPEgYQGzp5TeIpt9cpaK35hTOC/b2D7Ffl8/RIgK8vQ0mlnDIUgETcA173bnMEkyzdw==
-  dependencies:
-    dotenv "8.2.0"
-    dotenv-expand "5.1.0"
 
 vite@^4.4.9:
   version "4.5.1"

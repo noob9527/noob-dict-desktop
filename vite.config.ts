@@ -3,8 +3,6 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import electron from 'vite-plugin-electron';
 import renderer from 'vite-plugin-electron-renderer';
-// https://github.com/IndexXuan/vite-plugin-env-compatible
-import env from 'vite-plugin-env-compatible'
 import pkg from './package.json';
 
 // https://vitejs.dev/config/
@@ -42,13 +40,6 @@ export default defineConfig(({ command }) => {
     },
     plugins: [
       react(),
-      // vite exposes env variables on the special import.meta.env object.
-      // but jest explains 'SyntaxError: Cannot use 'import.meta' outside a module'
-      // we fall back to the 'process.env' way
-      env({
-        prefix: envPrefix,
-        mountedPath: 'process.env',
-      }),
       electron([
         {
           // Main-Process entry file of the Electron App.
@@ -70,12 +61,6 @@ export default defineConfig(({ command }) => {
                 external,
               },
             },
-            plugins: [
-              env({
-                prefix: envPrefix,
-                mountedPath: 'process.env',
-              }),
-            ],
           },
         },
         {
@@ -95,12 +80,6 @@ export default defineConfig(({ command }) => {
                 external,
               },
             },
-            plugins: [
-              env({
-                prefix: envPrefix,
-                mountedPath: 'process.env',
-              }),
-            ],
           },
         }
       ]),
