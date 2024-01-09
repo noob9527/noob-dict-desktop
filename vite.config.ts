@@ -1,16 +1,20 @@
-// import { rmSync } from 'node:fs'
+import { rmSync } from 'node:fs'
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import electron from 'vite-plugin-electron';
 import renderer from 'vite-plugin-electron-renderer';
 import pkg from './package.json';
+import { execSync } from 'child_process';
+
+const commitHash = execSync('git rev-parse HEAD').toString().trimEnd();
+const commitHashShort = commitHash.slice(0, 7);
+
+process.env.REACT_APP_GIT_COMMIT_HASH = commitHash;
+process.env.REACT_APP_GIT_COMMIT_HASH_SHORT = commitHashShort;
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command }) => {
-  // comment out because we want to put everything
-  // (include the output of main process and renderer process)
-  // in the build directory.
-  // rmSync('build', { recursive: true, force: true })
+  rmSync('build', { recursive: true, force: true })
 
   const isServe = command==='serve';
   const isBuild = command==='build';

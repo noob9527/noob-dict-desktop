@@ -8,7 +8,7 @@ import { Menu } from 'electron';
 import { mainContainer } from '../common/container/main-container';
 import { getIconPath, getBuildPath, getPublicPath } from '../electron-shared/path-util';
 import { APP_CONSTANTS } from '../common/app-constants';
-// import gitInfo from './utils/git-info';
+import gitInfo from './utils/git-info';
 import packageJson from '../../package.json';
 import openAboutWindow, { PackageJson } from 'about-window';
 import { getOrCreateSearchWindow } from './window/search-window';
@@ -43,8 +43,7 @@ function createMenu(): Menu {
   const use_version_info = [
     ...['electron', 'chrome', 'node', 'v8']
             .map(e => [e, process.versions[e]]).filter(Boolean), // remove null value
-    // todo: vite build git info
-    // ['git', gitInfo.version],
+    ['git', gitInfo.version],
   ] as [string, string][];
 
   const helpMenu: Electron.MenuItemConstructorOptions = {
