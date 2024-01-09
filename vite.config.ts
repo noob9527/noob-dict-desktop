@@ -60,7 +60,22 @@ export default defineConfig(({ command }) => {
               rollupOptions: {
                 external,
               },
+              // // required to make yarn link work
+              // // "However, this requires the linked dep to be exported as ESM. If not, you can add the dependency to optimizeDeps.include and build.commonjsOptions.include in your config."
+              // // "When making changes to the linked dep, restart the dev server with the --force command line option for the changes to take effect."
+              // // https://vitejs.dev/guide/dep-pre-bundling#monorepos-and-linked-dependencies
+              // commonjsOptions: {
+              //   // strictRequires: true,
+              //   include: [
+              //     /about-window/,
+              //     /node_modules/,
+              //   ],
+              // },
             },
+            // // https://vitejs.dev/guide/dep-pre-bundling#monorepos-and-linked-dependencies
+            // optimizeDeps: {
+            //   include: ['about-window'],
+            // },
           },
         },
         {

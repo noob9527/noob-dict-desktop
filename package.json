@@ -62,7 +62,7 @@
     "@types/react-router-dom": "^5.1.0",
     "@types/styled-components": "^4.4.1",
     "@vitejs/plugin-react": "^4.0.4",
-    "about-window": "^1.15.2",
+    "about-window": "https://github.com/noob9527/electron-about-window.git#build",
     "axios": "^0.19.2",
     "babel-jest": "^24.7.1",
     "babel-preset-react-app": "^9.0.0",
