@@ -7,6 +7,8 @@
  */
 // @remove-on-eject-end
 'use strict';
+// original generated with create-react-app eject.
+// however, currently, this file is only used for jest test now
 
 const fs = require('fs');
 const path = require('path');

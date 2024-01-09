@@ -4,7 +4,7 @@ import { ThemedTextArea } from '../../components/themed-ui/input/textarea';
 import { InputNumber } from 'antd';
 import { EditableText } from '../../components/themed-ui/input/editable-text';
 import { DataWrapper } from '../../../common/model/data-wrapper';
-import { ISearchHistory } from '../../../common/model/history';
+import { type ISearchHistory } from '../../../common/model/history';
 
 interface EditableCellProps {
   record: DataWrapper<ISearchHistory>

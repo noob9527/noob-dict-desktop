@@ -3,7 +3,7 @@ import { INote } from '../../../../common/model/note';
 import { Model } from '../../../redux/common/redux-model';
 import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
 import { NoteService, LocalNoteServiceToken } from '../../../../common/services/db/note-service';
-import { ISearchHistory } from '../../../../common/model/history';
+import { type ISearchHistory } from '../../../../common/model/history';
 import { HistoryService, LocalHistoryServiceToken } from '../../../../common/services/db/history-service';
 import _ from 'lodash';
 import { RootState } from '../../root-model';

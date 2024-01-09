@@ -9,7 +9,7 @@ const PREFIX = 'ipcDelegate:';
 @injectable()
 export abstract class Delegate {
   startListen() {
-    logger.debug('startListen', this);
+    logger.debug('startListen', this.constructor.name);
 
     const keys = Reflect.getMetadataKeys(this)
       .filter(e => e.startsWith(PREFIX))

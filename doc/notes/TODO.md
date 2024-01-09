@@ -9,3 +9,9 @@
 - alfred API?
 - sqlite?
 - global sync window?
+- type-safe state management?
+- migrate antd to latest version?
+- vite
+  - electron-log
+  - about-window
+  - git version?

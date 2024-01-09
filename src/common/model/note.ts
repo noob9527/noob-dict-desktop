@@ -1,4 +1,4 @@
-import { ISearchHistory } from './history';
+import { type ISearchHistory } from './history';
 import { EcDictSearchSuccessResult } from '@noob9527/noob-dict-ecdict';
 
 

@@ -1,7 +1,6 @@
 import { AppService } from '../../common/services/app-service';
 import * as remote from '@electron/remote';
 import { injectable } from 'inversify';
-import { Runtime } from '../../electron-shared/runtime';
 import { ipcRenderer } from 'electron-better-ipc';
 import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app';
 
@@ -16,7 +15,7 @@ export class ElectronAppService implements AppService {
   }
 
   getProcess(): NodeJS.Process {
-    return Runtime.process;
+    return remote.process;
   }
 
   async getClientAppId(): Promise<string> {

@@ -31,15 +31,8 @@ jobs:
       - name: install npm packages
         run: yarn
 
-      - name: build renderer
-        env:
-          # somehow create-react-app treat warnings as errors, if process.env.CI = true.
-          # see https://github.com/facebook/create-react-app/issues/3657
-          CI: false
-        run: yarn renderer:build
-
-      - name: build main
-        run: yarn main:build
+      - name: vite build
+        run: yarn vite:build
 
       - name: build electron
         if: runner.os != 'macOS'

@@ -6,15 +6,17 @@
  */
 import { Menu } from 'electron';
 import { mainContainer } from '../common/container/main-container';
-import openAboutWindow from 'about-window';
-import { getIconPath, getBuildPath } from '../electron-shared/path-util';
+import { getIconPath, getBuildPath, getPublicPath } from '../electron-shared/path-util';
 import { APP_CONSTANTS } from '../common/app-constants';
-import gitInfo from './utils/git-info';
+// import gitInfo from './utils/git-info';
+import packageJson from '../../package.json';
+import openAboutWindow, { PackageJson } from 'about-window';
 import { getOrCreateSearchWindow } from './window/search-window';
 import { getOrCreateSettingWindow } from './window/setting-window';
 import { getOrCreateLoginWindow } from './window/login-window';
 import { getOrCreateDeveloperWindow } from './window/debug-window';
 import { Runtime } from '../electron-shared/runtime';
+import logger from '../electron-shared/logger';
 
 export {
   getOrCreateAppMenu,
@@ -40,8 +42,9 @@ function createMenu(): Menu {
 
   const use_version_info = [
     ...['electron', 'chrome', 'node', 'v8']
-            .map(e => [e, Runtime.process.versions[e]]).filter(Boolean), // remove null value
-    ['git', gitInfo.version],
+            .map(e => [e, process.versions[e]]).filter(Boolean), // remove null value
+    // todo: vite build git info
+    // ['git', gitInfo.version],
   ] as [string, string][];
 
   const helpMenu: Electron.MenuItemConstructorOptions = {
@@ -55,7 +58,15 @@ function createMenu(): Menu {
             product_name: APP_CONSTANTS.PRODUCT_NAME,
             copyright: APP_CONSTANTS.COPYRIGHT,
             homepage: APP_CONSTANTS.HOME_PAGE,
-            package_json_dir: getBuildPath(),
+            // we pass in packageJson directly
+            // otherwise 'about-window' we try load package.json dynamically
+            // through require(package_json_dir/package.json).
+            // this throw error using vite build system.
+            package_json: packageJson as PackageJson,
+            package_json_dir: undefined,
+            // we copied about.html and relevant css/scripts
+            // from 'about-window' module to public folder
+            about_page_dir: getPublicPath('about'),
             use_version_info,
             win_options: {
               parent: getOrCreateSearchWindow(),
@@ -92,7 +103,7 @@ function createMenu(): Menu {
     { role: 'viewMenu' },
     { role: 'windowMenu' },
     toolMenu,
-    helpMenu
+    helpMenu,
   ];
   return Menu.buildFromTemplate(template);
 }

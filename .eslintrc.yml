@@ -1,7 +1,0 @@
-extends: react-app
-rules:
-  no-shadow: warn
-  quotes:
-    - warn
-    - single
-    - avoidEscape: true

@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import { NoteService } from '../../../../common/services/db/note-service';
 import logger from '../../../../electron-shared/logger';
-import { ISearchHistory } from '../../../../common/model/history';
+import { type ISearchHistory } from '../../../../common/model/history';
 import { INote, Note } from '../../../../common/model/note';
 
 @injectable()

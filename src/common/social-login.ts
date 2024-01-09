@@ -1,9 +1,7 @@
 /**
  * NOTE that redirect_uri doesn't have any meaning here as we close the login window
- *
- * WARN: to access env value, we can only use process.env instead of Runtime.process.env here!
- * I think the reason is, we are using dotenv related packages to build/access the value in renderer process.
  */
+import { Env } from '../electron-shared/env';
 
 enum LoginType {
   GITHUB = 'GITHUB',
@@ -29,8 +27,8 @@ const githubOption: LoginOption = {
   tokenExchangeUrl: 'https://a3eks8ljq9.execute-api.ap-east-1.amazonaws.com/prod/auth/github',
   endpoint: 'https://github.com/login/oauth/authorize',
   params: {
-    client_id: process.env.REACT_APP_GITHUB_CLIENT_ID!!,
-    redirect_uri: process.env.REACT_APP_GITHUB_REDIRECT_URI!!,
+    client_id: Env.REACT_APP_GITHUB_CLIENT_ID!!,
+    redirect_uri: Env.REACT_APP_GITHUB_REDIRECT_URI!!,
     scope: 'user',
   },
   get url() {
@@ -50,8 +48,8 @@ const weiboOption: LoginOption = {
   tokenExchangeUrl: 'https://a3eks8ljq9.execute-api.ap-east-1.amazonaws.com/prod/auth/weibo',
   endpoint: 'https://api.weibo.com/oauth2/authorize',
   params: {
-    client_id: process.env.REACT_APP_WEIBO_CLIENT_ID!!,
-    redirect_uri: process.env.REACT_APP_WEIBO_REDIRECT_URI!!,
+    client_id: Env.REACT_APP_WEIBO_CLIENT_ID!!,
+    redirect_uri: Env.REACT_APP_WEIBO_REDIRECT_URI!!,
     response_type: 'code',
   },
   get url() {

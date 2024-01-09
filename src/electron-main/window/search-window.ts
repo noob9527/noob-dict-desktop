@@ -72,10 +72,11 @@ function createWindow() {
     height: 900,
     icon: getIconPath('icon.png'),
     webPreferences: {
+      preload: path.join(__dirname, 'electron-preload.js'),
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
       nodeIntegration: true,
-      // see https://github.com/electron-userland/electron-forge/issues/2567
+      // // see https://github.com/electron-userland/electron-forge/issues/2567
       contextIsolation: false,
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
@@ -108,7 +109,10 @@ function createWindow() {
     }
   });
 
-  let allowAppQuit = false;
+  // let allowAppQuit = false;
+  // todo: vite
+  let allowAppQuit = true;
+
   window.on('close', async e => {
     // close to tray
     // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
@@ -156,33 +160,34 @@ function createWindow() {
   if (Runtime.isDev) {
     // Open the DevTools.
     window.webContents.openDevTools();
+    // todo: vite
     // add devtools
     //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    let extensionRelativeFolder: string;
-    if (Runtime.isMac) {
-      extensionRelativeFolder = 'Library/Application Support/Google/Chrome/Default/Extensions';
-    } else {
-      extensionRelativeFolder = '.config/google-chrome/Default/Extensions';
-    }
-    const extensionDir = path.join(os.homedir(), extensionRelativeFolder);
-    const reactDir = path.join(extensionDir, 'fmkadmapgofadopljbjfkapdkoienihi');
-    const reduxDir = path.join(extensionDir, 'lmhkpmbekcpmknklioeibfkpmmfibljd');
-    if (fs.existsSync(reactDir)) {
-      const react = fs.readdirSync(reactDir);
-      if (react.length) {
-        const reactExt = path.join(reactDir, react[react.length - 1]);
-        console.log(`load react dev tools from: ${reactExt}`);
-        session.defaultSession.loadExtension(reactExt);
-      }
-    }
-    if (fs.existsSync(reduxDir)) {
-      const redux = fs.readdirSync(reduxDir);
-      if (redux.length) {
-        const reduxExt = path.join(reduxDir, redux[redux.length - 1]);
-        console.log(`load redux dev tools from: ${reduxExt}`);
-        session.defaultSession.loadExtension(reduxExt);
-      }
-    }
+    // let extensionRelativeFolder: string;
+    // if (Runtime.isMac) {
+    //   extensionRelativeFolder = 'Library/Application Support/Google/Chrome/Default/Extensions';
+    // } else {
+    //   extensionRelativeFolder = '.config/google-chrome/Default/Extensions';
+    // }
+    // const extensionDir = path.join(os.homedir(), extensionRelativeFolder);
+    // const reactDir = path.join(extensionDir, 'fmkadmapgofadopljbjfkapdkoienihi');
+    // const reduxDir = path.join(extensionDir, 'lmhkpmbekcpmknklioeibfkpmmfibljd');
+    // if (fs.existsSync(reactDir)) {
+    //   const react = fs.readdirSync(reactDir);
+    //   if (react.length) {
+    //     const reactExt = path.join(reactDir, react[react.length - 1]);
+    //     console.log(`load react dev tools from: ${reactExt}`);
+    //     session.defaultSession.loadExtension(reactExt);
+    //   }
+    // }
+    // if (fs.existsSync(reduxDir)) {
+    //   const redux = fs.readdirSync(reduxDir);
+    //   if (redux.length) {
+    //     const reduxExt = path.join(reduxDir, redux[redux.length - 1]);
+    //     console.log(`load redux dev tools from: ${reduxExt}`);
+    //     session.defaultSession.loadExtension(reduxExt);
+    //   }
+    // }
   }
 
   return window;

@@ -1,4 +1,4 @@
-import { ISearchHistory } from '../../model/history';
+import { type ISearchHistory } from '../../model/history';
 import { Page } from '../../model/page';
 
 // used in renderer process
