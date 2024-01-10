@@ -160,18 +160,19 @@ function createWindow() {
   if (Runtime.isDev) {
     // Open the DevTools.
     window.webContents.openDevTools();
-    // todo: vite
     // add devtools
-    //BrowserWindow.addDevToolsExtension('<location to your react chrome extension>');
-    // let extensionRelativeFolder: string;
-    // if (Runtime.isMac) {
-    //   extensionRelativeFolder = 'Library/Application Support/Google/Chrome/Default/Extensions';
-    // } else {
-    //   extensionRelativeFolder = '.config/google-chrome/Default/Extensions';
-    // }
-    // const extensionDir = path.join(os.homedir(), extensionRelativeFolder);
+    let extensionRelativeFolder: string;
+    if (Runtime.isMac) {
+      extensionRelativeFolder = 'Library/Application Support/Google/Chrome/Default/Extensions';
+    } else {
+      extensionRelativeFolder = '.config/google-chrome/Default/Extensions';
+    }
+    const extensionDir = path.join(os.homedir(), extensionRelativeFolder);
     // const reactDir = path.join(extensionDir, 'fmkadmapgofadopljbjfkapdkoienihi');
-    // const reduxDir = path.join(extensionDir, 'lmhkpmbekcpmknklioeibfkpmmfibljd');
+    const reduxDir = path.join(extensionDir, 'lmhkpmbekcpmknklioeibfkpmmfibljd');
+    // somehow react devtools doesn't work
+    // Message: Uncaught TypeError: Cannot read properties of undefined (reading 'ExecutionWorld')
+    // https://github.com/electron/electron/issues/36545
     // if (fs.existsSync(reactDir)) {
     //   const react = fs.readdirSync(reactDir);
     //   if (react.length) {
@@ -180,14 +181,14 @@ function createWindow() {
     //     session.defaultSession.loadExtension(reactExt);
     //   }
     // }
-    // if (fs.existsSync(reduxDir)) {
-    //   const redux = fs.readdirSync(reduxDir);
-    //   if (redux.length) {
-    //     const reduxExt = path.join(reduxDir, redux[redux.length - 1]);
-    //     console.log(`load redux dev tools from: ${reduxExt}`);
-    //     session.defaultSession.loadExtension(reduxExt);
-    //   }
-    // }
+    if (fs.existsSync(reduxDir)) {
+      const redux = fs.readdirSync(reduxDir);
+      if (redux.length) {
+        const reduxExt = path.join(reduxDir, redux[redux.length - 1]);
+        console.log(`load redux dev tools from: ${reduxExt}`);
+        session.defaultSession.loadExtension(reduxExt);
+      }
+    }
   }
 
   return window;
