@@ -5,7 +5,7 @@ import {
   applyMiddleware,
   combineReducers,
   compose,
-  createStore,
+  createStore, Reducer,
   ReducersMapObject,
   Store,
   StoreEnhancer,
@@ -37,11 +37,12 @@ const defaultOption: DvaOption = {
 /**
  * A simplified dva
  */
-class Dva {
+export default class MiniDva {
   state: any = {};  // globalState
   _store: Store | null = null;
   effects: EffectsMapObject = {};
   sagas: Saga[] = [];
+  _rootReducer: Reducer<any> | null = null;
   reducers: ReducersMapObject = {};
   routerComponent!: ComponentType;
   history: History<any>;
@@ -112,14 +113,20 @@ class Dva {
     </Root>, element);
   }
 
+  private getOrCreateRootReducer() {
+    if (this._rootReducer) return this._rootReducer
+    this._rootReducer = combineReducers({
+      router: connectRouter(this.history),
+      ...this.reducers,
+    })
+    return this._rootReducer
+  }
+
   private getOrCreateStore() {
     if (this._store) return;
 
     const sagaMiddleware = createSagaMiddleware();
-    const rootReducer = combineReducers({
-      router: connectRouter(this.history),
-      ...this.reducers,
-    });
+    const rootReducer = this.getOrCreateRootReducer()
 
     // @ts-ignore
     const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -147,10 +154,3 @@ class Dva {
     this._store = store;
   }
 }
-
-export default function dva(
-  option: Partial<DvaOption> = {},
-) {
-  return new Dva(option);
-}
-
