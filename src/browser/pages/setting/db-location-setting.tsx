@@ -7,6 +7,8 @@ import { UserProfile } from '../../../electron-shared/user-profile/user-profile'
 import { ThemedButton } from '../../components/themed-ui/button/button';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { LocalDbService, LocalDbServiceToken } from '../../../common/services/db/local-db-service';
+import { settingChange, useSettingStore } from './setting-store';
+import { useTransientStore } from '../transient-store';
 
 const localDbService = rendererContainer.get<LocalDbService>(LocalDbServiceToken);
 
@@ -21,17 +23,15 @@ interface DbLocationSettingProps {
 }
 
 export const DbLocationSetting = (props: DbLocationSettingProps) => {
-
-  const dispatch = useDispatch();
-  const transientState: TransientState = useSelector((state: any) => state._transient);
-  const settingState: UserProfile = useSelector((state: any) => state.setting);
+  const localDbAvailable  = useTransientStore.use.localDbAvailable()
+  const  dbFileLocation  = useSettingStore.use.dbFileLocation()
   let ref1 = useRef<HTMLInputElement>(null);
   return (
     <Container>
 
       <span className="status-icon">
       {
-        transientState.localDbAvailable
+        localDbAvailable
           ? (<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a"/>)
           :(<Icon type="close-circle" theme="twoTone" twoToneColor="#eb2f96"/>)
       }
@@ -44,8 +44,8 @@ export const DbLocationSetting = (props: DbLocationSettingProps) => {
         }}
       >
         {
-          settingState.dbFileLocation
-            ? settingState.dbFileLocation
+          dbFileLocation
+            ? dbFileLocation
             :'Click to Set Correct Location'
         }
       </a>
@@ -59,12 +59,9 @@ export const DbLocationSetting = (props: DbLocationSettingProps) => {
         ref={ref1}
         onChange={(event) => {
           console.log(event.target.files?.item(0)?.path);
-          dispatch({
-            type: 'setting/settingChange',
-            payload: {
+          settingChange({
               dbFileLocation: event.target.files?.item(0)?.path || null,
-            },
-          });
+          })
         }}
       />
     </Container>

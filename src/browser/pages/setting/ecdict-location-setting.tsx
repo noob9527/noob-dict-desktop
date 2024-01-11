@@ -1,34 +1,31 @@
-import { ThemedButton } from '../../components/themed-ui/button/button';
-import React, { useRef } from 'react';
-import { TransientState } from '../transient-model';
-import { useDispatch, useSelector } from 'react-redux';
-import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
-import styled from 'styled-components';
-import { shell } from 'electron';
-import { Icon } from 'antd';
+import { ThemedButton } from '../../components/themed-ui/button/button'
+import React, { useRef } from 'react'
+import { UserProfile } from '../../../electron-shared/user-profile/user-profile'
+import styled from 'styled-components'
+import { shell } from 'electron'
+import { Icon } from 'antd'
+import { settingChange, useSettingStore } from './setting-store'
+import { useTransientStore } from '../transient-store'
 
 const Container = styled.div`
   .status-icon {
     //margin: 0 5px;
     margin-right: 8px;
   }
-`;
+`
 
 export const EcdictLocationSetting = () => {
-
-  const dispatch = useDispatch();
-  const transientState: TransientState = useSelector((state: any) => state._transient);
-  const settingState: UserProfile = useSelector((state: any) => state.setting);
-  let ref1 = useRef<HTMLInputElement>(null);
+  const ecDictAvailable = useTransientStore.use.ecDictAvailable()
+  const ecDictFileLocation = useSettingStore.use.ecDictFileLocation()
+  let ref1 = useRef<HTMLInputElement>(null)
   return (
     <Container>
-
       <span className="status-icon">
-      {
-        transientState.ecDictAvailable
-          ? (<Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a"/>)
-          :(<Icon type="close-circle" theme="twoTone" twoToneColor="#eb2f96"/>)
-      }
+        {ecDictAvailable ? (
+          <Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" />
+        ) : (
+          <Icon type="close-circle" theme="twoTone" twoToneColor="#eb2f96" />
+        )}
       </span>
       <span>ECDICT DB File Location: </span>
       {/*{*/}
@@ -45,10 +42,12 @@ export const EcdictLocationSetting = () => {
       <a
         role="button"
         onClick={() => {
-          ref1.current?.click();
+          ref1.current?.click()
         }}
       >
-        {settingState.ecDictFileLocation ? settingState.ecDictFileLocation:'Click to Set Correct Location'}
+        {ecDictFileLocation
+          ? ecDictFileLocation
+          : 'Click to Set Correct Location'}
       </a>
 
       <input
@@ -56,15 +55,12 @@ export const EcdictLocationSetting = () => {
         style={{ display: 'none' }}
         ref={ref1}
         onChange={(event) => {
-          console.log(event.target.files?.item(0)?.path);
-          dispatch({
-            type: 'setting/settingChange',
-            payload: {
-              ecDictFileLocation: event.target.files?.item(0)?.path || null,
-            },
-          });
+          console.log(event.target.files?.item(0)?.path)
+          settingChange({
+            ecDictFileLocation: event.target.files?.item(0)?.path || null,
+          })
         }}
       />
     </Container>
-  );
-};
+  )
+}

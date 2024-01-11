@@ -15,6 +15,7 @@ import { AutoUpdaterChannel } from '../../electron-shared/ipc/ipc-channel-auto-u
 import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app';
 import { GlobalShotCutChannel } from '../../electron-shared/ipc/ipc-channel-global-shot-cut';
 import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
+import { settingChanged } from '../pages/setting/setting-store';
 
 function registerStorageEventListener(store: Store) {
   logger.debug('register storage event listener');
@@ -27,10 +28,7 @@ function registerStorageEventListener(store: Store) {
       const settingService = rendererContainer.get<SettingService>(SettingServiceToken);
       await settingService.handleSettingChange(data.newValue, data.oldValue);
     }
-    store.dispatch({
-      type: 'setting/settingChanged',
-      payload: data.newValue,
-    });
+    settingChanged(data.newValue)
     return data.newValue;
   });
 

@@ -9,7 +9,7 @@ import { rendererContainer } from '../../../common/container/renderer-container'
 import { shell } from 'electron';
 import { AppService, AppServiceToken } from '../../../common/services/app-service';
 import { DbLocationSetting } from './db-location-setting';
-import { SettingState } from './setting-model';
+import { settingChange, useSettingStore } from './setting-store';
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 
 const Container = styled.div`
@@ -29,11 +29,14 @@ const InlineContainer = styled.span`
   }
 `;
 
+const userDataFolder = appService.getUserDataFolder();
+
 const SettingPage = () => {
-  const dispatch = useDispatch();
-  const settingState: SettingState = useSelector((state: any) => state.setting);
-  const { appHotKey, readClipboard, watchSelection } = settingState;
-  const userDataFolder = appService.getUserDataFolder();
+  const {
+    appHotKey,
+    readClipboard,
+    watchSelection ,
+  } = useSettingStore()
 
   return (
     <ThemedContent>
@@ -52,34 +55,25 @@ const SettingPage = () => {
         <ThemedCheckbox
           checked={watchSelection}
           onChange={event => {
-            dispatch({
-              type: 'setting/settingChange',
-              payload: {
-                watchSelection: event?.target?.checked!!,
-              },
-            });
+            settingChange({
+              watchSelection: event?.target?.checked!!,
+            })
           }}>Watch Selection (Only on Linux)</ThemedCheckbox>
         <ThemedCheckbox
           checked={readClipboard}
           onChange={event => {
-            dispatch({
-              type: 'setting/settingChange',
-              payload: {
-                readClipboard: event?.target?.checked!!,
-              },
-            });
+            settingChange({
+              readClipboard: event?.target?.checked!!,
+            })
           }}>Read Clipboard</ThemedCheckbox>
         <InlineContainer>
           <span>hot key:</span>
           <ThemedInputShortcut
             value={appHotKey}
             onChange={value => {
-              dispatch({
-                type: 'setting/settingChange',
-                payload: {
-                  appHotKey: value,
-                },
-              });
+              settingChange({
+                appHotKey: value,
+              })
             }}
           />
         </InlineContainer>
