@@ -7,9 +7,8 @@
 - vocabulary quiz?
 - anki?
 - alfred API?
-- sqlite?
 - global sync window?
-- type-safe state management?
 - migrate antd to latest version?
+  this might require to rewrite the search-input component, as it uses an "internal" API from antd v3
 - vite
   - electron-log
