@@ -14,7 +14,6 @@ import { Runtime } from '../../../electron-shared/runtime';
 const initialState: UserProfile = {
   appHotKey: '',
   readClipboard: false,
-  watchSelection: false,
   ecDictFileLocation: null,
   dbFileLocation: null,
 }

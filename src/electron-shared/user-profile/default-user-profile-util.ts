@@ -6,7 +6,6 @@ export function getDefaultUserProfile(): UserProfile {
   return {
     appHotKey: '',
     readClipboard: false,
-    watchSelection: false,
     ecDictFileLocation: null,
     dbFileLocation: getDefaultLocalDBPath(),
   };

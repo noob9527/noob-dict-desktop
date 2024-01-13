@@ -35,11 +35,11 @@ export class ElectronSettingService implements SettingService {
   }
 
   async handleSettingChange(newValue: UserProfile, oldValue: UserProfile | null): Promise<UserProfile> {
-    if (!newValue.watchSelection) {
-      this.clipboardService.stopListening();
-    } else {
-      this.clipboardService.startListening();
-    }
+    // if (!newValue.watchSelection) {
+    //   this.clipboardService.stopListening();
+    // } else {
+    //   this.clipboardService.startListening();
+    // }
     return newValue;
   }
 

@@ -41,12 +41,6 @@ function registerStorageEventListener(store: Store) {
         payload: { newText, oldText },
       });
     }));
-    clipboardService.onSelectionTextChange((newText, oldText) => {
-      store.dispatch({
-        type: 'search/selectionTextChange',
-        payload: { newText, oldText },
-      });
-    });
     // listen global shot cut event
     ipcRenderer.answerMain(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, async () => {
       logger.log(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, new Date());

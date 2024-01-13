@@ -35,7 +35,6 @@ const SettingPage = () => {
   const {
     appHotKey,
     readClipboard,
-    watchSelection ,
   } = useSettingStore()
 
   return (
@@ -52,13 +51,6 @@ const SettingPage = () => {
         </div>
         <DbLocationSetting/>
         <EcdictLocationSetting/>
-        <ThemedCheckbox
-          checked={watchSelection}
-          onChange={event => {
-            settingChange({
-              watchSelection: event?.target?.checked!!,
-            })
-          }}>Watch Selection (Only on Linux)</ThemedCheckbox>
         <ThemedCheckbox
           checked={readClipboard}
           onChange={event => {

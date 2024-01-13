@@ -60,7 +60,6 @@ const settingModel: SettingModel = {
   state: {
     appHotKey: '',
     readClipboard: false,
-    watchSelection: false,
     ecDictFileLocation: null,
     dbFileLocation: null,
   },

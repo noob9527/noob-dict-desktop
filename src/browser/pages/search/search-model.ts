@@ -50,30 +50,6 @@ const effects = {
       payload: { pinned },
     });
   },
-  * debouncedSelectionTextChange(action) {
-    const profile: UserProfile = yield select(state => state.setting);
-    const transientState: TransientState = yield select(state => state._transient);
-    const searchState: SearchState = yield select(state => state.search);
-
-    if (!profile.watchSelection) return;
-
-    // // selection search only when window is not pinned
-    // if (!searchState.pinned) {
-    //   const popupUiService = rendererContainer.get<PopupUiService>(PopupUiServiceToken);
-    //   popupUiService.show();
-    // }
-
-    if (transientState.isSearchWindowOpen) {
-      if (searchState.pinned) {
-        yield put({
-          type: 'search/search',
-          payload: {
-            text: action.payload.newText,
-          },
-        });
-      }
-    }
-  },
   * clipboardTextChange(action) {
     // console.log(action);
   },
@@ -140,34 +116,10 @@ const searchModel: SearchModel = {
   },
   effects,
   reducers,
-  sagas: [watchSelectionTextChange, watchClockEvent],
+  sagas: [watchClockEvent],
 };
 
 export default searchModel;
-
-function* watchSelectionTextChange() {
-  yield fork(function* () {
-    let task;
-    while (true) {
-      const action = yield take('search/selectionTextChange');
-      if (task) {
-        yield cancel(task);
-      }
-      // if text has multiline, we ignore it
-      if (!action?.payload?.newText?.includes('\n')) {
-        task = yield fork(debounced, action);
-      }
-    }
-  });
-
-  function* debounced(action) {
-    yield delay(800);
-    yield put({
-      ...action,
-      type: 'search/debouncedSelectionTextChange',
-    });
-  }
-}
 
 // call sync for each hour
 const DURATION = 1000 * 60 * 60;
