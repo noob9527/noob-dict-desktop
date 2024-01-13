@@ -1,19 +1,19 @@
 import { Model } from '../redux/common/redux-model';
 import { call, put, select } from '@redux-saga/core/effects';
 import { rendererContainer } from '../../common/container/renderer-container';
-import { SearchUiService, SearchUiServiceToken } from '../../common/services/search-ui-service';
+import { HomeUiService, SearchUiServiceToken } from '../../common/services/home-ui-service';
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import { WindowId } from '../../common/window-id';
 import { getCurrentWindowId } from '../utils/window-utils';
 import logger from '../../electron-shared/logger';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
 import { UserProfile } from '../../electron-shared/user-profile/user-profile';
-import { WindowEvents } from '../../common/window-events';
+import { WindowEvent } from '../../common/window-event';
 import { EcDictSearchService } from '../../electron-renderer/services/ecdict-search-service';
 import { EcDictSearchServiceToken } from '../../common/services/search-service';
 import { LocalDbService, LocalDbServiceToken } from '../../common/services/db/local-db-service';
 
-const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
+const searchUiService = rendererContainer.get<HomeUiService>(SearchUiServiceToken);
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 
 export interface TransientState {
@@ -46,7 +46,7 @@ interface ShowSearchWindowAction {
 const effects = {
   * showSearchWindow(action: ShowSearchWindowAction) {
     logger.log(action);
-    yield call([searchUiService, searchUiService.showSearchWindow]);
+    yield call([searchUiService, searchUiService.show]);
     yield put({
       type: '_transient/mergeState',
       payload: {
@@ -55,10 +55,10 @@ const effects = {
     });
   },
   * hideSearchWindow() {
-    yield call([searchUiService, searchUiService.hideSearchWindow]);
+    yield call([searchUiService, searchUiService.hide]);
   },
   * topSearchWindow() {
-    yield call([searchUiService, searchUiService.showSearchWindow]);
+    yield call([searchUiService, searchUiService.show]);
     // yield put({
     //   type: '_transient/mergeState',
     //   payload: {
@@ -132,8 +132,8 @@ const effects = {
   },
 };
 
-[WindowEvents.show, WindowEvents.restore].forEach(event =>
-  effects[WindowId.SEARCH.getEventChannelName(event)] = function * () {
+[WindowEvent.show, WindowEvent.restore].forEach(event =>
+  effects[event.getIpcChannelName(WindowId.HOME)] = function * () {
     yield put({
       type: '_transient/searchWindowOpened',
     });
@@ -149,8 +149,8 @@ const reducers = {
   },
 };
 
-[WindowEvents.hide, WindowEvents.minimize].forEach(event =>
-  reducers[WindowId.SEARCH.getEventChannelName(event)] = function (state, action: any) {
+[WindowEvent.hide, WindowEvent.minimize].forEach(event =>
+  reducers[event.getIpcChannelName(WindowId.HOME)] = function (state, action: any) {
     return {
       ...state,
       isSearchWindowOpen: false,

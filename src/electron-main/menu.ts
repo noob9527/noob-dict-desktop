@@ -11,12 +11,11 @@ import { APP_CONSTANTS } from '../common/app-constants';
 import gitInfo from './utils/git-info';
 import packageJson from '../../package.json';
 import openAboutWindow, { PackageJson } from 'about-window';
-import { getOrCreateSearchWindow } from './window/search-window';
-import { getOrCreateSettingWindow } from './window/setting-window';
-import { getOrCreateLoginWindow } from './window/login-window';
-import { getOrCreateDeveloperWindow } from './window/debug-window';
+import { debugWindowManager } from './window/debug-window';
 import { Runtime } from '../electron-shared/runtime';
 import logger from '../electron-shared/logger';
+import { homeWindowManager } from './window/home-window';
+import { settingWindowManager } from './window/setting-window';
 
 export {
   getOrCreateAppMenu,
@@ -35,7 +34,7 @@ function createMenu(): Menu {
     submenu: [
       {
         label: 'Developer Utilities',
-        click: () => getOrCreateDeveloperWindow(),
+        click: () => debugWindowManager.getOrCreate(),
       },
     ]
   };
@@ -68,7 +67,7 @@ function createMenu(): Menu {
             about_page_dir: getPublicPath('about'),
             use_version_info,
             win_options: {
-              parent: getOrCreateSearchWindow(),
+              parent: homeWindowManager.getOrCreate(),
               modal: !Runtime.isMac,
               maximizable: false,
               minimizable: false,
@@ -91,7 +90,7 @@ function createMenu(): Menu {
         // },
         {
           label: 'Setting',
-          click: () => getOrCreateSettingWindow(),
+          click: () => settingWindowManager.getOrCreate(),
         },
         {
           role: 'quit',

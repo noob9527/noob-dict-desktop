@@ -1,31 +1,21 @@
-import { EnumFactory, EnumClass, EnumValue } from 'effective-enum';
-import { WindowEvents } from './window-events';
+import { EnumClass, EnumFactory, EnumValue } from 'effective-enum'
 
 @EnumClass
 class WindowId extends EnumFactory<WindowId>() {
   @EnumValue
-  static readonly SEARCH = new WindowId('SEARCH');
+  static readonly HOME = new WindowId('HOME')
   @EnumValue
-  static readonly SETTING = new WindowId('SETTING');
+  static readonly SETTING = new WindowId('SETTING')
   @EnumValue
-  static readonly POPUP = new WindowId('POPUP');
+  static readonly POPUP = new WindowId('POPUP')
   @EnumValue
-  static readonly LOGIN = new WindowId('LOGIN');
+  static readonly LOGIN = new WindowId('LOGIN')
   @EnumValue
-  static readonly DEVELOPER = new WindowId('DEVELOPER');
+  static readonly DEVELOPER = new WindowId('DEVELOPER')
 
-  constructor(
-    public label: string,
-  ) {
-    super();
+  constructor(public label: string) {
+    super()
   }
-
-  getEventChannelName(
-    event: WindowEvents,
-  ): string {
-    return `${this}_${event}`;
-  }
-
 }
 
 // function parseWindowEventChannelName(
@@ -35,6 +25,4 @@ class WindowId extends EnumFactory<WindowId>() {
 //   // channelName.sub
 // }
 
-export {
-  WindowId,
-};
+export { WindowId }

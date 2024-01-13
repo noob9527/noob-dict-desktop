@@ -1,13 +1,10 @@
-import { LoginUiService } from '../../common/services/login-ui-service';
-import { ipcRenderer } from 'electron-better-ipc';
-import { injectable } from 'inversify';
-import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
-
+import { LoginUiService } from '../../common/services/login-ui-service'
+import { injectable } from 'inversify'
+import { ipcCallMain } from '../utils/ipc-decorator'
+import { WindowId } from '../../common/window-id'
 
 @injectable()
 export class ElectronLoginUiService implements LoginUiService {
-  async open(): Promise<boolean> {
-    const res = await ipcRenderer.callMain(LoginChannel.SHOW_LOGIN_WINDOW);
-    return res as boolean;
-  }
+  @ipcCallMain(WindowId.LOGIN.name + '/COMMAND')
+  async show() {}
 }

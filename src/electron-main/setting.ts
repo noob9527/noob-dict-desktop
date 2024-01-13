@@ -1,5 +1,4 @@
 import { ipcMain } from 'electron-better-ipc';
-import { getOrCreateSearchWindow, toggleSearchWindow } from './window/search-window';
 import { globalShortcut } from 'electron';
 import { UserProfile } from '../electron-shared/user-profile/user-profile';
 import logger from '../electron-shared/logger';
@@ -8,7 +7,8 @@ import { LocalDB } from './local-db/local-db';
 import { ElectronStoreUserProfileService } from '../electron-shared/user-profile/electron-store-user-profile-service';
 import { SettingChannel } from '../electron-shared/ipc/ipc-channel-setting';
 import { GlobalShotCutChannel } from '../electron-shared/ipc/ipc-channel-global-shot-cut';
-import { getOrCreateSettingWindow } from './window/setting-window';
+import { homeWindowManager } from './window/home-window';
+import { settingWindowManager } from './window/setting-window';
 
 export function initSetting() {
   ElectronStoreUserProfileService.init();
@@ -47,7 +47,7 @@ export async function handleSettingChange(
   ElectronStoreUserProfileService.instance().setProfile(newValue); // sync to electron store
 
   const res = await ipcMain.callRenderer(
-    getOrCreateSearchWindow(),
+    homeWindowManager.getOrCreate(),
     SettingChannel.SETTING_CHANGE, {
       newValue,
       oldValue,
@@ -55,7 +55,7 @@ export async function handleSettingChange(
 
   // notify setting window as well
   await ipcMain.callRenderer(
-    getOrCreateSettingWindow(),
+    settingWindowManager.getOrCreate(),
     SettingChannel.SETTING_CHANGE, {
       newValue,
       oldValue,
@@ -78,7 +78,7 @@ function handleAppHotKeyChange(newValue: string | null, oldValue: string | null 
       // then let the renderer process send back to main process
       // because we need the information about isSettingWindowOpen...
       // it's over complicated...
-      return ipcMain.callRenderer(getOrCreateSearchWindow(), GlobalShotCutChannel.APP_HOT_KEY_PRESSED);
+      return ipcMain.callRenderer(homeWindowManager.getOrCreate(), GlobalShotCutChannel.APP_HOT_KEY_PRESSED);
     });
     if (success) {
       logger.log(`${newValue} register success`);

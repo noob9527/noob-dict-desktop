@@ -10,15 +10,21 @@ import {
   LocalDbService,
   LocalDbServiceToken,
 } from '../../common/services/db/local-db-service'
-import { call } from '@redux-saga/core/effects'
-import { createSelectors } from '../zustand/create-selectors';
+import { createSelectors } from '../zustand/create-selectors'
+import { WindowEvent } from '../../common/window-event'
+import {
+  HomeUiService,
+  SearchUiServiceToken,
+} from '../../common/services/home-ui-service'
 
 const appService = rendererContainer.get<AppService>(AppServiceToken)
 const ecDictSearchService = rendererContainer.get<EcDictSearchService>(
-  EcDictSearchServiceToken
+  EcDictSearchServiceToken,
 )
 const localDbService =
   rendererContainer.get<LocalDbService>(LocalDbServiceToken)
+const searchUiService =
+  rendererContainer.get<HomeUiService>(SearchUiServiceToken)
 
 interface TransientState {
   focusInput: boolean
@@ -45,9 +51,66 @@ export async function setEcDictAvailable() {
     ecDictAvailable: available,
   })
 }
+
 export async function setLocalDbAvailable() {
   const available = await localDbService.fetchAvailable()
   useTransientStoreBase.setState({
     localDbAvailable: available,
+  })
+}
+
+export function handleWindowEvent(windowId: WindowId, event: WindowEvent) {
+  if (windowId !== WindowId.HOME) return
+  switch (event) {
+    case WindowEvent.hide:
+    case WindowEvent.minimize:
+      useTransientStoreBase.setState({
+        isSearchWindowOpen: false,
+      })
+      break
+    case WindowEvent.show:
+    case WindowEvent.restore:
+      useTransientStoreBase.setState({
+        isSearchWindowOpen: true,
+      })
+      break
+  }
+}
+
+export function showSearchWindow(focusInput?: boolean) {
+  searchUiService.show()
+  useTransientStoreBase.setState({
+    focusInput: focusInput ?? true,
+  })
+}
+
+export function hideSearchWindow() {
+  searchUiService.hide()
+}
+
+export function topSearchWindow() {
+  searchUiService.top()
+  focusSearchInput()
+}
+
+export function appHotKeyPressed() {
+  const state = useTransientStoreBase.getState()
+  if (state.isSearchWindowOpen) {
+    if (state.focusInput) {
+      // toggle
+      // if search input is focused, we hide the window
+      hideSearchWindow()
+    } else {
+      // else, we top then focus on input
+      topSearchWindow()
+    }
+  } else {
+    showSearchWindow()
+  }
+}
+
+export function focusSearchInput() {
+  useTransientStoreBase.setState({
+    focusInput: true,
   })
 }

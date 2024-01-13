@@ -6,7 +6,7 @@ import { SearchState } from '../search/search-model';
 import { Button, Icon } from 'antd';
 import logger from '../../../electron-shared/logger';
 import { rendererContainer } from "../../../common/container/renderer-container";
-import { SearchUiService, SearchUiServiceToken } from "../../../common/services/search-ui-service";
+import { HomeUiService, SearchUiServiceToken } from "../../../common/services/home-ui-service";
 import { ClipboardService, ClipboardServiceToken } from "../../../common/services/clipboard-service";
 import { PopupUiService, PopupUiServiceToken } from "../../../common/services/popup-ui-service";
 import { removeNormalizeStyle } from '../../utils/style-utils';
@@ -33,7 +33,7 @@ const PopupPage = () => {
   // const searchState: SearchState = useSelector((state: any) => state.search);
   // const { pinned } = searchState;
 
-  const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
+  const searchUiService = rendererContainer.get<HomeUiService>(SearchUiServiceToken);
   const clipboardService = rendererContainer.get<ClipboardService>(ClipboardServiceToken);
   const popupUiService = rendererContainer.get<PopupUiService>(PopupUiServiceToken);
 

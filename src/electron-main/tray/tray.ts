@@ -1,13 +1,11 @@
-import { app, Menu, Tray } from 'electron';
-import logger from '../../electron-shared/logger';
-import { showSearchWindow } from '../window/search-window';
-import { getIconPath } from '../../electron-shared/path-util';
-import { mainContainer } from '../../common/container/main-container';
-import { APP_CONSTANTS } from '../../common/app-constants';
+import { app, Menu, Tray } from 'electron'
+import logger from '../../electron-shared/logger'
+import { homeWindowManager } from '../window/home-window'
+import { getIconPath } from '../../electron-shared/path-util'
+import { mainContainer } from '../../common/container/main-container'
+import { APP_CONSTANTS } from '../../common/app-constants'
 
-export {
-  getOrCreateTray,
-};
+export { getOrCreateTray }
 
 const TrayToken = Symbol.for('tray');
 mainContainer.bind<Tray>(TrayToken)
@@ -41,7 +39,7 @@ function createMenu() {
       label: 'Show',
       click: () => {
         logger.log('show');
-        showSearchWindow();
+        homeWindowManager.show()
       },
     },
     {

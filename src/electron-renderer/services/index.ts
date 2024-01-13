@@ -3,8 +3,8 @@ import { rendererContainer } from '../../common/container/renderer-container';
 import { SearchService, CorsSearchServiceToken, EcDictSearchServiceToken } from '../../common/services/search-service';
 import { SettingUiService, SettingUiServiceToken } from '../../common/services/setting-ui-service';
 import { ElectronSettingUiService } from './setting-ui-service-impl';
-import { SearchUiService, SearchUiServiceToken } from '../../common/services/search-ui-service';
-import { ElectronSearchUiService } from './search-ui-service-impl';
+import { HomeUiService, SearchUiServiceToken } from '../../common/services/home-ui-service';
+import { ElectronHomeUiService } from './home-ui-service-impl';
 import { PopupUiService, PopupUiServiceToken } from '../../common/services/popup-ui-service';
 import { ElectronPopupUiService } from './popup-ui-service-impl';
 import { WindowService, WindowServiceToken } from '../../common/services/window-service';
@@ -43,7 +43,7 @@ function registerAllService() {
   rendererContainer.bind<SearchService>(CorsSearchServiceToken).to(CorsSearchService);
   rendererContainer.bind<SearchService>(EcDictSearchServiceToken).to(EcDictSearchService);
 
-  rendererContainer.bind<SearchUiService>(SearchUiServiceToken).to(ElectronSearchUiService);
+  rendererContainer.bind<HomeUiService>(SearchUiServiceToken).to(ElectronHomeUiService);
   rendererContainer.bind<SettingUiService>(SettingUiServiceToken).to(ElectronSettingUiService);
   rendererContainer.bind<SettingService>(SettingServiceToken).to(ElectronSettingService);
   rendererContainer.bind<PopupUiService>(PopupUiServiceToken).to(ElectronPopupUiService);

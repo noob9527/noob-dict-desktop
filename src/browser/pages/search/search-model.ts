@@ -1,6 +1,6 @@
 import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
 import { Model } from '../../redux/common/redux-model';
-import { SearchUiService, SearchUiServiceToken } from '../../../common/services/search-ui-service';
+import { HomeUiService, SearchUiServiceToken } from '../../../common/services/home-ui-service';
 import { rendererContainer } from '../../../common/container/renderer-container';
 import { TransientState } from '../transient-model';
 import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
@@ -43,8 +43,8 @@ interface SyncHistoryPageAction {
 
 const effects = {
   * togglePinned() {
-    const searchUiService = rendererContainer.get<SearchUiService>(SearchUiServiceToken);
-    const pinned = yield call([searchUiService, searchUiService.togglePin]);
+    const homeUIService = rendererContainer.get<HomeUiService>(SearchUiServiceToken);
+    const pinned = yield call([homeUIService, homeUIService.togglePin]);
     yield put({
       type: 'search/mergeState',
       payload: { pinned },

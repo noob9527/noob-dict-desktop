@@ -6,6 +6,7 @@ import { SearchInputState } from './search-input-model';
 import { usePrevious } from '../../../hooks/use-previous';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
+import { focusSearchInput } from '../../transient-store';
 
 const Suggestion = styled.div`
   width: 100%;
@@ -68,17 +69,11 @@ export default () => {
               text,
             });
           }
-          dispatch({
-            type: '_transient/mergeState',
-            payload: { focusInput: true },
-          });
+          focusSearchInput()
         }}
         onBlur={() => {
           setOpen(false);
-          dispatch({
-            type: '_transient/mergeState',
-            payload: { focusInput: false },
-          });
+          focusSearchInput()
         }}
         value={text}
         open={open}

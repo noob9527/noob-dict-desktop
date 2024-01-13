@@ -8,7 +8,7 @@ import { SettingService, SettingServiceToken } from '../../common/services/setti
 import { ClipboardService, ClipboardServiceToken } from '../../common/services/clipboard-service';
 import logger from '../../electron-shared/logger';
 import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../common/services/global-history-service';
-import { WindowEvents } from '../../common/window-events';
+import { WindowEvent } from '../../common/window-event';
 import { SettingChannel } from '../../electron-shared/ipc/ipc-channel-setting';
 import { SearchChannel } from '../../electron-shared/ipc/ipc-channel-search';
 import { AutoUpdaterChannel } from '../../electron-shared/ipc/ipc-channel-auto-updater';
@@ -16,6 +16,7 @@ import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app';
 import { GlobalShotCutChannel } from '../../electron-shared/ipc/ipc-channel-global-shot-cut';
 import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
 import { settingChanged } from '../pages/setting/setting-store';
+import { appHotKeyPressed, handleWindowEvent } from '../pages/transient-store';
 
 function registerStorageEventListener(store: Store) {
   logger.debug('register storage event listener');
@@ -24,7 +25,7 @@ function registerStorageEventListener(store: Store) {
 
   // listen setting change
   ipcRenderer.answerMain(SettingChannel.SETTING_CHANGE, async (data: any) => {
-    if (getCurrentWindowId()===WindowId.SEARCH) {
+    if (getCurrentWindowId()===WindowId.HOME) {
       const settingService = rendererContainer.get<SettingService>(SettingServiceToken);
       await settingService.handleSettingChange(data.newValue, data.oldValue);
     }
@@ -37,7 +38,7 @@ function registerStorageEventListener(store: Store) {
     return data.newValue;
   });
 
-  if (getCurrentWindowId()===WindowId.SEARCH) {
+  if (getCurrentWindowId()===WindowId.HOME) {
     // listen clipboard event
     const clipboardService = rendererContainer.get<ClipboardService>(ClipboardServiceToken);
     clipboardService.onClipboardTextChange(((newText, oldText) => {
@@ -49,9 +50,7 @@ function registerStorageEventListener(store: Store) {
     // listen global shot cut event
     ipcRenderer.answerMain(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, async () => {
       logger.log(GlobalShotCutChannel.APP_HOT_KEY_PRESSED, new Date());
-      store.dispatch({
-        type: '_transient/appHotKeyPressed',
-      });
+      appHotKeyPressed()
     });
     // listen app event
     ipcRenderer.answerMain(AppChannel.APP_QUITING, async () => {
@@ -110,11 +109,12 @@ function listenAutoUpdaterEvent(store) {
 
 function listenWindowEvents(store: Store) {
   WindowId.values().forEach(windowId => {
-    WindowEvents.values().forEach(event => {
-      const channelName = windowId.getEventChannelName(event);
+    WindowEvent.values().forEach(event => {
+      const channelName = event.getIpcChannelName(windowId)
       ipcRenderer.answerMain(
         channelName, async () => {
           logger.log(channelName);
+          handleWindowEvent(windowId, event)
           store.dispatch({ type: '_transient/' + channelName });
         });
     });

@@ -1,38 +1,26 @@
-import { BrowserWindow } from 'electron';
-import { getOrCreateSearchWindow } from './search-window';
-import logger from '../../electron-shared/logger';
-import { getWindowHashUrl } from '../../electron-shared/path-util';
-import { windowContainer } from './windows';
-import { WindowId } from '../../common/window-id';
-import * as remoteMain from '@electron/remote/main';
-import { Runtime } from '../../electron-shared/runtime';
-import { notifyRendererWindowEvents } from '../utils/window-util';
-import path from 'path';
+import { BrowserWindow } from 'electron'
+import { homeWindowManager } from './home-window'
+import { getWindowHashUrl } from '../../electron-shared/path-util'
+import { WindowId } from '../../common/window-id'
+import * as remoteMain from '@electron/remote/main'
+import { Runtime } from '../../electron-shared/runtime'
+import path from 'path'
+import { AbstractWindowManager } from './abstract-window-manager'
 
-export {
-  getOrCreateSettingWindow,
-};
+class SettingWindowManager extends AbstractWindowManager {
+  id: WindowId = WindowId.SETTING
 
-function getOrCreateSettingWindow() {
-  return windowContainer.find(WindowId.SETTING)
-    ?? windowContainer.add(WindowId.SETTING, createWindow());
+  protected customizedCreate(): BrowserWindow {
+    return createWindow()
+  }
 }
 
-function close() {
-  const window = windowContainer.find(WindowId.SETTING);
-  if (window == null) return;
-  window.close();
-}
-
-function destroy() {
-  logger.log('destroy setting window');
-  windowContainer.remove(WindowId.SETTING);
-}
+export const settingWindowManager = new SettingWindowManager()
 
 function createWindow() {
   // create a modal window
   // https://electronjs.org/docs/api/browser-window#modal-windows
-  const parent = getOrCreateSearchWindow();
+  const parent = homeWindowManager.getOrCreate()
   const window = new BrowserWindow({
     width: Runtime.isDev ? 1200 : 400,
     height: Runtime.isDev ? 600 : 200,
@@ -59,17 +47,17 @@ function createWindow() {
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
     },
-  });
-  remoteMain.enable(window.webContents);
-  window.setMenuBarVisibility(false);
+  })
+  remoteMain.enable(window.webContents)
+  window.setMenuBarVisibility(false)
 
   // Load a remote URL
   // https://stackoverflow.com/a/47926513
-  window.loadURL(getWindowHashUrl('setting'));
+  window.loadURL(getWindowHashUrl('setting'))
 
   window.once('ready-to-show', () => {
-    window.show();
-  });
+    window.show()
+  })
   // // currently in mac, modal window doesn't have close button
   // // hence we listen blur event, and close window
   // // https://github.com/electron/electron/issues/30232
@@ -78,16 +66,10 @@ function createWindow() {
   //     close();
   //   });
   // }
-  window.on('closed', async () => {
-    destroy();
-  });
-
-  // note that we notify parent window here!
-  notifyRendererWindowEvents(WindowId.SETTING, window, parent)
 
   if (Runtime.isDev) {
-    window.webContents.openDevTools();
+    window.webContents.openDevTools()
   }
 
-  return window;
+  return window
 }

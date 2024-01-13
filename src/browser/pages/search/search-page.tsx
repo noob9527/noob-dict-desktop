@@ -17,6 +17,7 @@ import { useParams } from 'react-router-dom';
 import { SearchResultType } from '@noob9527/noob-dict-core';
 import { NetworkEngineId } from '@noob9527/noob-dict-net-engines';
 import { TransientState } from '../transient-model';
+import { useTransientStore } from '../transient-store';
 
 const SearchPage = styled.div`
   height: 100vh;
@@ -55,7 +56,7 @@ export default () => {
   const routerState = useSelector((state: any) => state.router);
   const searchState: SearchState = useSelector((state: any) => state.search);
   const searchPanelState: SearchPanelState = useSelector((state: any) => state.searchPanel);
-  const transientState: TransientState = useSelector((state: any) => state._transient);
+  const ecDictAvailable = useTransientStore.use.ecDictAvailable()
 
   const matched = /engine_view\/(\w+)/
     .exec(routerState.location.pathname);
@@ -106,7 +107,7 @@ export default () => {
           </SearchPanelMenu>
         </nav>
         <ThemedContent id={'result-area'}>
-          {transientState.ecDictAvailable
+          {ecDictAvailable
             ? (<EcDictBar result={searchPanelState.ecDictSearchResult}/>)
             :null
           }

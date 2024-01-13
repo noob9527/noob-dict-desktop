@@ -77,6 +77,15 @@ export function ipcCallMain(
   };
 }
 
+/**
+ * e.g.
+ * CHANNEL_PREFIX/CHANNEL
+ *
+ * @param propertyKey only take effect when `channel` is missing
+ * @param channelPrefix
+ * @param channel if missing, we try guess it from propertyKey
+ * @param delimiter
+ */
 function getActualChannel(
   propertyKey: string | symbol,
   channelPrefix?: String,

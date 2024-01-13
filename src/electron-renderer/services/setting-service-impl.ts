@@ -48,7 +48,7 @@ export class ElectronSettingService implements SettingService {
     const res = ElectronStoreUserProfileService
       .instance()
       .getProfile();
-    if (getCurrentWindowId()===WindowId.SEARCH) {
+    if (getCurrentWindowId()===WindowId.HOME) {
       await this.handleSettingChange(res, null);
     }
     return res as UserProfile;

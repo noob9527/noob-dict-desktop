@@ -73,7 +73,7 @@ const effects = {
   },
   * login() {
     console.log('login');
-    yield call([loginUiService, loginUiService.open]);
+    yield call([loginUiService, loginUiService.show]);
   },
   * [LoginChannel.LOGIN_CODE_RECEIVED](action) {
     const { payload } = action;

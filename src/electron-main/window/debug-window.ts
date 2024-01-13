@@ -1,38 +1,28 @@
-import { BrowserWindow } from 'electron';
-import { getOrCreateSearchWindow } from './search-window';
-import logger from '../../electron-shared/logger';
-import { getWindowHashUrl } from '../../electron-shared/path-util';
-import { windowContainer } from './windows';
-import { WindowId } from '../../common/window-id';
-import * as remoteMain from '@electron/remote/main';
-import { Runtime } from '../../electron-shared/runtime';
-import path from 'path';
+import { BrowserWindow } from 'electron'
+import { homeWindowManager } from './home-window'
+import logger from '../../electron-shared/logger'
+import { getWindowHashUrl } from '../../electron-shared/path-util'
+import { WindowId } from '../../common/window-id'
+import * as remoteMain from '@electron/remote/main'
+import { Runtime } from '../../electron-shared/runtime'
+import path from 'path'
+import { AbstractWindowManager } from './abstract-window-manager'
 
-export {
-  getOrCreateDeveloperWindow,
-};
+class DebugWindowManager extends AbstractWindowManager {
+  id: WindowId = WindowId.DEVELOPER
 
-function getOrCreateDeveloperWindow() {
-  return windowContainer.find(WindowId.DEVELOPER)
-    ?? windowContainer.add(WindowId.DEVELOPER, createWindow());
+  protected customizedCreate(): BrowserWindow {
+    return createWindow()
+  }
 }
 
-function close() {
-  const window = windowContainer.find(WindowId.DEVELOPER);
-  if (window == null) return;
-  window.close();
-}
-
-function destroy() {
-  logger.log('destroy developer window');
-  windowContainer.remove(WindowId.DEVELOPER);
-}
+export const debugWindowManager = new DebugWindowManager()
 
 function createWindow() {
-  logger.log('create developer window');
+  logger.log('create developer window')
   // create a modal window
   // https://electronjs.org/docs/api/browser-window#modal-windows
-  const parent = getOrCreateSearchWindow();
+  const parent = homeWindowManager.getOrCreate()
   const window = new BrowserWindow({
     width: Runtime.isDev ? 1200 : 1200,
     height: 600,
@@ -58,17 +48,17 @@ function createWindow() {
       // to disable the cors policy, so that we can fetch resources from different origin
       webSecurity: false,
     },
-  });
-  remoteMain.enable(window.webContents);
-  window.setMenuBarVisibility(false);
+  })
+  remoteMain.enable(window.webContents)
+  window.setMenuBarVisibility(false)
 
   // Load a remote URL
   // https://stackoverflow.com/a/47926513
-  window.loadURL(getWindowHashUrl('developer'));
+  window.loadURL(getWindowHashUrl('developer'))
 
   window.once('ready-to-show', () => {
-    window.show();
-  });
+    window.show()
+  })
   // // currently in mac, modal window doesn't have close button
   // // hence we listen blur event, and close window
   // // https://github.com/electron/electron/issues/30232
@@ -77,12 +67,8 @@ function createWindow() {
   //     close();
   //   });
   // }
-  window.on('closed', async () => {
-    destroy();
-    logger.log(`${WindowId.DEVELOPER} closed`);
-  });
 
-  window.webContents.openDevTools();
+  window.webContents.openDevTools()
 
-  return window;
+  return window
 }
