@@ -28,6 +28,11 @@ function registerStorageEventListener(store: Store) {
       const settingService = rendererContainer.get<SettingService>(SettingServiceToken);
       await settingService.handleSettingChange(data.newValue, data.oldValue);
     }
+    // currently we have to notify both state system..
+    store.dispatch({
+      type: 'setting/settingChanged',
+      payload: data.newValue,
+    });
     settingChanged(data.newValue)
     return data.newValue;
   });
