@@ -1,12 +1,11 @@
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { Button, Icon } from 'antd';
-import styled from 'styled-components';
-import { SearchState } from '../search-model';
-import { rendererContainer } from '../../../../common/container/renderer-container';
-import { PopupUiService, PopupUiServiceToken } from '../../../../common/services/popup-ui-service';
-import { ThemedTooltip } from '../../../components/themed-ui/tooltip/tooltip';
-import { AvatarDropDown } from './avatar-drop-down';
+import React from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Button, Icon } from 'antd'
+import styled from 'styled-components'
+import { SearchState } from '../search-model'
+import { ThemedTooltip } from '../../../components/themed-ui/tooltip/tooltip'
+import { AvatarDropDown } from './avatar-drop-down'
+import { SyncActions, useSyncStore } from '../../sync/sync-store'
 
 const ToolBar = styled.div`
   display: flex;
@@ -15,17 +14,16 @@ const ToolBar = styled.div`
     margin-right: 10px;
   }
   i.anticon-pushpin {
-    font-size: 1.1em; 
+    font-size: 1.1em;
   }
-`;
+`
 
 
 export default () => {
   const dispatch = useDispatch();
   const searchState: SearchState = useSelector((state: any) => state.search);
   const { pinned } = searchState;
-
-  const popupUiService = rendererContainer.get<PopupUiService>(PopupUiServiceToken);
+  const isSyncing = useSyncStore.use.isSyncing()
 
   return (
     <ToolBar>
@@ -60,6 +58,22 @@ export default () => {
       {/*    />*/}
       {/*  </Button>*/}
       {/*</ThemedTooltip>*/}
+      <ThemedTooltip placement="bottom" title={'sync search history'}>
+        <Button
+          tabIndex={-1}
+          type="link"
+          shape="circle"
+          onClick={() => {
+            SyncActions.openSyncWindow()
+          }}
+          ghost
+        >
+          <Icon
+            type="sync"
+            spin={isSyncing}
+          />
+        </Button>
+      </ThemedTooltip>
       <ThemedTooltip placement="bottom" title={'pin window'}>
         <Button
           tabIndex={-1}

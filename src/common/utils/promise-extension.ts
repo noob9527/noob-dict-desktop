@@ -17,3 +17,14 @@ export async function delay<T>(delayTime: any, value?: T): Promise<void | T> {
     resolve => setTimeout(() => resolve(value), delayTime),
   );
 }
+
+/**
+ * Like setTimeout but returns Promise.
+ */
+export function timer (delay?: number): Promise<void>
+export function timer<T = any> (delay: number, payload?: T): Promise<T>
+export function timer (...args) {
+  return new Promise<any>((resolve: any) => {
+    setTimeout(() => args.length > 0 ? resolve(args[1]) : resolve(), Number(args[0]) || 0)
+  })
+}

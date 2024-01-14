@@ -22,6 +22,7 @@
     "build": "tsc && vite build && electron-builder",
     "test": "node scripts/test.js --config=config/jest/jest.config.js",
     "type-check": "tsc",
+    "type-check:watch": "tsc --watch",
     "format": "prettier --write src/",
     "vite:preview": "vite preview",
     "vite:build": "tsc && vite build",

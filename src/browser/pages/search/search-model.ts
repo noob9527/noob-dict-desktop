@@ -59,12 +59,12 @@ const effects = {
       text: action.payload.text,
     });
   },
-  * syncHistories() {
-    yield call([globalHistoryService, globalHistoryService.syncHistories]);
-    // todo
-    yield put({
-      type: 'root/refreshUserFromStorage',
-    });
+* syncHistories() {
+    // yield call([globalHistoryService, globalHistoryService.syncHistories]);
+    // // todo
+    // yield put({
+    //   type: 'root/refreshUserFromStorage',
+    // });
   },
 };
 

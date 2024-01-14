@@ -1,6 +1,5 @@
-import { UserProfile } from './user-profile';
-import { getDefaultLocalDBPath } from '../path-util';
-
+import { UserProfile } from './user-profile'
+import { getDefaultLocalDBPath } from '../path-util'
 
 export function getDefaultUserProfile(): UserProfile {
   return {
@@ -8,5 +7,8 @@ export function getDefaultUserProfile(): UserProfile {
     readClipboard: false,
     ecDictFileLocation: null,
     dbFileLocation: getDefaultLocalDBPath(),
-  };
+    'search.syncHistory.syncIntervalMinutes': 60,
+    'search.syncHistory.syncOnQuit': true,
+    'search.syncHistory.syncOnStart': true,
+  }
 }

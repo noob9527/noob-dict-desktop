@@ -6,12 +6,14 @@ import globalState from '../global-state'
 import * as os from 'os'
 import * as fs from 'fs'
 import { getIconPath, getWindowHashUrl } from '../../electron-shared/path-util'
-import { ipcMain } from 'electron-better-ipc'
 import { WindowId } from '../../common/window-id'
 import * as remoteMain from '@electron/remote/main'
 import { Runtime } from '../../electron-shared/runtime'
-import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app'
 import { AbstractWindowManager } from './window-manager'
+import { SearchHistorySyncTimer } from '../services/search-history-sync-timer'
+import { autoSyncSearchHistory } from '../auto-sync-search-history'
+
+const log = logger.getLogger('HomeWindowManager')
 
 class HomeWindowManager extends AbstractWindowManager {
   id: WindowId = WindowId.HOME
@@ -64,39 +66,51 @@ function createWindow() {
     if (!process.argv.includes('--background')) {
       window.show()
     }
+    SearchHistorySyncTimer.setHandler(() => autoSyncSearchHistory())
   })
 
-  // let allowAppQuit = false;
-  // todo: vite
-  let allowAppQuit = true
-
   window.on('close', async (e) => {
-    // close to tray
+    // just close to tray
     if (!globalState.trayQuitPressed) {
       e.preventDefault()
       window.hide()
-    } else {
-      if (!allowAppQuit) {
-        e.preventDefault()
-        logger.log('app is quiting')
-
-        // we might need to sync search histories before quiting
-        allowAppQuit = (await ipcMain.callRenderer(
-          window,
-          AppChannel.APP_QUITING,
-        )) as boolean
-
-        if (allowAppQuit) {
-          logger.log('app is ready to quit')
-          app.quit()
-        }
-      }
+      return
     }
+
+    if (globalState.syncOnQuitExecuted) {
+      logger.debug('sync on quit has been executed once')
+      return
+    }
+
+    if (!globalState.profile?.['search.syncHistory.syncOnQuit']) {
+      logger.debug(
+        'no need to sync search history on quit due to configuration',
+      )
+      return
+    }
+
+    logger.debug('sync search history on quit')
+    // prevent window close
+    e.preventDefault()
+    await autoSyncSearchHistory(1)
+    globalState.syncOnQuitExecuted = true
+
+    logger.log('app is ready to quit')
+    app.quit()
   })
 
-  window.webContents.on('did-finish-load', () => {
+  window.webContents.on('did-finish-load', async () => {
     getOrCreateTray()
     logger.log('did-finish-load')
+
+    if (globalState.profile?.['search.syncHistory.syncOnStart']) {
+      logger.debug('sync search history on start')
+      await autoSyncSearchHistory(1)
+    } else {
+      logger.debug(
+        'no need to sync search history on start due to configuration',
+      )
+    }
   })
   // stop link from opening new window
   // https://stackoverflow.com/questions/46462248/electron-link-opens-in-new-window

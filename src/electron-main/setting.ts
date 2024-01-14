@@ -9,16 +9,24 @@ import { SettingChannel } from '../electron-shared/ipc/ipc-channel-setting';
 import { GlobalShotCutChannel } from '../electron-shared/ipc/ipc-channel-global-shot-cut';
 import { homeWindowManager } from './window/home-window';
 import { settingWindowManager } from './window/setting-window';
+import { SearchHistorySyncTimer } from './services/search-history-sync-timer';
+import globalState from './global-state';
 
-export function initSetting() {
+export function initSetting(): UserProfile {
   ElectronStoreUserProfileService.init();
   const setting = ElectronStoreUserProfileService
     .instance().getProfile();
+  globalState.profile = setting
   if (setting.appHotKey) {
     handleAppHotKeyChange(setting.appHotKey);
   }
   handleEcDictFileLocationChange(setting.ecDictFileLocation);
   LocalDB.handleDbFileLocationChange(setting.dbFileLocation);
+
+  // set sync interval
+  SearchHistorySyncTimer.setInterval(setting['search.syncHistory.syncIntervalMinutes'])
+
+  return setting
 }
 
 // called by setting window
@@ -44,7 +52,11 @@ export async function handleSettingChange(
     oldValue.dbFileLocation,
   );
 
+  // set sync interval
+  SearchHistorySyncTimer.setInterval(newValue['search.syncHistory.syncIntervalMinutes'])
+
   ElectronStoreUserProfileService.instance().setProfile(newValue); // sync to electron store
+  globalState.profile = newValue
 
   const res = await ipcMain.callRenderer(
     homeWindowManager.getOrCreate(),

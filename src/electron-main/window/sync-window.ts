@@ -14,6 +14,11 @@ class SyncWindowManager extends AbstractWindowManager {
   protected customizedCreate(): BrowserWindow {
     return createWindow()
   }
+
+  get isActive(): boolean {
+    if (!this._window) return false
+    return (!this._window.isMinimized() && this._window.isVisible())
+  }
 }
 
 export const syncWindowManager = new SyncWindowManager()
@@ -42,11 +47,11 @@ function createWindow() {
       preload: path.join(__dirname, 'electron-preload.js'),
       // preload: path.join(__dirname, "preload.js"),
       // https://electronjs.org/docs/faq#i-can-not-use-jqueryrequirejsmeteorangularjs-in-electron
-      // nodeIntegration: true,
+      nodeIntegration: true,
       // see https://github.com/electron-userland/electron-forge/issues/2567
-      // contextIsolation: false,
+      contextIsolation: false,
       // to disable the cors policy, so that we can fetch resources from different origin
-      // webSecurity: false,
+      webSecurity: false,
     },
   })
   remoteMain.enable(window.webContents)

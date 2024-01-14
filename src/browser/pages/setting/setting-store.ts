@@ -16,6 +16,10 @@ const initialState: UserProfile = {
   readClipboard: false,
   ecDictFileLocation: null,
   dbFileLocation: null,
+
+  'search.syncHistory.syncOnQuit': true,
+  'search.syncHistory.syncOnStart': true,
+  'search.syncHistory.syncIntervalMinutes': -1,
 }
 
 const settingService =

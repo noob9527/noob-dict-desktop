@@ -1,21 +1,35 @@
-import { GlobalHistoryService, } from '../../common/services/global-history-service';
-import { inject, injectable } from 'inversify';
+import {
+  GlobalHistoryService,
+  ProgressInfo,
+  SyncHistoryCallback,
+} from '../../common/services/global-history-service'
+import { injectable } from 'inversify'
 import {
   DexieHistoryServiceToken,
   HistoryService,
-  LocalHistoryServiceToken
-} from '../../common/services/db/history-service';
-import { rendererContainer } from '../../common/container/renderer-container';
-import { NoteService, LocalNoteServiceToken, DexieNoteServiceToken } from '../../common/services/db/note-service';
-import logger from '../../electron-shared/logger';
-import { UserService, UserServiceToken } from '../../common/services/user-service';
-import axios from 'axios';
-import { APP_CONSTANTS } from '../../common/app-constants';
-import { ISearchHistory, SearchHistory } from '../../common/model/history';
-import { AppService, AppServiceToken } from '../../common/services/app-service';
-import { User } from '../../common/model/user';
-import { DexieNoteService } from './db/dexie/dexie-note-service';
-import { DexieHistoryService } from './db/dexie/dexie-history-service';
+  LocalHistoryServiceToken,
+} from '../../common/services/db/history-service'
+import { rendererContainer } from '../../common/container/renderer-container'
+import {
+  DexieNoteServiceToken,
+  LocalNoteServiceToken,
+  NoteService,
+} from '../../common/services/db/note-service'
+import logger from '../../electron-shared/logger'
+import {
+  UserService,
+  UserServiceToken,
+} from '../../common/services/user-service'
+import axios from 'axios'
+import { APP_CONSTANTS } from '../../common/app-constants'
+import { ISearchHistory, SearchHistory } from '../../common/model/history'
+import { AppService, AppServiceToken } from '../../common/services/app-service'
+import { User } from '../../common/model/user'
+import { DexieNoteService } from './db/dexie/dexie-note-service'
+import { DexieHistoryService } from './db/dexie/dexie-history-service'
+import { ipcRenderer } from 'electron-better-ipc'
+import { SyncHistoryChannel } from '../../electron-shared/ipc/ipc-channel-sync-history'
+import { timer } from '../../common/utils/promise-extension'
 
 interface SyncHistoriesRequestV2 {
   clientLastSyncTime: Date
@@ -42,67 +56,132 @@ interface SyncHistoriesResponseV2 {
  */
 @injectable()
 export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
-  private historyService: HistoryService;
-  private noteService: NoteService;
-  private userService: UserService;
-  private appService: AppService;
-  private dexieNoteService: NoteService;
-  private dexieHistoryService: HistoryService;
+  private historyService: HistoryService
+  private noteService: NoteService
+  private userService: UserService
+  private appService: AppService
+  private dexieNoteService: NoteService
+  private dexieHistoryService: HistoryService
 
-  private log = logger.getLogger('GlobalHistoryServiceImpl');
+  private log = logger.getLogger('GlobalHistoryServiceImpl')
 
-  constructor(
-    // see https://github.com/inversify/InversifyJS/issues/1004
-    // @inject(HistoryServiceToken) private historyService: HistoryService,
-    // @inject(NoteServiceToken) private noteService: NoteService,
-    // @inject(UserServiceToken) private userService: UserService,
-    // @inject(AppServiceToken) private appService: AppService,
-  ) {
-    this.historyService = rendererContainer.get<HistoryService>(LocalHistoryServiceToken);
-    this.noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken);
-    this.dexieNoteService = rendererContainer.get<DexieNoteService>(DexieNoteServiceToken);
-    this.dexieHistoryService = rendererContainer.get<DexieHistoryService>(DexieHistoryServiceToken);
-    this.userService = rendererContainer.get<UserService>(UserServiceToken);
-    this.appService = rendererContainer.get<AppService>(AppServiceToken);
+  constructor() // @inject(HistoryServiceToken) private historyService: HistoryService, // see https://github.com/inversify/InversifyJS/issues/1004
+  // @inject(NoteServiceToken) private noteService: NoteService,
+  // @inject(UserServiceToken) private userService: UserService,
+  // @inject(AppServiceToken) private appService: AppService,
+  {
+    this.historyService = rendererContainer.get<HistoryService>(
+      LocalHistoryServiceToken,
+    )
+    this.noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken)
+    this.dexieNoteService = rendererContainer.get<DexieNoteService>(
+      DexieNoteServiceToken,
+    )
+    this.dexieHistoryService = rendererContainer.get<DexieHistoryService>(
+      DexieHistoryServiceToken,
+    )
+    this.userService = rendererContainer.get<UserService>(UserServiceToken)
+    this.appService = rendererContainer.get<AppService>(AppServiceToken)
   }
 
   /**
    * sync search history between server and client.
    */
-  async syncHistories() {
-    const methodLogger = this.log.getLogger('syncHistories');
-    methodLogger.debug('start sync histories');
-    await this.syncHistoryPages(1000);
-    methodLogger.debug('end sync histories');
-  }
-
   async syncHistoryPages(
+    pageLimit: number,
     pageSize: number,
-    pageLimit: number = Infinity,
+    callback?: SyncHistoryCallback,
   ) {
-    const methodLogger = this.log.getLogger('syncHistoryPages');
+    const methodLogger = this.log.getLogger('syncHistoryPages')
+    methodLogger.debug('start syncHistoryPages')
 
-    const currentUser = await this.userService.fetchCurrentUserFromStorage();
+    const currentUser = await this.userService.fetchCurrentUserFromStorage()
     if (!currentUser) {
-      methodLogger.debug('sync terminated as no logged in user');
-      return;
+      methodLogger.debug('sync terminated as no logged in user')
+      return
     }
+    await callback?.(SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_STARTED)
+    await ipcRenderer.callMain(
+      SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_STARTED,
+    )
 
-    let response: SyncHistoriesResponseV2;
-    let currentPageIndex = 0;
-    let remainingItems = 0;
+    let response: SyncHistoriesResponseV2
+    let currentPageIndex = 0
+    let remainingItems = 0
+
+    // for calculating progress
+    let isFirstPage = true
+    let totalItems = 0
+    let totalPages = 0
     do {
-      const pushItemsToServer = currentPageIndex===0;
-      response = await this.syncSingleHistoryPage(currentUser, pageSize, pushItemsToServer);
-      remainingItems = response.total - response.count;
-      let remainingPages = Math.min(Math.ceil(remainingItems / pageSize), pageLimit - currentPageIndex - 1);
+      const pushItemsToServer = currentPageIndex === 0
+      try {
+        response = await this.syncSingleHistoryPage(
+          currentUser,
+          pageSize,
+          pushItemsToServer,
+        )
+      } catch (e) {
+        console.log(e)
+        await callback?.(
+          SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_ERROR,
+          {
+            error: e,
+          },
+        )
+        await ipcRenderer.callMain(
+          SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_ERROR,
+          {
+            error: e,
+          },
+        )
+        // terminate sync process
+        // should I break or throw error?
+        throw e
+      }
+      remainingItems = response.total - response.count
+      let remainingPages = Math.min(
+        Math.ceil(remainingItems / pageSize),
+        pageLimit - currentPageIndex - 1,
+      )
 
-      methodLogger.debug('current page index: ' + currentPageIndex);
-      methodLogger.debug('remaining items: ' + remainingItems);
-      methodLogger.debug('remaining pages: ' + remainingPages);
-    } while (remainingItems > 0 && ++currentPageIndex < pageLimit);
+      // update progress
+      if (isFirstPage) {
+        totalItems = response.total
+        totalPages = remainingPages + 1
+        isFirstPage = false
+      }
+      const finishedPages = currentPageIndex + 1
+      const progressInfo: ProgressInfo = {
+        percent: Math.floor((currentPageIndex + 1) / totalPages),
+        totalPages,
+        totalItems,
+        finishedPages,
+        finishedItems: pageSize * finishedPages,
+        pageSize,
+      }
 
-    methodLogger.debug('end syncHistoryPages');
+      await callback?.(
+        SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_PROGRESS,
+        progressInfo,
+      )
+      await ipcRenderer.callMain(
+        SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_PROGRESS,
+        progressInfo,
+      )
+
+      methodLogger.debug('current page index: ' + currentPageIndex)
+      methodLogger.debug('remaining items: ' + remainingItems)
+      methodLogger.debug('remaining pages: ' + remainingPages)
+    } while (remainingItems > 0 && ++currentPageIndex < pageLimit)
+
+    await callback?.(
+      SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_FINISHED,
+    )
+    await ipcRenderer.callMain(
+      SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_FINISHED,
+    )
+    methodLogger.debug('end syncHistoryPages')
   }
 
   private async syncSingleHistoryPage(
@@ -110,18 +189,24 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
     pageSize: number,
     pushItemsToServer: boolean,
   ) {
-    const methodLogger = this.log.getLogger('syncSingleHistoryPage');
-    const lastEvaluatedUpdateAt = (await this.userService.getLastEvaluatedUpdateAt())
-      ?? new Date(0);
-    const lastSyncTime = (await this.userService.getLastSyncTime()) ?? new Date(0);
+    const methodLogger = this.log.getLogger('syncSingleHistoryPage')
 
-    let pushToServerItems: ISearchHistory[] = [];
+    // for test
+    // await timer(2000)
+    // throw new Error('gotcha')
+
+    const lastEvaluatedUpdateAt =
+      (await this.userService.getLastEvaluatedUpdateAt()) ?? new Date(0)
+    const lastSyncTime =
+      (await this.userService.getLastSyncTime()) ?? new Date(0)
+
+    let pushToServerItems: ISearchHistory[] = []
     if (pushItemsToServer) {
       pushToServerItems = await this.fetchPushToServerItems(
         currentUser.id,
         new Date(currentUser.last_sync_time),
-      );
-      methodLogger.debug('send item size', pushToServerItems.length);
+      )
+      methodLogger.debug('send item size', pushToServerItems.length)
     }
 
     const request = {
@@ -130,10 +215,10 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
       itemSinceLastSync: pushToServerItems,
       clientAppId: await this.appService.getClientAppId(),
       syncSizeLimit: pageSize,
-    };
-    const response = await this.callSyncHistoryAPI(request);
-    methodLogger.debug('receive item size', response.items.length);
-    methodLogger.debug('total', response.total);
+    }
+    const response = await this.callSyncHistoryAPI(request)
+    methodLogger.debug('receive item size', response.items.length)
+    methodLogger.debug('total', response.total)
 
     // const promises = response.itemSinceLastSync.map(history => {
     //   return this.noteService.syncHistory(history);
@@ -144,43 +229,48 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
     // otherwise we may encounter concurrent related issue
     // e.g. Error: "Key already exists in the object store."
     for (const history of response.items) {
-      await this.noteService.syncHistory(history);
+      await this.noteService.syncHistory(history)
     }
 
     // update last sync time
-    await this.userService.setLastEvaluatedUpdateAt(new Date(response.lastEvaluatedUpdateAt));
-    await this.userService.setLastSyncTime(new Date(response.serverLastSyncTime));
-    return response;
+    await this.userService.setLastEvaluatedUpdateAt(
+      new Date(response.lastEvaluatedUpdateAt),
+    )
+    await this.userService.setLastSyncTime(
+      new Date(response.serverLastSyncTime),
+    )
+    return response
   }
 
-  async callSyncHistoryAPI(request: SyncHistoriesRequestV2): Promise<SyncHistoriesResponseV2> {
-    let res = await axios.patch(`${APP_CONSTANTS.API_PREFIX}/histories/v2`, request);
-    const data = res.data as SyncHistoriesResponseV2;
+  async callSyncHistoryAPI(
+    request: SyncHistoriesRequestV2,
+  ): Promise<SyncHistoriesResponseV2> {
+    let res = await axios.patch(
+      `${APP_CONSTANTS.API_PREFIX}/histories/v2`,
+      request,
+    )
+    const data = res.data as SyncHistoriesResponseV2
     // wrap history
-    data.items = data.items.map(e => SearchHistory.wrap(e));
-    return data;
+    data.items = data.items.map((e) => SearchHistory.wrap(e))
+    return data
   }
 
   // select histories where update time greater than last_sync_time
-  async fetchPushToServerItems(
-    user_id: string,
-    last_sync_time: Date,
-  ) {
+  async fetchPushToServerItems(user_id: string, last_sync_time: Date) {
     return this.historyService.searchByUpdateAt({
       user_id: user_id,
       updateAtBetween: {
-        lowerBound: (new Date(last_sync_time)).valueOf(),
-      }
-    });
+        lowerBound: new Date(last_sync_time).valueOf(),
+      },
+    })
   }
 
   async migrateToSqlite() {
-    const methodLogger = this.log.getLogger('migrateToSqlite');
-    const service = this.dexieHistoryService as DexieHistoryService;
-    const items = await service.findForMigration();
-    methodLogger.debug(`about to migrate ${items.length} items`);
-    const promises = items.map(e => this.noteService.syncHistory(e));
-    await Promise.all(promises);
+    const methodLogger = this.log.getLogger('migrateToSqlite')
+    const service = this.dexieHistoryService as DexieHistoryService
+    const items = await service.findForMigration()
+    methodLogger.debug(`about to migrate ${items.length} items`)
+    const promises = items.map((e) => this.noteService.syncHistory(e))
+    await Promise.all(promises)
   }
-
 }

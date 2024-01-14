@@ -10,6 +10,7 @@ import { getOrCreateAppMenu } from './menu'
 import { initialAutoUpdater } from './auto-update'
 import * as remoteMain from '@electron/remote/main'
 import { Env } from '../electron-shared/env'
+import { SearchHistorySyncTimer } from './services/search-history-sync-timer';
 
 // see https://github.com/electron/remote
 remoteMain.initialize()
@@ -69,6 +70,7 @@ app.on('activate', () => {
 
 app.on('will-quit', () => {
   globalShortcut.unregisterAll()
+  SearchHistorySyncTimer.destroy()
 })
 
 app.on('before-quit', () => {
