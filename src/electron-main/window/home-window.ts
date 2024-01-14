@@ -60,13 +60,13 @@ function createWindow() {
   // Menu.setApplicationMenu(null);
   // window.setAutoHideMenuBar(true);
 
+  // todo: url might be incorrect
   window.loadURL(getWindowHashUrl('main/search'))
 
   window.once('ready-to-show', () => {
     if (!process.argv.includes('--background')) {
       window.show()
     }
-    SearchHistorySyncTimer.setHandler(() => autoSyncSearchHistory())
   })
 
   window.on('close', async (e) => {
@@ -89,6 +89,13 @@ function createWindow() {
       return
     }
 
+    if (Runtime.isDev) {
+      logger.debug(
+        'no need to sync on quit in dev',
+      )
+      return
+    }
+
     logger.debug('sync search history on quit')
     // prevent window close
     e.preventDefault()
@@ -103,9 +110,17 @@ function createWindow() {
     getOrCreateTray()
     logger.log('did-finish-load')
 
+    SearchHistorySyncTimer.setHandler(() => autoSyncSearchHistory(Infinity))
+
     if (globalState.profile?.['search.syncHistory.syncOnStart']) {
-      logger.debug('sync search history on start')
-      await autoSyncSearchHistory(1)
+      if (Runtime.isDev) {
+        logger.debug('no need sync search history on start in dev environment')
+      } else {
+        logger.debug('sync search history on start')
+        await autoSyncSearchHistory(1)
+      }
+      // logger.debug('sync search history on start')
+      // await autoSyncSearchHistory(1)
     } else {
       logger.debug(
         'no need to sync search history on start due to configuration',

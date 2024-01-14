@@ -1,7 +1,8 @@
 import { WindowId } from '../../common/window-id';
 
 function getCurrentWindowId() {
-  switch (window?.location?.hash) {
+  const hash = window?.location?.hash
+  switch (hash) {
     case '#/main/search':
       return WindowId.HOME;
     case '#/setting':
@@ -13,7 +14,11 @@ function getCurrentWindowId() {
     case '#/sync':
       return WindowId.SYNC;
     default:
-      throw new Error(`unknown window, hash = ${window?.location?.hash}`)
+      if (hash?.includes('/search')) {
+        return WindowId.HOME;
+      } else {
+        throw new Error(`unknown window, hash = ${hash}`)
+      }
   }
 }
 
