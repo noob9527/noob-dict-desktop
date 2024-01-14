@@ -6,10 +6,10 @@ import {
   SettingServiceToken,
 } from '../../../common/services/setting-service'
 import logger from '../../../electron-shared/logger'
-import { setEcDictAvailable, setLocalDbAvailable } from '../transient-store';
-import { createSelectors } from '../../zustand/create-selectors';
-import { devtools } from 'zustand/middleware';
-import { Runtime } from '../../../electron-shared/runtime';
+import { setEcDictAvailable, setLocalDbAvailable } from '../transient-store'
+import { createSelectors } from '../../zustand/create-selectors'
+import { devtools } from 'zustand/middleware'
+import { Runtime } from '../../../electron-shared/runtime'
 
 const initialState: UserProfile = {
   appHotKey: '',
@@ -22,13 +22,10 @@ const settingService =
   rendererContainer.get<SettingService>(SettingServiceToken)
 
 const useSettingStoreBase = create<UserProfile>()(
-  devtools(
-    () => initialState,
-    {
-      name: 'setting',
-      enabled: Runtime.isDev,
-    }
-  )
+  devtools(() => initialState, {
+    name: 'setting',
+    enabled: Runtime.isDev,
+  }),
 )
 export const useSettingStore = createSelectors(useSettingStoreBase)
 
@@ -49,8 +46,12 @@ export function settingChanged(profile: UserProfile) {
   setLocalDbAvailable()
 }
 
-export async function initSetting() {
-  const setting = await settingService.initSetting()
-  logger.log('initSetting', setting)
-  settingChanged(setting)
+const log = logger.getLogger('SettingActions')
+
+export const SettingActions = {
+  async init() {
+    const setting = await settingService.initSetting()
+    log.log('init', setting)
+    settingChanged(setting)
+  },
 }

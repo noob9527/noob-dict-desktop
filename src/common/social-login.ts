@@ -3,7 +3,7 @@
  */
 import { Env } from '../electron-shared/env';
 
-enum LoginType {
+export enum LoginType {
   GITHUB = 'GITHUB',
   WEIBO = 'WEIBO',
 }

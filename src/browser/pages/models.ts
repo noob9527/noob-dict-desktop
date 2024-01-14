@@ -8,7 +8,6 @@ import searchNote from './search/note/search-note-model';
 import searchToolBar from './search/tool-bar/search-tool-bar-model';
 import transientModel from './transient-model';
 import overview from './search/views/overview/overview-model';
-import developer from './developer/developer-model';
 import { tableModel } from './table/table-model';
 
 export {
@@ -22,7 +21,6 @@ export {
   searchNote,
   searchToolBar,
   overview,
-  developer,
   tableModel,
 };
 

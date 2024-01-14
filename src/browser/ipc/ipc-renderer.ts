@@ -17,6 +17,7 @@ import { GlobalShotCutChannel } from '../../electron-shared/ipc/ipc-channel-glob
 import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
 import { settingChanged } from '../pages/setting/setting-store';
 import { appHotKeyPressed, handleWindowEvent } from '../pages/transient-store';
+import { RootActions } from '../root-store';
 
 function registerStorageEventListener(store: Store) {
   logger.debug('register storage event listener');
@@ -73,11 +74,12 @@ function registerStorageEventListener(store: Store) {
     });
 
     // login code received
-    ipcRenderer.answerMain(LoginChannel.LOGIN_CODE_RECEIVED, async (data) => {
+    ipcRenderer.answerMain(LoginChannel.LOGIN_CODE_RECEIVED, async (data: any) => {
       store.dispatch({
         type: 'root/' + LoginChannel.LOGIN_CODE_RECEIVED,
         payload: data,
       });
+      RootActions.loginCodeReceived(data.code, data.LoginType, data.LoginOption)
     });
   }
   listenWindowEvents(store);

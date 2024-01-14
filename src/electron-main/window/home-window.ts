@@ -72,18 +72,20 @@ function createWindow() {
 
   window.on('close', async (e) => {
     // close to tray
-    // https://stackoverflow.com/questions/37828758/electron-js-how-to-minimize-close-window-to-system-tray-and-restore-window-back
-    if (!globalState.isQuiting) {
+    if (!globalState.trayQuitPressed) {
       e.preventDefault()
       window.hide()
     } else {
       if (!allowAppQuit) {
         e.preventDefault()
         logger.log('app is quiting')
+
+        // we might need to sync search histories before quiting
         allowAppQuit = (await ipcMain.callRenderer(
           window,
           AppChannel.APP_QUITING,
         )) as boolean
+
         if (allowAppQuit) {
           logger.log('app is ready to quit')
           app.quit()

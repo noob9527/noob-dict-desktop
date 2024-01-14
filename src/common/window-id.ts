@@ -12,6 +12,8 @@ class WindowId extends EnumFactory<WindowId>() {
   static readonly LOGIN = new WindowId('LOGIN')
   @EnumValue
   static readonly DEVELOPER = new WindowId('DEVELOPER')
+  @EnumValue
+  static readonly SYNC = new WindowId('SYNC')
 
   constructor(public label: string) {
     super()

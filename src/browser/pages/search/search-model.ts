@@ -1,15 +1,19 @@
-import { call, cancel, delay, fork, put, select, take } from '@redux-saga/core/effects';
-import { Model } from '../../redux/common/redux-model';
-import { HomeUiService, SearchUiServiceToken } from '../../../common/services/home-ui-service';
-import { rendererContainer } from '../../../common/container/renderer-container';
-import { TransientState } from '../transient-model';
-import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
-import { Runtime } from '../../../electron-shared/runtime';
-import { END, eventChannel } from 'redux-saga';
-import { setInterval } from 'timers';
-import { GlobalHistoryService, GlobalHistoryServiceToken } from '../../../common/services/global-history-service';
+import { call, put, take } from '@redux-saga/core/effects'
+import { Model } from '../../redux/common/redux-model'
+import {
+  HomeUiService,
+  SearchUiServiceToken,
+} from '../../../common/services/home-ui-service'
+import { rendererContainer } from '../../../common/container/renderer-container'
+import { Runtime } from '../../../electron-shared/runtime'
+import { END, eventChannel } from 'redux-saga'
+import { setInterval } from 'timers'
+import {
+  GlobalHistoryService,
+  GlobalHistoryServiceToken,
+} from '../../../common/services/global-history-service'
 
-export const SPLIT_PANE_SIZE_MAX = 450;
+export const SPLIT_PANE_SIZE_MAX = 450
 export const SPLIT_PANE_SIZE_MIN = 60;
 export const SPLIT_PANE_SIZE_MIDDLE = (400 + 60) / 2;
 
@@ -30,14 +34,6 @@ interface SearchAction {
   payload: {
     text: string
     engine?: string
-  }
-}
-
-interface SyncHistoryPageAction {
-  type: 'search/syncHistoryPages',
-  payload: {
-    pageSize: number,
-    pageLimit: number,
   }
 }
 
@@ -65,16 +61,7 @@ const effects = {
   },
   * syncHistories() {
     yield call([globalHistoryService, globalHistoryService.syncHistories]);
-    yield put({
-      type: 'root/refreshUserFromStorage',
-    });
-  },
-  * syncHistoryPages(action: SyncHistoryPageAction) {
-    yield call(
-      [globalHistoryService, globalHistoryService.syncHistoryPages],
-      action.payload.pageSize,
-      action.payload.pageLimit,
-    );
+    // todo
     yield put({
       type: 'root/refreshUserFromStorage',
     });
@@ -116,7 +103,8 @@ const searchModel: SearchModel = {
   },
   effects,
   reducers,
-  sagas: [watchClockEvent],
+  // todo:
+  // sagas: [watchClockEvent],
 };
 
 export default searchModel;

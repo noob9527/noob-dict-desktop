@@ -35,6 +35,11 @@ interface SyncHistoriesResponseV2 {
   syncSizeLimit: number
 }
 
+/**
+ * historically, we sync search history in renderer process
+ * (historically, we use indexed db)
+ * in the future, we might sync it in main process
+ */
 @injectable()
 export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
   private historyService: HistoryService;
