@@ -6,8 +6,6 @@ function getCurrentWindowId() {
       return WindowId.HOME;
     case '#/setting':
       return WindowId.SETTING;
-    case '#/popup':
-      return WindowId.POPUP;
     case '#/login':
       return WindowId.LOGIN;
     case '#/developer':

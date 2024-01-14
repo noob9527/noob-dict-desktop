@@ -5,7 +5,7 @@ import { WindowId } from '../../common/window-id'
 import * as remoteMain from '@electron/remote/main'
 import { Runtime } from '../../electron-shared/runtime'
 import path from 'path'
-import { AbstractWindowManager } from './abstract-window-manager'
+import { AbstractWindowManager } from './window-manager'
 
 class SettingWindowManager extends AbstractWindowManager {
   id: WindowId = WindowId.SETTING

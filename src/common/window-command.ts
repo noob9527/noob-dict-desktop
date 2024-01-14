@@ -4,6 +4,8 @@ import { WindowId } from './window-id';
 @EnumClass
 class WindowCommand extends EnumFactory<WindowCommand>() {
   @EnumValue
+  static readonly open = new WindowCommand('open');
+  @EnumValue
   static readonly show = new WindowCommand('show');
   @EnumValue
   static readonly hide = new WindowCommand('hide');

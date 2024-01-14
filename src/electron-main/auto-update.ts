@@ -1,6 +1,6 @@
 import { autoUpdater } from 'electron-updater';
 // import log from 'electron-log';
-import { windowContainer } from './window/windows';
+import { windowManagerContainer } from './window/window-manager-container';
 import logger from '../electron-shared/logger';
 import { AutoUpdaterChannel } from '../electron-shared/ipc/ipc-channel-auto-updater';
 
@@ -37,6 +37,6 @@ function initialAutoUpdater() {
 
 function broadcast(channel: string, data?: any) {
   // log.info(channel, text);
-  windowContainer.broadcast(channel, data);
+  windowManagerContainer.broadcast(channel, data);
 }
 

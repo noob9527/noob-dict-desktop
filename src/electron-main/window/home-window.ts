@@ -11,7 +11,7 @@ import { WindowId } from '../../common/window-id'
 import * as remoteMain from '@electron/remote/main'
 import { Runtime } from '../../electron-shared/runtime'
 import { AppChannel } from '../../electron-shared/ipc/ipc-channel-app'
-import { AbstractWindowManager } from './abstract-window-manager'
+import { AbstractWindowManager } from './window-manager'
 
 class HomeWindowManager extends AbstractWindowManager {
   id: WindowId = WindowId.HOME
