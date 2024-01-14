@@ -7,8 +7,6 @@ class WindowId extends EnumFactory<WindowId>() {
   @EnumValue
   static readonly SETTING = new WindowId('SETTING')
   @EnumValue
-  static readonly POPUP = new WindowId('POPUP')
-  @EnumValue
   static readonly LOGIN = new WindowId('LOGIN')
   @EnumValue
   static readonly DEVELOPER = new WindowId('DEVELOPER')
