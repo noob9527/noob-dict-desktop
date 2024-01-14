@@ -2,25 +2,11 @@ import SplitPane from 'react-split-pane';
 import styled from 'styled-components';
 import ColorId from '../../styles/ColorId';
 
-const ThemedSplitPane = styled(SplitPane)`
-  // unset height: 100%
-  // unset min-height: 100%
-  height: unset !important;
-  min-height: unset !important;
-
-  // ---------------------------------
-  // this part may not suit for general situation
+// see: https://github.com/tomkp/react-split-pane
+const SettingPageSplitPane = styled(SplitPane)`
   &.SplitPane {
     position: unset !important;
   }
-  .Pane1 {
-    height: 100%;
-    overflow: hidden;
-  }
-  .Pane2 {
-    display: unset !important;
-  }
-  // ---------------------------------
   .Resizer {
     //background: #000;
     background: ${props => props.theme[ColorId.foreground]};
@@ -33,12 +19,12 @@ const ThemedSplitPane = styled(SplitPane)`
     -webkit-background-clip: padding;
     background-clip: padding-box;
   }
-  
+
   .Resizer:hover {
     -webkit-transition: all 2s ease;
     transition: all 2s ease;
   }
-  
+
   .Resizer.horizontal {
     height: 11px;
     margin: -5px 0;
@@ -47,14 +33,14 @@ const ThemedSplitPane = styled(SplitPane)`
     cursor: row-resize;
     width: 100%;
   }
-  
+
   .Resizer.horizontal:hover {
     //border-top: 5px solid rgba(0, 0, 0, 0.5);
     //border-bottom: 5px solid rgba(0, 0, 0, 0.5);
     border-top: 5px solid rgba(255, 255, 255, 0.5);
     border-bottom: 5px solid rgba(255, 255, 255, 0.5);
   }
-  
+
   .Resizer.vertical {
     width: 11px;
     margin: 0 -5px;
@@ -62,17 +48,19 @@ const ThemedSplitPane = styled(SplitPane)`
     border-right: 5px solid rgba(255, 255, 255, 0);
     cursor: col-resize;
   }
-  
+
   .Resizer.vertical:hover {
     border-left: 5px solid rgba(0, 0, 0, 0.5);
     border-right: 5px solid rgba(0, 0, 0, 0.5);
   }
+
   .Resizer.disabled {
     cursor: not-allowed;
   }
+
   .Resizer.disabled:hover {
     border-color: transparent;
   }
 `;
 
-export default ThemedSplitPane;
+export default SettingPageSplitPane;

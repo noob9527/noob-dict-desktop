@@ -22,8 +22,8 @@ function createWindow() {
   // https://electronjs.org/docs/api/browser-window#modal-windows
   const parent = homeWindowManager.getOrCreate()
   const window = new BrowserWindow({
-    width: Runtime.isDev ? 1200 : 400,
-    height: Runtime.isDev ? 600 : 200,
+    width: Runtime.isDev ? 1200 : 800,
+    height: Runtime.isDev ? 600 : 600,
     maximizable: false,
     minimizable: false,
 

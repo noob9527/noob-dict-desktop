@@ -10,7 +10,7 @@ import { SearchPanelMenu, SearchPanelMenuItem } from './panel/search-panel-menu'
 import { ThemedContent } from '../../components/themed-ui/content/content';
 import styled from 'styled-components';
 import SearchNote from './note/search-note';
-import ThemedSplitPane from './split-pane';
+import SearchPageSplitPane from './search-page-split-pane';
 import { SearchState, SPLIT_PANE_SIZE_MAX, SPLIT_PANE_SIZE_MIN } from './search-model';
 import _ from 'lodash';
 import { useParams } from 'react-router-dom';
@@ -113,7 +113,7 @@ export default () => {
           }
           {showSearchNote ?
             (
-              <ThemedSplitPane
+              <SearchPageSplitPane
                 primary="second"
                 split="horizontal"
                 minSize={SPLIT_PANE_SIZE_MIN}
@@ -124,7 +124,7 @@ export default () => {
               >
                 <SearchPanel/>
                 <SearchNote/>
-              </ThemedSplitPane>
+              </SearchPageSplitPane>
             )
             :
             (

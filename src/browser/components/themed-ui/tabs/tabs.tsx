@@ -1,3 +1,6 @@
+/**
+ * @see https://github.com/reactjs/react-tabs?tab=readme-ov-file#custom-components
+ */
 import React from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 // import './tabs.css';

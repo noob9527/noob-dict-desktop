@@ -1,77 +1,67 @@
-import React, { useRef } from 'react';
-import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
-import { ThemedCheckbox } from '../../components/themed-ui/input/checkbox';
-import { ThemedContent } from '../../components/themed-ui/content/content';
-import { ThemedInputShortcut } from '../../components/themed-ui/input/input-shortcut/themed-input-shortcut';
-import { EcdictLocationSetting } from './ecdict-location-setting';
-import { rendererContainer } from '../../../common/container/renderer-container';
-import { shell } from 'electron';
-import { AppService, AppServiceToken } from '../../../common/services/app-service';
-import { DbLocationSetting } from './db-location-setting';
-import { settingChange, useSettingStore } from './setting-store';
-const appService = rendererContainer.get<AppService>(AppServiceToken);
+import React from 'react'
+import styled from 'styled-components'
+import { ThemedContent } from '../../components/themed-ui/content/content'
+import SettingPageSplitPane from './setting-page-split-pane'
+// import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import {
+  Tab,
+  Tabs,
+  TabList,
+  TabPanel,
+} from '../../components/themed-ui/tabs/tabs'
+import ColorId from '../../styles/ColorId'
+import { GeneralSettingPage } from './general-setting-page'
+import { SyncSettingPage } from './sync-setting-page';
 
 const Container = styled.div`
   height: 100vh;
   padding: 20px;
+`
+
+const StyledTabs = styled(Tabs)`
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+`
+
+// @ts-ignore
+const StyledTabList = styled(TabList)`
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
-`;
+  background-color: ${(props) => props.theme[ColorId.background]};
+`
 
-const InlineContainer = styled.span`
-  display: inline-flex;
-  align-items: center;
-
-  > * + * {
-    margin-left: 10px;
-  }
-`;
-
-const userDataFolder = appService.getUserDataFolder();
+const StyledContent = styled.div`
+  margin: 20px;
+`
 
 const SettingPage = () => {
-  const {
-    appHotKey,
-    readClipboard,
-  } = useSettingStore()
-
   return (
     <ThemedContent>
       <Container>
-        <div>
-          <span>User Data Folder: </span>
-          <a
-            onClick={() => {
-              shell.showItemInFolder(userDataFolder);
-            }}
-            role="button"
-          >{userDataFolder}</a>
-        </div>
-        <DbLocationSetting/>
-        <EcdictLocationSetting/>
-        <ThemedCheckbox
-          checked={readClipboard}
-          onChange={event => {
-            settingChange({
-              readClipboard: event?.target?.checked!!,
-            })
-          }}>Read Clipboard</ThemedCheckbox>
-        <InlineContainer>
-          <span>hot key:</span>
-          <ThemedInputShortcut
-            value={appHotKey}
-            onChange={value => {
-              settingChange({
-                appHotKey: value,
-              })
-            }}
-          />
-        </InlineContainer>
+        <StyledTabs>
+          <SettingPageSplitPane
+            split="vertical"
+            minSize={120}
+          >
+            <StyledTabList>
+              <Tab>General</Tab>
+              <Tab>Auto Sync</Tab>
+            </StyledTabList>
+
+            <StyledContent>
+              <TabPanel>
+                <GeneralSettingPage />
+              </TabPanel>
+              <TabPanel>
+                <SyncSettingPage />
+              </TabPanel>
+            </StyledContent>
+          </SettingPageSplitPane>
+        </StyledTabs>
       </Container>
     </ThemedContent>
-  );
-};
+  )
+}
 
-export default SettingPage;
+export default SettingPage
