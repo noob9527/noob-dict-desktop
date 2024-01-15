@@ -6,9 +6,11 @@ import { registerUserChangeListener } from '../utils/api-axios'
 import { RootActions } from '../root-store'
 
 export const createReduxRootComponent = (store, history) => {
-  // store.dispatch({
-  //   type: 'root/init',
-  // });
+  // for backward compatibility
+  // todo: remove in future
+  store.dispatch({
+    type: 'root/init',
+  });
   registerStorageEventListener(store)
   registerUserChangeListener()
   // the order matters!

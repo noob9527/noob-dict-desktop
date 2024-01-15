@@ -64,6 +64,7 @@ function createWindow() {
   window.loadURL(getWindowHashUrl('main/search'))
 
   window.once('ready-to-show', () => {
+    logger.debug('ready-to-show')
     if (!process.argv.includes('--background')) {
       window.show()
     }
@@ -117,7 +118,7 @@ function createWindow() {
         logger.debug('no need sync search history on start in dev environment')
       } else {
         logger.debug('sync search history on start')
-        await autoSyncSearchHistory(1)
+        autoSyncSearchHistory(1)
       }
       // logger.debug('sync search history on start')
       // await autoSyncSearchHistory(1)

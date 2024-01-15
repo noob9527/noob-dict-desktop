@@ -32,9 +32,9 @@ const effects = {
     yield put({
       type: 'root/refreshUserFromStorage',
     });
-    yield put({
-      type: 'setting/init',
-    });
+    // yield put({
+    //   type: 'setting/init',
+    // });
   },
   * refreshUserFromStorage() {
     yield put({
