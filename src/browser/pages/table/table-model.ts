@@ -102,7 +102,7 @@ const effects = {
       },
     });
 
-    yield call([historyService, historyService.update], history);
+    yield call([historyService, historyService.update], history, true);
 
     yield put({
       type: 'table/finishSyncHistoryContext',

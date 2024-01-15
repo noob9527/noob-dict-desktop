@@ -82,7 +82,7 @@ const effects = {
     //   // to show the spinner...
     //   delay(1000),
     // ]);
-    yield call([historyService, historyService.update], history);
+    yield call([historyService, historyService.update], history, true);
 
     yield put({
       type: 'searchNote/finishSyncHistoryContext',

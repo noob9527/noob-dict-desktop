@@ -47,8 +47,9 @@ export interface HistoryService {
    * update history item in db
    * auto update its update_at property
    * @param history
+   * @param reset_update_at
    */
-  update(history: ISearchHistory): Promise<ISearchHistory>
+  update(history: ISearchHistory, reset_update_at: boolean): Promise<ISearchHistory>
 
   /**
    * find history items by text

@@ -126,11 +126,21 @@ export class MainHistoryService extends Delegate implements HistoryService {
   }
 
   @ipcAnswerRenderer(LOCAL_DB_HISTORY_PREFIX)
-  async update(history: ISearchHistory): Promise<ISearchHistory> {
+  async update(
+    history: ISearchHistory,
+    reset_update_at: boolean,
+  ): Promise<ISearchHistory> {
     this.log.debug(this.update.name, history);
 
-    history.update_at = new Date().valueOf();
+    if (reset_update_at) {
+      history.update_at = new Date().valueOf();
+    }
     const model = SearchHistoryModel.of(history);
+    // the doc says:
+    // If you change the value of some field of an instance,
+    // calling save again will update it accordingly.
+    // https://sequelize.org/docs/v6/core-concepts/model-instances/#updating-an-instance
+    // but it is not the case
     // somehow model.save() doesn't work here
     // it fire insert query instead of update query.
     await SearchHistoryModel.update({ ...model.toDTO() }, {

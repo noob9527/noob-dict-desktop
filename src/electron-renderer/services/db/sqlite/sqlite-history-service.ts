@@ -43,7 +43,7 @@ export class SqliteHistoryService implements HistoryService {
   }
 
   @ipcCallMain(LOCAL_DB_HISTORY_PREFIX)
-  update(history: ISearchHistory): Promise<ISearchHistory> {
+  update(history: ISearchHistory, reset_update_at: boolean): Promise<ISearchHistory> {
     return Promise.resolve({} as any);
   }
 

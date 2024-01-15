@@ -88,8 +88,8 @@ export class MainNoteService extends Delegate implements NoteService {
       .findByPk(history.id!!);
     if (existed) {
       this.log.debug(this.syncHistory.name, 'update history');
-      // we do not call this.historyService.update(history) as we don't want to change history.update_at
-      await SearchHistoryModel.of(history).save();
+      // we don't want to change history.update_at here
+      await this.historyService.update(history, false)
     } else {
       await this.addHistory(history);
     }
