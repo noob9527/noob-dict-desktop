@@ -21,7 +21,6 @@ import { WindowId } from '../../../common/window-id'
 import { devtools } from 'zustand/middleware'
 import { Runtime } from '../../../electron-shared/runtime'
 import { SyncHistoryChannel } from '../../../electron-shared/ipc/ipc-channel-sync-history'
-import Event = SyncHistoryChannel.Event
 
 const userService = rendererContainer.get<UserService>(UserServiceToken)
 const globalHistoryService = rendererContainer.get<GlobalHistoryService>(

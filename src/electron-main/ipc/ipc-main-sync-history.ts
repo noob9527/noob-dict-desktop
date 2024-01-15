@@ -18,7 +18,7 @@ ipcMain.answerRenderer(
 ipcMain.answerRenderer(
   SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_ERROR,
   (data: any) => {
-    logger.error(data.error)
+    logger.error(`error: ${data.error_message}`)
     globalState.isSyncing = false
   },
 )

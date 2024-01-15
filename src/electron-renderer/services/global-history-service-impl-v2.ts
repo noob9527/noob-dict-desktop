@@ -122,22 +122,29 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
           pushItemsToServer,
         )
       } catch (e) {
-        console.log(e)
+        methodLogger.error(e)
         await callback?.(
           SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_ERROR,
           {
             error: e,
           },
         )
+        // error might not be serializable
         await ipcRenderer.callMain(
           SyncHistoryChannel.Event.SYNC_SEARCH_HISTORY_EVENT_ERROR,
           {
-            error: e,
+            error_message: e instanceof Error ? e.message : null,
           },
         )
-        // terminate sync process
-        // should I break or throw error?
-        throw e
+        // somehow electron will try to send the error to main process
+        // if the error cannot be serialized, the following error will be thrown
+        // Error: An object could not be cloned.
+        // at o.send node:electron/js2c/renderer_init
+        // and the process stuck.
+        // somehow, we cannot handle the error in main process.
+        // hence, we handle the error here.
+        break
+        // throw e
       }
       remainingItems = response.total - response.count
       let remainingPages = Math.min(
