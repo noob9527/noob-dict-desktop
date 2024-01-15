@@ -1,14 +1,16 @@
 import { ipcMain } from 'electron-better-ipc'
 import { WindowId } from '../../common/window-id'
 import { WindowManager } from './window-manager'
-import { homeWindowManager } from './home-window';
-import { syncWindowManager } from './sync-window';
-import { loginWindowManager } from './login-window';
-import { settingWindowManager } from './setting-window';
-import { debugWindowManager } from './debug-window';
+import { homeWindowManager } from './home-window'
+import { syncWindowManager } from './sync-window'
+import { loginWindowManager } from './login-window'
+import { settingWindowManager } from './setting-window'
+import { debugWindowManager } from './debug-window'
+import logger from '../../electron-shared/logger'
 
 class WindowManagerContainer {
   private map: Map<WindowId, WindowManager> = new Map()
+  private log = logger.getLogger('WindowManagerContainer')
 
   add(id: WindowId, window: WindowManager): WindowManager {
     this.map.set(id, window)
@@ -24,9 +26,12 @@ class WindowManagerContainer {
   }
 
   broadcast(channel: string, data?: any): Promise<unknown> {
-    const promises = this.all().map((window) =>
-      ipcMain.callRenderer(window.getOrCreate(), channel, data),
-    )
+    this.log.debug(`[broadcast] channel: ${channel}, data: ${data}`)
+    const promises = this.all()
+      .filter((window) => window.created)
+      .map((window) =>
+        ipcMain.callRenderer(window.getOrCreate(), channel, data),
+      )
     return Promise.all(promises)
   }
 

@@ -6,7 +6,17 @@ import { ipcMain } from 'electron-better-ipc'
 import { WindowEvent } from '../../common/window-event'
 
 export interface WindowManager {
+  // e.g. if we want to broadcast an event
+  // we only broadcast to created window
   get created(): boolean
+
+  get window(): BrowserWindow | null
+
+  /**
+   * usually,
+   * most window auto 'show' when it is ready,
+   * hence, you can think of this method will also open the window.
+   */
   getOrCreate(): BrowserWindow
 
   open()
@@ -133,5 +143,9 @@ export abstract class AbstractWindowManager implements WindowManager {
 
   get logger() {
     return logger.getLogger(this.id.name)
+  }
+
+  get window(): BrowserWindow | null {
+    return this._window
   }
 }
