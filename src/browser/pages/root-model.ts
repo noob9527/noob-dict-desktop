@@ -8,7 +8,6 @@ import logger from '../../electron-shared/logger';
 import { User } from '../../common/model/user';
 import { LoginUiService, LoginUiServiceToken } from '../../common/services/login-ui-service';
 import { LoginChannel } from '../../electron-shared/ipc/ipc-channel-login';
-import { SettingActions } from './setting/setting-store';
 
 const appService = rendererContainer.get<AppService>(AppServiceToken);
 const userService = rendererContainer.get<UserService>(UserServiceToken);
@@ -33,7 +32,9 @@ const effects = {
     yield put({
       type: 'root/refreshUserFromStorage',
     });
-    yield call(SettingActions.init)
+    yield put({
+      type: 'setting/init',
+    });
   },
   * refreshUserFromStorage() {
     yield put({

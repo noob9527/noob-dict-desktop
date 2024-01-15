@@ -1,16 +1,15 @@
 import 'reflect-metadata';
-import  '../../browser/utils/axios';
 import { GlobalHistoryServiceImplV2 } from './global-history-service-impl-v2';
 import { MockHistoryService } from './db/mock/mock-history-service';
 import { MockNoteService } from './db/mock/mock-note-service';
 import { MockUserService } from './mock-user-service';
 import { MockAppService } from './mock-app-service';
-import axios from 'axios';
+import { apiAxios } from '../utils/api-axios'
 
 
 xdescribe('GlobalHistoryServiceImplV2', () => {
   beforeAll(() => {
-    axios.defaults.headers.common.tokenHeader = '';
+    apiAxios.defaults.headers.common.tokenHeader = '';
   });
 
   describe('syncHistories', () => {

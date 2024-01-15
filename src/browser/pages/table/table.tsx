@@ -15,6 +15,7 @@ const Container = styled.div`
   overflow: hidden;
 `;
 
+// @ts-ignore
 const TableContainer = styled(ThemedContent)`
   padding: 20px;
   height: 100%;

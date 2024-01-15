@@ -20,7 +20,6 @@ import {
   UserService,
   UserServiceToken,
 } from '../../common/services/user-service'
-import axios from 'axios'
 import { APP_CONSTANTS } from '../../common/app-constants'
 import { ISearchHistory, SearchHistory } from '../../common/model/history'
 import { AppService, AppServiceToken } from '../../common/services/app-service'
@@ -30,6 +29,7 @@ import { DexieHistoryService } from './db/dexie/dexie-history-service'
 import { ipcRenderer } from 'electron-better-ipc'
 import { SyncHistoryChannel } from '../../electron-shared/ipc/ipc-channel-sync-history'
 import { timer } from '../../common/utils/promise-extension'
+import { apiAxios } from '../utils/api-axios';
 
 interface SyncHistoriesRequestV2 {
   clientLastSyncTime: Date
@@ -252,7 +252,7 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
   async callSyncHistoryAPI(
     request: SyncHistoriesRequestV2,
   ): Promise<SyncHistoriesResponseV2> {
-    let res = await axios.patch(
+    let res = await apiAxios.patch(
       `${APP_CONSTANTS.API_PREFIX}/histories/v2`,
       request,
     )

@@ -2,11 +2,11 @@ import { UserService } from '../../common/services/user-service';
 import { User } from '../../common/model/user';
 import { injectable } from 'inversify';
 import { LoginOption } from '../../common/social-login';
-import axios from 'axios';
 import { LocalStorageService, LocalStorageServiceToken } from '../../common/services/local-storage-service';
 import { rendererContainer } from '../../common/container/renderer-container';
 import logger from '../../electron-shared/logger';
 import { AppService, AppServiceToken } from '../../common/services/app-service';
+import { apiAxios } from '../utils/api-axios';
 
 const USER_KEY = 'currentUser';
 
@@ -23,7 +23,7 @@ export class CorsUserService implements UserService {
   }
 
   async login(code: string, option: LoginOption): Promise<User> {
-    const res = await axios.post(option.tokenExchangeUrl, {
+    const res = await apiAxios.post(option.tokenExchangeUrl, {
       code,
       redirect_uri: option.params.redirect_uri
     });

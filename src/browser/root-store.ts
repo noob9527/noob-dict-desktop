@@ -12,6 +12,8 @@ import { createSelectors } from './zustand/create-selectors'
 import { SettingActions } from './pages/setting/setting-store'
 import logger from '../electron-shared/logger'
 import { LoginOption, LoginType } from '../common/social-login'
+import { devtools } from 'zustand/middleware'
+import { Runtime } from '../electron-shared/runtime'
 
 const appService = rendererContainer.get<AppService>(AppServiceToken)
 const userService = rendererContainer.get<UserService>(UserServiceToken)
@@ -37,7 +39,12 @@ const initialState: RootState = {
   currentUser: null,
   lastEvaluatedUpdateAt: null,
 }
-const useRootStoreBase = create<RootState>()(() => initialState)
+const useRootStoreBase = create<RootState>()(
+  devtools(() => initialState, {
+    name: 'root',
+    enabled: Runtime.isDev,
+  }),
+)
 export const useRootStore = createSelectors(useRootStoreBase)
 
 export namespace RootActions {

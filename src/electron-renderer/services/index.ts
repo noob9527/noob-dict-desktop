@@ -36,6 +36,9 @@ import { LocalDbService, LocalDbServiceToken } from '../../common/services/db/lo
 import { SqliteLocalDbService } from './db/sqlite/sqlite-local-db-service';
 import { SqliteHistoryService } from './db/sqlite/sqlite-history-service';
 import { SqliteNoteService } from './db/sqlite/sqlite-note-service';
+import { type AxiosInstance } from 'axios';
+import { ApiAxiosToken } from '../../common/services/api-service';
+import { apiAxios } from '../utils/api-axios';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -62,6 +65,8 @@ function registerAllService() {
   rendererContainer.bind<LocalDbService>(LocalDbServiceToken).to(SqliteLocalDbService);
   rendererContainer.bind<HistoryService>(LocalHistoryServiceToken).to(SqliteHistoryService);
   rendererContainer.bind<NoteService>(LocalNoteServiceToken).to(SqliteNoteService);
+
+  rendererContainer.bind<AxiosInstance>(ApiAxiosToken).toConstantValue(apiAxios)
 }
 
 registerAllService();
