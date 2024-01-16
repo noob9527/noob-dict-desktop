@@ -79,7 +79,7 @@
     "electron-better-ipc": "^2.0.1",
     "electron-builder": "^23.1.0",
     "electron-context-menu": "^0.15.0",
-    "electron-log": "^4.1.0",
+    "electron-log": "^5.0.3",
     "electron-store": "^8.0.2",
     "electron-updater": "^5.0.5",
     "history": "^4.10.1",
