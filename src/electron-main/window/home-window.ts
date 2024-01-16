@@ -42,7 +42,10 @@ function createWindow() {
     },
 
     // https://www.electronjs.org/docs/api/browser-window#showing-window-gracefully
-    show: false, // not show until window is ready
+    // not show until window is ready
+    // show: false,
+    // somehow, 'ready-to-show' doesn't fire in mac dev
+    show: Runtime.isDev,
     backgroundColor: '#2e2c29',
 
     // doesn't work on linux
