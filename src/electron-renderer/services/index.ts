@@ -39,6 +39,10 @@ import { SqliteNoteService } from './db/sqlite/sqlite-note-service';
 import { type AxiosInstance } from 'axios';
 import { ApiAxiosToken } from '../../common/services/api-service';
 import { apiAxios } from '../utils/api-axios';
+import { OpenAILLMService, OpenAILLMServiceToken } from '../../common/services/llm/open-ai-llm-service';
+import { OpenAILLMServiceImpl } from './llm/openai-llm-service-impl';
+import { GeminiLLMService, GeminiLLMServiceToken } from '../../common/services/llm/gemini-llm-service';
+import { GeminiLLMServiceImpl } from './llm/gemini-llm-service-impl';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -67,6 +71,10 @@ function registerAllService() {
   rendererContainer.bind<NoteService>(LocalNoteServiceToken).to(SqliteNoteService);
 
   rendererContainer.bind<AxiosInstance>(ApiAxiosToken).toConstantValue(apiAxios)
+
+  // llm
+  rendererContainer.bind<OpenAILLMService>(OpenAILLMServiceToken).to(OpenAILLMServiceImpl);
+  rendererContainer.bind<GeminiLLMService>(GeminiLLMServiceToken).to(GeminiLLMServiceImpl);
 }
 
 registerAllService();

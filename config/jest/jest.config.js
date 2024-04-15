@@ -31,7 +31,9 @@ const common = {
     "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "<rootDir>/config/jest/fileTransform.js"
   },
   "transformIgnorePatterns": [
-    "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
+    // somehow I need to comment this line out
+    // to make gemini-llm-service-impl.test.ts work
+    // "[/\\\\]node_modules[/\\\\].+\\.(js|jsx|ts|tsx)$",
     "^.+\\.module\\.(css|sass|scss)$"
   ],
   "modulePaths": [],

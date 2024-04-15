@@ -11,6 +11,8 @@ import { createSelectors } from '../../zustand/create-selectors'
 import { devtools } from 'zustand/middleware'
 import { Runtime } from '../../../electron-shared/runtime'
 import { debounce, pick } from 'lodash';
+import { OpenAILLMService, OpenAILLMServiceToken } from '../../../common/services/llm/open-ai-llm-service';
+import { GeminiLLMService, GeminiLLMServiceToken } from '../../../common/services/llm/gemini-llm-service';
 
 interface SettingState extends UserProfile {
   persisted: UserProfile
@@ -26,6 +28,10 @@ const initData: UserProfile = {
   'search.syncHistory.syncOnQuit': true,
   'search.syncHistory.syncOnStart': true,
   'search.syncHistory.syncIntervalMinutes': -1,
+
+  'llm.openai.base_url': null,
+  'llm.openai.api_key': null,
+  'llm.gemini.api_key': null,
 }
 
 const initialState: SettingState = {
@@ -115,6 +121,35 @@ export function settingChanged(
         newValue.ecDictFileLocation,
       )
       setLocalDbAvailable().then()
+    }
+  }
+
+  if (
+    oldValue?.['llm.openai.base_url'] != newValue['llm.openai.base_url'] ||
+    oldValue?.['llm.openai.api_key'] != newValue['llm.openai.api_key']
+  ) {
+    if (!!newValue['llm.openai.base_url']) {
+      const openAILLMService =
+        rendererContainer.get<OpenAILLMService>(OpenAILLMServiceToken)
+      openAILLMService.init(
+        {
+          baseUrl: newValue['llm.openai.base_url']!!,
+          apiKey: newValue?.['llm.openai.api_key'],
+        },
+      )
+    }
+  }
+  if (
+    oldValue?.['llm.gemini.api_key'] != newValue['llm.gemini.api_key']
+  ) {
+    if (!!newValue['llm.gemini.api_key']) {
+      const geminiLLMService =
+        rendererContainer.get<GeminiLLMService>(GeminiLLMServiceToken)
+      geminiLLMService.init(
+        {
+          apiKey: newValue?.['llm.gemini.api_key'],
+        },
+      )
     }
   }
 }

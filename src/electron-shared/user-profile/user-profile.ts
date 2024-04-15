@@ -11,4 +11,10 @@ export interface UserProfile {
 
   // sync interval in background, set to negative to disable
   'search.syncHistory.syncIntervalMinutes': number
+
+  // openai
+  'llm.openai.base_url': string | null
+  'llm.openai.api_key': string | null
+  // gemini
+  'llm.gemini.api_key': string | null,
 }

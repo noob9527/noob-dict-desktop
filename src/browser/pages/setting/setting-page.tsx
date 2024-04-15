@@ -12,6 +12,7 @@ import {
 import ColorId from '../../styles/ColorId'
 import { GeneralSettingPage } from './general/general-setting-page'
 import { SyncSettingPage } from './sync/sync-setting-page';
+import { LLMSettingPage } from './llm/llm-setting-page';
 
 const Container = styled.div`
   height: 100vh;
@@ -42,11 +43,12 @@ const SettingPage = () => {
         <StyledTabs>
           <SettingPageSplitPane
             split="vertical"
-            minSize={120}
+            minSize={190}
           >
             <StyledTabList>
               <Tab>General</Tab>
               <Tab>Auto Sync</Tab>
+              <Tab>Large Language Model</Tab>
             </StyledTabList>
 
             <StyledContent>
@@ -55,6 +57,9 @@ const SettingPage = () => {
               </TabPanel>
               <TabPanel>
                 <SyncSettingPage />
+              </TabPanel>
+              <TabPanel>
+                <LLMSettingPage />
               </TabPanel>
             </StyledContent>
           </SettingPageSplitPane>
