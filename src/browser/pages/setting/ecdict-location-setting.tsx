@@ -3,7 +3,7 @@ import React, { useRef } from 'react'
 import { UserProfile } from '../../../electron-shared/user-profile/user-profile'
 import styled from 'styled-components'
 import { shell } from 'electron'
-import { Icon } from 'antd'
+import { Button, Icon } from 'antd';
 import { settingChange, useSettingStore } from './setting-store'
 import { useTransientStore } from '../transient-store'
 
@@ -12,6 +12,22 @@ const Container = styled.div`
     //margin: 0 5px;
     margin-right: 8px;
   }
+`
+
+const ClearButton = styled(Button)`
+
+  &.ant-btn-sm {
+    width: 17px;
+    min-width: 17px;
+    height: 17px;
+    font-size: 7px;
+  }
+  margin-left: 8px;
+  display: inline-block;
+  vertical-align: middle;
+  //.anticon {
+  //  line-height: 14px;
+  //}
 `
 
 export const EcdictLocationSetting = () => {
@@ -49,6 +65,20 @@ export const EcdictLocationSetting = () => {
           ? ecDictFileLocation
           : 'Click to Set Correct Location'}
       </a>
+
+      {ecDictFileLocation ? (
+        <ClearButton
+          shape="circle"
+          icon="minus"
+          ghost
+          size="small"
+          onClick={() => {
+            settingChange({
+              ecDictFileLocation: null,
+            })
+          }}
+        />
+      ) : null}
 
       <input
         type="file"

@@ -8,7 +8,7 @@ export interface SettingService {
   // called by setting window
   // -> setting window
   // -> ElectronSettingService.sendSettingChange
-  // -> src/electron-main/setting.ts
+  // -> src/electron-main/setting.ts handleSettingChange
   // -> src/browser/ipc-renderer.ts registerStorageEventListener
   // -> ElectronSettingService.handleSettingChange
   sendSettingChange(newValue: UserProfile, oldValue: UserProfile): Promise<UserProfile>

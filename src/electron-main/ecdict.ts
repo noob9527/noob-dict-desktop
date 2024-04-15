@@ -6,13 +6,15 @@ let ecDict: EcDict | null = null;
 
 export function handleEcDictFileLocationChange(newValue: string | null, oldValue: string | null = null) {
   if (newValue===oldValue) return newValue;
+  logger.log('Ecdict file location has been set to: ' + newValue);
   if (newValue) {
-    logger.log('Ecdict file location has been set to: ' + newValue);
     try {
       ecDict = new EcDict(newValue);
     } catch (e) {
       ecDict = null;
     }
+  } else {
+    ecDict = null;
   }
 }
 

@@ -42,7 +42,7 @@ function registerStorageEventListener(store: Store) {
       type: 'setting/settingChanged',
       payload: data.newValue,
     })
-    settingChanged(data.newValue)
+    settingChanged(data.oldValue, data.newValue)
     return data.newValue
   })
 
