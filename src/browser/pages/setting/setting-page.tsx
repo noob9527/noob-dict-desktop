@@ -10,8 +10,8 @@ import {
   TabPanel,
 } from '../../components/themed-ui/tabs/tabs'
 import ColorId from '../../styles/ColorId'
-import { GeneralSettingPage } from './general-setting-page'
-import { SyncSettingPage } from './sync-setting-page';
+import { GeneralSettingPage } from './general/general-setting-page'
+import { SyncSettingPage } from './sync/sync-setting-page';
 
 const Container = styled.div`
   height: 100vh;

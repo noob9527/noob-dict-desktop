@@ -1,7 +1,7 @@
-import { settingChange, useSettingStore } from './setting-store'
+import { settingChange, useSettingStore } from '../setting-store'
 import React from 'react'
 import styled from 'styled-components'
-import { ThemedCheckbox } from '../../components/themed-ui/input/checkbox'
+import { ThemedCheckbox } from '../../../components/themed-ui/input/checkbox'
 
 const Container = styled.div`
   > div {

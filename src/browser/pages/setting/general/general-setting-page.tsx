@@ -1,15 +1,15 @@
-import { settingChange, useSettingStore } from './setting-store'
+import { settingChange, useSettingStore } from '../setting-store'
 import { shell } from 'electron'
 import { DbLocationSetting } from './db-location-setting'
 import { EcdictLocationSetting } from './ecdict-location-setting'
-import { ThemedCheckbox } from '../../components/themed-ui/input/checkbox'
-import { ThemedInputShortcut } from '../../components/themed-ui/input/input-shortcut/themed-input-shortcut'
+import { ThemedCheckbox } from '../../../components/themed-ui/input/checkbox'
+import { ThemedInputShortcut } from '../../../components/themed-ui/input/input-shortcut/themed-input-shortcut'
 import React from 'react'
-import { rendererContainer } from '../../../common/container/renderer-container'
+import { rendererContainer } from '../../../../common/container/renderer-container'
 import {
   AppService,
   AppServiceToken,
-} from '../../../common/services/app-service'
+} from '../../../../common/services/app-service'
 import styled from 'styled-components'
 
 const appService = rendererContainer.get<AppService>(AppServiceToken)

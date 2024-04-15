@@ -1,14 +1,14 @@
 import React, { useRef } from 'react';
-import { TransientState } from '../transient-model';
+import { TransientState } from '../../transient-model';
 import { useDispatch, useSelector } from 'react-redux';
 import styled from 'styled-components';
 import { Icon } from 'antd';
-import { UserProfile } from '../../../electron-shared/user-profile/user-profile';
-import { ThemedButton } from '../../components/themed-ui/button/button';
-import { rendererContainer } from '../../../common/container/renderer-container';
-import { LocalDbService, LocalDbServiceToken } from '../../../common/services/db/local-db-service';
-import { settingChange, useSettingStore } from './setting-store';
-import { useTransientStore } from '../transient-store';
+import { UserProfile } from '../../../../electron-shared/user-profile/user-profile';
+import { ThemedButton } from '../../../components/themed-ui/button/button';
+import { rendererContainer } from '../../../../common/container/renderer-container';
+import { LocalDbService, LocalDbServiceToken } from '../../../../common/services/db/local-db-service';
+import { settingChange, useSettingStore } from '../setting-store';
+import { useTransientStore } from '../../transient-store';
 
 const localDbService = rendererContainer.get<LocalDbService>(LocalDbServiceToken);
 

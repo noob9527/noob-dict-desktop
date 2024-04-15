@@ -1,11 +1,11 @@
-import { ThemedButton } from '../../components/themed-ui/button/button'
+import { ThemedButton } from '../../../components/themed-ui/button/button'
 import React, { useRef } from 'react'
-import { UserProfile } from '../../../electron-shared/user-profile/user-profile'
+import { UserProfile } from '../../../../electron-shared/user-profile/user-profile'
 import styled from 'styled-components'
 import { shell } from 'electron'
-import { Button, Icon } from 'antd';
-import { settingChange, useSettingStore } from './setting-store'
-import { useTransientStore } from '../transient-store'
+import { Button, Icon } from 'antd'
+import { settingChange, useSettingStore } from '../setting-store'
+import { useTransientStore } from '../../transient-store'
 
 const Container = styled.div`
   .status-icon {
