@@ -10,8 +10,14 @@ import { setEcDictAvailable, setLocalDbAvailable } from '../transient-store'
 import { createSelectors } from '../../zustand/create-selectors'
 import { devtools } from 'zustand/middleware'
 import { Runtime } from '../../../electron-shared/runtime'
+import { debounce, pick } from 'lodash';
 
-const initialState: UserProfile = {
+interface SettingState extends UserProfile {
+  persisted: UserProfile
+  isChanging: boolean
+}
+
+const initData: UserProfile = {
   appHotKey: '',
   readClipboard: false,
   ecDictFileLocation: null,
@@ -22,10 +28,22 @@ const initialState: UserProfile = {
   'search.syncHistory.syncIntervalMinutes': -1,
 }
 
+const initialState: SettingState = {
+  persisted: initData,
+  isChanging: false,
+  ...initData,
+}
+
+const userProfileKeys = Object.keys(initData) as (Array<keyof UserProfile>)
+
+function stateToProfile(state: UserProfile): UserProfile {
+  return pick(state, userProfileKeys)
+}
+
 const settingService =
   rendererContainer.get<SettingService>(SettingServiceToken)
 
-const useSettingStoreBase = create<UserProfile>()(
+const useSettingStoreBase = create<SettingState>()(
   devtools(() => initialState, {
     name: 'setting',
     enabled: Runtime.isDev,
@@ -33,14 +51,12 @@ const useSettingStoreBase = create<UserProfile>()(
 )
 export const useSettingStore = createSelectors(useSettingStoreBase)
 
-export async function settingChange(patch: Partial<UserProfile>) {
-  const oldValue = useSettingStoreBase.getState()
-  const newValue = { ...oldValue, ...patch }
-  logger.log('setting change', oldValue, newValue)
-  return settingService.sendSettingChange(
-    newValue,
-    oldValue,
-  )
+const debouncedSendSettingChange = debounce((
+  oldValue: UserProfile,
+  newValue: UserProfile,
+) => {
+  const newProfile = stateToProfile(newValue)
+  return settingService.sendSettingChange(newProfile, oldValue)
   // we don't call settingChanged here,
   // because we will receive SETTING_CHANGED notification.
   // const actualNewValue = await settingService.sendSettingChange(
@@ -48,6 +64,18 @@ export async function settingChange(patch: Partial<UserProfile>) {
   //   oldValue,
   // )
   // settingChanged(oldValue, actualNewValue)
+}, 1000)
+
+export async function settingChange(patch: Partial<UserProfile>) {
+  const oldValue = useSettingStoreBase.getState()
+  const newValue = {
+    ...oldValue,
+    ...patch,
+    isChanging: true,
+  }
+  useSettingStoreBase.setState((_) => newValue)
+  logger.log('setting change', oldValue, newValue)
+  return debouncedSendSettingChange(oldValue, newValue)
 }
 
 /**
@@ -61,15 +89,24 @@ export function settingChanged(
   oldValue: UserProfile | null,
   newValue: UserProfile,
 ) {
-  useSettingStoreBase.setState(
-    (state) => ({ ...state, ...newValue })
-  )
+  useSettingStoreBase.setState((state) => ({
+    ...state,
+    ...newValue,
+    persisted: newValue,
+    isChanging: false,
+  }))
+  logger.log('setting changed', oldValue, newValue)
+
   if (oldValue?.ecDictFileLocation != newValue.ecDictFileLocation) {
-    logger.log('detect "ecDictFileLocation" updated, about to call setEcDictAvailable')
+    logger.log(
+      'detect "ecDictFileLocation" updated, about to call setEcDictAvailable',
+    )
     setEcDictAvailable().then()
   }
   if (oldValue?.dbFileLocation != newValue.dbFileLocation) {
-    logger.log('detect "dbFileLocation" updated, about to call setLocalDbAvailable')
+    logger.log(
+      'detect "dbFileLocation" updated, about to call setLocalDbAvailable',
+    )
     setLocalDbAvailable().then()
   }
 }

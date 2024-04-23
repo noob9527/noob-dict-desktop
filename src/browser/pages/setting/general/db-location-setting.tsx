@@ -24,7 +24,7 @@ interface DbLocationSettingProps {
 
 export const DbLocationSetting = (props: DbLocationSettingProps) => {
   const localDbAvailable  = useTransientStore.use.localDbAvailable()
-  const  dbFileLocation  = useSettingStore.use.dbFileLocation()
+  const dbFileLocation  = useSettingStore.use.dbFileLocation()
   let ref1 = useRef<HTMLInputElement>(null);
   return (
     <Container>
