@@ -5,5 +5,5 @@ export function useDebounceCallback<T extends (...args: any[]) => any>(
   callback: T,
   delay: number,
 ): DebouncedFunc<T> {
-  return useCallback(debounce(callback, delay), [])
+  return useCallback(debounce(callback, delay), [delay])
 }

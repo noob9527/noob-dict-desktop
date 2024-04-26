@@ -4,7 +4,7 @@ import { StringOutputParser } from '@langchain/core/output_parsers'
 import { Runnable, RunnableConfig } from '@langchain/core/runnables'
 import { GeminiLLMService, GeminiModelOption } from '../../../common/services/llm/gemini-llm-service';
 import { ChatGoogleGenerativeAI } from '@langchain/google-genai';
-import { enWriteSuggestionPrompt, wordEnToCnPrompt } from './prompts';
+import { enWriteSuggestionPrompt, textAreaEnToCnPrompt, wordEnToCnPrompt } from './prompts';
 import { injectable } from 'inversify';
 
 @injectable()
@@ -34,6 +34,16 @@ export class GeminiLLMServiceImpl implements GeminiLLMService {
 
   async wordEnToCn(text: string): Promise<IterableReadableStream<string>> {
     return this.wordEnToCnChain.stream({ text })
+  }
+
+  get textAreaEnToCnChain(): Runnable<any, string> {
+    return textAreaEnToCnPrompt
+      .pipe(this.model)
+      .pipe(this.outputParser)
+  }
+
+  async textAreaEnToCn(text: string): Promise<IterableReadableStream<string>> {
+    return this.textAreaEnToCnChain.stream({ text })
   }
 
   get writeSuggestionPrompt(): ChatPromptTemplate {

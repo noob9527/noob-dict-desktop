@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import SearchNote from './note/search-note';
 import SearchPageSplitPane from './search-page-split-pane';
 import { SearchState, SPLIT_PANE_SIZE_MAX, SPLIT_PANE_SIZE_MIN } from './search-model';
-import _ from 'lodash';
+import { debounce } from 'lodash';
 import { useParams } from 'react-router-dom';
 import { SearchResultType } from '@noob9527/noob-dict-core';
 import { NetworkEngineId } from '@noob9527/noob-dict-net-engines';
@@ -80,7 +80,7 @@ export default () => {
       },
     });
   };
-  const debounced = useCallback(_.debounce(handleUpdateSize, 200), []);
+  const debounced = useCallback(debounce(handleUpdateSize, 200), []);
 
   const engineMenuItems = Object.keys(searchPanelState.searchResultMap)
     .filter(e => !!e)

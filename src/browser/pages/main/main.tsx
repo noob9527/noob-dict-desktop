@@ -8,6 +8,8 @@ import { Icon } from 'antd';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { TablePage } from '../table/table';
+import { TranslatePage } from '../textarea/translate/translate-page';
+import { WriteSuggestionPage } from '../textarea/write-suggestion/write-suggestion-page';
 
 const Container = styled.div`
   width: 100%;
@@ -66,6 +68,20 @@ const MainPage: React.FC = () => {
             {/*  /!*<Link to={`${url}/chart`}>chart</Link>*!/*/}
             {/*  <StyledIcon type={'pie-chart'}/>*/}
             {/*</MainMenuItem>*/}
+            <MainMenuItem
+              key={'translate'}
+              active={location.pathname.includes('translate')}
+              onClick={() => goto('translate')}
+            >
+              <StyledIcon type={'swap'}/>
+            </MainMenuItem>
+            <MainMenuItem
+              key={'write_suggestion'}
+              active={location.pathname.includes('write_suggestion')}
+              onClick={() => goto('write_suggestion')}
+            >
+              <StyledIcon type={'form'}/>
+            </MainMenuItem>
           </MainMenu>
         </SideBar>
         <Content>
@@ -73,6 +89,8 @@ const MainPage: React.FC = () => {
             <Route path={`${path}/search`} component={SearchPage}/>
             <Route path={`${path}/table`} component={TablePage}/>
             <Route path={`${path}/chart`} component={App}/>
+            <Route path={`${path}/translate`} component={TranslatePage}/>
+            <Route path={`${path}/write_suggestion`} component={WriteSuggestionPage}/>
             <Route component={SearchPage}/>
           </Switch>
         </Content>

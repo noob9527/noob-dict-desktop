@@ -12,6 +12,7 @@ enum ColorId {
   // input
   input_foreground = 'input.foreground',
   input_background = 'input.background',
+  input_disableBackground = 'input.disableBackground',
   input_border = 'input.border',
 
   // button
@@ -37,4 +38,4 @@ enum ColorId {
   dropdown_border = 'dropdown.border',
 }
 
-export default ColorId;
+export default ColorId
