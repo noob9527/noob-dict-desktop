@@ -84,6 +84,7 @@
     "electron-log": "^5.0.3",
     "electron-store": "^8.0.2",
     "electron-updater": "^5.0.5",
+    "franc-min": "^6.2.0",
     "history": "^4.10.1",
     "identity-obj-proxy": "3.0.0",
     "inversify": "^5.0.1",
