@@ -42,6 +42,10 @@ I want you to only reply the correction, the improvements and nothing else, do n
 I: {text}
 `
 
+export const textAreaToEnPrompt = ChatPromptTemplate.fromMessages([
+  ['human', textAreaToEnPromptText],
+])
+
 export const textAreaEnToCnPrompt = ChatPromptTemplate.fromMessages([
   ['human', textAreaEnToCnPromptText],
 ])

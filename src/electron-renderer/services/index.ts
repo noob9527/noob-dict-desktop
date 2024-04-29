@@ -43,6 +43,10 @@ import { OpenAILLMService, OpenAILLMServiceToken } from '../../common/services/l
 import { OpenAILLMServiceImpl } from './llm/openai-llm-service-impl';
 import { GeminiLLMService, GeminiLLMServiceToken } from '../../common/services/llm/gemini-llm-service';
 import { GeminiLLMServiceImpl } from './llm/gemini-llm-service-impl';
+import { FakeLLMService, FakeLLMServiceToken } from '../../common/services/llm/fake-llm-service';
+import { FakeLLMServiceImpl } from './llm/fake-llm-service-impl';
+import { RouterLLMServiceImpl } from './llm/router-llm-service-impl';
+import { LLMService, RouterLLMServiceToken } from '../../common/services/llm/llm-service';
 
 function registerAllService() {
   rendererContainer.bind<ClipboardService>(ClipboardServiceToken).to(ClipboardServiceImpl);
@@ -75,6 +79,8 @@ function registerAllService() {
   // llm
   rendererContainer.bind<OpenAILLMService>(OpenAILLMServiceToken).to(OpenAILLMServiceImpl);
   rendererContainer.bind<GeminiLLMService>(GeminiLLMServiceToken).to(GeminiLLMServiceImpl);
+  rendererContainer.bind<FakeLLMService>(FakeLLMServiceToken).to(FakeLLMServiceImpl);
+  rendererContainer.bind<LLMService>(RouterLLMServiceToken).to(RouterLLMServiceImpl);
 }
 
 registerAllService();

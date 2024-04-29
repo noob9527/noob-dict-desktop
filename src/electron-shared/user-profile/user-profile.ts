@@ -15,6 +15,8 @@ export interface UserProfile {
   // openai
   'llm.openai.base_url': string | null
   'llm.openai.api_key': string | null
+  'llm.openai.model_name': string | null
+
   // gemini
   'llm.gemini.api_key': string | null,
 }

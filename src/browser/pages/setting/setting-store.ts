@@ -31,6 +31,8 @@ const initData: UserProfile = {
 
   'llm.openai.base_url': null,
   'llm.openai.api_key': null,
+  'llm.openai.model_name': null,
+
   'llm.gemini.api_key': null,
 }
 
@@ -126,17 +128,22 @@ export function settingChanged(
 
   if (
     oldValue?.['llm.openai.base_url'] != newValue['llm.openai.base_url'] ||
+    oldValue?.['llm.openai.model_name'] != newValue['llm.openai.model_name'] ||
     oldValue?.['llm.openai.api_key'] != newValue['llm.openai.api_key']
   ) {
-    if (!!newValue['llm.openai.base_url']) {
-      const openAILLMService =
-        rendererContainer.get<OpenAILLMService>(OpenAILLMServiceToken)
-      openAILLMService.init(
-        {
-          baseUrl: newValue['llm.openai.base_url']!!,
-          apiKey: newValue?.['llm.openai.api_key'],
-        },
+    if (
+      newValue?.['llm.openai.base_url'] ||
+      newValue?.['llm.openai.model_name'] ||
+      newValue?.['llm.openai.api_key']
+    ) {
+      const openAILLMService = rendererContainer.get<OpenAILLMService>(
+        OpenAILLMServiceToken,
       )
+      openAILLMService.init({
+        baseURL: newValue['llm.openai.base_url'],
+        model: newValue['llm.openai.model_name'],
+        apiKey: newValue['llm.openai.api_key'],
+      })
     }
   }
   if (

@@ -1,8 +1,9 @@
+import 'reflect-metadata'
 import { GeminiLLMServiceImpl } from './gemini-llm-service-impl';
 
 const GEMINI_API_KEY= process.env['GEMINI_API_KEY']
 
-describe('GeminiLLMServiceImpl', () => {
+xdescribe('GeminiLLMServiceImpl', () => {
   describe('init', () => {
     it('basic case', async () => {
       const service = new GeminiLLMServiceImpl()

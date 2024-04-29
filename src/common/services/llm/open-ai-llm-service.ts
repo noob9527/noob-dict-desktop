@@ -1,20 +1,13 @@
-import { ChatPromptTemplate } from '@langchain/core/prompts'
-import { IterableReadableStream } from '@langchain/core/utils/stream'
+import { LLMService } from './llm-service'
 
 export const OpenAILLMServiceToken = Symbol.for('open-ai-llm-service')
 
 export interface OpenAIModelOption {
-  baseUrl: string
+  baseURL?: string | null
+  model?: string | null
   apiKey?: string | null
 }
 
-export interface OpenAILLMService {
+export interface OpenAILLMService extends LLMService {
   init(option: OpenAIModelOption)
-
-  translate(text: string): Promise<IterableReadableStream<string>>
-
-  writeSuggestion(text: string): Promise<IterableReadableStream<string>>
-
-  translatePrompt: ChatPromptTemplate
-  writeSuggestionPrompt: ChatPromptTemplate
 }

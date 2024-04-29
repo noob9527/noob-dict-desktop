@@ -10,5 +10,11 @@ export function getDefaultUserProfile(): UserProfile {
     'search.syncHistory.syncIntervalMinutes': 60,
     'search.syncHistory.syncOnQuit': true,
     'search.syncHistory.syncOnStart': true,
+
+    'llm.openai.base_url': null,
+    'llm.openai.api_key': null,
+    'llm.openai.model_name': null,
+    // gemini
+    'llm.gemini.api_key': null,
   }
 }
