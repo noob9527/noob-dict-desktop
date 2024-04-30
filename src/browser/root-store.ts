@@ -47,9 +47,12 @@ const useRootStoreBase = create<RootState>()(
 )
 export const useRootStore = createSelectors(useRootStoreBase)
 
+const log = logger.getLogger('RootActions')
+
 export namespace RootActions {
   export async function init() {
     await reloadCurrentUserFromStorage()
+    log.log('init')
     await SettingActions.init()
   }
 

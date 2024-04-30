@@ -18,7 +18,7 @@ export class LocalDB {
     newValue: string | null,
     oldValue: string | null = null
   ) {
-    if (newValue==null)
+    if (!newValue)
       LocalDB.noobDictDB = null;
     else if (newValue===oldValue)
       return newValue;

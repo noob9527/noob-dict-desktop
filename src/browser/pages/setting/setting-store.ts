@@ -97,17 +97,25 @@ export function settingChanged(
   }))
   logger.log('setting changed', oldValue, newValue)
 
-  if (oldValue?.ecDictFileLocation != newValue.ecDictFileLocation) {
-    logger.log(
-      'detect "ecDictFileLocation" updated, about to call setEcDictAvailable',
-    )
-    setEcDictAvailable().then()
-  }
-  if (oldValue?.dbFileLocation != newValue.dbFileLocation) {
-    logger.log(
-      'detect "dbFileLocation" updated, about to call setLocalDbAvailable',
-    )
-    setLocalDbAvailable().then()
+  // tmp fix:
+  // current change any code will trigger settingChanged
+  if(!Runtime.isDev) {
+    if (oldValue?.ecDictFileLocation != newValue.ecDictFileLocation) {
+      logger.log(
+        'detect "ecDictFileLocation" updated, about to call setEcDictAvailable',
+        oldValue?.ecDictFileLocation,
+        newValue.ecDictFileLocation,
+      )
+      setEcDictAvailable().then()
+    }
+    if (oldValue?.dbFileLocation != newValue.dbFileLocation) {
+      logger.log(
+        'detect "dbFileLocation" updated, about to call setLocalDbAvailable',
+        oldValue?.ecDictFileLocation,
+        newValue.ecDictFileLocation,
+      )
+      setLocalDbAvailable().then()
+    }
   }
 }
 
