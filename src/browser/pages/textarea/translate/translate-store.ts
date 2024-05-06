@@ -9,9 +9,14 @@ import {
 } from '../../../../common/services/llm/gemini-llm-service'
 import { debounce } from 'lodash'
 import { mockStream, textPlaceholder } from '../utils'
+import { detect, Language } from '../../../../common/utils/lan-detector';
 
 interface TranslateState {
   raw: string
+
+  detectedRawLanguage: Language | null,
+  rawLanguage: Language | null,
+
   translatedText: string
   changing: boolean
   generating: boolean
@@ -20,6 +25,10 @@ interface TranslateState {
 
 const initialState: TranslateState = {
   raw: textPlaceholder,
+
+  detectedRawLanguage:  null,
+  rawLanguage: null,
+
   translatedText: textPlaceholder,
   changing: false,
   generating: false,
@@ -91,8 +100,16 @@ export namespace TranslateActions {
     })
   }
 
-  export const debouncedTranslate = debounce(translate, 1000)
-  export const debouncedMockTranslate = debounce(mockTranslate, 1000)
+  function detectLanguage(rawText: string) {
+    const lan = detect(rawText)
+    useTranslateStore.setState({
+      detectedRawLanguage: lan
+    })
+  }
+
+  const debouncedTranslate = debounce(translate, 1000)
+  const debouncedMockTranslate = debounce(mockTranslate, 1000)
+  const debouncedDetectLanguage = debounce(detectLanguage, 1000)
 
   export function changeRawText(rawText: string) {
     useTranslateStore.setState({
@@ -108,5 +125,6 @@ export namespace TranslateActions {
     } else {
       debouncedTranslate()
     }
+    debouncedDetectLanguage(rawText)
   }
 }

@@ -5,6 +5,7 @@ import { ThemedTextArea2 } from '../../../components/themed-ui/input/textarea2'
 import { FooterToolBar } from '../footer-tool-bar'
 import { LeftContainer } from '../left-container'
 import changeRawText = TranslateActions.changeRawText
+import { LanguageSelect } from '../language-selector';
 
 const RawTextArea = styled(ThemedTextArea2)`
   font-size: 1.5rem;
@@ -15,6 +16,10 @@ const RawTextArea = styled(ThemedTextArea2)`
 `
 
 const Footer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 100%;
 `
 
 export const LeftPane: React.FC = () => {
@@ -31,7 +36,9 @@ export const LeftPane: React.FC = () => {
         spellCheck={false}
       />
       <FooterToolBar>
-        <Footer />
+        <Footer>
+          <LanguageSelect />
+        </Footer>
       </FooterToolBar>
     </LeftContainer>
   )
