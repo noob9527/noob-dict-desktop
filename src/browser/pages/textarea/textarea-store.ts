@@ -1,15 +1,12 @@
 import { create } from 'zustand'
 import { devtools } from 'zustand/middleware'
-import { Runtime } from '../../../../electron-shared/runtime'
-import { createSelectors } from '../../../zustand/create-selectors'
-import { rendererContainer } from '../../../../common/container/renderer-container'
-import {
-  GeminiLLMService,
-  GeminiLLMServiceToken,
-} from '../../../../common/services/llm/gemini-llm-service'
 import { debounce } from 'lodash'
-import { mockStream, textPlaceholder } from '../utils'
-import { detect, Language } from '../../../../common/utils/lan-detector';
+import { detect, Language } from '../../../common/utils/lan-detector';
+import { mockStream, textPlaceholder } from './utils';
+import { createSelectors } from '../../zustand/create-selectors';
+import { rendererContainer } from '../../../common/container/renderer-container';
+import { GeminiLLMService, GeminiLLMServiceToken } from '../../../common/services/llm/gemini-llm-service';
+import { Runtime } from '../../../electron-shared/runtime';
 
 interface TranslateState {
   raw: string
@@ -17,6 +14,7 @@ interface TranslateState {
   detectedRawLanguage: Language | null,
   rawLanguage: Language | null,
 
+  generatedText: string
   translatedText: string
   changing: boolean
   generating: boolean
@@ -24,59 +22,71 @@ interface TranslateState {
 }
 
 const initialState: TranslateState = {
-  raw: textPlaceholder,
 
   detectedRawLanguage:  null,
   rawLanguage: null,
 
+  raw: textPlaceholder,
   translatedText: textPlaceholder,
+  // generatedText: textPlaceholder,
+
+  // raw: '',
+  // translatedText: '',
+  generatedText: '',
+
   changing: false,
   generating: false,
   mock: true,
 }
 
-const useTranslateStoreBase = create<TranslateState>()(
+const useTextareaStoreBase = create<TranslateState>()(
   devtools(() => initialState, {
-    name: 'translate',
+    name: 'textarea',
     enabled: Runtime.isDev,
   }),
 )
 
-export const useTranslateStore = createSelectors(useTranslateStoreBase)
+export const useTextareaStore = createSelectors(useTextareaStoreBase)
 
 const geminiLLMService = rendererContainer.get<GeminiLLMService>(
   GeminiLLMServiceToken,
 )
 
-export namespace TranslateActions {
+export function useCurrentLan(): Language | null {
+  const rawLanguage = useTextareaStore.use.rawLanguage()
+  const detectedRawLanguage = useTextareaStore.use.detectedRawLanguage()
+  return rawLanguage ?? detectedRawLanguage
+}
+
+export namespace TextareaActions {
   export async function translate() {
-    useTranslateStore.setState({
+    useTextareaStore.setState({
       changing: false,
     })
 
-    const state = useTranslateStore.getState()
+    const state = useTextareaStore.getState()
     if (!state.raw.trim()) return
 
     const stream = await geminiLLMService.textAreaEnToCn(state.raw)
     let firstChunk = true
     for await (const chunk of stream) {
-      const { generating, translatedText } = useTranslateStore.getState()
+      const { generating, translatedText } = useTextareaStore.getState()
       if (generating || firstChunk) {
-        useTranslateStore.setState({
+        useTextareaStore.setState({
           translatedText: translatedText + chunk,
           generating: true,
         })
       }
       firstChunk = false
     }
-    useTranslateStore.setState({
+    useTextareaStore.setState({
       generating: false,
     })
   }
 
   async function mockTranslate() {
-    const state = useTranslateStore.getState()
-    useTranslateStore.setState({
+    const state = useTextareaStore.getState()
+    useTextareaStore.setState({
       changing: false,
     })
 
@@ -85,9 +95,9 @@ export namespace TranslateActions {
 
     let firstChunk = true
     for await (const chunk of stream) {
-      const { generating, translatedText } = useTranslateStore.getState()
+      const { generating, translatedText } = useTextareaStore.getState()
       if (generating || firstChunk) {
-        useTranslateStore.setState({
+        useTextareaStore.setState({
           translatedText: translatedText + chunk,
           generating: true,
         })
@@ -95,14 +105,14 @@ export namespace TranslateActions {
       firstChunk = false
     }
 
-    useTranslateStore.setState({
+    useTextareaStore.setState({
       generating: false,
     })
   }
 
   function detectLanguage(rawText: string) {
     const lan = detect(rawText)
-    useTranslateStore.setState({
+    useTextareaStore.setState({
       detectedRawLanguage: lan
     })
   }
@@ -112,14 +122,14 @@ export namespace TranslateActions {
   const debouncedDetectLanguage = debounce(detectLanguage, 1000)
 
   export function changeRawText(rawText: string) {
-    useTranslateStore.setState({
+    useTextareaStore.setState({
       raw: rawText,
       changing: true,
       generating: false,
       translatedText: '',
     })
 
-    const mock = useTranslateStore.getState().mock
+    const mock = useTextareaStore.getState().mock
     if (mock) {
       debouncedMockTranslate()
     } else {

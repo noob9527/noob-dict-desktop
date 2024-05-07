@@ -10,6 +10,7 @@ import { push } from 'connected-react-router';
 import { TablePage } from '../table/table';
 import { TranslatePage } from '../textarea/translate/translate-page';
 import { WriteSuggestionPage } from '../textarea/write-suggestion/write-suggestion-page';
+import { TextAreaPage } from '../textarea/textarea-page';
 
 const Container = styled.div`
   width: 100%;
@@ -34,6 +35,8 @@ const MainPage: React.FC = () => {
   const { path, url } = useRouteMatch();
   const location = useLocation();
   const dispatch = useDispatch();
+
+  console.log('MainPage: ', path, url)
 
   function goto(routeName: string) {
     dispatch(push(`${url}/${routeName}`));
@@ -69,17 +72,11 @@ const MainPage: React.FC = () => {
             {/*  <StyledIcon type={'pie-chart'}/>*/}
             {/*</MainMenuItem>*/}
             <MainMenuItem
-              key={'translate'}
-              active={location.pathname.includes('translate')}
-              onClick={() => goto('translate')}
+              key={'textarea'}
+              active={location.pathname.includes('textarea')}
+              onClick={() => goto('textarea')}
             >
-              <StyledIcon type={'swap'}/>
-            </MainMenuItem>
-            <MainMenuItem
-              key={'write_suggestion'}
-              active={location.pathname.includes('write_suggestion')}
-              onClick={() => goto('write_suggestion')}
-            >
+              {/*<StyledIcon type={'swap'}/>*/}
               <StyledIcon type={'form'}/>
             </MainMenuItem>
           </MainMenu>
@@ -89,8 +86,7 @@ const MainPage: React.FC = () => {
             <Route path={`${path}/search`} component={SearchPage}/>
             <Route path={`${path}/table`} component={TablePage}/>
             <Route path={`${path}/chart`} component={App}/>
-            <Route path={`${path}/translate`} component={TranslatePage}/>
-            <Route path={`${path}/write_suggestion`} component={WriteSuggestionPage}/>
+            <Route path={`${path}/textarea`} component={TextAreaPage}/>
             <Route component={SearchPage}/>
           </Switch>
         </Content>

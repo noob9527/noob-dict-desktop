@@ -1,20 +1,35 @@
 import React from 'react'
 import styled from 'styled-components'
 import { ThemedContent } from '../../../components/themed-ui/content/content'
-import { LeftPane } from './left-pane'
-import { RightPane } from './right-pane'
+import Markdown from 'react-markdown'
+import { ThemedScrollArea } from '../../../components/themed-ui/content/scroll-area';
+import { FooterToolBar } from '../footer-tool-bar';
+import { useTextareaStore } from '../textarea-store';
 
 const Container = styled(ThemedContent)`
-  height: 100vh;
   display: flex;
-  padding: 10px;
+  flex-direction: column;
+  overflow: hidden;
+  height: 100%;
+  font-size: 1.5rem;
 `
 
+const StyledScrollArea = styled(ThemedScrollArea)`
+  padding: 4px 11px;
+`
+
+const Footer = styled.div``
+
 export const TranslatePage: React.FC = () => {
+  const translated = useTextareaStore.use.translatedText()
   return (
     <Container>
-      <LeftPane />
-      <RightPane />
+      <StyledScrollArea>
+        <Markdown>{translated}</Markdown>
+      </StyledScrollArea>
+      {/*<FooterToolBar>*/}
+      {/*  <Footer></Footer>*/}
+      {/*</FooterToolBar>*/}
     </Container>
   )
 }
