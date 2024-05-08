@@ -59,9 +59,12 @@ export abstract class AbstractWindowManager implements WindowManager {
     WindowEvent.values().forEach((event) => {
       const channelName = event.getIpcChannelName(this.id)
       this._window!!.on(event as any, (e) => {
-        // by default, we only notify this window.
-        // consider broadcast the event instead?
-        ipcMain.callRenderer(this._window!!, channelName)
+        const window = this._window
+        if (window && !window.isDestroyed()) {
+          // by default, we only notify this window.
+          // consider broadcast the event instead?
+          ipcMain.callRenderer(this._window!!, channelName)
+        }
       })
     })
   }
