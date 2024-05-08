@@ -11,8 +11,9 @@ import {
 const Container = styled.div``
 
 export const OpenAiSetting = () => {
-  const baseUrl = useSettingStore.use['llm.openai.base_url']()
-  const apiKey = useSettingStore.use['llm.openai.api_key']()
+  const llm = useSettingStore.use.llm()
+  const baseUrl = llm.open_ai?.base_url
+  const apiKey = llm.open_ai?.api_key
   return (
     <Container>
       <h1>Open AI</h1>
@@ -30,7 +31,13 @@ export const OpenAiSetting = () => {
             value={baseUrl ?? ''}
             onChange={(e) => {
               settingChange({
-                'llm.openai.base_url': e.target.value ? e.target.value : null,
+                llm: {
+                  ...llm,
+                  open_ai: {
+                    ...(llm?.open_ai ?? {}),
+                    base_url: e.target.value ? e.target.value : null,
+                  }
+                },
               })
             }}
           />
@@ -43,7 +50,13 @@ export const OpenAiSetting = () => {
             value={apiKey ?? ''}
             onChange={(e) => {
               settingChange({
-                'llm.openai.api_key': e.target.value ? e.target.value : null,
+                llm: {
+                  ...llm,
+                  open_ai: {
+                    ...(llm?.open_ai ?? {}),
+                    api_key: e.target.value ? e.target.value : null,
+                  }
+                },
               })
             }}
           />

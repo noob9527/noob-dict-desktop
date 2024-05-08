@@ -1,3 +1,18 @@
+export interface OpenAISetting {
+  base_url?: string | null
+  api_key?: string | null
+  model_name?: string | null
+}
+
+export interface GeminiSetting {
+  api_key?: string | null
+}
+
+export interface LLMSetting {
+  open_ai?: OpenAISetting | null
+  gemini?: GeminiSetting | null
+}
+
 export interface UserProfile {
   appHotKey: string | null
   readClipboard: boolean
@@ -13,10 +28,5 @@ export interface UserProfile {
   'search.syncHistory.syncIntervalMinutes': number
 
   // openai
-  'llm.openai.base_url': string | null
-  'llm.openai.api_key': string | null
-  'llm.openai.model_name': string | null
-
-  // gemini
-  'llm.gemini.api_key': string | null,
+  llm: LLMSetting
 }

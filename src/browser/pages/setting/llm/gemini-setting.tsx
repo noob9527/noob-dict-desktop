@@ -10,7 +10,7 @@ const Container = styled.div``
 
 
 export const GeminiSetting = () => {
-  const apiKey = useSettingStore.use['llm.gemini.api_key']()
+  const llm = useSettingStore.use.llm()
   return (
     <Container>
       <h1>Gemini</h1>
@@ -25,10 +25,16 @@ export const GeminiSetting = () => {
         <SettingEntryLabel>API Key: </SettingEntryLabel>
         <SettingEntryControl>
           <ThemedInput
-            value={apiKey ?? ''}
+            value={llm?.gemini?.api_key ?? ''}
             onChange={(e) => {
               settingChange({
-                'llm.gemini.api_key': e.target.value ? e.target.value : null,
+                llm: {
+                  ...llm,
+                  gemini: {
+                    ...(llm?.gemini ?? {}),
+                    api_key: e.target.value ? e.target.value : null,
+                  }
+                },
               })
             }}
             spellCheck={false}

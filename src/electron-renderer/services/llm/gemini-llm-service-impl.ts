@@ -16,6 +16,7 @@ export class GeminiLLMServiceImpl
   private _model: ChatGoogleGenerativeAI | null = null
 
   init(option: GeminiModelOption) {
+    if (!option.apiKey) this._model = null
     this._model = new ChatGoogleGenerativeAI({
       apiKey: option.apiKey ?? undefined,
       temperature: 0,

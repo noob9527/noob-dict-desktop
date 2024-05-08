@@ -29,11 +29,16 @@ const initData: UserProfile = {
   'search.syncHistory.syncOnStart': true,
   'search.syncHistory.syncIntervalMinutes': -1,
 
-  'llm.openai.base_url': null,
-  'llm.openai.api_key': null,
-  'llm.openai.model_name': null,
-
-  'llm.gemini.api_key': null,
+  llm: {
+    open_ai: {
+      base_url: null,
+      api_key: null,
+      model_name: null,
+    },
+    gemini: {
+      api_key: null,
+    }
+  },
 }
 
 const initialState: SettingState = {
@@ -123,40 +128,6 @@ export function settingChanged(
         newValue.ecDictFileLocation,
       )
       setLocalDbAvailable().then()
-    }
-  }
-
-  if (
-    oldValue?.['llm.openai.base_url'] != newValue['llm.openai.base_url'] ||
-    oldValue?.['llm.openai.model_name'] != newValue['llm.openai.model_name'] ||
-    oldValue?.['llm.openai.api_key'] != newValue['llm.openai.api_key']
-  ) {
-    if (
-      newValue?.['llm.openai.base_url'] ||
-      newValue?.['llm.openai.model_name'] ||
-      newValue?.['llm.openai.api_key']
-    ) {
-      const openAILLMService = rendererContainer.get<OpenAILLMService>(
-        OpenAILLMServiceToken,
-      )
-      openAILLMService.init({
-        baseURL: newValue['llm.openai.base_url'],
-        model: newValue['llm.openai.model_name'],
-        apiKey: newValue['llm.openai.api_key'],
-      })
-    }
-  }
-  if (
-    oldValue?.['llm.gemini.api_key'] != newValue['llm.gemini.api_key']
-  ) {
-    if (!!newValue['llm.gemini.api_key']) {
-      const geminiLLMService =
-        rendererContainer.get<GeminiLLMService>(GeminiLLMServiceToken)
-      geminiLLMService.init(
-        {
-          apiKey: newValue?.['llm.gemini.api_key'],
-        },
-      )
     }
   }
 }

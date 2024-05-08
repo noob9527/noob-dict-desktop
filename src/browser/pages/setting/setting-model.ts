@@ -65,12 +65,16 @@ const settingModel: SettingModel = {
     'search.syncHistory.syncOnQuit': true,
     'search.syncHistory.syncOnStart': true,
     'search.syncHistory.syncIntervalMinutes': -1,
-
-    'llm.openai.base_url': null,
-    'llm.openai.api_key': null,
-    'llm.openai.model_name': null,
-    // gemini
-    'llm.gemini.api_key': null,
+    llm: {
+      open_ai: {
+        base_url: null,
+        api_key: null,
+        model_name: null,
+      },
+      gemini: {
+        api_key: null,
+      }
+    },
   },
   effects,
   reducers,
