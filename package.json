@@ -87,6 +87,7 @@
     "franc-min": "^6.2.0",
     "history": "^4.10.1",
     "identity-obj-proxy": "3.0.0",
+    "immer": "^10.1.1",
     "inversify": "^5.0.1",
     "jest": "^24.7.1",
     "jest-environment-jsdom-fourteen": "0.1.0",
