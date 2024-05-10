@@ -11,15 +11,10 @@ const RightPaneMenu = styled.ul`
 `;
 
 const MenuItemElement: React.FC<any> = (props) => {
-  let { active, to, className, children } = props;
-  // const match = useRouteMatch({
-  //   path: to,
-  //   exact: true
-  // });
-  // className += match ? ' active' : '';
+  let { active, onClick, to, className, children } = props;
   className += (active ? ' active' : '');
   return (
-    <li className={className}><Link tabIndex={-1} to={to}>{children}</Link></li>
+    <li className={className} onClick={onClick}><Link tabIndex={-1} to={to}>{children}</Link></li>
   );
 };
 

@@ -16,6 +16,7 @@ import {
   type OpenAILLMService,
   OpenAILLMServiceToken,
 } from '../../../common/services/llm/open-ai-llm-service'
+import { LLMProvider } from '../../../common/services/llm/provider';
 
 @injectable()
 export class RouterLLMServiceImpl implements LLMService {
@@ -26,44 +27,50 @@ export class RouterLLMServiceImpl implements LLMService {
     @inject(OpenAILLMServiceToken) private openAILLMService: OpenAILLMService,
   ) {}
 
-  getService(option: LLMInvokeOption): LLMService {
-    if (option.mock) {
-      return this.fakeLLMService
-    }
-    switch (option.provider) {
-      case 'GEMINI':
+  async getAvailable(option?: LLMInvokeOption): Promise<boolean> {
+    return this.getService(option)
+      .getAvailable(option)
+  }
+
+  getService(option?: LLMInvokeOption): LLMService {
+    switch (option?.provider) {
+      case LLMProvider.Constant.GEMINI:
         return this.geminiLLMService
-      case 'OPEN_AI':
+      case LLMProvider.Constant.OPEN_AI:
         return this.openAILLMService
+      case LLMProvider.Constant.FAKE:
+        return this.fakeLLMService
+      case null:
+        return this.fakeLLMService
       default:
-        throw Error(`unknown provider: ${option.provider}`)
+        throw Error(`unknown provider: ${option?.provider}`)
     }
   }
 
   textAreaEnToCn(
     text: string,
-    option: LLMInvokeOption,
+    option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
     return this.getService(option).textAreaEnToCn(text, option)
   }
 
   textAreaToEn(
     text: string,
-    option: LLMInvokeOption,
+    option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
     return this.getService(option).textAreaToEn(text, option)
   }
 
   wordEnToCn(
     text: string,
-    option: LLMInvokeOption,
+    option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
     return this.getService(option).wordEnToCn(text, option)
   }
 
   writeSuggestion(
     text: string,
-    option: LLMInvokeOption,
+    option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
     return this.getService(option).writeSuggestion(text, option)
   }

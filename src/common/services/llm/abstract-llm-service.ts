@@ -14,7 +14,20 @@ import { injectable } from 'inversify';
 export abstract class AbstractLLMService implements LLMService {
   protected outputParser = new StringOutputParser()
 
-  abstract getModel(option?: LLMInvokeOption): BaseChatModel
+  abstract fetchModel(option?: LLMInvokeOption): BaseChatModel | null
+
+  getModel(option?: LLMInvokeOption) {
+    const model = this.fetchModel(option)
+    if (model == null) {
+      throw new Error("Model hasn't been initialized yet!")
+    } else {
+      return model
+    }
+  }
+
+  getAvailable(option?: LLMInvokeOption): Promise<boolean> {
+    return Promise.resolve(this.fetchModel(option) != null)
+  }
 
   textAreaEnToCn(
     text: string,

@@ -14,6 +14,7 @@ export const OpenAiSetting = () => {
   const llm = useSettingStore.use.llm()
   const baseUrl = llm.open_ai?.base_url
   const apiKey = llm.open_ai?.api_key
+  const modelName = llm.open_ai?.model_name
   return (
     <Container>
       <h1>Open AI</h1>
@@ -40,6 +41,7 @@ export const OpenAiSetting = () => {
                 },
               })
             }}
+            spellCheck={false}
           />
         </SettingEntryControl>
       </SettingEntry>
@@ -59,6 +61,27 @@ export const OpenAiSetting = () => {
                 },
               })
             }}
+            spellCheck={false}
+          />
+        </SettingEntryControl>
+      </SettingEntry>
+      <SettingEntry>
+        <SettingEntryLabel>Model: </SettingEntryLabel>
+        <SettingEntryControl>
+          <ThemedInput
+            value={modelName ?? ''}
+            onChange={(e) => {
+              settingChange({
+                llm: {
+                  ...llm,
+                  open_ai: {
+                    ...(llm?.open_ai ?? {}),
+                    model_name: e.target.value ? e.target.value : null,
+                  }
+                },
+              })
+            }}
+            spellCheck={false}
           />
         </SettingEntryControl>
       </SettingEntry>

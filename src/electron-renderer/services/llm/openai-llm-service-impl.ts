@@ -26,11 +26,7 @@ export class OpenAILLMServiceImpl
     })
   }
 
-  getModel(option: LLMInvokeOption): BaseChatModel {
-    if (this._model == null) {
-      throw new Error("Model hasn't been initialized yet!")
-    } else {
-      return this._model
-    }
+  fetchModel(option: LLMInvokeOption): BaseChatModel | null {
+    return this._model
   }
 }

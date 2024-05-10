@@ -10,9 +10,9 @@ import { setEcDictAvailable, setLocalDbAvailable } from '../transient-store'
 import { createSelectors } from '../../zustand/create-selectors'
 import { devtools } from 'zustand/middleware'
 import { Runtime } from '../../../electron-shared/runtime'
-import { debounce, pick } from 'lodash';
-import { OpenAILLMService, OpenAILLMServiceToken } from '../../../common/services/llm/open-ai-llm-service';
-import { GeminiLLMService, GeminiLLMServiceToken } from '../../../common/services/llm/gemini-llm-service';
+import { debounce, isEqual, pick } from 'lodash'
+import { TextareaActions } from '../textarea/textarea-store'
+import setLLMAvailable = TextareaActions.setLLMAvailable
 
 interface SettingState extends UserProfile {
   persisted: UserProfile
@@ -37,7 +37,7 @@ const initData: UserProfile = {
     },
     gemini: {
       api_key: null,
-    }
+    },
   },
 }
 
@@ -47,7 +47,7 @@ const initialState: SettingState = {
   ...initData,
 }
 
-const userProfileKeys = Object.keys(initData) as (Array<keyof UserProfile>)
+const userProfileKeys = Object.keys(initData) as Array<keyof UserProfile>
 
 function stateToProfile(state: UserProfile): UserProfile {
   return pick(state, userProfileKeys)
@@ -64,20 +64,20 @@ const useSettingStoreBase = create<SettingState>()(
 )
 export const useSettingStore = createSelectors(useSettingStoreBase)
 
-const debouncedSendSettingChange = debounce((
-  oldValue: UserProfile,
-  newValue: UserProfile,
-) => {
-  const newProfile = stateToProfile(newValue)
-  return settingService.sendSettingChange(newProfile, oldValue)
-  // we don't call settingChanged here,
-  // because we will receive SETTING_CHANGED notification.
-  // const actualNewValue = await settingService.sendSettingChange(
-  //   newValue,
-  //   oldValue,
-  // )
-  // settingChanged(oldValue, actualNewValue)
-}, 1000)
+const debouncedSendSettingChange = debounce(
+  (oldValue: UserProfile, newValue: UserProfile) => {
+    const newProfile = stateToProfile(newValue)
+    return settingService.sendSettingChange(newProfile, oldValue)
+    // we don't call settingChanged here,
+    // because we will receive SETTING_CHANGED notification.
+    // const actualNewValue = await settingService.sendSettingChange(
+    //   newValue,
+    //   oldValue,
+    // )
+    // settingChanged(oldValue, actualNewValue)
+  },
+  1000,
+)
 
 export async function settingChange(patch: Partial<UserProfile>) {
   const oldValue = useSettingStoreBase.getState()
@@ -112,7 +112,7 @@ export function settingChanged(
 
   // tmp fix:
   // current change any code will trigger settingChanged
-  if(!Runtime.isDev) {
+  if (!Runtime.isDev) {
     if (oldValue?.ecDictFileLocation != newValue.ecDictFileLocation) {
       logger.log(
         'detect "ecDictFileLocation" updated, about to call setEcDictAvailable',
@@ -129,6 +129,10 @@ export function settingChanged(
       )
       setLocalDbAvailable().then()
     }
+  }
+
+  if (!isEqual(oldValue?.llm, newValue.llm)) {
+    setLLMAvailable().then()
   }
 }
 

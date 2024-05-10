@@ -2,9 +2,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { ThemedContent } from '../../../components/themed-ui/content/content'
 import Markdown from 'react-markdown'
-import { ThemedScrollArea } from '../../../components/themed-ui/content/scroll-area';
-import { FooterToolBar } from '../footer-tool-bar';
-import { useTextareaStore } from '../textarea-store';
+import { ThemedScrollArea } from '../../../components/themed-ui/content/scroll-area'
+import { Tab, useTextareaStore } from '../textarea-store'
 
 const Container = styled(ThemedContent)`
   display: flex;
@@ -21,11 +20,11 @@ const StyledScrollArea = styled(ThemedScrollArea)`
 const Footer = styled.div``
 
 export const TranslatePage: React.FC = () => {
-  const translated = useTextareaStore.use.translatedText()
+  const resultMap = useTextareaStore.use.resultMap()
   return (
     <Container>
       <StyledScrollArea>
-        <Markdown>{translated}</Markdown>
+        <Markdown>{resultMap[Tab.trans]?.output}</Markdown>
       </StyledScrollArea>
       {/*<FooterToolBar>*/}
       {/*  <Footer></Footer>*/}

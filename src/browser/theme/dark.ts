@@ -15,7 +15,7 @@ dark[ColorId.input_foreground] = Color('#D4D4D4')
 dark[ColorId.input_background] = Color('#3C3C3C')
 dark[ColorId.input_disableBackground] =
   dark[ColorId.input_background]?.fade(0.5)
-dark[ColorId.input_border] = null
+dark[ColorId.input_border] = dark[ColorId.input_background]
 
 // button
 dark[ColorId.button_background] = Color('rebeccapurple')

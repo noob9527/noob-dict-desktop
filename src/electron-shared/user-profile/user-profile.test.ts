@@ -7,7 +7,7 @@ describe('comparison', () => {
     expect(isEqual(null, undefined)).toBe(false)
     expect(isEqual({}, {})).toBe(true)
   })
-  it('case 40', () => {
+  it('case 10', () => {
     const a: LLMSetting = {
       open_ai: {
         base_url: 'a'
@@ -21,5 +21,34 @@ describe('comparison', () => {
       gemini: null,
     }
     expect(isEqual(a?.open_ai, b.open_ai)).toBe(false)
+  })
+
+  it('case 20', () => {
+    const a = {
+      llm: {
+        open_ai: {
+          base_url: 'a'
+        },
+        gemini: null,
+      }
+    }
+    const b = {
+      llm: {
+        open_ai: {
+          base_url: 'b'
+        },
+        gemini: null,
+      }
+    }
+    const c = {
+      llm: {
+        open_ai: {
+          base_url: 'a'
+        },
+        gemini: null,
+      }
+    }
+    expect(isEqual(a, b)).toBe(false)
+    expect(isEqual(a, c)).toBe(true)
   })
 })

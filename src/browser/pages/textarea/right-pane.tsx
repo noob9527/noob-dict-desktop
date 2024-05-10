@@ -1,14 +1,22 @@
 import React from 'react'
 import styled from 'styled-components'
 import { RightPaneMenu, RightPaneMenuItem } from './right-pane-menu'
-import { Route, Switch, useLocation } from 'react-router-dom'
+import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 import { TranslatePage } from './translate/translate-page'
 import { WriteSuggestionPage } from './write-suggestion/write-suggestion-page'
 import ColorId from '../../styles/ColorId'
-import { useCurrentLan, useTextareaStore } from './textarea-store';
+import { Tab, TextareaActions, useCurrentLan, useTextareaStore } from './textarea-store';
 import { ThemedEmpty } from '../../components/themed-ui/empty/empty';
+import { ModelSelect } from './model-selector';
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+import changeTab = TextareaActions.changeTab;
 
 const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 11px;
 `
 
 const Nav = styled.nav`
@@ -46,11 +54,26 @@ export const RightPane: React.FC = () => {
     .exec(location.pathname)
   const active = (matched && matched[1]) ?? 'translate'
 
+  // const { url } = useRouteMatch();
+  // const dispatch = useDispatch();
+  // function goto(routeName: string) {
+  //   dispatch(push(`${url}/${routeName}`));
+  // }
+
+  const availableLLMProviders = useTextareaStore.use
+    .availableLLMProviders()
   const raw = useTextareaStore.use.raw()
   const language = useCurrentLan()
+
+  if (!availableLLMProviders.length) {
+    return (
+      <ThemedEmpty description={'No available LLM'}/>
+    )
+  }
+
   if (!raw && language == null) {
     return (
-      <ThemedEmpty />
+      <ThemedEmpty description={'No input text'} />
     )
   }
 
@@ -61,10 +84,20 @@ export const RightPane: React.FC = () => {
       <RightPaneMenu>
         <RightPaneMenuItem
           active={active == 'translate'}
-          to={'/main/textarea/translate'}>Trans</RightPaneMenuItem>
+          onClick={() => {
+            changeTab(Tab.trans)
+            // goto('/main/textarea/translate')
+          }}
+          to={'/main/textarea/translate'}
+        >Trans</RightPaneMenuItem>
         <RightPaneMenuItem
           active={active == 'write_suggestion'}
-          to={'/main/textarea/write_suggestion'}>Rewrite</RightPaneMenuItem>
+          onClick={() => {
+            changeTab(Tab.rewrite)
+            // goto('/main/textarea/write_suggestion')
+          }}
+          to={'/main/textarea/write_suggestion'}
+        >Rewrite</RightPaneMenuItem>
       </RightPaneMenu>
     )
   } else {
@@ -83,11 +116,12 @@ export const RightPane: React.FC = () => {
         <Nav>
           {menu}
         </Nav>
+        <ModelSelect />
       </Header>
       <Content>
         <Switch>
           <Route path={`/main/textarea/translate`} component={TranslatePage}/>
-          <Route path={`/main/textarea/write_suggestions`} component={WriteSuggestionPage}/>
+          <Route path={`/main/textarea/write_suggestion`} component={WriteSuggestionPage}/>
           <Route component={TranslatePage} />
         </Switch>
       </Content>

@@ -30,15 +30,33 @@ export const GlobalSelectStyles = createGlobalStyle`
 `;
 
 export const ThemedSelect = styled(Select)`
+  // &.ant-select-focused {
+  //   .ant-select-selection  {
+  //     border-color: ${props => props.theme[ColorId.input_border]};
+  //     &:hover {
+  //       border-color: ${props => props.theme[ColorId.input_border]};
+  //     }
+  //     &:focus {
+  //       border-color: ${props => props.theme[ColorId.input_border]};
+  //     }
+  //   }
+  // }
   
   .ant-select-selection {
     color: ${props => props.theme[ColorId.input_foreground]};
     background-color: ${props => props.theme[ColorId.input_background]};
 
     border-radius: 0;
-    border-color: unset;
+    //border-color: unset;
+    border-color: ${props => props.theme[ColorId.input_border]};
+    &:focus {
+      //border-color: unset;
+      border-color: ${props => props.theme[ColorId.input_border]};
+      box-shadow: none;
+    }
     &:hover {
-      border-color: unset;
+      //border-color: unset;
+      border-color: ${props => props.theme[ColorId.input_border]};
     }
 
     .ant-select-arrow {
