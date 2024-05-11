@@ -8,9 +8,15 @@ export interface GeminiSetting {
   api_key?: string | null
 }
 
+export interface OllamaSetting {
+  base_url?: string | null
+  model_name?: string | null
+}
+
 export interface LLMSetting {
   open_ai?: OpenAISetting | null
   gemini?: GeminiSetting | null
+  ollama?: OllamaSetting | null
 }
 
 export interface UserProfile {

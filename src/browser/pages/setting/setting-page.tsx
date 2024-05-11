@@ -33,7 +33,10 @@ const StyledTabList = styled(TabList)`
 `
 
 const StyledContent = styled.div`
-  margin: 20px;
+  height: 100%;
+  overflow: hidden;
+  //margin: 0 20px;
+  margin-left: 20px;
 `
 
 const SettingPage = () => {
@@ -58,7 +61,7 @@ const SettingPage = () => {
               <TabPanel>
                 <SyncSettingPage />
               </TabPanel>
-              <TabPanel>
+              <TabPanel style={{height: '100%', overflow: 'hidden'}}>
                 <LLMSettingPage />
               </TabPanel>
             </StyledContent>

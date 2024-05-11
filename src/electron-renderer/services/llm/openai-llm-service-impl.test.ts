@@ -12,7 +12,7 @@ describe('OpenAILLMServiceImpl', () => {
     it('basic case', async () => {
       const service = new OpenAILLMServiceImpl()
       service.init({
-        baseURL: 'https://openrouter.ai/api/v1',
+        baseUrl: 'https://openrouter.ai/api/v1',
         apiKey: OPEN_ROUTER_API_KEY,
       })
     })
@@ -24,7 +24,7 @@ describe('OpenAILLMServiceImpl', () => {
       service = new OpenAILLMServiceImpl()
       service.init({
         model: 'mistralai/mistral-7b-instruct:free',
-        baseURL: 'https://openrouter.ai/api/v1',
+        baseUrl: 'https://openrouter.ai/api/v1',
         apiKey: OPEN_ROUTER_API_KEY,
       })
     })

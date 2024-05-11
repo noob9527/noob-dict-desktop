@@ -1,4 +1,4 @@
-import { LLMInvokeOption, LLMService } from './llm-service'
+import { LLMInitOption, LLMInvokeOption, LLMService } from './llm-service';
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { BaseChatModel } from '@langchain/core/dist/language_models/chat_models'
 import { StringOutputParser } from '@langchain/core/output_parsers'
@@ -15,6 +15,8 @@ export abstract class AbstractLLMService implements LLMService {
   protected outputParser = new StringOutputParser()
 
   abstract fetchModel(option?: LLMInvokeOption): BaseChatModel | null
+
+  abstract init(option: LLMInitOption)
 
   getModel(option?: LLMInvokeOption) {
     const model = this.fetchModel(option)

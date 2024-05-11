@@ -11,15 +11,10 @@ import { getCurrentWindowId } from '../../browser/utils/window-utils'
 import { WindowId } from '../../common/window-id'
 import { ElectronStoreUserProfileService } from '../../electron-shared/user-profile/electron-store-user-profile-service'
 import { SettingChannel } from '../../electron-shared/ipc/ipc-channel-setting'
-import {
-  OpenAILLMService,
-  OpenAILLMServiceToken,
-} from '../../common/services/llm/open-ai-llm-service'
-import {
-  GeminiLLMService,
-  GeminiLLMServiceToken,
-} from '../../common/services/llm/gemini-llm-service'
 import { isEqual } from 'lodash'
+import { RouterLLMServiceToken } from '../../common/services/llm/llm-service'
+import { LLMProvider } from '../../common/services/llm/provider'
+import { AbstractLLMService } from '../../common/services/llm/abstract-llm-service'
 
 @injectable()
 export class ElectronSettingService implements SettingService {
@@ -60,15 +55,16 @@ export class ElectronSettingService implements SettingService {
     //   this.clipboardService.startListening();
     // }
 
+    const routerLLMService = rendererContainer.get<AbstractLLMService>(
+      RouterLLMServiceToken,
+    )
     if (
       !isEqual(oldValue?.llm?.open_ai, newValue.llm?.open_ai) &&
       newValue.llm?.open_ai
     ) {
-      const openAILLMService = rendererContainer.get<OpenAILLMService>(
-        OpenAILLMServiceToken,
-      )
-      openAILLMService.init({
-        baseURL: newValue.llm.open_ai.base_url,
+      routerLLMService.init({
+        provider: LLMProvider.Constant.OPEN_AI,
+        baseUrl: newValue.llm.open_ai.base_url,
         model: newValue.llm.open_ai.model_name,
         apiKey: newValue.llm.open_ai.api_key,
       })
@@ -78,11 +74,20 @@ export class ElectronSettingService implements SettingService {
       !isEqual(oldValue?.llm?.gemini, newValue.llm?.gemini) &&
       newValue.llm?.gemini
     ) {
-      const geminiLLMService = rendererContainer.get<GeminiLLMService>(
-        GeminiLLMServiceToken,
-      )
-      geminiLLMService.init({
+      routerLLMService.init({
+        provider: LLMProvider.Constant.GEMINI,
         apiKey: newValue.llm.gemini.api_key,
+      })
+    }
+
+    if (
+      !isEqual(oldValue?.llm?.ollama, newValue.llm?.ollama) &&
+      newValue.llm?.ollama
+    ) {
+      routerLLMService.init({
+        provider: LLMProvider.Constant.OLLAMA,
+        baseUrl: newValue.llm.ollama.base_url,
+        model: newValue.llm.ollama.model_name,
       })
     }
     return newValue

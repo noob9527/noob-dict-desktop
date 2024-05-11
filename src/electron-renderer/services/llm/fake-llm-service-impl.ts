@@ -1,17 +1,16 @@
-import { FakeLLMService } from '../../../common/services/llm/fake-llm-service'
 import { FakeListChatModel } from '@langchain/core/utils/testing'
-import { OpenAIModelOption } from '../../../common/services/llm/open-ai-llm-service'
 import { injectable } from 'inversify'
 import { AbstractLLMService } from '../../../common/services/llm/abstract-llm-service'
 import { BaseChatModel } from '@langchain/core/dist/language_models/chat_models'
-import { LLMInvokeOption } from '../../../common/services/llm/llm-service'
+import {
+  LLMInitOption,
+  LLMInvokeOption,
+} from '../../../common/services/llm/llm-service'
 import { textPlaceholder } from '../../../browser/pages/textarea/utils'
+import { Runtime } from '../../../electron-shared/runtime';
 
 @injectable()
-export class FakeLLMServiceImpl
-  extends AbstractLLMService
-  implements FakeLLMService
-{
+export class FakeLLMServiceImpl extends AbstractLLMService {
   private _model: FakeListChatModel | null = null
 
   constructor() {
@@ -19,7 +18,7 @@ export class FakeLLMServiceImpl
     this.init({})
   }
 
-  init(option: OpenAIModelOption) {
+  init(option: LLMInitOption) {
     this._model = new FakeListChatModel({
       responses: [
         '1st: ' + textPlaceholder,
@@ -32,5 +31,9 @@ export class FakeLLMServiceImpl
 
   fetchModel(option: LLMInvokeOption): BaseChatModel | null {
     return this._model
+  }
+
+  override getAvailable(option?: LLMInvokeOption): Promise<boolean> {
+    return Promise.resolve(Runtime.isDev)
   }
 }

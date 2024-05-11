@@ -7,6 +7,13 @@ export interface LLMInvokeOption {
   provider?: LLMProvider.Constant | null
 }
 
+export interface LLMInitOption {
+  provider?: LLMProvider.Constant | null
+  baseUrl?: string | null
+  apiKey?: string | null
+  model?: string | null
+}
+
 export interface LLMService {
   getAvailable(
     option?: LLMInvokeOption,

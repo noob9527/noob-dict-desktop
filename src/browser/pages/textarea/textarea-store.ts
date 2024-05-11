@@ -173,7 +173,7 @@ export namespace TextareaActions {
   const debouncedDetectLanguage = debounce(detectLanguage, 1000)
 
   export function changeRawText(rawText: string) {
-    useTextareaStore.setState(state => ({
+    useTextareaStore.setState((state) => ({
       raw: rawText,
       changing: true,
       resultMap: {
@@ -183,7 +183,7 @@ export namespace TextareaActions {
         },
         [Tab.trans]: null,
         [Tab.rewrite]: null,
-      }
+      },
     }))
 
     const mock = useTextareaStore.getState().mock
@@ -212,24 +212,19 @@ export namespace TextareaActions {
 
   export async function setLLMAvailable() {
     const available = await Promise.all(
-      [LLMProvider.Constant.GEMINI, LLMProvider.Constant.OPEN_AI].map((e) => {
+      LLMProvider.values().map((e) => {
         return routerLLMService.getAvailable({
-          provider: e,
+          provider: e.name as LLMProvider.Constant,
         })
       }),
     )
-    let availableLLMProviders = [
-      LLMProvider.Constant.GEMINI,
-      LLMProvider.Constant.OPEN_AI,
-    ].filter((e, i) => {
-      return available[i]
-    })
-    if (Runtime.isDev) {
-      availableLLMProviders = [
-        LLMProvider.Constant.FAKE,
-        ...availableLLMProviders,
-      ]
-    }
+
+    let availableLLMProviders = LLMProvider.values()
+      .map((e) => e.name)
+      .filter((e, i) => {
+        return available[i]
+      })
+
     useTextareaStore.setState((state) => ({
       availableLLMProviders,
       selectedLLMProvider:

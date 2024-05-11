@@ -38,6 +38,10 @@ const initData: UserProfile = {
     gemini: {
       api_key: null,
     },
+    ollama: {
+      base_url: null,
+      model_name: null,
+    }
   },
 }
 
