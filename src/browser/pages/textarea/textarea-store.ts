@@ -100,6 +100,11 @@ export function useCurrentLan(): Language | null {
 }
 
 export namespace TextareaActions {
+  export function getDeterminedLan() {
+    const { rawLanguage, detectedRawLanguage } = useTextareaStore.getState()
+    return rawLanguage ?? detectedRawLanguage
+  }
+
   export async function callLLM() {
     useTextareaStore.setState({
       changing: false,
@@ -109,11 +114,28 @@ export namespace TextareaActions {
     if (!raw) return
 
     let stream: IterableReadableStream<string>
+    const lan = getDeterminedLan()
     switch (currentTab) {
       case Tab.trans:
-        stream = await routerLLMService.textAreaEnToCn(raw, {
-          provider: selectedLLMProvider,
-        })
+        switch (lan) {
+          case 'EN':
+            stream = await routerLLMService.textAreaEnToCn(raw, {
+              provider: selectedLLMProvider,
+            })
+            break
+          case 'ZH':
+            stream = await routerLLMService.textAreaToEn(raw, {
+              provider: selectedLLMProvider,
+            })
+            break
+          case 'JP':
+            stream = await routerLLMService.textAreaToEn(raw, {
+              provider: selectedLLMProvider,
+            })
+            break
+          default:
+            throw new Error(`unsupported language ${lan}`)
+        }
         break
       case Tab.rewrite:
         stream = await routerLLMService.writeSuggestion(raw, {
@@ -170,7 +192,7 @@ export namespace TextareaActions {
 
   export const debouncedCallLLM = debounce(callLLM, 1000)
   // const debouncedMockCallLLM = debounce(mockCallLLM, 1000)
-  const debouncedDetectLanguage = debounce(detectLanguage, 1000)
+  const debouncedDetectLanguage = debounce(detectLanguage, 500)
 
   export function changeRawText(rawText: string) {
     useTextareaStore.setState((state) => ({
@@ -186,13 +208,14 @@ export namespace TextareaActions {
       },
     }))
 
+    // we need to first detect the lan
+    debouncedDetectLanguage(rawText)
     const mock = useTextareaStore.getState().mock
     if (mock) {
       // debouncedMockCallLLM()
     } else {
       debouncedCallLLM()
     }
-    debouncedDetectLanguage(rawText)
   }
 
   export function changeTab(tab: Tab) {
