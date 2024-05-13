@@ -1,5 +1,5 @@
 import { isEqual } from 'lodash'
-import { LLMSetting } from './user-profile'
+import { LLMProviderSetting } from './user-profile'
 
 describe('comparison', () => {
   it('case 1', () => {
@@ -8,15 +8,15 @@ describe('comparison', () => {
     expect(isEqual({}, {})).toBe(true)
   })
   it('case 10', () => {
-    const a: LLMSetting = {
+    const a: LLMProviderSetting = {
       open_ai: {
-        base_url: 'a'
+        base_url: 'a',
       },
       gemini: null,
     }
-    const b: LLMSetting = {
+    const b: LLMProviderSetting = {
       open_ai: {
-        base_url: 'b'
+        base_url: 'b',
       },
       gemini: null,
     }
@@ -27,26 +27,26 @@ describe('comparison', () => {
     const a = {
       llm: {
         open_ai: {
-          base_url: 'a'
+          base_url: 'a',
         },
         gemini: null,
-      }
+      },
     }
     const b = {
       llm: {
         open_ai: {
-          base_url: 'b'
+          base_url: 'b',
         },
         gemini: null,
-      }
+      },
     }
     const c = {
       llm: {
         open_ai: {
-          base_url: 'a'
+          base_url: 'a',
         },
         gemini: null,
-      }
+      },
     }
     expect(isEqual(a, b)).toBe(false)
     expect(isEqual(a, c)).toBe(true)

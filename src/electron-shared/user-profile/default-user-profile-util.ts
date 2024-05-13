@@ -11,6 +11,8 @@ export function getDefaultUserProfile(): UserProfile {
     'search.syncHistory.syncOnQuit': true,
     'search.syncHistory.syncOnStart': true,
 
-    llm: {},
+    llm: {
+      providers: {},
+    },
   }
 }

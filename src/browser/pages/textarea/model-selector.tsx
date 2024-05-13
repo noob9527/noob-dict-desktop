@@ -1,18 +1,19 @@
-import React from 'react';
-import styled from 'styled-components';
-import { ThemedSelect } from '../../components/themed-ui/selector/select';
-import { TextareaActions, useTextareaStore } from './textarea-store';
-import { LLMProvider } from '../../../common/services/llm/provider';
-import changeProvider = TextareaActions.changeProvider;
+import React from 'react'
+import styled from 'styled-components'
+import { ThemedSelect } from '../../components/themed-ui/selector/select'
+import { TextareaActions } from './textarea-store'
+import { LLMProvider } from '../../../common/services/llm/provider'
+import { useSettingStore } from '../setting/setting-store'
+import changeProvider = TextareaActions.changeProvider
 
 const StyledSelect = styled(ThemedSelect)`
   min-width: 100px;
 `
 
 export const ModelSelect: React.FC = () => {
-  const providers = useTextareaStore.use.availableLLMProviders()
+  const providers = useSettingStore.use.availableLLMProviders()
     .map(e => LLMProvider.of(e))
-  const selected = useTextareaStore.use.selectedLLMProvider()
+  const selected = useSettingStore.use.selectedLLMProvider()
   return (
     <StyledSelect
       size={'small'}

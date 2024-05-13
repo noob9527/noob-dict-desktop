@@ -1,6 +1,6 @@
-import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { quiz_singular_choice } from './quest-prompts'
 
-export const wordEnToCnPromptText = `
+export const trans_word_en_to_cn = `
 You are an experienced English tutor, and I am your student from China. My goal is to improve my English vocabulary.
 I will provide you with either an English word or a Chinese word, and your task is to teach me about that word.
 
@@ -18,11 +18,7 @@ Please provide your explanations in both English and Chinese to facilitate my un
 word: {text}
 `
 
-export const wordEnToCnPrompt = ChatPromptTemplate.fromMessages([
-  ['human', wordEnToCnPromptText],
-])
-
-export const textAreaEnToCnPromptText = `
+export const trans_text_en_to_cn = `
 You are an experienced English tutor, and I am your student from China.
 Please translate the following text from English to Chinese.
 
@@ -31,7 +27,7 @@ text:
 `
 
 // https://github.com/f/awesome-chatgpt-prompts?tab=readme-ov-file#act-as-an-english-translator-and-improver
-export const textAreaToEnPromptText = `
+export const trans_text_to_en = `
 I want you to act as an English translator, spelling corrector and improver. 
 I will speak to you in any language and you will detect the language, 
 translate it and answer in the corrected and improved version of my text, in English. 
@@ -42,15 +38,7 @@ I want you to only reply the correction, the improvements and nothing else, do n
 I: {text}
 `
 
-export const textAreaToEnPrompt = ChatPromptTemplate.fromMessages([
-  ['human', textAreaToEnPromptText],
-])
-
-export const textAreaEnToCnPrompt = ChatPromptTemplate.fromMessages([
-  ['human', textAreaEnToCnPromptText],
-])
-
-export const enWriteSuggestionPromptText = `
+export const rewrite_text_en = `
 You are an experienced English tutor. I just wrote some text in English, 
 I need your help to review it for typos and grammatical mistakes.
 
@@ -67,6 +55,11 @@ Here is my writing:
 {text}
 """
 `
-export const enWriteSuggestionPrompt = ChatPromptTemplate.fromMessages([
-  ['human', enWriteSuggestionPromptText],
-])
+
+export const defaultPromptTpls = {
+  trans_word_en_to_cn,
+  trans_text_to_en,
+  trans_text_en_to_cn,
+  rewrite_text_en,
+  quiz_singular_choice,
+}

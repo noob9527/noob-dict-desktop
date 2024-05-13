@@ -12,6 +12,8 @@ import {
 } from '../../../common/services/llm/llm-service'
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { immer } from 'zustand/middleware/immer'
+import { Workflow } from '../../../common/services/llm/workflow'
+import { SettingActions, useSettingStore } from '../setting/setting-store'
 
 export enum Tab {
   trans = 'trans',
@@ -39,15 +41,8 @@ interface TranslateState {
   detectedRawLanguage: Language | null
   rawLanguage: Language | null
 
-  // writeSuggestionText: string
-  // translatedText: string
-
   changing: boolean
   mock: boolean
-
-  availableLLMProviders: LLMProvider.Constant[]
-  selectedLLMProvider: LLMProvider.Constant | null
-
   resultMap: LLMResultMap
 
   currentTab: Tab
@@ -63,8 +58,6 @@ const initialState: TranslateState = {
   changing: false,
   mock: false,
 
-  availableLLMProviders: [],
-  selectedLLMProvider: null,
   resultMap: {
     versions: {
       [Tab.trans]: 0,
@@ -100,6 +93,8 @@ export function useCurrentLan(): Language | null {
 }
 
 export namespace TextareaActions {
+  import getPrompt = SettingActions.getPrompt
+
   export function getDeterminedLan() {
     const { rawLanguage, detectedRawLanguage } = useTextareaStore.getState()
     return rawLanguage ?? detectedRawLanguage
@@ -110,39 +105,36 @@ export namespace TextareaActions {
       changing: false,
     })
     const state = useTextareaStore.getState()
-    const { raw, currentTab, selectedLLMProvider } = state
+    const { selectedLLMProvider } = useSettingStore.getState()
+    const { raw, currentTab } = state
     if (!raw) return
 
-    let stream: IterableReadableStream<string>
+    let prompt: string
     const lan = getDeterminedLan()
     switch (currentTab) {
       case Tab.trans:
         switch (lan) {
           case 'EN':
-            stream = await routerLLMService.textAreaEnToCn(raw, {
-              provider: selectedLLMProvider,
-            })
+            prompt = getPrompt(Workflow.trans_text_en_to_cn)
             break
           case 'ZH':
-            stream = await routerLLMService.textAreaToEn(raw, {
-              provider: selectedLLMProvider,
-            })
+            prompt = getPrompt(Workflow.trans_text_to_en)
             break
           case 'JP':
-            stream = await routerLLMService.textAreaToEn(raw, {
-              provider: selectedLLMProvider,
-            })
+            prompt = getPrompt(Workflow.trans_text_to_en)
             break
           default:
             throw new Error(`unsupported language ${lan}`)
         }
         break
       case Tab.rewrite:
-        stream = await routerLLMService.writeSuggestion(raw, {
-          provider: selectedLLMProvider,
-        })
+        prompt = getPrompt(Workflow.rewrite_text_en)
         break
     }
+    const stream: IterableReadableStream<string> =
+      await routerLLMService.invoke({ text: raw }, prompt, {
+        provider: selectedLLMProvider,
+      })
 
     let version = 0
     useTextareaStore.setState((state) => {
@@ -227,33 +219,9 @@ export namespace TextareaActions {
   }
 
   export function changeProvider(provider: LLMProvider.Constant) {
-    useTextareaStore.setState({
+    useSettingStore.setState({
       selectedLLMProvider: provider,
     })
     callLLM().then()
-  }
-
-  export async function setLLMAvailable() {
-    const available = await Promise.all(
-      LLMProvider.values().map((e) => {
-        return routerLLMService.getAvailable({
-          provider: e.name as LLMProvider.Constant,
-        })
-      }),
-    )
-
-    let availableLLMProviders = LLMProvider.values()
-      .map((e) => e.name)
-      .filter((e, i) => {
-        return available[i]
-      })
-
-    useTextareaStore.setState((state) => ({
-      availableLLMProviders,
-      selectedLLMProvider:
-        state.selectedLLMProvider ?? availableLLMProviders.length
-          ? availableLLMProviders[0]
-          : null,
-    }))
   }
 }

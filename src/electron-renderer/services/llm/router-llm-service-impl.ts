@@ -7,6 +7,7 @@ import {
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { LLMProvider } from '../../../common/services/llm/provider'
 import { AbstractLLMService } from '../../../common/services/llm/abstract-llm-service'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
 
 @injectable()
 export class RouterLLMServiceImpl implements LLMService {
@@ -47,31 +48,11 @@ export class RouterLLMServiceImpl implements LLMService {
     }
   }
 
-  textAreaEnToCn(
-    text: string,
+  invoke(
+    input: any,
+    prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
-    return this.getService(option).textAreaEnToCn(text, option)
-  }
-
-  textAreaToEn(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>> {
-    return this.getService(option).textAreaToEn(text, option)
-  }
-
-  wordEnToCn(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>> {
-    return this.getService(option).wordEnToCn(text, option)
-  }
-
-  writeSuggestion(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>> {
-    return this.getService(option).writeSuggestion(text, option)
+    return this.getService(option).invoke(input, prompt, option)
   }
 }

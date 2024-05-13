@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { settingChange, useSettingStore } from '../setting-store'
+import { settingChange2, useSettingStore } from '../setting-store'
 import React from 'react'
 import { ThemedInput } from '../../../components/themed-ui/input/input'
 import {
@@ -12,9 +12,9 @@ const Container = styled.div``
 
 export const OpenAiSetting = () => {
   const llm = useSettingStore.use.llm()
-  const baseUrl = llm.open_ai?.base_url
-  const apiKey = llm.open_ai?.api_key
-  const modelName = llm.open_ai?.model_name
+  const baseUrl = llm.providers.open_ai?.base_url
+  const apiKey = llm.providers.open_ai?.api_key
+  const modelName = llm.providers.open_ai?.model_name
   return (
     <Container>
       <h1>Open AI</h1>
@@ -31,14 +31,11 @@ export const OpenAiSetting = () => {
           <ThemedInput
             value={baseUrl ?? ''}
             onChange={(e) => {
-              settingChange({
-                llm: {
-                  ...llm,
-                  open_ai: {
-                    ...(llm?.open_ai ?? {}),
-                    base_url: e.target.value ? e.target.value : null,
-                  }
-                },
+              settingChange2((state) => {
+                state.llm.providers.open_ai = {
+                  ...(state.llm.providers.open_ai ?? {}),
+                  base_url: e.target.value ? e.target.value : null,
+                }
               })
             }}
             spellCheck={false}
@@ -51,14 +48,11 @@ export const OpenAiSetting = () => {
           <ThemedInput
             value={apiKey ?? ''}
             onChange={(e) => {
-              settingChange({
-                llm: {
-                  ...llm,
-                  open_ai: {
-                    ...(llm?.open_ai ?? {}),
-                    api_key: e.target.value ? e.target.value : null,
-                  }
-                },
+              settingChange2((state) => {
+                state.llm.providers.open_ai = {
+                  ...(state.llm.providers.open_ai ?? {}),
+                  api_key: e.target.value ? e.target.value : null,
+                }
               })
             }}
             spellCheck={false}
@@ -71,14 +65,11 @@ export const OpenAiSetting = () => {
           <ThemedInput
             value={modelName ?? ''}
             onChange={(e) => {
-              settingChange({
-                llm: {
-                  ...llm,
-                  open_ai: {
-                    ...(llm?.open_ai ?? {}),
-                    model_name: e.target.value ? e.target.value : null,
-                  }
-                },
+              settingChange2((state) => {
+                state.llm.providers.open_ai = {
+                  ...(state.llm.providers.open_ai ?? {}),
+                  model_name: e.target.value ? e.target.value : null,
+                }
               })
             }}
             spellCheck={false}

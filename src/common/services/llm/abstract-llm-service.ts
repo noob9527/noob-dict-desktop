@@ -2,13 +2,8 @@ import { LLMInitOption, LLMInvokeOption, LLMService } from './llm-service';
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { BaseChatModel } from '@langchain/core/dist/language_models/chat_models'
 import { StringOutputParser } from '@langchain/core/output_parsers'
-import {
-  enWriteSuggestionPrompt,
-  textAreaEnToCnPrompt,
-  textAreaToEnPrompt,
-  wordEnToCnPrompt,
-} from './prompts'
 import { injectable } from 'inversify';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 @injectable()
 export abstract class AbstractLLMService implements LLMService {
@@ -31,43 +26,23 @@ export abstract class AbstractLLMService implements LLMService {
     return Promise.resolve(this.fetchModel(option) != null)
   }
 
-  textAreaEnToCn(
-    text: string,
+  invoke(
+    input: any,
+    prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
-    return textAreaEnToCnPrompt
+    let pro: ChatPromptTemplate
+    if (typeof prompt == 'string') {
+      pro = ChatPromptTemplate.fromMessages([
+        ['human', prompt],
+      ])
+    } else {
+      pro = prompt
+    }
+    return pro
       .pipe(this.getModel(option))
       .pipe(this.outputParser)
-      .stream({ text })
+      .stream(input)
   }
 
-  textAreaToEn(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>> {
-    return textAreaToEnPrompt
-      .pipe(this.getModel(option))
-      .pipe(this.outputParser)
-      .stream({ text })
-  }
-
-  wordEnToCn(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>> {
-    return wordEnToCnPrompt
-      .pipe(this.getModel(option))
-      .pipe(this.outputParser)
-      .stream({ text })
-  }
-
-  writeSuggestion(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>> {
-    return enWriteSuggestionPrompt
-      .pipe(this.getModel(option))
-      .pipe(this.outputParser)
-      .stream({ text })
-  }
 }

@@ -1,5 +1,5 @@
 import styled from 'styled-components'
-import { settingChange, useSettingStore } from '../setting-store'
+import { settingChange2, useSettingStore } from '../setting-store'
 import React from 'react'
 import { ThemedInput } from '../../../components/themed-ui/input/input'
 import {
@@ -12,8 +12,8 @@ const Container = styled.div``
 
 export const OllamaSetting = () => {
   const llm = useSettingStore.use.llm()
-  const baseUrl = llm.ollama?.base_url
-  const modelName = llm.ollama?.model_name
+  const baseUrl = llm.providers.ollama?.base_url
+  const modelName = llm.providers.ollama?.model_name
   return (
     <Container>
       <h1>Ollama</h1>
@@ -23,14 +23,11 @@ export const OllamaSetting = () => {
           <ThemedInput
             value={baseUrl ?? ''}
             onChange={(e) => {
-              settingChange({
-                llm: {
-                  ...llm,
-                  ollama: {
-                    ...(llm?.ollama ?? {}),
-                    base_url: e.target.value ? e.target.value : null,
-                  },
-                },
+              settingChange2((state) => {
+                state.llm.providers.ollama = {
+                  ...(state.llm.providers.ollama ?? {}),
+                  base_url: e.target.value ? e.target.value : null,
+                }
               })
             }}
             spellCheck={false}
@@ -43,14 +40,11 @@ export const OllamaSetting = () => {
           <ThemedInput
             value={modelName ?? ''}
             onChange={(e) => {
-              settingChange({
-                llm: {
-                  ...llm,
-                  ollama: {
-                    ...(llm?.ollama ?? {}),
-                    model_name: e.target.value ? e.target.value : null,
-                  },
-                },
+              settingChange2((state) => {
+                state.llm.providers.ollama = {
+                  ...(state.llm.providers.ollama ?? {}),
+                  model_name: e.target.value ? e.target.value : null,
+                }
               })
             }}
             spellCheck={false}

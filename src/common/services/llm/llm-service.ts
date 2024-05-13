@@ -1,5 +1,6 @@
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { LLMProvider } from './provider';
+import { ChatPromptTemplate } from '@langchain/core/prompts';
 
 export const RouterLLMServiceToken = Symbol.for('router-llm-service')
 
@@ -19,23 +20,9 @@ export interface LLMService {
     option?: LLMInvokeOption,
   ): Promise<boolean>
 
-  wordEnToCn(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>>
-
-  textAreaEnToCn(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>>
-
-  textAreaToEn(
-    text: string,
-    option?: LLMInvokeOption,
-  ): Promise<IterableReadableStream<string>>
-
-  writeSuggestion(
-    text: string,
+  invoke(
+    input: any,
+    prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>>
 }

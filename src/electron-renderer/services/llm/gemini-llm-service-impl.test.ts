@@ -1,5 +1,6 @@
 import 'reflect-metadata'
 import { GeminiLLMServiceImpl } from './gemini-llm-service-impl';
+import { defaultPromptTpls } from '../../../common/services/llm/prompts/prompts';
 
 const GEMINI_API_KEY= process.env['GEMINI_API_KEY']
 
@@ -23,8 +24,10 @@ xdescribe('GeminiLLMServiceImpl', () => {
     })
 
     it('basic case', async () => {
-      const stream = await service.wordEnToCn('apple')
-
+      const stream = await service.invoke(
+        {text: 'apple'},
+        defaultPromptTpls.trans_word_en_to_cn
+      )
       for await (const chunk of stream) {
         console.log(chunk)
       }

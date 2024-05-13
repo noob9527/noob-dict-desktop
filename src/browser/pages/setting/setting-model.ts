@@ -66,14 +66,7 @@ const settingModel: SettingModel = {
     'search.syncHistory.syncOnStart': true,
     'search.syncHistory.syncIntervalMinutes': -1,
     llm: {
-      open_ai: {
-        base_url: null,
-        api_key: null,
-        model_name: null,
-      },
-      gemini: {
-        api_key: null,
-      }
+      providers: {},
     },
   },
   effects,

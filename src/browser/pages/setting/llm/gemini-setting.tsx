@@ -1,10 +1,12 @@
 import styled from 'styled-components'
-import { Icon } from 'antd'
-import { ThemedButton } from '../../../components/themed-ui/button/button'
-import { settingChange, useSettingStore } from '../setting-store'
+import { settingChange2, useSettingStore } from '../setting-store'
 import React from 'react'
 import { ThemedInput } from '../../../components/themed-ui/input/input'
-import { SettingEntry, SettingEntryControl, SettingEntryLabel } from '../components';
+import {
+  SettingEntry,
+  SettingEntryControl,
+  SettingEntryLabel,
+} from '../components'
 
 const Container = styled.div``
 
@@ -25,16 +27,13 @@ export const GeminiSetting = () => {
         <SettingEntryLabel>API Key: </SettingEntryLabel>
         <SettingEntryControl>
           <ThemedInput
-            value={llm?.gemini?.api_key ?? ''}
+            value={llm?.providers?.gemini?.api_key ?? ''}
             onChange={(e) => {
-              settingChange({
-                llm: {
-                  ...llm,
-                  gemini: {
-                    ...(llm?.gemini ?? {}),
-                    api_key: e.target.value ? e.target.value : null,
-                  }
-                },
+              settingChange2((state) => {
+                state.llm.providers.gemini = {
+                  ...(state.llm.providers.gemini ?? {}),
+                  api_key: e.target.value ? e.target.value : null,
+                }
               })
             }}
             spellCheck={false}

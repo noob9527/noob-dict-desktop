@@ -11,6 +11,7 @@ import { ModelSelect } from './model-selector';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import changeTab = TextareaActions.changeTab;
+import { useSettingStore } from '../setting/setting-store';
 
 const Header = styled.div`
   display: flex;
@@ -60,7 +61,7 @@ export const RightPane: React.FC = () => {
   //   dispatch(push(`${url}/${routeName}`));
   // }
 
-  const availableLLMProviders = useTextareaStore.use
+  const availableLLMProviders = useSettingStore.use
     .availableLLMProviders()
   const raw = useTextareaStore.use.raw()
   const language = useCurrentLan()

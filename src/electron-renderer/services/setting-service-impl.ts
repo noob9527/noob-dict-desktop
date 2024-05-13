@@ -59,35 +59,35 @@ export class ElectronSettingService implements SettingService {
       RouterLLMServiceToken,
     )
     if (
-      !isEqual(oldValue?.llm?.open_ai, newValue.llm?.open_ai) &&
-      newValue.llm?.open_ai
+      !isEqual(oldValue?.llm?.providers?.open_ai, newValue.llm?.providers?.open_ai) &&
+      newValue.llm?.providers?.open_ai
     ) {
       routerLLMService.init({
         provider: LLMProvider.Constant.OPEN_AI,
-        baseUrl: newValue.llm.open_ai.base_url,
-        model: newValue.llm.open_ai.model_name,
-        apiKey: newValue.llm.open_ai.api_key,
+        baseUrl: newValue.llm?.providers.open_ai.base_url,
+        model: newValue.llm?.providers.open_ai.model_name,
+        apiKey: newValue.llm?.providers.open_ai.api_key,
       })
     }
 
     if (
-      !isEqual(oldValue?.llm?.gemini, newValue.llm?.gemini) &&
-      newValue.llm?.gemini
+      !isEqual(oldValue?.llm?.providers?.gemini, newValue.llm?.providers?.gemini) &&
+      newValue.llm?.providers?.gemini
     ) {
       routerLLMService.init({
         provider: LLMProvider.Constant.GEMINI,
-        apiKey: newValue.llm.gemini.api_key,
+        apiKey: newValue.llm?.providers.gemini.api_key,
       })
     }
 
     if (
-      !isEqual(oldValue?.llm?.ollama, newValue.llm?.ollama) &&
-      newValue.llm?.ollama
+      !isEqual(oldValue?.llm?.providers?.ollama, newValue.llm?.providers?.ollama) &&
+      newValue.llm?.providers?.ollama
     ) {
       routerLLMService.init({
         provider: LLMProvider.Constant.OLLAMA,
-        baseUrl: newValue.llm.ollama.base_url,
-        model: newValue.llm.ollama.model_name,
+        baseUrl: newValue.llm?.providers.ollama.base_url,
+        model: newValue.llm?.providers.ollama.model_name,
       })
     }
     return newValue
