@@ -1,6 +1,5 @@
 import React from 'react'
 import styled from 'styled-components'
-import { RightPaneMenu, RightPaneMenuItem } from './right-pane-menu'
 import { Route, Switch, useLocation, useRouteMatch } from 'react-router-dom';
 import { TranslatePage } from './translate/translate-page'
 import { WriteSuggestionPage } from './write-suggestion/write-suggestion-page'
@@ -12,6 +11,7 @@ import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import changeTab = TextareaActions.changeTab;
 import { useSettingStore } from '../setting/setting-store';
+import { RouterMenu, RouterMenuItem } from '../../components/themed-ui/tabs/router-menu';
 
 const Header = styled.div`
   display: flex;
@@ -82,32 +82,32 @@ export const RightPane: React.FC = () => {
   if (language == 'EN') {
     // display rewrite tab only when lan is EN
     menu = (
-      <RightPaneMenu>
-        <RightPaneMenuItem
+      <RouterMenu>
+        <RouterMenuItem
           active={active == 'translate'}
           onClick={() => {
             changeTab(Tab.trans)
             // goto('/main/textarea/translate')
           }}
           to={'/main/textarea/translate'}
-        >Trans</RightPaneMenuItem>
-        <RightPaneMenuItem
+        >Trans</RouterMenuItem>
+        <RouterMenuItem
           active={active == 'write_suggestion'}
           onClick={() => {
             changeTab(Tab.rewrite)
             // goto('/main/textarea/write_suggestion')
           }}
           to={'/main/textarea/write_suggestion'}
-        >Rewrite</RightPaneMenuItem>
-      </RightPaneMenu>
+        >Rewrite</RouterMenuItem>
+      </RouterMenu>
     )
   } else {
     menu = (
-      <RightPaneMenu>
-        <RightPaneMenuItem
+      <RouterMenu>
+        <RouterMenuItem
           active={active == 'translate'}
-          to={'/main/textarea/translate'}>Trans</RightPaneMenuItem>
-      </RightPaneMenu>
+          to={'/main/textarea/translate'}>Trans</RouterMenuItem>
+      </RouterMenu>
     )
   }
 

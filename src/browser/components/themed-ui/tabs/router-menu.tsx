@@ -1,24 +1,16 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import styled from 'styled-components';
-import ColorId from '../../styles/ColorId';
+import styled from 'styled-components'
+import ColorId from '../../../styles/ColorId'
+import React from 'react'
+import { Link } from 'react-router-dom'
 
-const RightPaneMenu = styled.ul`
-  background-color: ${props => props.theme[ColorId.tab_inactiveBackground]};
-  color: ${props => props.theme[ColorId.tab_inactiveForeground]};
+export const RouterMenu = styled.ul`
+  background-color: ${(props) => props.theme[ColorId.tab_inactiveBackground]};
+  color: ${(props) => props.theme[ColorId.tab_inactiveForeground]};
   margin: 0;
   padding: 0;
-`;
+`
 
-const MenuItemElement: React.FC<any> = (props) => {
-  let { active, onClick, to, className, children } = props;
-  className += (active ? ' active' : '');
-  return (
-    <li className={className} onClick={onClick}><Link tabIndex={-1} to={to}>{children}</Link></li>
-  );
-};
-
-const RightPaneMenuItem = styled(MenuItemElement)`
+const MenuItemContainer = styled.li`
     display: inline-block;
     //border-bottom: none;
     //position: relative;
@@ -47,10 +39,16 @@ const RightPaneMenuItem = styled(MenuItemElement)`
     a:hover {
       color: unset;
     }
-`;
+`
 
-export {
-  RightPaneMenu,
-  RightPaneMenuItem
-};
-
+export const RouterMenuItem: React.FC<any> = (props) => {
+  let { active, onClick, to, className, children } = props
+  className += active ? ' active' : ''
+  return (
+    <MenuItemContainer className={className} onClick={onClick}>
+      <Link tabIndex={-1} to={to}>
+        {children}
+      </Link>
+    </MenuItemContainer>
+  )
+}
