@@ -20,6 +20,6 @@ export class OllamaLLMServiceImpl extends AbstractLLMService {
   }
 
   fetchModel(option: LLMInvokeOption): BaseChatModel | null {
-    return this._model as BaseChatModel | null
+    return this._model
   }
 }

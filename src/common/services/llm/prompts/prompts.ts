@@ -15,7 +15,7 @@ If I give you an English word, please provide the following:
 If I give you a Chinese word, please first find the equivalent English word, then continue the above steps
 Please provide your explanations in both English and Chinese to facilitate my understanding.
 
-word: {text}
+word: {{text}}
 `
 
 export const trans_text_en_to_cn = `
@@ -23,7 +23,7 @@ You are an experienced English tutor, and I am your student from China.
 Please translate the following text from English to Chinese.
 
 text:
-{text}
+{{text}}
 `
 
 // https://github.com/f/awesome-chatgpt-prompts?tab=readme-ov-file#act-as-an-english-translator-and-improver
@@ -35,7 +35,7 @@ I want you to replace my simplified A0-level words and sentences with more beaut
 and elegant, upper level English words and sentences. 
 Keep the meaning same, but make them more literary. 
 I want you to only reply the correction, the improvements and nothing else, do not write explanations. 
-I: {text}
+I: {{text}}
 `
 
 export const rewrite_text_en = `
@@ -52,7 +52,7 @@ Note that:
 
 Here is my writing: 
 """
-{text}
+{{text}}
 """
 `
 

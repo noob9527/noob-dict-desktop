@@ -31,7 +31,7 @@ describe('OpenAILLMServiceImpl', () => {
     })
 
     it('basic case', async () => {
-      const stream = await service.invoke(
+      const stream = await service.stream(
         {text: 'apple'},
         defaultPromptTpls.trans_word_en_to_cn
       )

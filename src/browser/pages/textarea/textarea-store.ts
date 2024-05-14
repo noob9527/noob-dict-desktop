@@ -132,7 +132,7 @@ export namespace TextareaActions {
         break
     }
     const stream: IterableReadableStream<string> =
-      await routerLLMService.invoke({ text: raw }, prompt, {
+      await routerLLMService.stream({ text: raw }, prompt, {
         provider: selectedLLMProvider,
       })
 

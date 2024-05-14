@@ -20,7 +20,7 @@ export interface LLMService {
     option?: LLMInvokeOption,
   ): Promise<boolean>
 
-  invoke(
+  stream(
     input: any,
     prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,

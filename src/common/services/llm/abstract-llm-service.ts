@@ -3,7 +3,7 @@ import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { BaseChatModel } from '@langchain/core/dist/language_models/chat_models'
 import { StringOutputParser } from '@langchain/core/output_parsers'
 import { injectable } from 'inversify';
-import { ChatPromptTemplate } from '@langchain/core/prompts';
+import { ChatPromptTemplate, HumanMessagePromptTemplate } from '@langchain/core/prompts';
 
 @injectable()
 export abstract class AbstractLLMService implements LLMService {
@@ -26,7 +26,7 @@ export abstract class AbstractLLMService implements LLMService {
     return Promise.resolve(this.fetchModel(option) != null)
   }
 
-  invoke(
+  stream(
     input: any,
     prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,
@@ -34,7 +34,9 @@ export abstract class AbstractLLMService implements LLMService {
     let pro: ChatPromptTemplate
     if (typeof prompt == 'string') {
       pro = ChatPromptTemplate.fromMessages([
-        ['human', prompt],
+        HumanMessagePromptTemplate.fromTemplate(prompt, {
+          templateFormat: 'mustache',
+        })
       ])
     } else {
       pro = prompt

@@ -48,11 +48,11 @@ export class RouterLLMServiceImpl implements LLMService {
     }
   }
 
-  invoke(
+  stream(
     input: any,
     prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
-    return this.getService(option).invoke(input, prompt, option)
+    return this.getService(option).stream(input, prompt, option)
   }
 }
