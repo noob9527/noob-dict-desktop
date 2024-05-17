@@ -40,7 +40,8 @@ export class QuizGeneratorImpl implements QuizGenerator {
       // try our best to extract json from response
       const obj = getJsonObj(res)
       if (isSingleChoiceQuestion(obj)) {
-        return obj
+        const res = { ...obj, word: input.text }
+        return res
       } else {
         let message = `Generation failed! 
         Retry Times: ${times}
@@ -58,22 +59,24 @@ export class QuizGeneratorImpl implements QuizGenerator {
   }
 
   async generateSingularChoiceBatch(
-    length: number,
-    input: GenerateSingularChoiceInput,
+    inputs: GenerateSingularChoiceInput[],
     prompt: ChatPromptTemplate,
     option?: LLMInitOption,
     maxRetryTimes: number = 2,
   ): Promise<SingleChoiceQuestion[]> {
     const res = await Promise.all(
-      Array.from({ length })
-        .map(() => {
-        return this.generateSingularChoice(input, prompt, option, maxRetryTimes)
-          .catch(e => {
-            this.log.error(e.message)
-            return null
-          })
+      inputs.map((e) => {
+        return this.generateSingularChoice(
+          e,
+          prompt,
+          option,
+          maxRetryTimes,
+        ).catch((e) => {
+          this.log.error(e.message)
+          return null
+        })
       }),
     )
-    return res.filter(e => !!e) as SingleChoiceQuestion[]
+    return res.filter((e) => !!e) as SingleChoiceQuestion[]
   }
 }

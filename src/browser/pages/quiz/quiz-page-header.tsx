@@ -36,9 +36,9 @@ export const QuizPageHeader: React.FC = () => {
       useQuizStore.setState({
         selectedLLMProvider: availableLLMProviders[0],
       })
-    }
-    if (!questionContainers.length) {
-      generateQuestions(2)
+      if (!questionContainers.length) {
+        generateQuestions(2)
+      }
     }
   }, [availableLLMProviders, questionContainers])
 

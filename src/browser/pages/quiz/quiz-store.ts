@@ -74,16 +74,17 @@ export namespace QuizActions {
   import getPrompt = SettingActions.getPrompt
   import getLLMInitOption = SettingActions.getLLMInitOption
 
-  async function getRandomNote(): Promise<INote | null> {
+  async function getRandomNotes(length: number): Promise<INote[] | null> {
     const user_id = useRootStore.getState().currentUser?.id ?? ''
     const notes = await noteService.fetchLatest(20, user_id)
     if (!notes.length) return null
-    return notes[random(notes.length - 1)]
+    return Array.from({length})
+      .map(e => notes[random(notes.length - 1)])
   }
 
   export async function generateQuestions(length: number) {
-    const note = await getRandomNote()
-    if (!note) return
+    const notes = await getRandomNotes(length)
+    if (!notes) return
 
     const prompt = getPrompt(Workflow.quiz_singular_choice)
     const tpl = toPromptTemplate(prompt)
@@ -99,8 +100,7 @@ export namespace QuizActions {
     })
 
     const questions = await quizGenerator.generateSingularChoiceBatch(
-      length,
-      { text: note.text },
+      notes.map(e => ({ text: e.text })),
       tpl,
       {
         ...option,
