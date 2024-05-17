@@ -3632,6 +3632,11 @@ bcrypt-pbkdf@^1.0.0:
   dependencies:
     tweetnacl "^0.14.3"
 
+best-effort-json-parser@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.npmmirror.com/best-effort-json-parser/-/best-effort-json-parser-1.1.0.tgz#cbf550561a83c2e801637e4732a893da97aece3c"
+  integrity sha512-nQlkhwPALqtbC/y9C38d3I7t2k9bTDJO/Or40INW/JsGwhdpmGgw2cajJ2I/oUN9FBBNBvbII/PFCnbw2BIlRA==
+
 big-integer@^1.6.17:
   version "1.6.51"
   resolved "https://registry.npmmirror.com/big-integer/-/big-integer-1.6.51.tgz#0df92a5d9880560d3ff2d5fd20245c889d130686"

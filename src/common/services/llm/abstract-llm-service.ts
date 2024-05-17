@@ -1,20 +1,30 @@
-import { LLMInitOption, LLMInvokeOption, LLMService } from './llm-service';
+import { LLMInitOption, LLMInvokeOption, LLMService } from './llm-service'
 import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { BaseChatModel } from '@langchain/core/dist/language_models/chat_models'
 import { StringOutputParser } from '@langchain/core/output_parsers'
-import { injectable } from 'inversify';
-import { ChatPromptTemplate, HumanMessagePromptTemplate } from '@langchain/core/prompts';
+import { injectable } from 'inversify'
+import { ChatPromptTemplate } from '@langchain/core/prompts'
+import logger from '../../../electron-shared/logger'
+import { toPromptTemplate } from './utils'
 
 @injectable()
 export abstract class AbstractLLMService implements LLMService {
   protected outputParser = new StringOutputParser()
+  protected _model: BaseChatModel | null = null
+  private log = logger.getLogger(this.constructor.name)
 
-  abstract fetchModel(option?: LLMInvokeOption): BaseChatModel | null
+  abstract createModel(option?: LLMInitOption): BaseChatModel
 
-  abstract init(option: LLMInitOption)
+  init(option: LLMInitOption) {
+    try {
+      this._model = this.createModel(option)
+    } catch (e) {
+      this.log.error(e)
+    }
+  }
 
-  getModel(option?: LLMInvokeOption) {
-    const model = this.fetchModel(option)
+  getModel() {
+    const model = this._model
     if (model == null) {
       throw new Error("Model hasn't been initialized yet!")
     } else {
@@ -23,7 +33,7 @@ export abstract class AbstractLLMService implements LLMService {
   }
 
   getAvailable(option?: LLMInvokeOption): Promise<boolean> {
-    return Promise.resolve(this.fetchModel(option) != null)
+    return Promise.resolve(this._model != null)
   }
 
   stream(
@@ -31,20 +41,16 @@ export abstract class AbstractLLMService implements LLMService {
     prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
-    let pro: ChatPromptTemplate
-    if (typeof prompt == 'string') {
-      pro = ChatPromptTemplate.fromMessages([
-        HumanMessagePromptTemplate.fromTemplate(prompt, {
-          templateFormat: 'mustache',
-        })
-      ])
-    } else {
-      pro = prompt
-    }
-    return pro
-      .pipe(this.getModel(option))
-      .pipe(this.outputParser)
-      .stream(input)
+    let pro = toPromptTemplate(prompt)
+    return pro.pipe(this.getModel()).pipe(this.outputParser).stream(input)
   }
 
+  invoke(
+    input: any,
+    prompt: string | ChatPromptTemplate,
+    option?: LLMInvokeOption,
+  ): Promise<string> {
+    let pro = toPromptTemplate(prompt)
+    return pro.pipe(this.getModel()).pipe(this.outputParser).invoke(input)
+  }
 }

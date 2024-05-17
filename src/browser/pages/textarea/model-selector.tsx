@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useEffect } from 'react';
 import styled from 'styled-components'
 import { ThemedSelect } from '../../components/themed-ui/selector/select'
-import { TextareaActions } from './textarea-store'
+import { TextareaActions, useTextareaStore } from './textarea-store';
 import { LLMProvider } from '../../../common/services/llm/provider'
 import { useSettingStore } from '../setting/setting-store'
 import changeProvider = TextareaActions.changeProvider
@@ -13,7 +13,15 @@ const StyledSelect = styled(ThemedSelect)`
 export const ModelSelect: React.FC = () => {
   const providers = useSettingStore.use.availableLLMProviders()
     .map(e => LLMProvider.of(e))
-  const selected = useSettingStore.use.selectedLLMProvider()
+  const selected = useTextareaStore.use.selectedLLMProvider()
+
+  useEffect(() => {
+    // select 1 provider if we've got any available providers
+    if (providers.length) {
+      changeProvider(providers[0].name as LLMProvider.Constant)
+    }
+  }, providers)
+
   return (
     <StyledSelect
       size={'small'}

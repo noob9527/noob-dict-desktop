@@ -3,6 +3,13 @@ import ColorId from '../styles/ColorId'
 
 export const dark = {}
 
+dark[ColorId.primary] = Color.hsl(217.2, 91.2, 30)
+// dark[ColorId.success] = Color.hsl(142.1, 70.6, 45.3).darken(0.5)
+dark[ColorId.success] = Color.hsl(142.1, 70.6, 22.5)
+// dark[ColorId.error] = Color.hsl(346.8, 77.2, 49.8).darken(0.5)
+dark[ColorId.error] = Color.hsl(346.8, 77.2, 25)
+dark[ColorId.accent] = Color.hsl(20.5, 90.2, 25)
+
 dark[ColorId.background] = Color('#1E1E1E')
 dark[ColorId.foreground] = Color('#D4D4D4')
 

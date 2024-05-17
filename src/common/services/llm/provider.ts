@@ -7,30 +7,35 @@ export class LLMProvider extends EnumFactory<LLMProvider>() {
     'GEMINI',
     'Gemini',
     Symbol.for('gemini-llm-service'),
+    'gemini',
   )
   @EnumValue
   static readonly OPEN_AI = new LLMProvider(
     'OPEN_AI',
     'Open AI',
     Symbol.for('open-ai-llm-service'),
+    'open_ai',
   )
   @EnumValue
   static readonly OLLAMA = new LLMProvider(
     'OLLAMA',
     'Ollama',
     Symbol.for('ollama-llm-service'),
+    'ollama'
   )
   @EnumValue
   static readonly FAKE = new LLMProvider(
     'FAKE',
     'Fake',
     Symbol.for('fake-llm-service'),
+    null,
   )
 
   constructor(
     public override name: string,
     public label: string,
     public serviceToken: symbol,
+    public settingKey: string | null,
   ) {
     super()
   }

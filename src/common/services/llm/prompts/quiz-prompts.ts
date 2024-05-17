@@ -63,7 +63,7 @@ export const quiz_singular_choice = `
   3. 确定正确答案，并提供解释。
   4. 使用 json 格式输出题目。
 - Examples:
-  - 单词：'consent'
+  - 用户想要练习的英语单词：'consent'
     输出：\`\`\`json
       {
         "question": "The boy slipped out of the room and headed for the swimming pool without his parents' _____."
@@ -77,7 +77,7 @@ export const quiz_singular_choice = `
         "explanation": "consent 同意, 赞成, 答应。conviction 深信, 确信。compromise 妥协, 折中。command 命令, 指令; 掌握, 运用能力。"
       }
     \`\`\`
-  - 单词：'comprehensive'
+  - 用户想要练习的英语单词：'comprehensive'
     输出：\`\`\`json
       {
         "question": "Henry's news report covering the conference was so _____ that nothing had been omitted."

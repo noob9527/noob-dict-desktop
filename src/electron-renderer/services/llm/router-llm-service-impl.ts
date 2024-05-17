@@ -8,6 +8,7 @@ import { IterableReadableStream } from '@langchain/core/utils/stream'
 import { LLMProvider } from '../../../common/services/llm/provider'
 import { AbstractLLMService } from '../../../common/services/llm/abstract-llm-service'
 import { ChatPromptTemplate } from '@langchain/core/prompts'
+import { BaseChatModel } from '@langchain/core/dist/language_models/chat_models';
 
 @injectable()
 export class RouterLLMServiceImpl implements LLMService {
@@ -29,6 +30,10 @@ export class RouterLLMServiceImpl implements LLMService {
 
   init(option: LLMInitOption) {
     this.getService(option).init(option)
+  }
+
+  createModel(option?: LLMInitOption): BaseChatModel {
+    return this.getService(option).createModel(option)
   }
 
   getService(option?: LLMInvokeOption): AbstractLLMService {
@@ -54,5 +59,13 @@ export class RouterLLMServiceImpl implements LLMService {
     option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>> {
     return this.getService(option).stream(input, prompt, option)
+  }
+
+  invoke(
+    input: any,
+    prompt: string | ChatPromptTemplate,
+    option?: LLMInvokeOption,
+  ): Promise<string> {
+    return this.getService(option).invoke(input, prompt, option)
   }
 }

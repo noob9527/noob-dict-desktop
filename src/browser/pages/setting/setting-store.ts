@@ -15,17 +15,22 @@ import { Workflow } from '../../../common/services/llm/workflow'
 import { defaultPromptTpls } from '../../../common/services/llm/prompts/prompts'
 import { LLMProvider } from '../../../common/services/llm/provider'
 import {
+  LLMInitOption,
   LLMService,
   RouterLLMServiceToken,
-} from '../../../common/services/llm/llm-service'
+} from '../../../common/services/llm/llm-service';
 import { immer } from 'zustand/middleware/immer'
 import { WritableDraft } from 'immer';
+import {
+  geminiSettingToOption,
+  ollamaSettingToOption,
+  openAISettingToOption
+} from '../../../common/services/llm/utils';
 
 interface SettingState extends UserProfile {
   persisted: UserProfile
   isChanging: boolean
   availableLLMProviders: LLMProvider.Constant[]
-  selectedLLMProvider: LLMProvider.Constant | null
 }
 
 const initData: UserProfile = {
@@ -67,7 +72,6 @@ const initialState: SettingState = {
   persisted: initData,
   isChanging: false,
   availableLLMProviders: [],
-  selectedLLMProvider: null,
   ...initData,
 }
 
@@ -202,15 +206,43 @@ export namespace SettingActions {
       .map((e) => e.name)
       .filter((e, i) => {
         return available[i]
-      })
+      }) as LLMProvider.Constant[]
 
-    useSettingStore.setState((state) => ({
+    useSettingStore.setState({
       availableLLMProviders,
-      selectedLLMProvider:
-        state.selectedLLMProvider ?? availableLLMProviders.length
-          ? availableLLMProviders[0]
-          : null,
-    }))
+    })
+  }
+
+  export function getLLMInitOption(provider: LLMProvider.Constant) {
+    const state = useSettingStore.getState()
+    if(!state.availableLLMProviders.includes(provider)) {
+      return null
+    }
+
+    const llmProvider = LLMProvider.of(provider)
+    if (!llmProvider.settingKey) return null
+
+    const setting = state.llm.providers[llmProvider.settingKey]
+    let option: LLMInitOption | null = null
+    switch (provider) {
+      case LLMProvider.Constant.GEMINI:
+        option = geminiSettingToOption(setting)
+        break
+      case LLMProvider.Constant.OPEN_AI:
+        option = openAISettingToOption(setting)
+        break
+      case LLMProvider.Constant.OLLAMA:
+        option = ollamaSettingToOption(setting)
+        break
+      case LLMProvider.Constant.FAKE:
+        option = {
+          provider
+        }
+        break
+      default:
+        return null
+    }
+    return option
   }
 
 }

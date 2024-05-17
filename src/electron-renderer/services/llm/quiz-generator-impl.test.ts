@@ -5,7 +5,7 @@ import {
   ChatPromptTemplate,
   HumanMessagePromptTemplate,
 } from '@langchain/core/prompts'
-import { quiz_singular_choice, quiz_singular_choice_text } from '../../../common/services/llm/prompts/quest-prompts';
+import { quiz_singular_choice, quiz_singular_choice_text } from '../../../common/services/llm/prompts/quiz-prompts';
 import { ChatOllama } from '@langchain/community/chat_models/ollama';
 
 const XINFERENCE_BASE_URL = process.env['XINFERENCE_BASE_URL']

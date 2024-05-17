@@ -2,6 +2,11 @@
 enum ColorId {
   heart = 'heart', // none stable
 
+  primary = 'primary',
+  accent = 'accent',
+  success = 'success',
+  error = 'error',
+
   background = 'background',
   foreground = 'foreground',
 

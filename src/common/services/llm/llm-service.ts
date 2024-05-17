@@ -13,9 +13,12 @@ export interface LLMInitOption {
   baseUrl?: string | null
   apiKey?: string | null
   model?: string | null
+  temperature?: number | null
+  response_format?: 'json' | null
 }
 
 export interface LLMService {
+
   getAvailable(
     option?: LLMInvokeOption,
   ): Promise<boolean>
@@ -25,4 +28,11 @@ export interface LLMService {
     prompt: string | ChatPromptTemplate,
     option?: LLMInvokeOption,
   ): Promise<IterableReadableStream<string>>
+
+  invoke(
+    input: any,
+    prompt: string | ChatPromptTemplate,
+    option?: LLMInvokeOption,
+  ): Promise<string>
+
 }

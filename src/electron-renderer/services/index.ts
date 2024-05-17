@@ -90,6 +90,8 @@ import {
 } from '../../common/services/llm/llm-service'
 import { LLMProvider } from '../../common/services/llm/provider'
 import { OllamaLLMServiceImpl } from './llm/ollama-llm-service-impl'
+import { QuizGenerator, QuizGeneratorToken } from '../../common/services/llm/quiz-generator';
+import { QuizGeneratorImpl } from './llm/quiz-generator-impl';
 
 function registerAllService() {
   rendererContainer
@@ -167,6 +169,10 @@ function registerAllService() {
   rendererContainer
     .bind<LLMService>(RouterLLMServiceToken)
     .to(RouterLLMServiceImpl)
+  rendererContainer
+    .bind<QuizGenerator>(QuizGeneratorToken)
+    .to(QuizGeneratorImpl)
+
 }
 
 registerAllService();

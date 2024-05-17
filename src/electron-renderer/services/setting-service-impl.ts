@@ -15,6 +15,7 @@ import { isEqual } from 'lodash'
 import { RouterLLMServiceToken } from '../../common/services/llm/llm-service'
 import { LLMProvider } from '../../common/services/llm/provider'
 import { AbstractLLMService } from '../../common/services/llm/abstract-llm-service'
+import { geminiSettingToOption, ollamaSettingToOption, openAISettingToOption } from '../../common/services/llm/utils';
 
 @injectable()
 export class ElectronSettingService implements SettingService {
@@ -62,33 +63,24 @@ export class ElectronSettingService implements SettingService {
       !isEqual(oldValue?.llm?.providers?.open_ai, newValue.llm?.providers?.open_ai) &&
       newValue.llm?.providers?.open_ai
     ) {
-      routerLLMService.init({
-        provider: LLMProvider.Constant.OPEN_AI,
-        baseUrl: newValue.llm?.providers.open_ai.base_url,
-        model: newValue.llm?.providers.open_ai.model_name,
-        apiKey: newValue.llm?.providers.open_ai.api_key,
-      })
+      const option = openAISettingToOption(newValue.llm?.providers.open_ai)
+      routerLLMService.init(option)
     }
 
     if (
       !isEqual(oldValue?.llm?.providers?.gemini, newValue.llm?.providers?.gemini) &&
       newValue.llm?.providers?.gemini
     ) {
-      routerLLMService.init({
-        provider: LLMProvider.Constant.GEMINI,
-        apiKey: newValue.llm?.providers.gemini.api_key,
-      })
+      const option = geminiSettingToOption(newValue.llm?.providers.gemini)
+      routerLLMService.init(option)
     }
 
     if (
       !isEqual(oldValue?.llm?.providers?.ollama, newValue.llm?.providers?.ollama) &&
       newValue.llm?.providers?.ollama
     ) {
-      routerLLMService.init({
-        provider: LLMProvider.Constant.OLLAMA,
-        baseUrl: newValue.llm?.providers.ollama.base_url,
-        model: newValue.llm?.providers.ollama.model_name,
-      })
+      const option = ollamaSettingToOption(newValue.llm?.providers.ollama)
+      routerLLMService.init(option)
     }
     return newValue
   }

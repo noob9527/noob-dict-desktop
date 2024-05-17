@@ -1,4 +1,4 @@
-import { quiz_singular_choice } from './quest-prompts'
+import { quiz_singular_choice } from './quiz-prompts'
 
 export const trans_word_en_to_cn = `
 You are an experienced English tutor, and I am your student from China. My goal is to improve my English vocabulary.

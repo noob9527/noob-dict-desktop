@@ -55,6 +55,13 @@ const MainPage: React.FC = () => {
               <StyledIcon type={'search'} />
             </MainMenuItem>
             <MainMenuItem
+              key={'quiz'}
+              active={location.pathname.includes('quiz')}
+              onClick={() => goto('quiz')}
+            >
+              <StyledIcon type={'question'}/>
+            </MainMenuItem>
+            <MainMenuItem
               key={'table'}
               active={location.pathname.includes('table')}
               onClick={() => goto('table')}
@@ -78,13 +85,6 @@ const MainPage: React.FC = () => {
               <StyledIcon type={'swap'} />
               {/*<StyledIcon type={'form'} />*/}
               {/*<StyledIcon type={'highlight'}/>*/}
-            </MainMenuItem>
-            <MainMenuItem
-              key={'quiz'}
-              active={location.pathname.includes('quiz')}
-              onClick={() => goto('quiz')}
-            >
-              <StyledIcon type={'question'}/>
             </MainMenuItem>
           </MainMenu>
         </SideBar>

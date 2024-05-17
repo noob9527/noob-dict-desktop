@@ -41,6 +41,8 @@ interface TranslateState {
   detectedRawLanguage: Language | null
   rawLanguage: Language | null
 
+  selectedLLMProvider: LLMProvider.Constant | null
+
   changing: boolean
   mock: boolean
   resultMap: LLMResultMap
@@ -57,6 +59,8 @@ const initialState: TranslateState = {
   raw: '',
   changing: false,
   mock: false,
+
+  selectedLLMProvider: null,
 
   resultMap: {
     versions: {
@@ -105,12 +109,13 @@ export namespace TextareaActions {
       changing: false,
     })
     const state = useTextareaStore.getState()
-    const { selectedLLMProvider } = useSettingStore.getState()
-    const { raw, currentTab } = state
+    const { raw, currentTab, selectedLLMProvider } = state
     if (!raw) return
 
-    let prompt: string
+    detectLanguage(raw) // call detect lan immediately
     const lan = getDeterminedLan()
+
+    let prompt: string
     switch (currentTab) {
       case Tab.trans:
         switch (lan) {
@@ -219,7 +224,7 @@ export namespace TextareaActions {
   }
 
   export function changeProvider(provider: LLMProvider.Constant) {
-    useSettingStore.setState({
+    useTextareaStore.setState({
       selectedLLMProvider: provider,
     })
     callLLM().then()
