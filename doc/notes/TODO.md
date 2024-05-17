@@ -4,7 +4,8 @@
 - overview page
 - add a progress bar for sync items process.
 - builtin dictionary?
-- vocabulary quiz?
+- vocabulary quiz
+  - show choice's meaning?
 - anki?
 - alfred API?
 - global sync window?

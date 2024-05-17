@@ -4,16 +4,17 @@ import styled from 'styled-components'
 import { ThemedContent } from '../../components/themed-ui/content/content'
 import { ThemedButton } from '../../components/themed-ui/button/button'
 import { SingleChoice } from './single-choice'
+import { QuizPageHeader } from './quiz-page-header'
+import { ThemedEmpty } from '../../components/themed-ui/empty/empty'
 import previousQuestion = QuizActions.previousQuestion
 import nextQuestion = QuizActions.nextQuestion
-import { QuizPageHeader } from './quiz-page-header';
 
 const Container = styled(ThemedContent)`
   height: 100vh;
   padding: 0 20px 20px 20px;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  //justify-content: space-between;
 `
 
 const Content = styled.div`
@@ -35,9 +36,23 @@ const StyledButton = styled(ThemedButton)`
   }
 `
 
+const StyledEmpty = styled(ThemedEmpty)`
+  flex-grow: 1;
+`
+
 export const QuizPage: React.FC = () => {
   const questionContainers = useQuizStore.use.questionContainers()
   const currentIndex = useQuizStore.use.currentIndex()
+
+  if (!questionContainers.length) {
+    return (
+      <Container>
+        <QuizPageHeader />
+        <StyledEmpty description={'No generated questions'} />
+      </Container>
+    )
+  }
+
   const { question, selectedIndex } = questionContainers[currentIndex]
 
   return (

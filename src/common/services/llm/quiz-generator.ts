@@ -33,5 +33,14 @@ export interface QuizGenerator {
     input: GenerateSingularChoiceInput,
     prompt: ChatPromptTemplate,
     option?: LLMInitOption,
+    maxRetryTimes?: number,
   ): Promise<SingleChoiceQuestion>
+
+  generateSingularChoiceBatch(
+    length: number,
+    input: GenerateSingularChoiceInput,
+    prompt: ChatPromptTemplate,
+    option?: LLMInitOption,
+    maxRetryTimes?: number,
+  ): Promise<SingleChoiceQuestion[]>
 }

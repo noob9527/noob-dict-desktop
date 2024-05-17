@@ -17,10 +17,9 @@ import {
   QuizGeneratorToken,
   SingleChoiceQuestion,
 } from '../../../common/services/llm/quiz-generator'
-import { SettingActions, useSettingStore } from '../setting/setting-store'
+import { SettingActions } from '../setting/setting-store'
 import { Workflow } from '../../../common/services/llm/workflow'
 import { toPromptTemplate } from '../../../common/services/llm/utils'
-import logger from '../../../electron-shared/logger'
 
 const noteService = rendererContainer.get<NoteService>(LocalNoteServiceToken)
 const quizGenerator = rendererContainer.get<QuizGenerator>(QuizGeneratorToken)
@@ -48,14 +47,15 @@ interface QuizState {
   selectedLLMProvider: LLMProvider.Constant | null
   questionContainers: QuestionContainer[]
   currentIndex: number
+  generating: boolean
 }
 
 const initialState: QuizState = {
   currentIndex: 0,
   selectedLLMProvider: null,
-  questionContainers: [{
-    question,
-  }],
+  // questionContainers: [{ question }],
+  questionContainers: [],
+  generating: false,
 }
 
 const useQuizStoreBase = create<QuizState>()(
@@ -81,7 +81,7 @@ export namespace QuizActions {
     return notes[random(notes.length - 1)]
   }
 
-  export async function generateQuestion() {
+  export async function generateQuestions(length: number) {
     const note = await getRandomNote()
     if (!note) return
 
@@ -93,25 +93,29 @@ export namespace QuizActions {
     if (!selectedLLMProvider) {
       throw new Error('No LLM provider')
     }
-
     const option = getLLMInitOption(selectedLLMProvider)
+    useQuizStore.setState({
+      generating: true,
+    })
 
-    const question = await quizGenerator
-      .generateSingularChoice({ text: note.text }, tpl, {
+    const questions = await quizGenerator.generateSingularChoiceBatch(
+      length,
+      { text: note.text },
+      tpl,
+      {
         ...option,
         temperature: 1,
         response_format: 'json',
-      })
-      .catch((e) => {
-        logger.error(e)
-        return null
-      })
-    if (!question) return
+      },
+    )
+    if (!questions.length) return
 
     useQuizStore.setState((state) => {
-      state.questionContainers = [...state.questionContainers, {
-        question,
-      }]
+      state.generating = false
+      state.questionContainers = [
+        ...state.questionContainers,
+        ...questions.map((question) => ({ question })),
+      ]
     })
   }
 
@@ -126,7 +130,7 @@ export namespace QuizActions {
   export function nextQuestion() {
     useQuizStore.setState((state) => {
       if (state.currentIndex >= state.questionContainers.length - 2) {
-        generateQuestion()
+        generateQuestions(1)
       }
       if (state.currentIndex < state.questionContainers.length - 1) {
         state.currentIndex++
