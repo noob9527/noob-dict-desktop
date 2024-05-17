@@ -1,47 +1,30 @@
-import React, { useEffect } from 'react';
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { ThemedSelect } from '../../components/themed-ui/selector/select'
-import { TextareaActions, useTextareaStore } from './textarea-store';
-import { LLMProvider } from '../../../common/services/llm/provider'
+import { TextareaActions, useTextareaStore } from './textarea-store'
 import { useSettingStore } from '../setting/setting-store'
+import { LLMProviderSelector } from '../../components/themed-ui/selector/llm-provider-selector'
 import changeProvider = TextareaActions.changeProvider
 
-const StyledSelect = styled(ThemedSelect)`
+const StyledSelect = styled(LLMProviderSelector)`
   min-width: 100px;
 `
 
 export const ModelSelect: React.FC = () => {
-  const providers = useSettingStore.use.availableLLMProviders()
-    .map(e => LLMProvider.of(e))
+  const availableLLMProviders = useSettingStore.use.availableLLMProviders()
   const selected = useTextareaStore.use.selectedLLMProvider()
 
   useEffect(() => {
     // select 1 provider if we've got any available providers
-    if (providers.length) {
-      changeProvider(providers[0].name as LLMProvider.Constant)
+    if (availableLLMProviders.length) {
+      changeProvider(availableLLMProviders[0], false)
     }
-  }, providers)
+  }, [availableLLMProviders])
 
   return (
     <StyledSelect
-      size={'small'}
-      placeholder="Service Provider"
+      availableProviders={availableLLMProviders}
+      onSelect={(provider) => changeProvider(provider, true)}
       value={selected}
-      optionLabelProp="label"
-      onChange={(value) => {
-        changeProvider(value as LLMProvider.Constant)
-      }}
-    >
-      {providers.map((e) => {
-        return (
-          <StyledSelect.Option
-            key={e.name}
-            label={e.label}
-          >
-            {e.label}
-          </StyledSelect.Option>
-        )
-      })}
-    </StyledSelect>
+    />
   )
 }

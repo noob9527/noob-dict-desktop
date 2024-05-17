@@ -87,15 +87,11 @@ export namespace QuizActions {
 
     const prompt = getPrompt(Workflow.quiz_singular_choice)
     const tpl = toPromptTemplate(prompt)
-    const setting = useSettingStore.getState()
     const state = useQuizStore.getState()
 
-    // todo select provider
-    const selectedLLMProvider =
-      state.selectedLLMProvider ??
-      (setting.availableLLMProviders.length && setting.availableLLMProviders[0])
+    const selectedLLMProvider = state.selectedLLMProvider
     if (!selectedLLMProvider) {
-      throw new Error('No llm provider')
+      throw new Error('No LLM provider')
     }
 
     const option = getLLMInitOption(selectedLLMProvider)

@@ -6,10 +6,11 @@ import { ThemedButton } from '../../components/themed-ui/button/button'
 import { SingleChoice } from './single-choice'
 import previousQuestion = QuizActions.previousQuestion
 import nextQuestion = QuizActions.nextQuestion
+import { QuizPageHeader } from './quiz-page-header';
 
 const Container = styled(ThemedContent)`
   height: 100vh;
-  padding: 20px;
+  padding: 0 20px 20px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -41,6 +42,7 @@ export const QuizPage: React.FC = () => {
 
   return (
     <Container>
+      <QuizPageHeader />
       <Content>
         <SingleChoice
           question={question}

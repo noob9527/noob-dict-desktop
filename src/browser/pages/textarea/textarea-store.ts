@@ -223,10 +223,15 @@ export namespace TextareaActions {
     if (!state.resultMap[tab]) callLLM().then()
   }
 
-  export function changeProvider(provider: LLMProvider.Constant) {
+  export function changeProvider(
+    provider: LLMProvider.Constant,
+    regenerate: boolean,
+  ) {
     useTextareaStore.setState({
       selectedLLMProvider: provider,
     })
-    callLLM().then()
+    if (regenerate) {
+      callLLM().then()
+    }
   }
 }
