@@ -13,6 +13,7 @@ import ColorId from '../../styles/ColorId'
 import { GeneralSettingPage } from './general/general-setting-page'
 import { SyncSettingPage } from './sync/sync-setting-page';
 import { LLMSettingPage } from './llm/llm-setting-page';
+import { PromptSettingPage } from './llm/prompts/prompt-setting-page';
 
 const Container = styled.div`
   height: 100vh;
@@ -51,7 +52,7 @@ const SettingPage = () => {
             <StyledTabList>
               <Tab>General</Tab>
               <Tab>Auto Sync</Tab>
-              <Tab>Large Language Model</Tab>
+              <Tab>LLM Providers</Tab>
             </StyledTabList>
 
             <StyledContent>
