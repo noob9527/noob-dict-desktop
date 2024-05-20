@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import { settingChange2, useSettingStore } from '../setting-store'
+import { debounceSettingChange2, useSettingStore } from '../../setting-store'
 import React from 'react'
-import { ThemedInput } from '../../../components/themed-ui/input/input'
+import { ThemedInput } from '../../../../components/themed-ui/input/input'
 import {
   SettingEntry,
   SettingEntryControl,
   SettingEntryLabel,
-} from '../components'
+} from '../../components'
 
 const Container = styled.div``
 
@@ -29,7 +29,7 @@ export const GeminiSetting = () => {
           <ThemedInput
             value={llm?.providers?.gemini?.api_key ?? ''}
             onChange={(e) => {
-              settingChange2((state) => {
+              debounceSettingChange2((state) => {
                 state.llm.providers.gemini = {
                   ...(state.llm.providers.gemini ?? {}),
                   api_key: e.target.value ? e.target.value : null,

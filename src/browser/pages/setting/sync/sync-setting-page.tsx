@@ -1,4 +1,4 @@
-import { settingChange, useSettingStore } from '../setting-store'
+import { debounceSettingChange, useSettingStore } from '../setting-store'
 import React from 'react'
 import styled from 'styled-components'
 import { ThemedCheckbox } from '../../../components/themed-ui/input/checkbox'
@@ -21,7 +21,7 @@ export const SyncSettingPage = () => {
         <ThemedCheckbox
           checked={syncOnStart}
           onChange={(event) => {
-            settingChange({
+            debounceSettingChange({
               'search.syncHistory.syncOnStart': event?.target?.checked!!,
             })
           }}
@@ -33,7 +33,7 @@ export const SyncSettingPage = () => {
         <ThemedCheckbox
           checked={syncOnQuit}
           onChange={(event) => {
-            settingChange({
+            debounceSettingChange({
               'search.syncHistory.syncOnQuit': event?.target?.checked!!,
             })
           }}
@@ -45,7 +45,7 @@ export const SyncSettingPage = () => {
         <ThemedCheckbox
           checked={autoSyncInBackground}
           onChange={(event) => {
-            settingChange({
+            debounceSettingChange({
               'search.syncHistory.syncIntervalMinutes': event?.target?.checked
                 ? 60
                 : -1,

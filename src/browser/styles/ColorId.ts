@@ -23,6 +23,7 @@ enum ColorId {
   // button
   button_background = 'button.background',
   button_hoverBackground = 'button.hoverBackground',
+  button_disabledBackground = 'button.disabledBackground',
   button_foreground = 'button.foreground',
 
   // tabs

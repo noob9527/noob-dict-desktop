@@ -69,6 +69,7 @@ const initData: UserProfile = {
 }
 
 const initialState: SettingState = {
+  // we use this prop to store the config.json data
   persisted: initData,
   isChanging: false,
   availableLLMProviders: [],
@@ -95,22 +96,24 @@ const useSettingStoreBase = create<SettingState>()(
 )
 export const useSettingStore = createSelectors(useSettingStoreBase)
 
+const sendSettingChange = (oldValue: UserProfile, newValue: UserProfile) => {
+  const newProfile = stateToProfile(newValue)
+  return settingService.sendSettingChange(newProfile, oldValue)
+  // we don't call settingChanged here,
+  // because we will receive SETTING_CHANGED notification.
+  // const actualNewValue = await settingService.sendSettingChange(
+  //   newValue,
+  //   oldValue,
+  // )
+  // settingChanged(oldValue, actualNewValue)
+}
+
 const debouncedSendSettingChange = debounce(
-  (oldValue: UserProfile, newValue: UserProfile) => {
-    const newProfile = stateToProfile(newValue)
-    return settingService.sendSettingChange(newProfile, oldValue)
-    // we don't call settingChanged here,
-    // because we will receive SETTING_CHANGED notification.
-    // const actualNewValue = await settingService.sendSettingChange(
-    //   newValue,
-    //   oldValue,
-    // )
-    // settingChanged(oldValue, actualNewValue)
-  },
+  sendSettingChange,
   1000,
 )
 
-export async function settingChange(patch: Partial<UserProfile>) {
+export async function debounceSettingChange(patch: Partial<UserProfile>) {
   const oldValue = useSettingStoreBase.getState()
   const newValue = {
     ...oldValue,
@@ -118,15 +121,15 @@ export async function settingChange(patch: Partial<UserProfile>) {
     isChanging: true,
   }
   useSettingStoreBase.setState((_) => newValue)
-  logger.log('setting change', oldValue, newValue)
+  logger.log('debounce setting change', oldValue, newValue)
   return debouncedSendSettingChange(oldValue, newValue)
 }
 
-export async function settingChange2(mutation: (draft: WritableDraft<SettingState>) => (void)) {
+export async function debounceSettingChange2(mutation: (draft: WritableDraft<UserProfile>) => (void)) {
   const oldValue = useSettingStore.getState()
   useSettingStore.setState(mutation)
   const newValue = useSettingStore.getState()
-  logger.log('setting change2', oldValue, newValue)
+  logger.log('debounce setting change2', oldValue, newValue)
   return debouncedSendSettingChange(oldValue, newValue)
 }
 
@@ -243,6 +246,21 @@ export namespace SettingActions {
         return null
     }
     return option
+  }
+
+  export async function persistChange() {
+    const oldValue = useSettingStore.getState().persisted
+    const newValue = useSettingStore.getState()
+    logger.log('persist change', oldValue, newValue)
+    return sendSettingChange(oldValue, newValue)
+  }
+
+  export async function cancelChange() {
+    const oldValue = useSettingStore.getState().persisted
+    useSettingStore.setState(state => {
+      Object.assign(state, oldValue)
+      state.persisted = oldValue
+    })
   }
 
 }

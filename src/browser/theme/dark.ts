@@ -28,6 +28,8 @@ dark[ColorId.input_border] = dark[ColorId.input_background]
 dark[ColorId.button_background] = Color('rebeccapurple')
 dark[ColorId.button_hoverBackground] =
   dark[ColorId.button_background]?.darken(0.2)
+dark[ColorId.button_disabledBackground] =
+  dark[ColorId.input_disableBackground]
 dark[ColorId.button_foreground] = Color('white')
 
 // tabs

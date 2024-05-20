@@ -35,7 +35,7 @@ I want you to replace my simplified A0-level words and sentences with more beaut
 and elegant, upper level English words and sentences. 
 Keep the meaning same, but make them more literary. 
 I want you to only reply the correction, the improvements and nothing else, do not write explanations. 
-I: {{text}}
+My sentence: {{text}}
 `
 
 export const rewrite_text_en = `

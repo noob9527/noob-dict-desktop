@@ -1,14 +1,16 @@
 import styled from 'styled-components'
-import { settingChange2, useSettingStore } from '../setting-store'
+import { debounceSettingChange2, useSettingStore } from '../../setting-store'
 import React from 'react'
-import { ThemedInput } from '../../../components/themed-ui/input/input'
+import { ThemedInput } from '../../../../components/themed-ui/input/input'
 import {
   SettingEntry,
   SettingEntryControl,
   SettingEntryLabel,
-} from '../components'
+} from '../../components'
 
-const Container = styled.div``
+const Container = styled.div`
+  margin-top: 20px;
+`
 
 export const OpenAiSetting = () => {
   const llm = useSettingStore.use.llm()
@@ -31,7 +33,7 @@ export const OpenAiSetting = () => {
           <ThemedInput
             value={baseUrl ?? ''}
             onChange={(e) => {
-              settingChange2((state) => {
+              debounceSettingChange2((state) => {
                 state.llm.providers.open_ai = {
                   ...(state.llm.providers.open_ai ?? {}),
                   base_url: e.target.value ? e.target.value : null,
@@ -48,7 +50,7 @@ export const OpenAiSetting = () => {
           <ThemedInput
             value={apiKey ?? ''}
             onChange={(e) => {
-              settingChange2((state) => {
+              debounceSettingChange2((state) => {
                 state.llm.providers.open_ai = {
                   ...(state.llm.providers.open_ai ?? {}),
                   api_key: e.target.value ? e.target.value : null,
@@ -65,7 +67,7 @@ export const OpenAiSetting = () => {
           <ThemedInput
             value={modelName ?? ''}
             onChange={(e) => {
-              settingChange2((state) => {
+              debounceSettingChange2((state) => {
                 state.llm.providers.open_ai = {
                   ...(state.llm.providers.open_ai ?? {}),
                   model_name: e.target.value ? e.target.value : null,

@@ -1,12 +1,12 @@
 import styled from 'styled-components'
-import { settingChange2, useSettingStore } from '../setting-store'
+import { debounceSettingChange2, useSettingStore } from '../../setting-store'
 import React from 'react'
-import { ThemedInput } from '../../../components/themed-ui/input/input'
+import { ThemedInput } from '../../../../components/themed-ui/input/input'
 import {
   SettingEntry,
   SettingEntryControl,
   SettingEntryLabel,
-} from '../components'
+} from '../../components'
 
 const Container = styled.div``
 
@@ -23,7 +23,7 @@ export const OllamaSetting = () => {
           <ThemedInput
             value={baseUrl ?? ''}
             onChange={(e) => {
-              settingChange2((state) => {
+              debounceSettingChange2((state) => {
                 state.llm.providers.ollama = {
                   ...(state.llm.providers.ollama ?? {}),
                   base_url: e.target.value ? e.target.value : null,
@@ -40,7 +40,7 @@ export const OllamaSetting = () => {
           <ThemedInput
             value={modelName ?? ''}
             onChange={(e) => {
-              settingChange2((state) => {
+              debounceSettingChange2((state) => {
                 state.llm.providers.ollama = {
                   ...(state.llm.providers.ollama ?? {}),
                   model_name: e.target.value ? e.target.value : null,
