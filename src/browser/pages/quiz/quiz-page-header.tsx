@@ -5,6 +5,7 @@ import { LLMProviderSelector } from '../../components/themed-ui/selector/llm-pro
 import { QuizActions, useQuizStore } from './quiz-store'
 import { Icon } from 'antd'
 import generateQuestions = QuizActions.generateQuestions
+import changeProvider = QuizActions.changeProvider;
 
 const Container = styled.header`
   height: 52px;
@@ -26,21 +27,15 @@ const Span = styled.span`
 
 export const QuizPageHeader: React.FC = () => {
   const availableLLMProviders = useSettingStore.use.availableLLMProviders()
-  const questionContainers = useQuizStore.use.questionContainers()
   const selected = useQuizStore.use.selectedLLMProvider()
   const generating = useQuizStore.use.generating()
 
   useEffect(() => {
     // select 1 provider if we've got any available providers
     if (availableLLMProviders.length) {
-      useQuizStore.setState({
-        selectedLLMProvider: availableLLMProviders[0],
-      })
-      if (!questionContainers.length) {
-        generateQuestions(2)
-      }
+      changeProvider(availableLLMProviders[0])
     }
-  }, [availableLLMProviders, questionContainers])
+  }, [availableLLMProviders])
 
   return (
     <Container>
@@ -48,9 +43,7 @@ export const QuizPageHeader: React.FC = () => {
       <StyledSelect
         availableProviders={availableLLMProviders}
         onSelect={(provider) => {
-          useQuizStore.setState({
-            selectedLLMProvider: provider,
-          })
+          changeProvider(provider)
         }}
         value={selected}
       />

@@ -78,8 +78,7 @@ export namespace QuizActions {
     const user_id = useRootStore.getState().currentUser?.id ?? ''
     const notes = await noteService.fetchLatest(20, user_id)
     if (!notes.length) return null
-    return Array.from({length})
-      .map(e => notes[random(notes.length - 1)])
+    return Array.from({ length }).map((e) => notes[random(notes.length - 1)])
   }
 
   export async function generateQuestions(length: number) {
@@ -100,7 +99,7 @@ export namespace QuizActions {
     })
 
     const questions = await quizGenerator.generateSingularChoiceBatch(
-      notes.map(e => ({ text: e.text })),
+      notes.map((e) => ({ text: e.text })),
       tpl,
       {
         ...option,
@@ -116,6 +115,17 @@ export namespace QuizActions {
         ...state.questionContainers,
         ...questions.map((question) => ({ question })),
       ]
+    })
+  }
+
+  export function changeProvider(provider: LLMProvider.Constant) {
+    useQuizStore.setState((state) => {
+      state.selectedLLMProvider = provider
+      if (!state.questionContainers.length) {
+        // if no questions try to generate 2 questions
+        // otherwise, the user can click 'next' button to generate questions
+        generateQuestions(2)
+      }
     })
   }
 
