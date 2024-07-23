@@ -6,7 +6,7 @@ import { SearchInputState } from './search-input-model';
 import { usePrevious } from '../../../hooks/use-previous';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import { focusSearchInput } from '../../transient-store';
+import { setFocusInput, useTransientStore } from '../../transient-store';
 
 const Suggestion = styled.div`
   width: 100%;
@@ -30,7 +30,7 @@ const Suggestion = styled.div`
 
 export default () => {
   const dispatch = useDispatch();
-  const { focusInput } = useSelector((state: any) => state._transient);
+  const focusInput  = useTransientStore.use.focusInput()
   const {
     text,
     suggests,
@@ -69,11 +69,11 @@ export default () => {
               text,
             });
           }
-          focusSearchInput()
+          setFocusInput(true)
         }}
         onBlur={() => {
           setOpen(false);
-          focusSearchInput()
+          setFocusInput(false)
         }}
         value={text}
         open={open}

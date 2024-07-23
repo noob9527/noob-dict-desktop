@@ -90,7 +90,7 @@ export function hideSearchWindow() {
 
 export function topSearchWindow() {
   searchUiService.top()
-  focusSearchInput()
+  setFocusInput()
 }
 
 export function appHotKeyPressed() {
@@ -109,8 +109,8 @@ export function appHotKeyPressed() {
   }
 }
 
-export function focusSearchInput() {
+export function setFocusInput(focusInput: boolean = true) {
   useTransientStoreBase.setState({
-    focusInput: true,
+    focusInput,
   })
 }
