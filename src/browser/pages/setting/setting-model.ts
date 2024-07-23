@@ -65,6 +65,9 @@ const settingModel: SettingModel = {
     'search.syncHistory.syncOnQuit': true,
     'search.syncHistory.syncOnStart': true,
     'search.syncHistory.syncIntervalMinutes': -1,
+    llm: {
+      providers: {},
+    },
   },
   effects,
   reducers,

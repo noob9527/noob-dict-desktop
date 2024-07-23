@@ -4,7 +4,7 @@ import { UserProfile } from '../../../../electron-shared/user-profile/user-profi
 import styled from 'styled-components'
 import { shell } from 'electron'
 import { Button, Icon } from 'antd'
-import { settingChange, useSettingStore } from '../setting-store'
+import { debounceSettingChange, useSettingStore } from '../setting-store'
 import { useTransientStore } from '../../transient-store'
 
 const Container = styled.div`
@@ -73,7 +73,7 @@ export const EcdictLocationSetting = () => {
           ghost
           size="small"
           onClick={() => {
-            settingChange({
+            debounceSettingChange({
               ecDictFileLocation: null,
             })
           }}
@@ -86,7 +86,7 @@ export const EcdictLocationSetting = () => {
         ref={ref1}
         onChange={(event) => {
           console.log(event.target.files?.item(0)?.path)
-          settingChange({
+          debounceSettingChange({
             ecDictFileLocation: event.target.files?.item(0)?.path || null,
           })
         }}

@@ -1,17 +1,15 @@
 import React from 'react';
 import { Route, Switch } from 'react-router-dom';
-import ScrollArea from 'react-scrollbar';
 import OverviewView from '../views/overview/overview-view';
 import EngineView from '../views/engine/engine-view';
 import styled from 'styled-components';
+import { ThemedScrollArea } from '../../../components/themed-ui/content/scroll-area';
 
-const StyledScrollArea = styled(ScrollArea)`
+const StyledScrollArea = styled(ThemedScrollArea)`
   &.scrollarea {
     padding: 15px;
     height: 100%;
-    .scrollbar {
-      background-color: white !important;
-    }
+
     // make the content height fill the container
     // https://stackoverflow.com/questions/1122381/how-to-force-child-div-to-be-100-of-parent-divs-height-without-specifying-pare
     .scrollarea-content {

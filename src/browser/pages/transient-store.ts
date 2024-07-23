@@ -16,6 +16,7 @@ import {
   HomeUiService,
   SearchUiServiceToken,
 } from '../../common/services/home-ui-service'
+import { LLMProvider } from '../../common/services/llm/provider';
 
 const appService = rendererContainer.get<AppService>(AppServiceToken)
 const ecDictSearchService = rendererContainer.get<EcDictSearchService>(

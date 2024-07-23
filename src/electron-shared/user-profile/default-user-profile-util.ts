@@ -10,5 +10,9 @@ export function getDefaultUserProfile(): UserProfile {
     'search.syncHistory.syncIntervalMinutes': 60,
     'search.syncHistory.syncOnQuit': true,
     'search.syncHistory.syncOnStart': true,
+
+    llm: {
+      providers: {},
+    },
   }
 }

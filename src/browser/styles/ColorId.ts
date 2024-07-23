@@ -2,6 +2,11 @@
 enum ColorId {
   heart = 'heart', // none stable
 
+  primary = 'primary',
+  accent = 'accent',
+  success = 'success',
+  error = 'error',
+
   background = 'background',
   foreground = 'foreground',
 
@@ -12,11 +17,13 @@ enum ColorId {
   // input
   input_foreground = 'input.foreground',
   input_background = 'input.background',
+  input_disableBackground = 'input.disableBackground',
   input_border = 'input.border',
 
   // button
   button_background = 'button.background',
   button_hoverBackground = 'button.hoverBackground',
+  button_disabledBackground = 'button.disabledBackground',
   button_foreground = 'button.foreground',
 
   // tabs
@@ -37,4 +44,4 @@ enum ColorId {
   dropdown_border = 'dropdown.border',
 }
 
-export default ColorId;
+export default ColorId

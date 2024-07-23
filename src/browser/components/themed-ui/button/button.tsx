@@ -13,6 +13,9 @@ const ThemedButton = styled(Button)`
       color: ${props => props.theme[ColorId.button_foreground]};
       background-color: ${props => props.theme[ColorId.button_hoverBackground]};
     }
+    &[disabled] {
+      background-color: ${props => props.theme[ColorId.button_disabledBackground]};
+    }
   }
 `;
 

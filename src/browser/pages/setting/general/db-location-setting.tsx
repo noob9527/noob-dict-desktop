@@ -7,7 +7,7 @@ import { UserProfile } from '../../../../electron-shared/user-profile/user-profi
 import { ThemedButton } from '../../../components/themed-ui/button/button';
 import { rendererContainer } from '../../../../common/container/renderer-container';
 import { LocalDbService, LocalDbServiceToken } from '../../../../common/services/db/local-db-service';
-import { settingChange, useSettingStore } from '../setting-store';
+import { debounceSettingChange, useSettingStore } from '../setting-store';
 import { useTransientStore } from '../../transient-store';
 
 const localDbService = rendererContainer.get<LocalDbService>(LocalDbServiceToken);
@@ -59,7 +59,7 @@ export const DbLocationSetting = (props: DbLocationSettingProps) => {
         ref={ref1}
         onChange={(event) => {
           console.log(event.target.files?.item(0)?.path);
-          settingChange({
+          debounceSettingChange({
               dbFileLocation: event.target.files?.item(0)?.path || null,
           })
         }}

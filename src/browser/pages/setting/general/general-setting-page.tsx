@@ -1,4 +1,4 @@
-import { settingChange, useSettingStore } from '../setting-store'
+import { debounceSettingChange, useSettingStore } from '../setting-store'
 import { shell } from 'electron'
 import { DbLocationSetting } from './db-location-setting'
 import { EcdictLocationSetting } from './ecdict-location-setting'
@@ -51,7 +51,7 @@ export const GeneralSettingPage = () => {
         <ThemedCheckbox
           checked={readClipboard}
           onChange={(event) => {
-            settingChange({
+            debounceSettingChange({
               readClipboard: event?.target?.checked!!,
             })
           }}
@@ -65,7 +65,7 @@ export const GeneralSettingPage = () => {
           <ThemedInputShortcut
             value={appHotKey}
             onChange={(value) => {
-              settingChange({
+              debounceSettingChange({
                 appHotKey: value,
               })
             }}
