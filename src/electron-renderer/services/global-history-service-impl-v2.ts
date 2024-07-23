@@ -114,6 +114,10 @@ export class GlobalHistoryServiceImplV2 implements GlobalHistoryService {
     let totalItems = 0
     let totalPages = 0
     do {
+      // as we do pagination, we need call API serveral times
+      // to get all new items.
+      // however, when we send items to server, we send them all at once.
+      // so pushItemsToServer is true only for ths 1st page.
       const pushItemsToServer = currentPageIndex === 0
       try {
         response = await this.syncSingleHistoryPage(

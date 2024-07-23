@@ -97,15 +97,21 @@ export class MainHistoryService extends Delegate implements HistoryService {
 
   @ipcAnswerRenderer(LOCAL_DB_HISTORY_PREFIX)
   searchByUpdateAt(param: HistoryUpdateAtSearchParam): Promise<ISearchHistory[]> {
+    let update_at = {}
+    if (param.updateAtBetween.upperBound != null) {
+      update_at = {
+        [Op.gte]: param.updateAtBetween.lowerBound,
+        [Op.lte]: param.updateAtBetween.upperBound,
+      }
+    } else {
+      update_at = {
+        [Op.gte]: param.updateAtBetween.lowerBound,
+      }
+    }
     return SearchHistoryModel.findAll({
       where: {
         user_id: param.user_id,
-        update_at: {
-          [Op.between]: [
-            param.updateAtBetween.lowerBound,
-            param.updateAtBetween.upperBound,
-          ],
-        }
+        update_at,
       },
     }).then(e => e.map(m => m.toDTO()));
   }
